@@ -1,0 +1,59 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <div class="row">
+        <div id="form_error">
+            {% if postform.bodyofchat.errors %}
+                {% for error in postform.bodyofchat.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Chat Error: {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if order.type == 1 %}
+        {% include '/auth/orders/_itemorder.html' %}
+    {% endif %}
+
+    <!-- left side -->
+    <div class="row graybg border">
+        <div class="col-12 col-sm-6" style="border-right: solid; border-right-color: gray; border-right-width: 1px;">
+            A Clearnet Market mod will join the conversation within 24 hours.
+            You can come back to this window later by viewing "customer service" on the home page.
+            <br>
+            <hr>
+            <h4>User Reason</h4>
+            {{ order.private_note }}
+        </div>
+
+        <div class="col-12 col-sm-6" ><!-- right side -->
+            <form method="POST">
+                {{ postform.csrf_token }}
+                <div class="form-group">
+                    {{ render_field(postform.bodyofchat,
+                    class="form-control",
+                     rows="3",
+                      placeholder="Your comment here") }}
+                </div>
+                <div class="form-group text-center">
+                    {{ render_field(postform.post, value= "Post", autocomplete="off", class="btn btn-primary") }}
+                </div>
+            </form>
+
+            {% for comment in comments %}
+                {% if order %}
+                    {% include '/posts/_commentsinsidepic.html' %}
+                {% endif %}
+            {% endfor %}
+        </div><!-- right side -->
+    </div>
+
+
+
+
+
+{% endblock %}

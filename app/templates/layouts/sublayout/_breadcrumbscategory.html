@@ -1,0 +1,17 @@
+
+	<ol class="breadcrumb linkcolor">
+
+
+	<li> <a href="{{ url_for('index') }}">Home</a></li>
+	<li><a href="{{ url_for('category.categories') }}">Categories</a></li>
+
+
+	{% if id > 100 %}
+	<li><a href="{{ url_for('category.viewcategory', maincatid=breadcrumb2.mainid) }}">{{ breadcrumb2.mainCategory }}</a></li>
+	<li><a href="{{ url_for('category.viewcategory', maincatid=breadcrumb2.id) }}">{{ breadcrumb2.subname1 }}</a></li>
+	{% else %}
+	<li><a href="{{ url_for('category.viewcategory', maincatid=main.mainid) }}">{{ main.mainCategory }}</a></li>
+	{% endif %}
+
+
+	</ol>

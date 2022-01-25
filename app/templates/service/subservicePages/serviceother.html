@@ -1,0 +1,110 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+<!-- help topics Questions-->
+<div class="row">
+    <h2>Other Questions</h2>
+</div>
+<a name='backtotop'></a>
+
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other1">Can I increase the security of my account?</a>
+</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other2">Is using tor and tor browser safe?</a>
+</div>
+</div>
+
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other3">Is keeping my coins on this site safe?</a>
+</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other4">I think I found a bug, broken link, issue with Clearnet Market.</a>
+</div>
+</div>
+<!-- END help topics Questions -->
+
+
+
+<br><br><br><br>
+    <h2>Answers</h2>
+<!-- END help topics Answers -->
+<div class="row question linkcolor">
+	<div class="col-12 ">
+	<a name='other1'></a>
+    <h4>Can I increase the security of my account?</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+
+    </div>
+	</div>
+	<div class="col-12">
+    Changing your password frequently and using a strong password is the best defence.
+    <br>In future updates, we will introduce two factor authentication.
+</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+	<a name='other2'></a>
+    <h4>Is using tor and tor browser safe?</h4>
+    <div class="text-right">
+    <a  href="#backtotop" role="button">Back to top</a>
+
+    </div>
+	</div>
+	<div class="col-12">
+Using tor is one of the safest ways to browse our site.
+    We understand you have privacy in mind and can be assured we don't unnecessarily track you.
+    Its highly recommend if you are from a country with strict governmental laws.
+</div>
+</div>
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+	<a name='other3'></a>
+    <h4>Is keeping my coins in this site safe?</h4>
+    <div class="text-right">
+    <a href="#backtotop" role="button">Back to top</a>
+
+    </div>
+	</div>
+	<div class="col-12">
+    Nothing on the internet is 100% secure, including Clearnet Market.
+        Regardless, we do our best to ensure the safety of your wallet and account on Clearnet Market.
+    Bitcoin is always safest in your own wallet. If your really
+    concerned about safety, its best to have the coins on your own wallet and not connected to the internet.
+</div>
+</div>
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+	<a name='other4'></a>
+    <h4>I think I found a bug, broken link, issue with Clearnet Market.</h4>
+    <div class="text-right">
+    <a  href="#backtotop" role="button">Back to top</a>
+    </div>
+
+	</div>
+	<div class="col-12">
+    You can always leave feedback, which is closely monitored for bugs and issues.  You cna also message a representative directly.
+	</div>
+</div>
+
+
+{% endblock %}

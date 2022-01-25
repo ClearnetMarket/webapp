@@ -1,0 +1,16 @@
+{% extends "/layouts/plain.html" %}
+
+{% block content %}
+<div id="holder_box">
+<div class="text-center linkcolor">
+<h2>Oops. Looks like a CSRF Error</h2>
+    <h4>
+    Lets go back <a href="{{ url_for('index') }}">Home</a>
+        </h4>
+    <div id="error_picture_holder">
+        <a href="{{ url_for('index') }}">
+<img src="{{ url_for('static', filename='/images/buy_bitcoins.jpeg')  }}">
+            </a>
+</div></div>
+</div>
+{% endblock %}

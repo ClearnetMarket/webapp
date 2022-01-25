@@ -1,0 +1,226 @@
+
+
+<div class="row graybg border">
+    <div class="col-12 col-sm-12 col-md-3">
+        {% if order.type == 1 %}
+             <img src="{{ url_for('userdata.media_file',
+    filename=('item/' + order.stringnodeid + order.stringauctionid + order.imageone + "_250x.jpg"))  }}"
+         class="boximage">
+        {% elif order.type ==2 %}
+               <img src="{{ url_for('userdata.media_file',
+    filename=('item/' + order.stringnodeid + order.stringauctionid + order.imageone))  }}"
+         class="boximage">
+        {% else %}
+            <img src="{{ url_for('static', filename='/images/Bitcoin_Logo2.jpeg')  }}" width="200px" height="200px" >
+        {% endif %}
+    </div>
+
+    <div class="col-12 col-sm-5 linkcolor">
+        <!--Market Item -->
+        {% if order.type == 1 %}
+            <a href="{{ url_for('item.Itemforsale', id=order.item_id) }}">
+                <h4>{{ order.title }}</h4>
+            </a>
+            <br>
+            <b>Customer:</b>
+            <a href="{{ url_for('profile.user',username=order.customer) }}">
+                {{ order.customer }}
+                ({{ order.customer_id|userrating }})
+                ({{ order.customer_id|avguserrating }}
+                <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px">)
+            </a>
+            <br>
+            <b>Order id#:</b>
+            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+                {{ order.id }}
+            </a>
+            <br>
+            {% if order.completed == 1 %}
+                <b>Order Completed:</b>
+                {{ moment(timestamp=order.completed_time, local=False).format('L')  }}
+                <br>
+            {% endif %}
+            {%  if order.new_order == 1 %}
+                <b>Order Status:</b>
+                <div class="greenstatus">
+                    Waiting to be accepted
+                </div>
+                <br>
+            {%  elif order.accepted_order == 1 %}
+                <b>Order Status:</b>
+                <div class="greenstatus">
+                    Order accepted waiting for shipment</div>
+                <br>
+            {%  elif order.waiting_order == 1 %}
+                <b>Order Status:</b>
+                <div class="greenstatus">
+                    Order Shipped
+                </div>
+                <br>
+            {%  else %}
+            {%  endif %}
+            {% if order.request_cancel == 1 %}
+                <b> Order Status: </b>
+                <div class="redstatus">
+                    Request to Cancel Order Sent to Vendor
+                </div>
+                <br>
+            {% endif %}
+
+            {% if order.cancelled == 1 %}
+                <b>Order Status: </b>
+                <div class="redstatus">
+                    Order Cancelled
+                </div>
+                <br>
+            {% endif %}
+            {% if order.request_return == 1 %}
+                <b>Return Status:</b>
+                <div class="redstatus">
+                    Return Address Needed by Vendor
+                </div>
+                <br>
+            {% endif %}
+
+            {% if order.request_return == 2 %}
+                <b> Return Status:</b>
+                <div class="redstatus">
+                    Waiting on customer to mark as shipped
+                </div>
+                <br>
+            {% endif %}
+
+            {% if order.request_return == 3 %}
+                <b>  Return Status:</b>
+                <div class="redstatus">
+                    Waiting on vendor to mark as received
+                </div>
+                <br>
+            {% endif %}
+            {% if order.request_return == 4 %}
+                <b> Return Status:</b>
+                <div class="greenstatus">
+                    It was successfully returned
+                </div>
+                <br>
+            {% endif %}
+            <b>Shipping Method:</b>
+            {{ order.shipdescription }}
+            <br>
+            <b>Quantity:</b>
+            {{ order.quantity }}
+            <br>
+            <br>
+
+
+            <!--Digital Trade -->
+        {% elif order.type == 2 %}
+            <!--Bitcoin Trade -->
+        {% elif order.type == 3 %}
+        {% else %}
+        {% endif %}
+    </div>
+
+    <div class="col-12 col-sm-4 linkcolor">
+
+        {% if order.type == 1 %}
+
+            {% if order.digital_currency == 2 %}
+
+
+                {% if order.quantity == 0 %}
+                    <b>Price per Item: </b>
+                    <div class="btcorangeinline">
+                        {{ order.price|formatbtctostring }} BTC
+                    </div>
+                    <br>
+                {% else %}
+                    <b>Price per Item: </b>
+                    <div class="btcorangeinline">
+                        {{ order.price / order.quantity }} BTC
+                    </div>
+                    <br>
+                {% endif %}
+                {% if order.shipping_price == 0 %}
+                    <b>Shipping:</b>
+                    <div class="btcorangeinline">
+                        Free Shipping
+                    </div>
+                    <br>
+                {% else %}
+                    <b>Shipping:</b>
+                    <div class="btcorangeinline">
+                        {{ order.shipping_price }} BTC
+                    </div>
+                    <br>
+                {% endif %}
+                <hr>
+                {% if order.quantity == 0 %}
+                    <b> Total Price: </b>
+                    <div class="btcorangeinline">
+                        {{ order.shipping_price + order.price}} BTC
+                    </div>
+                    <br>
+                {% else %}
+                    <b> Total Price: </b>
+                    <div class="btcorangeinline">
+                        {{ order.shipping_price + order.price}} BTC
+                    </div>
+                    <br>
+                {% endif %}
+
+
+            {% elif order.digital_currency == 3 %}
+                {% if order.quantity == 0 %}
+                <b>Price per Item: </b>
+                    <div class="btccash">
+                        {{ order.price|formatbtctostring }} BCH
+                    </div>
+                    <br>
+                {% else %}
+                    <b>Price per Item: </b>
+                    <div class="btccash">
+                        {{ order.price / order.quantity }} BCH
+                    </div>
+                    <br>
+                {% endif %}
+                {% if order.shipping_price == 0 %}
+                    <b>Shipping:</b>
+                    <div class="btccash">
+                        Free Shipping
+                    </div>
+                    <br>
+                {% else %}
+                    <b>Shipping:</b>
+                    <div class="btccash">
+                        {{ order.shipping_price }} BCH
+                    </div>
+                    <br>
+                {% endif %}
+                <hr>
+                {% if order.quantity == 0 %}
+                    <b> Total Price: </b>
+                    <div class="btccash">
+                        {{ order.shipping_price + order.price}} BCH
+                    </div>
+                    <br>
+                {% else %}
+                    <b> Total Price: </b>
+                    <div class="btccash">
+                        {{ order.shipping_price + order.price}} BCH
+                    </div>
+                    <br>
+                {% endif %}
+            {% else %}
+            {% endif %}
+
+        {% elif order.type == 2 %}
+
+
+        {% elif order.type == 3 %}
+        {% else %}
+        {% endif %}
+    </div>
+
+
+</div>

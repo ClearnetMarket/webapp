@@ -1,0 +1,661 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+    <div id="formerrorholder">
+        <!--Item title -->
+        <div id="form_error">
+            {% if form.messagewhy.errors %}
+                {% for error in form.messagewhy.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Message Error: {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <!-- Item info -->
+    <div class="row">
+        <div class="col-12">
+            <h4>Return an item</h4>
+        </div>
+    </div>
+
+    {% include 'vendor/_ordersspecs.html' %}
+    <!-- Customer info-->
+    <div class="row" style="margin-bottom: 25px; margin-top: 25px;">
+        <div class="col-md-3 col-sm-3 col-3 col-lg-3"></div>
+        <div class="col-md-6 col-sm-6 col-6 col-lg-6 ">
+            <strong>Please Note</strong><br><br>
+            <ul>
+                <li>
+                    Your order has already been accepted by the vendor.
+                    Please leave a note on why you want
+                    to cancel.  Some items take custom measures to produce, and your reason is valuable.
+                </li>
+                <li>
+                    By agreeing to return an item, shipping costs
+                    will NOT be refunded and you must meet the deadlines of return time.
+                </li>
+                <li>
+                    Return shipping is paid for by the customer.
+                </li>
+            </ul>
+            <br>
+        </div>
+        <div class="col-md-3 col-sm-3 col-3 col-lg-3"></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3"></div>
+        <div class="col-md-6 col-sm-6 col-6 col-lg-6">
+            <div class="row border graybg" style="width: 500px; padding: 20px; ">
+                <form method="post" class="form-horizontal">
+                    {{ form.csrf_token }}
+                    {% if order.quantity == 1 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                1
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 2 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 3 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 4 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 5 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 6 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 7 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 8 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 9 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 10 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 11 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 12 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 13 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 14 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 15 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 16 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="16">16</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 17 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 18 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 19 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% elif order.quantity == 20 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 21 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 22 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 23 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity == 24 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% elif order.quantity >= 25 %}
+                        <div class="form-group">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                            <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Quantity</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                <select class="form-control" name="quant-{{order.id }}" id="{{ order.id }}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    {% else %}
+                    {% endif %}
+
+                    <div class="form-group">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                        <label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Category</label>
+                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                            {{ render_field(form.type, class="form-control") }}
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+                        <label class="col-2 col-sm-2 col-md-2 col-lg-2 control-label">Reason </label>
+                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                            {{ render_field(form.messagewhy,class="form-control", rows=5, cols=10) }}
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-5 col-sm-5 col-md-5 col-lg-5"></div>
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
+                            {{ render_field(form.submit, class="btn btn-danger", value="Submit") }}
+                        </div>
+                        <div class="col-5 col-sm-5 col-md-5 col-lg-5"></div>
+
+
+                    </div>
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3"></div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

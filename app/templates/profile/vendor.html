@@ -1,0 +1,30 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-12 col-md-2 d-none d-md-block">
+       {% include 'profile/profiles/prototype.html' %}
+        </div>
+
+
+        <!-- Bio of user -->
+        <div class="col-12 col-md-9 offset-md-1 offset-lg-1">
+        {% include '/profile/account_widgets/_topbar.html' %}
+
+
+
+        {% include '/profile/account_widgets/_vendor_stats.html' %}
+        {% include '/profile/account_widgets/_vendor_ratings.html' %}
+
+
+
+
+
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

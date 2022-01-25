@@ -1,0 +1,54 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+<div class="row">
+	<div class="col-12 col-sm-3 border">
+		<h4>Recent Patches</h4><br>
+		<hr>
+        {% for update in getupdates %}
+         <div class="row" style="margin-bottom: 10px;">
+			<div class="col-12">
+				<strong>{{ update.header }}</strong>
+			</div>
+			<div class="col-12">
+				{{ moment(timestamp=update.dateofupdate, local=False).calendar()  }}
+			</div>
+				<hr>
+         </div>
+        {% endfor %}
+    </div>
+
+
+	<div class="hidden-xs col-sm-1"></div>
+
+
+	<div class="col-12 col-sm-8 border">
+
+	        {% for update in getupdates %}
+		        <div class="row">
+	                <div class="col-12">
+	                <h3>{{ update.header }}</h3><br>
+
+	               {{ moment(timestamp=update.dateofupdate, local=False).calendar()  }}<br>
+	              {{ update.body }}
+	                <hr>
+		            </div>
+		        </div>
+	        {% endfor %}
+
+	</div>
+
+
+</div>
+
+
+
+{% endblock %}

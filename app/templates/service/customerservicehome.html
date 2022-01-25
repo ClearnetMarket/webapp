@@ -1,0 +1,282 @@
+{% extends "/layouts/plain.html" %} {% block content %}
+
+<nav aria-label="breadcrumb" class="linkcolor">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+  </ol>
+</nav>
+
+<div class="row text-center">
+  <h2>Customer Service</h2>
+</div>
+{% if current_user.is_authenticated %}
+<h4>My Current Item Issues</h4>
+{% if myorderscount > 0 %}
+<table class="col-12" style="margin-bottom: 25px">
+  <tr>
+    <th class="col-3 col-md-2 bluetable">Order #</th>
+    <th class="hidden-xs hidden-sm col-md-2 bluetable">Title</th>
+    <th class="hidden-xs hidden-sm col-md-2 bluetable">Vendor</th>
+    <th class="col-6 col-sm-6 col-md-2 bluetable">Status</th>
+    <th class="hidden-xs hidden-sm col-md-2 bluetable">Type</th>
+    <th class="col-3 col-md-2 bluetable"></th>
+  </tr>
+
+  {% for order in orders %}
+  <tr class="bg-danger">
+    <td class="col-2 col-md-2 linkcolor">
+      <a href="{{ url_for('vendor.viewOrder', id=order.id) }}"
+        >{{ order.id }}</a
+      >
+    </td>
+
+    <td class="hidden-xs hidden-sm col-md-2">{{ order.title }}</td>
+
+    <td class="hidden-xs hidden-sm col-md-2">
+      {{ order.vendor }} ({{ order.vendor_id|avgvendorrating }}) ({{
+      order.vendor_id|vendorratingcount }})
+    </td>
+    <td class="col-6 col-sm-6 col-md-2 linkcolor">
+      {% if order.disputed_order == 1 %} Disputed {% endif %} {% if
+      order.request_return ==2 %} Item return needed {% endif %}
+    </td>
+    <td class="hidden-xs hidden-sm col-md-2">
+      {% if order.type == 1 %} Market Item {% else %} {% endif %}
+    </td>
+    <td class="col-3 col-md-2 btnwhite">
+      {% if order.disputed_order == 1 %}
+      <a
+        class="btn btn-warning"
+        href="{{ url_for('service.helpwithitem_active', id=order.id) }}"
+        role="button"
+        >View Issue</a
+      >
+      {% endif %} {% if order.request_return ==2 %}
+      <a
+        class="btn btn-danger"
+        href="{{ url_for('auth.customerOrders_returninstructions',
+                                    id=order.id) }}"
+        role="button"
+        >View Return</a
+      >
+      {% endif %}
+    </td>
+  </tr>
+
+  {% endfor %}
+</table>
+{% else %} You have no order issues .. {% endif %}<!-- End Table -->
+
+{% if thepostcount > 0 %}
+<div class="row">
+  <div class="col-12 col-sm-12 border">
+    <h4>My Service Issues</h4>
+    <hr />
+    {% for p in post %} {% if p.status == 0 %}
+    <div class="row linkcolor bg-warning">
+      {% elif p.status == 1 %}
+      <div class="row linkcolor">
+        {% else %}
+        <div class="row linkcolor">
+          {% endif %}
+
+          <div class="col-12">
+            <a href="{{ url_for('service.helpwithissue_active', id=p.id) }}">
+              Issue id: #{{ p.id }}
+            </a>
+            <br />
+            {% if p.status == 0 %}
+            <b>Status:</b> Open Issue {% elif p.status == 1 %}
+            <b>Status:</b> Closed Issue {% else %}
+            <b>Status:</b>
+            {% endif %}
+
+            <strong>
+              <br />
+              {{ moment(timestamp=p.timestamp,
+              local=False).fromNow(refresh=True) }}
+            </strong>
+            <br /><br />
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %} {% endif %}
+    <hr />
+    <div class="row">
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-bitcoin icon"></span>
+          <div class="linkcolor">
+            <h4>
+              <a href="{{ url_for('service.customerservice_bitcoin') }}"
+                >Bitcoin Cash</a
+              >
+            </h4>
+          </div>
+          <p>
+            Common questions and answers about Bitcoin. <br />Coin now showing
+            up in wallet.
+          </p>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-exclamation-triangle icon"></span>
+          <h4>
+            <div class="linkcolor">
+              <a href="{{ url_for('service.customerservice_notrecieved') }}"
+                >Shipping Questions</a
+              >
+            </div>
+          </h4>
+          <p>Package not recieved? Item late or having issues.</p>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-refresh icon"></span>
+          <h4>
+            <div class="linkcolor">
+              <a href="{{ url_for('service.customerservice_returnitem') }}"
+                >Returns</a
+              >
+            </div>
+          </h4>
+          <p>Return questions and answers.</p>
+        </div>
+      </div>
+      <!-- End Col -->
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-user icon"></span>
+          <div class="linkcolor">
+            <h4>
+              <a href="{{ url_for('service.customerservice_forgotaccount') }}"
+                >Forgot Account Information</a
+              >
+            </h4>
+          </div>
+          <p>Lost your password/username? Have trouble signing in.</p>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-bitcoin icon"></span>
+          <h4>
+            <div class="linkcolor">
+              <a href="{{ url_for('service.customerservice_sellerfees') }}"
+                >Seller Fees</a
+              >
+            </div>
+          </h4>
+          <p>Question regarding costs to vendors/buyers</p>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-refresh icon"></span>
+          <h4>
+            <div class="linkcolor">
+              <a href="{{ url_for('service.customerservice_cancelitem') }}"
+                >Cancel an item</a
+              >
+            </div>
+          </h4>
+          <p>Need help cancelling an item?</p>
+        </div>
+      </div>
+      <!-- End Col -->
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-remove icon"></span>
+          <div class="linkcolor">
+            <h4>
+              <a
+                href="{{ url_for('service.customerservice_disputesquestions') }}"
+                >Disputes</a
+              >
+            </h4>
+          </div>
+          <p>Lost your password/username? Have trouble signing in.</p>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-bitcoin icon"></span>
+          <h4>
+            <div class="linkcolor">
+              <a href="{{ url_for('service.customerservice_walletfees') }}"
+                >Wallet Fees</a
+              >
+            </div>
+          </h4>
+          <p>Question regarding costs to wallet txt fees, user fees.</p>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-md-4 col-sm-4 text-center">
+        <div class="feature-box">
+          <span class="fa fa-minus icon"></span>
+          <h4>
+            <div class="linkcolor">
+              <a href="{{ url_for('service.customerservice_other') }}"
+                >Other
+              </a>
+            </div>
+          </h4>
+          <p>General Questions about the site, bugs, issues, etc.</p>
+        </div>
+      </div>
+      <!-- End Col -->
+    </div>
+    <!-- End Boxes questions -->
+
+    <hr />
+
+    <div
+      class="row clearnetblue btnwhite text-center"
+      style="
+        min-height: 100px;
+        padding-top: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      "
+    >
+      <!-- Beginning of contact Box -->
+      <div class="clearnetblue col-12 col-sm-4">
+        <h4>
+          Need to speak to someone? <br />Contact a Representative directly
+        </h4>
+      </div>
+      <div class="clearnetblue col-12 col-sm-5"></div>
+      <div class="clearnetblue col-12 col-sm-3" style="margin-top: 10px">
+        <a
+          class="btn btn-warning"
+          href="{{ url_for('service.customerserviceMessage') }}"
+          role="button"
+          >Send Message</a
+        >
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+</div>

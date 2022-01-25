@@ -1,0 +1,113 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('vendor.itemsforSale') }}">My Items</a></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <h3>My Promoted Items</h3>
+        </div>
+    </div>
+
+
+
+    {% if items %}
+        <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="row">
+                <div class="col-4 col-sm-1">
+                    <input type="checkbox" onclick="toggle(this);" />Toggle<br />
+                </div>
+
+                <div class="col-4 col-sm-1">
+                    {{ render_field(form.submitcheckbox, class="btn btn-primary", value="Turn off Ads" ) }}
+                </div>
+
+                <div class="col-4 col-sm-10 text-right linkcolor">
+
+                </div>
+            </div>
+
+
+            <table class="table table-condensed col-12">
+
+                <tr>
+                    <th class="col-1 bluetable">CheckBox</th>
+                    <th class="col-5 bluetable">Title</th>
+                    <th class="col-2 bluetable">ID</th>
+                    <th class="col-1 bluetable">Status</th>
+                    <th class="col-3 bluetable">Location</th>
+                </tr>
+                {% for sale in items %}
+                    {%  if sale.online == 0 %}
+                        <tr class="danger">
+                            {%  else %}
+                        <tr class="success">
+                    {%  endif  %}
+
+                        <td class="col-12 col-sm-1 linkcolor">
+                            <label>
+                                <input type="checkbox" name='checkit' value={{ sale.id }}>
+                            </label>
+                        </td>
+
+                        <td class="col-12 col-sm-5 linkcolor">
+                            {{ sale.itemtitlee }}
+
+                        </td>
+
+                        <td class="col-12 col-sm-2 linkcolor">
+                            <b>Item #:</b> {{ sale.id }}<br>
+                        </td>
+
+                        <td class="col-12 col-sm-1 ">
+                            {% if sale.aditem == 1 %}
+                                Online
+                            {% else %}
+                                Offline
+                            {% endif %}
+
+                        </td>
+                        <td class="col-12 col-sm-3">
+
+                            {% if sale.aditem_level == 1 %}
+                                Promoted in Category
+                            {% elif sale.aditem_level == 2 %}
+                                Promoted Frontpage
+                            {% else %}
+
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </form>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                Looks like you have no promotions ..<br><br>
+                Creating pomotions is easy.
+
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        function toggle(source) {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] != source)
+                    checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
+
+{% endblock %}

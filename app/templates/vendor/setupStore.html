@@ -1,0 +1,178 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+<div id="holder_box">
+
+<!-- sidebar  -->
+
+    <div id="store_vendorcontrolbar">
+        <div id="Controlenter">
+        <div id="headercontrolcenter">
+            <div id="headercontrolcenter_left"><h5>{{ vendorprofile.username }}'s Control Center</h5></div>
+            <div id="headercontrolcenter_right" class="text-right">
+
+            {% if store.vacation == 0 %}
+
+
+                  <a class="btn btn-danger btnwhite" href="{{ url_for('vendor.vacation', username=current_user.username) }}">
+                Vacation Mode On
+                </a>
+
+            {% else %}
+
+                <a class="btn btn-primary btnwhite" href="{{ url_for('vendor.vacation', username=current_user.username) }}">
+                Vacation Mode Off
+                </a>
+
+            {% endif %}
+
+            </div>
+        </div>
+
+                <hr>
+                <div id="vendor_holder_overview" class="linkcolor">
+                    <a href="{{ url_for('profile.user', username=current_user.username) }}">
+                        Overview
+                        </a>
+                </div>
+                <div id="vendor_holder_itemsforsale" class="linkcolor">
+                    <a href="{{ url_for('vendor.itemsforSale') }}">
+                        My Items
+                    </a>
+                </div>
+
+                {% if issues == 0 %}
+                 <div id="vendor_holder_refunds" class="linkcolor">
+                     <a href="{{ url_for('vendor.vendorRefunds') }}">
+                         Returns/Disputes
+                     </a>
+                 </div>
+                 {% else %}
+                    <div id="vendor_holder_refunds" class="linkcolororange">
+                        <a href="{{ url_for('vendor.vendorRefunds') }}">
+                           Returns/Disputes ({{ issues }})
+                        </a>
+                    </div>
+                 {% endif %}
+                <div id="vendor_holder_ratings" class="linkcolor">
+                    <a href="{{ url_for('vendor.vendorRatings') }}">
+                        Ratings
+                    </a>
+                </div>
+                <div id="vendor_holder_messages" class="linkcolor linkcolororange">
+                    <a href="{{ url_for('main.notifications', username=current_user.username) }}">
+                        Notifications ({{ getnotifications }})
+                    </a>
+                </div>
+                    {% if order == 0 %}
+                        <div id="vendor_holder_orders" class="linkcolor">
+                            <a href="{{ url_for('vendor.vendorOrders') }}">
+                                Orders
+                            </a>
+                        </div>
+
+                    {% else %}
+                        <div id="vendor_holder_orders" class="linkcolororange">
+                            <a href="{{ url_for('vendor.vendorOrders') }}">
+                                Orders({{ order }})
+                            </a>
+                        </div>
+                    {% endif %}
+        <div id="vendor_holder_custom" class="linkcolor">
+            <a href="{{ url_for('vendor.custommystore', username=current_user.username) }}">
+                Customize your Store
+            </a>
+        </div>
+        {% if getdefaultreturn == 1 %}
+            <div id="vendor_holder_custom" class="linkcolor">
+                <a href="{{ url_for('vendor.editreturn', username=current_user.username) }}">
+                    Edit Default Return Address
+                </a>
+            </div>
+        {% else %}
+            <div id="vendor_holder_custom" class="linkcolor">
+                <a href="{{ url_for('vendor.addreturn', username=current_user.username) }}">
+                    Add Default Return Address
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+        <div id="Controlcenter_status">
+            <h5>Store Status</h5>
+            <hr>
+            {% if store.vacation == 0 %}
+            <div id="vendor_holder_1">
+                <b>Status:</b> Online
+            </div>
+            {% else %}
+            <div id="vendor_holder_11">
+                <b>Status:</b> Vacation Mode
+            </div>
+            {% endif %}
+            <div id="vendor_holder_2">
+                <b>Items for Sale: {{ itemquerycount }}</b>
+            </div>
+            <div id="vendor_holder_3">
+                <b>Escrow Bitcoin: </b>
+            </div>
+            <div id="vendor_holder_4">
+                <b>Returns:  {{ issues }}</b>
+            </div>
+        </div>
+    </div>
+
+{% include 'layouts/sublayout/_usersidebarcategories.html' %}
+
+
+<!-- END sidebar  -->
+<!-- middlecontent  -->
+
+    <div id="store_storecontent">
+
+        <div id="store_result_sortresults">
+                <form class="form-inline pull-right" method="POST">
+                    {{ sortresults.csrf_token }}
+                      <div class="form-group">
+                        <label for="exampleInputName2">Sort Results:</label>
+                        {{ render_field(sortresults.sortCategory) }}
+                      </div>
+                      <div class="form-group">
+
+                        {{ render_field(sortresults.sort, class="btn btn-primary", type="submit", value="Sort") }}
+                      </div>
+                </form>
+
+        </div>
+
+        <div id="store_itemlist">
+                {% for item in itemquery  %}
+                {% include 'item/../search/searchresults/_simpleitem.html' %}
+                {% endfor %}
+        </div>
+
+
+
+
+        <div class="d-flex justify-content-center linkcolor">
+            {{ pagination.links }}
+        </div>
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+<!-- END holderbox  -->
+
+
+{% endblock %}
+

@@ -1,0 +1,51 @@
+<div class="row mt-3 pb-3 mb-3 bg-white justify-content-center">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 linkcolororange">
+                <h5>Items with the same keywords</h5>
+                <hr>
+            </div>
+        </div>
+
+        <div class="col d-flex justify-content-center">
+            <!-- xsonly -->
+            <div class="d-block d-sm-none">
+                <div class="card-deck">
+                    {% for item in samekeyword[0:1] %}
+                        {% include 'item/itemparts/related/_itemlayout.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-sm-block d-md-none">
+                <div class="card-deck">
+                    {% for item in samekeyword[0:2] %}
+                        {% include 'item/itemparts/related/_itemlayout.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-md-block d-lg-none">
+                <div class="card-deck">
+                    {% for item in samekeyword[0:3] %}
+                        {% include 'item/itemparts/related/_itemlayout.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-lg-block d-xl-none">
+                <div class="card-deck">
+                    {% for item in samekeyword[0:4] %}
+                        {% include 'item/itemparts/related/_itemlayout.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-xl-block">
+                <div class="card-deck">
+                    {% for item in samekeyword[0:6] %}
+                        {% include 'item/itemparts/related/_itemlayout.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

@@ -1,0 +1,60 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+
+    <div class="row" style="margin-bottom: 50px;">
+        {% include '/affiliate/homecontent/_bannertop.html' %}
+    </div>
+    <div class="row text-center">
+        <div class="col-12 ">
+            Using images helps attract users to click on your promo ad.
+        </div>
+
+    </div>
+    <div class="row text-center">
+        <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img src="{{ url_for('static', filename='/images/affiliate/afflogo4.png')  }}">
+        </div>
+        <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img src="{{ url_for('static', filename='/images/affiliate/afflogo5.png')  }}">
+        </div>
+    </div>
+     <div class="row text-center">
+        <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img src="{{ url_for('static', filename='/images/affiliate/afflogo1.png')  }}">
+        </div>
+        <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img class='border' src="{{ url_for('static', filename='/images/affiliate/afflogo3.png')  }}">
+        </div>
+     </div>
+     <div class="row text-center">
+        <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img class='border' src="{{ url_for('static', filename='/images/affiliate/afflogo2.png')  }}">
+        </div>
+        <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img class='border' src="{{ url_for('static', filename='/images/affiliate/afflogo8.png')  }}">
+        </div>
+     </div>
+     <div class="row text-center">
+        <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img class='border' src="{{ url_for('static', filename='/images/affiliate/afflogo9.png')  }}">
+        </div>
+
+     </div>
+    <div class="row">
+    <div class="col-12 col-sm-6 col-sm-offset-3">
+                <div class="col-12 col-sm-6" style="margin-bottom: 25px">
+            <img class='border' src="{{ url_for('static', filename='/images/affiliate/afflogo7.png')  }}">
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+

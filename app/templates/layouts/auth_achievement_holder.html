@@ -1,0 +1,53 @@
+{% from "_formhelpers.html" import render_field %} {% include
+'layouts/headers/_headerplain.html' %} {% include
+'layouts/sublayout/_flashbar.html' %}
+<body>
+  <div class="container clearnetcontainer">
+    <div class="row">
+      <div class="col-12 col-sm-3">
+        <div
+          class="classWithPad border"
+          style="height: 150px; min-height: 500px"
+        >
+          <b>Achievement Category</b>
+          <ul>
+            <li class="linkcolor">
+              <a href="{{ url_for('auth.achievements_all') }}">Newest added</a>
+            </li>
+            <li class="linkcolor">
+              <a href="{{ url_for('auth.achievements_common') }}">Common</a>
+            </li>
+            <li class="linkcolor">
+              <a href="{{ url_for('auth.achievements_experience') }}"
+                >Experience</a
+              >
+            </li>
+
+            <li class="linkcolor">
+              <a href="{{ url_for('auth.achievements_unique') }}">Unique</a>
+            </li>
+            <li class="linkcolor">
+              <a href="{{ url_for('auth.achievements_customer') }}">Customer</a>
+            </li>
+            <li class="linkcolor">
+              <a href="{{ url_for('auth.achievements_vendor') }}">Vendor</a>
+            </li>
+            <li class="linkcolor">
+              <a href="{{ url_for('auth.achievements_coin') }}">Coin</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-9">
+        <div class="row text-center" style="font-size: 22px">
+          <div class="col-12 col-sm-12">{{ title }}</div>
+        </div>
+
+        {% block content %} {% endblock %}
+      </div>
+    </div>
+  </div>
+</body>
+
+{% include 'layouts/subindex/_footer.html' %}

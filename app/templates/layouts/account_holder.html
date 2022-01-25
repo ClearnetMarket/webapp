@@ -1,0 +1,142 @@
+{% from "_formhelpers.html" import render_field %} {% include
+'layouts/headers/_headerplain.html' %} {% include
+'layouts/sublayout/_flashbar.html' %}
+<body>
+  <div class="container clearnetcontainer">
+    <nav aria-label="breadcrumb" class="linkcolor">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ url_for('index') }}">Home</a>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="row" style="margin-bottom: 200px">
+      <div class="col-12 col-sm-12 col-md-3 border linkcolor">
+        <b>Account Overview</b>
+        <ul>
+          <li>
+            <a
+              href="{{ url_for('auth.myAccount', username=current_user.username) }}"
+              >Account</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('auth.orders') }}">Recent Orders</a>
+          </li>
+          <li>
+            <a
+              href="{{ url_for('profile.achs', username=current_user.username) }}"
+              >My Achievements</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('auth.selectuserAchs') }}"
+              >Customize profile bar</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('service.customerserviceHome') }}">
+              Customer Service
+            </a>
+          </li>
+          <li>
+            <a
+              href="{{ url_for('main.notifications', username=current_user.username) }}"
+            >
+              Notifications
+            </a>
+          </li>
+        </ul>
+        <br />
+        <b>Security</b>
+        <ul>
+          <li>
+            <a href="{{ url_for('auth.changepin') }}"> Wallet Pin </a>
+          </li>
+          <li>
+            <a href="{{ url_for('auth.changepassword') }}">
+              Account Password
+            </a>
+          </li>
+        </ul>
+        {% if user.vendor_account == 1 %}
+        <b>Vendor</b>
+        <ul>
+          <li>
+            <a href="{{ url_for('vendor.vendorverification') }}"
+              >Vendor Verification</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('vendor.itemsforSale')}}"> My Items </a>
+          </li>
+          <li>
+            <a href="{{ url_for('vendor.vendorRefunds') }}"> Issues </a>
+          </li>
+          <li>
+            <a href="{{ url_for('vendor.vendorRatings') }}"> Ratings </a>
+          </li>
+          <li>
+            <a href="{{ url_for('vendor.vendorOrders') }}"> OpenOrders </a>
+          </li>
+          <li>
+            <a href="{{ url_for('main.notifications') }}"> Notifications </a>
+          </li>
+        </ul>
+        <br />
+        {% endif %} {% if user.admin == 1 %}
+        <b>Admin</b>
+        <ul>
+          <li>
+            <a
+              href="{{ url_for('admin.adminHome', username=current_user.username) }}"
+              >Admin home</a
+            >
+          </li>
+          {% if user.admin_role == 10 %}
+          <li>
+            <a href="{{ url_for('admin.setaccounttoAdmin') }}"
+              >Set Account to Admin</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('admin.addAchievement') }}">Achievements</a>
+          </li>
+          <li>
+            <a href="{{ url_for('admin.addupdate') }}">Add Update</a>
+          </li>
+          {% endif %}
+        </ul>
+        {% endif %}
+        <br />
+        <b>Status</b>
+        <ul>
+          <li>
+            <a href="{{ url_for('auth.logout') }}"> Log Out </a>
+          </li>
+        </ul>
+        <br />
+        <b><div style="color: red">Danger Area</div></b>
+        <ul>
+          <li>
+            <a href="{{ url_for('auth.deleteaccount') }}"> Delete Account </a>
+          </li>
+        </ul>
+      </div>
+      <div class="hidden-xs hidden-sm col-md-1"></div>
+      <div class="col-12 col-sm-12 col-md-8">
+        <div class="row">
+          <div class="col-12 text-center">
+            <h3>{{ user.username }} - {{ title }}</h3>
+            <hr />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">{% block content %} {% endblock %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+{% include 'layouts/subindex/_footer.html' %}

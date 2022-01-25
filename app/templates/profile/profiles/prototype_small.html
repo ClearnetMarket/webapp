@@ -1,0 +1,100 @@
+<div class="clearnetblue linkcolor_topbar">
+  {% if current_user.is_authenticated %}
+  <!--Holder-->
+  {% if user1.admin ==1 %}
+  <div
+    id="userprofilebar_holder"
+    class="linkcolor_topbar clearnetorangebackground text-center"
+    style="color: #ffffff; max-width: 220px"
+  >
+    {% else %}
+    <div
+      id="userprofilebar_holder"
+      class="linkcolor_topbar clearnetblue text-center"
+      style="color: #ffffff; max-width: 220px"
+    >
+      {% endif %}
+      <!--username-->
+      {% if user1.vendor_account ==1 %}
+      <div id="userprofilebar_username">
+        <div class="text-center linkcolor_topbar">
+          <a
+            href="{{ url_for('profile.vendorprofile',username=user1.username) }}"
+            >{{ user1.username }}</a
+          >
+        </div>
+      </div>
+      {% else %}
+      <div id="userprofilebar_username">
+        <div class="text-center linkcolor_topbar">
+          <a href="{{ url_for('profile.user',username=user1.username) }}"
+            >{{ user1.username }}</a
+          >
+        </div>
+      </div>
+      {% endif %}
+
+      <!--Image-->
+      <div id="userprofilebar_userimage">
+        <img src="{{user1.id|profilepicture }}" width="125px" height="125px" />
+      </div>
+      <!--country-->
+      <div id="userprofile_country" class="text-center">
+        {{ user1.country|countryformat }}
+      </div>
+
+      <!--Level-->
+      <div id="userprofilebar_level" class="text-center">
+        Lvl {{ user1level.level }}<br />
+        {% if user1.id|trustlevel == '0' %} {% else %}
+        <a href="{{ url_for('main.levels') }}">
+          <img
+            src="{{ url_for('static', filename='/images/trustlevel/' + user1.id|trustlevel + '.png')  }}"
+            width="125px"
+            height="30px"
+          />
+        </a>
+        {% endif %}
+      </div>
+      {% if user1width %}
+      <div id="level_holder" style="padding-bottom: 1px">
+        <div id="Current_level">
+          Next Level({{ user1width }}%)
+          <div class="progress">
+            <div
+              class="progress-bar progress-bar-warning"
+              role="progressbar"
+              aria-valuenow="{{"
+              user1width
+              }}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style="width:{{ user1width }}%"
+            ></div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <!--msg-->
+    </div>
+    {% else %}
+
+    <div id="userprofile_name" class="linkcolor clearnetblue text-center">
+      <a href="{{ url_for('auth.register') }}">Sign Up</a>
+    </div>
+    <div class="text-center">
+      <img src="{{ url_for('static', filename="/images/profileimages/0.png" )
+      }}" width="125px" height="125px">
+    </div>
+
+    <div id="userprofile_badges" class="text-center linkcolor">
+      <a href="{{ url_for('wallet.walletHome') }}">My Wallets</a><br />
+      Level 0<br /><br />
+      <br />
+      Free wallets<br />
+      Create your Store<br />
+      <br />
+    </div>
+    {% endif %}
+  </div>
+</div>

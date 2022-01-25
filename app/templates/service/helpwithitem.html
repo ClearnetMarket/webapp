@@ -1,0 +1,65 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+    <div class="row">
+        <!--Item title -->
+        <div id="form_error">
+            {% if issue.issuebody.errors %}
+                {% for error in issue.issuebody.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Message Error: {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-md-6 offset-md-3">
+
+        <div class="col-12  text-center">
+            <span class="fa fa- info-sign" aria-hidden="true" style="font-size: 40px;"></span><br>
+            For customer service help with an item, please give us a brief explanation of the problem.
+            A representative will get ahold of you with assistance.
+        </div>
+
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <b>Order #:{{ getitem.id }}</b>
+            </div>
+
+        </div>
+
+        <form method="post">
+            {{ issue.csrf_token }}
+
+            <div class="form-group">
+                <label >Issue</label>
+                {{ render_field(issue.subject, class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                <label>Message</label>
+                {{ render_field(issue.issuebody,class="form-control", rows="10", cols="10") }}
+            </div>
+
+            <div class="text-center">
+                {{ render_field(issue.submit, class="btn btn-primary", value="submit") }}
+            </div>
+
+        </form>
+
+    </div>
+    </div>
+
+
+{% endblock %}

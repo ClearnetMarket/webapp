@@ -1,0 +1,111 @@
+<div class="row">
+        <div class="col-sm-12" style="font-size: 20px;">
+            Recent Achievements
+        </div>
+</div>
+    <hr>
+<div class="row" style="margin-bottom: 100px;">
+    {% for f in user_recent_ach %}
+
+        <div class="col-12" style=" margin-bottom: 10px;">
+            <div class="row blue border">
+                <div class="col-4">
+
+ {% if f.ach_id == 1 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/a/a1.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 2 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/e/e2.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 3 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/e/e3.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 4 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/e/e1.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 5 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/e/e5.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 6 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/e/e6.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 7 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/e/e7.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 8 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/u/u1.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 9 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/u/u2.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 10 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/u/u3.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 11 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v4.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 12 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v1.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 13 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v2.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 14 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/b/b1.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 15 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/a/a1.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 16 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/a/a2.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 17 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v3.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 18 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/b/b2.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 19 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c3.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 20 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c2.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 21 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c4.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 22 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c5.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 23 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c6.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 24 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c7.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 25 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c8.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 26 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v5.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 27 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v6.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 28 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v7.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 29 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v8.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 30 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v9.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 31 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v10.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 32 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c9.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 33 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c10.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 34 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/c/c11.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 35 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/a/c12.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 36 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v11.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 37 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v12.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 38 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v13.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 39 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v14.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 40 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v15.png')  }}" width="198px" height="60px" ></div>
+                {% elif f.ach_id == 41 %}
+                    <div class="text-center"><img src="{{ url_for('static', filename='/images/achievement/v/v16.png')  }}" width="198px" height="60px" ></div>
+
+                {% else %}
+                {% endif %}
+
+                </div>
+               <div class="col-8 btnwhite text-center" style="padding-top: 20px;">
+
+                   {{ moment(timestamp=f.achievement_date, local=False).format('L')  }}
+               </div>
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>

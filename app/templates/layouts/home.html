@@ -1,0 +1,25 @@
+{% from "_formhelpers.html" import render_field %}
+
+{% include 'layouts/headers/_header_normal.html' %}
+<body>
+<div class="container" >
+    <div class="row">
+        <div class="col-12 col-md-2 d-none d-md-block">
+            {% include 'profile/profiles/prototype.html' %}
+            {% include 'layouts/catbar/_catsside.html' %}
+            {% include 'widgets/exchanges/_BTCCASH_Exchanges.html' %}
+            {% include 'layouts/rightbar/_admin.html' %}
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-10">
+
+            {% include 'layouts/sublayout/_achievement_flash.html' %}
+            {% block content %}
+            {% endblock %}
+
+        </div>
+    </div>
+</div>
+</body>
+
+{% include 'layouts/subindex/_footer.html' %}

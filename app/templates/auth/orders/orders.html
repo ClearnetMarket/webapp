@@ -1,0 +1,72 @@
+{% extends "/layouts/default.html" %}
+{% block content %}
+
+
+    <div class="row"><!--Feedback error  -->
+        <div class="col-xs-hidden col-sm-3"></div>
+        <div class="col-12 col-sm-6">
+            {% if feedbackform %}
+                <div id="form_error">
+                    {% if feedbackform.feedbacktext.errors %}
+                        {% for error in feedbackform.feedbacktext.errors %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                Feedback Error: {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% else %}
+            {% endif %}
+
+
+        </div>
+        <div class="col-xs-hidden col-sm-3"></div>
+    </div><!--END Feedback error  -->
+
+
+
+
+    <div class="row"> <!--Content -->
+        <div class="col-12">
+            <div class="row" style="margin-bottom: 20px; font-size:12px;">
+                <div class="col-12">
+                    *Please Note, finalizaing a purchase nulls any returns.  It allows for bonus exp, and helps
+                    the vendor receive the coin faster in a volatile market.
+                </div>
+            </div>
+
+
+            {% if myorderscount >= 1 %}
+                {% for order in orders %}
+                    {% if order.type == 1 %}
+                        {% include '/auth/orders/_itemorder.html' %}
+                    {% endif %}
+
+                {% endfor %}
+
+
+                <div class="row text-center" >
+                    <div class="col-sm-3"></div>
+                    <div class="col-12 col-sm-6">
+                        {{ pagination.info }}
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+
+                <div class="d-flex justify-content-center linkcolor">
+                    {{ pagination.links }}
+                </div>
+
+
+
+
+            {% else %}<br><br>
+                <div class="text-center"><h4>You have not traded or bought anything on Clearnet Market...</h4></div>
+            {% endif  %}
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+
+
+
+
+	<div class="row">
+		<div class="col-12 text-center">
+            <h4>Vendor Agreement</h4>
+		</div>
+	</div>
+
+	 <div class="row" style="margin-bottom: 100px;">
+		<div class="col-12 text-center">
+            Become a vendor and start trading and selling on Clearnet Market.  Every vendor needs to
+            know whats allowed.  If not it can result in suspension, or being banned entirely from Clearnet Market.
+            By signing this form you agree to the
+                   <div class="linkcolor inlinecode">
+	                    <a href="{{ url_for('main.termsofservice') }}" >
+	                    Terms of Service.
+	                    </a>
+                    </div>
+			Please review them carefully.  If at anytime you wish to stop vending, you can delete
+            your account information easily.
+		</div>
+	</div>
+<div class="row">
+	<div class="col-12 text-center">
+		<strong>Digital Signature</strong>
+	</div>
+</div>
+
+
+	        <div class="row">
+
+				<form method="post">
+		        {{ form.csrf_token }}
+				<div class="row">
+		        <div class="form-group">
+			        <label class="col-12 col-sm-4 col-sm-offset-4">Your Username</label>
+			        <div class="col-12 col-sm-4 col-sm-offset-4">
+			        {{ render_field(form.username, class="form-control") }}
+			        </div>
+		        </div>
+				</div>
+		        <div class="row">
+		        <div class="form-group">
+			        <label class="col-12 col-sm-4 col-sm-offset-4">Selling From:</label>
+			        <div class="col-12 col-sm-4 col-sm-offset-4">
+			        {{ render_field(form.country, class="form-control") }}
+			        </div>
+		        </div>
+		        </div>
+		        <div class="row">
+		        <div class="col-12 text-center">
+			        <label>I agree to the Terms of Service</label>
+			        <div class="col-12 text-center">
+			        {{ render_field(form.agreement) }}
+			        </div>
+		        </div>
+		        </div>
+		        <div class="row">
+		        <div class="col-12 text-center">
+
+			        {{ render_field(form.submit, class="btn btn-warning", value="I agree") }}
+		        </div>
+			        </div>
+		        </form>
+	        </div>
+
+{% endblock %}
+
+

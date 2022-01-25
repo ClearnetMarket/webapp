@@ -1,0 +1,135 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <ol class="breadcrumb linkcolor">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('admin.adminHome') }}">Admin Home</a></li>
+    </ol>
+
+    <h3>Stats for: {{ username }}</h3>
+    <form method="Post">
+        {{ form.csrf_token }}
+
+
+        <div class="row">
+            <h3>Vendor Stats</h3>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-12">Total BTC Recieved</label>
+                <div class="col-2">
+                    {{ render_field(form.vendor_totalbtcrecieved,class="form-control") }}
+
+                </div>
+                <div class="col-10"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-12">total btc spent</label>
+                <div class="col-2">
+                    {{ render_field(form.vendor_totalbtcspent, class="form-control", default=getstatsvendor.totalbtcspent) }}
+
+                </div>
+                <div class="col-4"></div>
+            </div>
+            <div class="form-group ">
+                <label class="col-12">Total Sales</label>
+                <div class="col-2">
+                    {{ render_field(form.vendor_totalsales, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+
+            <div class="form-group ">
+                <label class="col-12">total reviews</label>
+                <div class="col-2">
+                    {{ render_field(form.vendor_totalreviews, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+            <div class="form-group ">
+                <label class="col-12">total trades</label>
+                <div class="col-2">
+                    {{ render_field(form.vendor_totaltrades, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+            <div class="form-group ">
+                <label class="col-12">Vendor rating</label>
+                <div class="col-2">
+                    {{ render_field(form.vendor_vendorrating, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+            <div class="form-group ">
+                <label class="col-12">avg item rating</label>
+                <div class="col-2">
+                    {{ render_field(form.vendor_itemrating, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+        </div>
+        <div class="row">
+
+
+
+            <h3>Customer Stats</h3>
+        </div>
+        <div class="row">
+
+            <div class="form-group">
+                <label class="col-12">Total BTC Recieved</label>
+                <div class="col-2">
+                    {{ render_field(form.customer_totalbtcrecieved,class="form-control") }}
+
+                </div>
+                <div class="col-10"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-12">total btc spent</label>
+                <div class="col-2">
+                    {{ render_field(form.customer_totalbtcspent, class="form-control") }}
+
+                </div>
+                <div class="col-4"></div>
+            </div>
+            <div class="form-group ">
+                <label class="col-12">Total Items Bought</label>
+                <div class="col-2">
+                    {{ render_field(form.customer_totalitemsbought, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+
+            <div class="form-group ">
+                <label class="col-12">total reviews</label>
+                <div class="col-2">
+                    {{ render_field(form.customer_totalreviews, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Shared Stats</h3>
+        </div>
+        <div class="row">
+
+            <div class="form-group ">
+                <label class="col-12">Diff Trading Partners</label>
+                <div class="col-2">
+                    {{ render_field(form.difftradingpartners, class="form-control") }}
+                </div>
+                <div class="col-10"></div>
+            </div>
+
+        </div>
+        <div class="col-md-12 text-center">
+            <label></label>
+            {{ render_field(form.changeuser,  value="Submit", autocomplete="off", class="btn btn-primary") }}
+        </div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<div id="holder_box">
+    <h4>Item Info</h4>
+    <div id="orderinfo_holder" class="graybg border">
+        <div id="orderinfo_imageleft">
+
+            <img src="{{ url_for('userdata.media_file', filename=vendororder.pic|thumbnail('200x200', crop='fit'))     }}">
+        </div>
+        <div id="orderinfo_basicinfo">
+            <div id="orderinfo_title">
+                <h3>{{ vendororder.title }}</h3>
+            </div>
+
+
+                 <div id="orderinfo_item" class="linkcolor">
+                <b>Customer:</b>
+
+                <a href="{{ url_for('profile.user',username=vendororder.customer) }}" >
+                            {{ vendororder.customer }}
+                            ({{ vendororder.customer_id|userrating }})
+                            ({{ vendororder.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+                        </a>
+               </div>
+          <div id="orderinfo_item">
+                <b>Sale id:</b> {{ vendororder.id }}
+            </div>
+            <div id="orderinfo_item">
+                <b>Order Status:</b>
+                {%  if vendororder.new_order == 1 %}
+                    Waiting to be accepted
+                {%  elif vendororder.accepted_order == 1 %}
+                    Order accepted waiting for shipment
+                {%  elif vendororder.waiting_order == 1 %}
+                    Order Shipped
+                {%  else %}
+                     Not Specified
+                {%  endif %}
+            </div>
+
+            <div id="orderinfo_item">
+                <b>Item id:</b> {{ vendororder.item_id }}
+            </div>
+            <div id="orderinfo_item">
+                <b>Shipping Method:</b> {{ vendororder.item_id }}
+            </div>
+
+            <div id="orderinfo_itemcondition">
+                {%  if item.condition == 1 %}
+                    <b>Condition:</b>  New
+                {%  elif item.condition == 2 %}
+                     <b>Condition:</b>  Manufacturer Refurbished
+                {%  elif item.condition == 3 %}
+                     <b>Condition:</b>  Seller Refurbished
+                {%  elif item.condition == 4 %}
+                    <b>Condition:</b>  Used
+                {%  elif item.condition == 5 %}
+                     <b>Condition:</b>  For Parts
+                {%  else %}
+                    <b>Condition:</b>  Not Specified
+                {%  endif %}
+            </div>
+        </div>
+
+        <div id="orderinfo_priceinfo">
+            <div id="orderinfo_pricesoldfor">
+                <h3>{{ vendororder.price }} BTC</h3>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="orderinfo_titleholder">
+        <div id="orderinfo_titleholder_left"><h4>Shipping Info</h4></div>
+        <div id="orderinfo_titleholder_right">
+            <a class="btn btn-warning" href="{{ url_for('service.customerserviceMessage') }}" role="button">Message Seller</a>
+
+        </div>
+
+    </div>
+
+    <div id="orderinfo_shipholder" class="graybg border">
+
+			{% if msg %}
+
+				{{ msg.msgtxt }}
+
+			{% endif %}
+
+
+
+
+
+
+    </div>
+</div>
+
+
+{% endblock %}

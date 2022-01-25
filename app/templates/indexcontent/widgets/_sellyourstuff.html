@@ -1,0 +1,39 @@
+<div class="row p-2" >
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+        {% if current_user.is_authenticated %}
+            {% if current_user.vendor_account == 0 %}
+                <a href="{{ url_for('auth.becomeVendor') }}">
+                    <img src="{{ url_for('static', filename='/images/homepage/startselling.png'  )  }}" width="395px" height="200px">
+                </a>
+            {% else %}
+                <a href="{{ url_for('vendor.itemsforSale') }}">
+                    <img src="{{ url_for('static', filename='/images/homepage/startselling.png'  )  }}" width="395px" height="200px">
+                </a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">
+                <img src="{{ url_for('static', filename='/images/homepage/startselling.png'  )  }}" width="395px" height="200px">
+            </a>
+        {% endif %}
+    </div>
+
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center" >
+        {% if current_user.is_authenticated %}
+            {% if current_user.vendor_account == 0 %}
+                <a href="{{ url_for('main.levels') }}">
+                    <img src="{{ url_for('static', filename='/images/homepage/getverification.png'  )  }}"  width="395px" height="200px">
+                </a>
+            {% else %}
+                <a href="{{ url_for('vendor.vendorverification') }}">
+                    <img src="{{ url_for('static', filename='/images/homepage/getverification.png'  )  }}"  width="395px" height="200px">
+                </a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('main.levels') }}">
+                <img src="{{ url_for('static', filename='/images/homepage/getverification.png'  )  }}"  width="395px" height="200px">
+            </a>
+        {% endif %}
+    </div>
+</div>

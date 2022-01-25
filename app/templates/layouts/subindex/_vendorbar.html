@@ -1,0 +1,63 @@
+
+<div class="row linkcolor_topbar text-center pt-1 pb-1" style="background-color: #232F3E">
+    {% if getnotifications == 0 %}
+        <div class="col-2">
+            <a href="{{ url_for('main.notifications', username=current_user.username) }}">
+                Notifications
+            </a>
+        </div>
+    {% else %}
+        <div class="col-2 linkcolororange">
+            <a href="{{ url_for('main.notifications', username=current_user.username) }}">
+                Notifications({{ getnotifications }})
+            </a>
+        </div>
+    {% endif %}
+    <div class="col-2">
+        <a href="{{ url_for('profile.user', username=current_user.username) }}">
+            Overview
+        </a>
+    </div>
+    <div class="col-2">
+        <a href="{{ url_for('vendor.itemsforSale') }}">
+            My Items
+        </a>
+    </div>
+    {% if issues == 0 %}
+        <div class="col-2">
+            <a href="{{ url_for('vendor.vendorRefunds') }}">
+                Issues
+            </a>
+        </div>
+    {% else %}
+        <div class="col-2 linkcolororange">
+            <a href="{{ url_for('vendor.vendorRefunds') }}">
+                Issues({{ issues }})
+            </a>
+        </div>
+    {% endif %}
+    <div class="col-2">
+        <a href="{{ url_for('vendor.vendorRatings') }}">
+            Ratings
+        </a>
+    </div>
+    <div class="col-2">
+        {% if order == 0 %}
+            <a href="{{ url_for('vendor.vendorOrders') }}">
+                Open Orders
+            </a>
+        {% else %}
+            <div class="linkcolororange">
+                <a href="{{ url_for('vendor.vendorOrders') }}">
+                    Open Orders({{ order }})
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
+

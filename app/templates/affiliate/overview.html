@@ -1,0 +1,51 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+
+        <div class="row" style="margin-bottom: 50px;">
+            <div class="col-12 text-center">
+                <h3>Protos Affiliate</h3>
+            </div>
+        </div>
+        <div style="margin-bottom: 50px;">
+            {% include '/affiliate/homecontent/_bannertop.html' %}
+        </div>
+
+        <div class="row" style="margin-bottom: 50px;">
+            <div class="col-12 text-left">
+                <h4>How does it work?</h4>
+                <span>After you signup, you are given a promo code. The promo code can be given to people to be used
+                on checkout.  The buyer discount ranges between 1%-5% depending on your affiliate status.
+                    You are given a percentage fee for each transaction.</span>
+                <br><br>
+                <h4>How much can I make?</h4>
+                <span>This depends on how many sales, your affiliate status, etc.  There is no limit
+                to the amount you can earn, or cap.  </span>
+                <br><br>
+                <h4>How do I get paid?</h4>
+                <span>After each sale is finalized,
+                    the percent of your promo code discount is funded immediatly to your account.
+                </span>
+                <br><br>
+
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 50px;">
+            <div class="col-12 text-center">
+               <a class="btn btn-primary" href="{{ url_for('affiliate.aff_becomeaff') }}">Become Affiliate</a>
+            </div>
+        </div>
+
+
+
+{% endblock %}
+
+

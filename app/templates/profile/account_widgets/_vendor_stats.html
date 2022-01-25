@@ -1,0 +1,82 @@
+
+<!-- Featured stats -->
+<div class="row">
+    <div class="col-sm-12" style="font-size: 20px; ">
+        Featured Stats
+    </div>
+</div>
+<hr>
+
+<div class="row">
+
+    <div class="col-sm-4 text-center" >
+        <div class="classWithPad" style="height: 150px;font-size: 15px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Became a Clearnet Market User<br><br>
+            <h4> {{started }}</h4>
+        </div>
+    </div>
+    <div class="col-sm-4 text-center" >
+        <div class="classWithPad" style="height: 150px;font-size: 15px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Reviews Recieved<br><br>
+            <h4>{{ vendorstats.totalreviews }} </h4>
+        </div>
+    </div>
+    <div class="col-sm-4 text-center" >
+        <div class="classWithPad" style="height: 150px;font-size: 15px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Total Items Sold<br><br>
+            <h4> {{vendorstats.totalsales }}</h4>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" style="margin-bottom: 100px;">
+    <div class="col-sm-4 text-center" >
+        <div class="classWithPad" style="height: 150px;font-size: 15px;
+          background-color:#0d579b;color:#FFFFFF; min-width:225px;">
+            Different Trading Partners<br><br>
+            <h4> {{ vendorstats.diffpartners }}</h4>
+        </div>
+    </div>
+    <div class="col-sm-4 text-center " >
+        <div class="classWithPad" style="height: 150px;font-size: 15px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Total BCH Received<br>
+            {% if vendorstats.totalbtccashrecieved == 0 %}
+                0.00   BCH
+            {% else %}
+                {{ vendorstats.totalbtccashrecieved }}   BCH
+            {% endif %}
+            <br><br>
+            Total BCH Spent<br>
+
+            {% if vendorstats.totalbtccashspent == 0 %}
+                0.00   BCH
+            {% else %}
+                {{ vendorstats.totalbtccashspent }}   BCH
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-sm-4 text-center " >
+        <div class="classWithPad" style="height: 150px;font-size: 15px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Total BTC Received<br>
+            {% if vendorstats.totalbtcrecieved == 0 %}
+                0.00   BTC
+            {% else %}
+                {{ vendorstats.totalbtcrecieved }}   BTC
+            {% endif %}
+            <br><br>
+            Total BTC Spent<br>
+
+            {% if vendorstats.totalbtcspent == 0 %}
+                0.00   BTC
+            {% else %}
+                {{ vendorstats.totalbtcspent }}   BTC
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+
+

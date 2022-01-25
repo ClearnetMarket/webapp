@@ -1,0 +1,258 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+<div class="row">
+<div id="form_error">
+{% if form.selectcarrier1.errors %}
+{% for error in form.selectcarrier1.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Carrier 1: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+
+<div id="form_error">
+{% if form.selectcarrier2.errors %}
+{% for error in form.selectcarrier2.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Carrier 2: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+<div id="form_error">
+{% if form.selectcarrier3.errors %}
+{% for error in form.selectcarrier3.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Carrier 3: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+
+<div id="form_error">
+{% if form.othercarrier1.errors %}
+{% for error in form.othercarrier1.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Other Carrier 1: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+
+<div id="form_error">
+{% if form.othercarrier2.errors %}
+{% for error in form.othercarrier2.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Other Carrier 2: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+
+
+<div id="form_error">
+{% if form.othercarrier3.errors %}
+{% for error in form.othercarrier3.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Other Carrier 3: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+<div id="form_error">
+{% if form.trackingnumber1.errors %}
+{% for error in form.trackingnumber1.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Tracking Number 1: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+<div id="form_error">
+{% if form.trackingnumber2.errors %}
+{% for error in form.trackingnumber2.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Tracking Number 2: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+
+<div id="form_error">
+{% if form.trackingnumber3.errors %}
+{% for error in form.trackingnumber3.errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+Tracking Number 3: {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
+</div>
+
+
+
+    <div class="row">
+	    <div class="col-12">
+	        <p>Here you can add tracking for the customer.
+	        You can enter up to three tracking numbers for item.
+	        If your carrier is not listed you can put it under other carrier.  Its best to link a website to
+		        the tracking.
+	        </p>
+		</div>
+    </div>
+
+    <div class="row">
+
+	    <div class="hidden-xs col-sm-2 col-md-3"></div>
+	    <div class="col-12 col-sm-8 col-md-6">
+	        <form method="post" class="form-horizontal">
+	        {{ form.csrf_token }}
+
+            <hr style="color: black; width:750px; margin-left: 0px;">
+            <h4>Tracking#1</h4>
+
+            <div class="form-group">
+            <label class="col-2 control-label">Select Carrier</label>
+            <div class="col-10">
+            {{ render_field(form.selectcarrier1, class="form-control") }}
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-2 control-label">Other</label>
+             <div class="col-10">
+            {{ render_field(form.othercarrier1, class="form-control") }}
+             </div>
+            </div>
+
+
+            <div class="form-group">
+            <label class="col-2 control-label">Tracking Number</label>
+             <div class="col-10">
+            {{ render_field(form.trackingnumber1, class="form-control") }}
+             </div>
+            </div>
+
+
+
+
+
+
+
+			<hr style="color: black; width:750px; margin-left: 0px;">
+
+             <h4>Tracking #2(Optional)</h4>
+
+            <div class="form-group">
+            <label class="col-2 control-label">Select Carrier</label>
+            <div class="col-10">
+            {{ render_field(form.selectcarrier2, class="form-control") }}
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-2 control-label">Other</label>
+             <div class="col-10">
+            {{ render_field(form.othercarrier2, class="form-control") }}
+             </div>
+            </div>
+
+
+            <div class="form-group">
+            <label class="col-2 control-label">Tracking Number</label>
+             <div class="col-10">
+            {{ render_field(form.trackingnumber2, class="form-control") }}
+             </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+			<hr style="color: black; width:750px; margin-left: 0px;">
+
+             <h4>Tracking #3(Optional)</h4>
+
+            <div class="form-group">
+            <label class="col-sm-2 control-label">Select Carrier</label>
+            <div class="col-sm-10">
+            {{ render_field(form.selectcarrier3, class="form-control") }}
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-sm-2 control-label">Other</label>
+             <div class="col-sm-10">
+            {{ render_field(form.othercarrier3, class="form-control") }}
+             </div>
+            </div>
+
+
+            <div class="form-group">
+            <label class="col-sm-2 control-label">Tracking Number</label>
+             <div class="col-sm-10">
+            {{ render_field(form.trackingnumber3, class="form-control") }}
+             </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+            <div class="text-center">
+            {{ render_field(form.submit, class="btn btn-primary", Value="submit") }}
+            </div>
+            </div>
+
+			<div class="hidden-xs col-sm-2 col-md-3"></div>
+        </form>
+	    </div>
+
+    </div>
+
+
+
+{% endblock %}

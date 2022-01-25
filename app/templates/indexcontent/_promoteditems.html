@@ -1,0 +1,50 @@
+
+
+<div class="row mb-5">
+
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 linkcolororange">
+                <h4>Promoted Items</h4>
+            </div>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <!-- xsonly -->
+            <div class="d-block d-sm-none">
+                <div class="card-deck">
+                    {% for item in promoteditems[0:1] %}
+                        {% include 'indexcontent/itemlayout/basic.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-sm-block d-md-none">
+                <div class="card-deck">
+                    {% for item in promoteditems[0:2] %}
+                        {% include 'indexcontent/itemlayout/basic.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-md-block d-lg-none">
+                <div class="card-deck">
+                    {% for item in promoteditems[0:3] %}
+                        {% include 'indexcontent/itemlayout/basic.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-lg-block d-xl-none">
+                <div class="card-deck">
+                    {% for item in promoteditems[0:4] %}
+                        {% include 'indexcontent/itemlayout/basic.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-none d-xl-block">
+                <div class="card-deck">
+                    {% for item in promoteditems[0:5] %}
+                        {% include 'indexcontent/itemlayout/basic.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

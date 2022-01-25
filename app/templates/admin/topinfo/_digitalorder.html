@@ -1,0 +1,76 @@
+
+{% if order.feedback == 1 and order.vendor_id != current_user.id %}
+<div id="trade_orderbox" class="border graybg">
+
+{% else %}
+<div id="trade_orderbox_addrating" class="border graybg">
+{% endif %}
+
+    <!-- image -->
+    <div id="trade_orderbox_image">
+       <img src="{{ order.trade_id|orderpicture(type=2) }}" width="200px" height="200px">
+    </div>
+
+    <!-- info -->
+<div id="trade_orderbox_description">
+    <div id="trade_orderbox_title" class="linkcolor">
+        <h4><a href="{{ url_for('digital.digitaltrade',id=order.item_id) }}" >{{ order.title }}</a></h4>
+    </div>
+ <div id="trade_orderbox_info" class="linkcolor"><b>Order id:</b> #<a href="{{ url_for('vendor.viewOrder', id=order.id) }}">{{ order.id }}</a></div>
+        <div id="trade_orderbox_info"><b>Trade type:</b>
+            {% if order.type == 1 %}
+                Physical Item
+            {% endif %}
+            {% if order.type == 2 %}
+                Digital Item
+            {% endif %}
+            {% if order.type == 3 %}
+                Bitcoin Trade
+            {% endif %}
+        </div>
+
+        <div id="trade_orderbox_info"><b>Trade Status: </b>
+            {% if order.cancelled == 1 %}
+         Order was cancelled.
+            {% endif %}
+            {% if order.completed == 0 %}
+            Trade is in progress.
+            {% endif %}
+            {% if order.completed == 1 %}
+                Trade Complete.
+            {% endif %}
+            {% if order.disputed_order == 1 %}
+             Order is disputed.
+            {% endif %}
+        </div>
+
+        <div id="trade_orderbox_info"><b>Trade Category: </b>
+            {{ order.subcategory|subcategorylabel }}
+        </div>
+        <div id="trade_orderbox_info"><b>Coin Status: </b>
+
+            {% if order.released == 0 %}
+            Coin in Escrow
+            {% endif %}
+            {% if order.released == 1 %}
+            Coin Released
+            {% endif %}
+        </div>
+
+            {% if order.completed == 1 %}
+            <div id="trade_orderbox_info"><b>Trade finalized: </b>{{ moment(timestamp=order.returncancelage, local=False).format('L')  }}</div>
+            {% endif %}
+    </div>
+
+
+    <!-- Buttons -->
+    <div id="trade_orderbox_buttons">
+        <div id="trade_orderbox_howmuch"><h5>Pricing</h5></div>
+        <div id="trade_orderbox_pricebtc" class="btcorange"><h4> {{ order.price|formatbtctostring }} BTC</h4></div>
+        <div id="trade_orderbox_howmuch"><h4></h4></div>
+
+    </div>
+
+
+
+</div>

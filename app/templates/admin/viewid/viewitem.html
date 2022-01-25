@@ -1,0 +1,11 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"> <a  href="{{ url_for('wallet.walletHome') }}">Wallets</a></li>
+        </ol>
+    </nav>
+
+{% endblock %}

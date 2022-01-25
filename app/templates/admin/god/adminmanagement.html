@@ -1,0 +1,43 @@
+{% extends "/layouts/account_holder.html" %}
+
+{% block content %}
+
+ <div id="auth_security">
+        <form method="post">
+            {{ adminform.csrf_token }}
+    Username
+    {{ render_field(adminform.username, class="form-control") }}
+            Role
+    {{ render_field(adminform.admin_role, class="form-control") }}
+      {{ render_field(adminform.submit, class="btn btn-primary", value="submit") }}
+
+
+</form>
+
+
+
+
+
+        <h3>Current Admins</h3>
+
+   <table class="table" cellspacing="20" cellpadding="20" width="100%">
+            <tr>
+            <th style="background-color: #0d579b; color: #fff; width:10%;">Userid</th>
+            <th style="background-color: #0d579b; color: #fff;width:25%;">Username</th>
+            <th style="background-color: #0d579b; color: #fff;width:10%;">Level</th>
+            <th style="background-color: #0d579b; color: #fff;width:10%;">Buttons</th>
+            </tr>
+            {% for user in adminaccounts %}
+
+                <tr>
+                <td width="15%">{{ user.id }} </td>
+                <td width="15%">{{ user.username }} </td>
+                <td width="15%">{{ user.admin_role }} </td>
+                <td width="15%"></td>
+                </tr>
+            {% endfor %}
+            </table>
+
+</div>
+
+{% endblock %}

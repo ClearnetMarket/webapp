@@ -1,0 +1,110 @@
+
+
+
+<div class="text-center">
+    <a href="{{ url_for('item.Itemforsale', id=item.id) }}">
+        <img src="{{ url_for('userdata.media_file',
+            filename=('item/' +
+            item.stringnodeid +item.stringauctionid + item.imageone + "_250x.jpg")) }}" class="boximage">
+    </a>
+</div>
+
+<div class="text-center">
+    <b>{{ item.itemtitlee |truncate(100)  }}</b>
+</div>
+
+<div id="simpleitem_pricelocal" class="text-center">
+    <b>
+        {{ item.price }}
+        {{ item.currency|currencyformat }}
+    </b>
+</div>
+<div class="text-center">
+    {{ item.price|btcprice(currency=item.currency) }} BTC
+</div>
+
+
+<div class="text-center">
+    {%  if item.itemrating == 0 %}
+        <div class="text-center">
+            No ratings
+        </div>
+
+    {%  endif %}
+    {%  if 0.499 >= item.itemrating >= 0.0001  %}
+        ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/05stars.jpg'  )  }}" >
+    {%  endif %}
+
+    {%  if 0.999 >= item.itemrating >= 0.5  %}
+        <div id="widthstars">
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/05stars.jpg'  )  }}" >
+        </div>
+    {%  endif %}
+
+    {%  if 1.4999 >= item.itemrating >= 1  %}
+        <div id="widthstars" >
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/10stars.jpg'  )  }}" >
+        </div>
+    {%  endif %}
+
+    {%  if 1.99999 >= item.itemrating >= 1.5  %}
+        <div id="widthstars" >
+            ({{ item.reviewcount}})<img src="{{ url_for('static', filename='/images/stars/15stars.jpg'  )  }}" >
+        </div>
+    {%  endif %}
+
+    {%  if 2.4999 >= item.itemrating >= 2  %}
+        <div id="widthstars">
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/20stars.jpg' )}}" >
+        </div>
+    {%  endif %}
+
+    {%  if 2.99999 >= item.itemrating >= 2.5  %}
+        <div id="widthstars">
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/25stars.jpg' )}}" >
+        </div>
+    {%  endif %}
+
+    {%  if 3.499 >= item.itemrating >= 3  %}
+        <div id="widthstars" >
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/30stars.jpg'  )  }}" >
+        </div>
+    {%  endif %}
+
+    {%  if 3.99999 >= item.itemrating >= 3.5  %}
+        <div id="widthstars" >
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/35stars.jpg'  )  }}" >
+        </div>
+    {%  endif %}
+
+    {%  if 4.499 >= item.itemrating >= 4  %}
+        <div id="widthstars" >
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/40stars.jpg'  )  }}" >
+        </div>
+    {%  endif %}
+
+    {%  if 4.99999 >= item.itemrating >= 4.5  %}
+        <div id="widthstars" >
+            ({{ item.reviewcount }}) <img src="{{ url_for('static', filename='/images/stars/45stars.jpg'  )  }}" >
+        </div>
+    {%  endif %}
+
+    {%  if item.itemrating == 5  %}
+        <div id="widthstars" >
+            ({{ item.reviewcount }})<img src="{{ url_for('static', filename='/images/stars/50stars.jpg'  )  }}">
+        </div>
+    {%  endif %}
+</div>
+
+<div class="text-center linkcolor">
+    <a href="{{ url_for('profile.user',username=item.vendor_name) }}">
+        {{ item.vendor_name }}
+    </a>
+
+    ({{ item.vendor_id|avgvendorrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px">)
+    ({{ item.vendor_id|vendorratingcount }})
+</div>
+
+<div class="text-center">
+    <a class="btn btn-primary" href="{{ url_for('item.Itemforsale', id=item.id) }}" role="button">View</a>
+</div>

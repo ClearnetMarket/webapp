@@ -1,0 +1,52 @@
+
+
+<div class="col-12">
+    <div class="col-12" style="">
+        <a href="{{ url_for('item.Itemforsale',id=item.id) }}">
+            <img src="{{ url_for('userdata.media_file',
+                                filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_250x.jpg")) }}">
+        </a>
+    </div>
+
+    <div class="col-12 text-center" style="height: 50px; overflow: hidden; font-size: 12px;">
+        {{ item.itemtitlee| truncate(40) }}
+    </div>
+
+    <div class="col-12 ">
+        <b>
+            {{ item.price|safe }}
+            {{ item.currency|currencyformat|safe }}
+
+        </b>
+    </div>
+    {% if current_user.is_authenticated %}
+        {% if item.currency != current_user.currency %}
+            <div class="col-12 text-center">
+
+                {{ item.price|currencytocurrency(currency = current_user.currency,
+                currentusercurrency = item.currency) }}
+
+                {{ current_user.currency|currencyformat }}
+
+            </div>
+        {% endif %}
+
+    {% endif %}
+
+    <div class="col-12">
+        {% if item.digital_currency2 == 1 %}
+            <div class="btcorange">
+              BTC Accepted
+            </div>
+            <br>
+
+
+        {% endif %}
+        {% if item.digital_currency3 == 1 %}
+            <div class="btccash">
+              BCH Accepted
+            </div>
+            <br>
+        {% endif %}
+    </div>
+</div>

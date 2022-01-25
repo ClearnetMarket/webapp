@@ -1,0 +1,23 @@
+{% extends "layouts/home.html" %}
+{% block content %}
+
+    {% if current_user.vendor_account == 1 %}
+        {% include 'layouts/subindex/_smallvendorbar.html' %}
+    {% else %}
+    {% endif %}
+
+    <div style="padding-left: 25px;">
+        <div class="row" style="margin-bottom: 50px;">
+            <h2>Video Games, Board Games, and more </h2>
+        </div>
+        <div class="row" style="margin-bottom: 50px;">
+            {% include 'search/categories/categoryhomepages/sublayouts/_bestsellers.html' %}
+        </div>
+        <div class="row" style="margin-bottom: 50px;">
+            {% include 'search/categories/categoryhomepages/sublayouts/_todaysfeatured.html' %}
+        </div>
+    </div>
+
+
+
+{% endblock %}

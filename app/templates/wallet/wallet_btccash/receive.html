@@ -1,0 +1,75 @@
+{% extends 'wallet/wallet_btccash/wallet_layout.html' %}
+
+{% block content %}
+{% from "_formhelpers.html" import render_field %}
+
+
+	<div class="row">
+		<div class="col-12 col-sm-12">
+			<p>In order to receive bitcoin cash, please send to the address below, or scan the QR Code.  </p>
+            <br>
+            <p>Please note:</p>
+            <ul>
+                <li>Wallet addresses are generated frequently.  This helps with the privacy of your transaction.</li>
+                <li>You are given a new address after a period of time, or after a withdrawal/deposit.</li>
+                <li>Bitcoin cash coins sent to an old address could become lost.  Make sure you send to the address below.</li>
+                <li>Bitcoin cash transfer speed is dependent on several factors, and may not appear immediately.</li>
+            </ul>
+		</div>
+	</div>
+
+    {% if wallet.address1status ==1 %}
+	<div class="row" style="margin-top: 50px;">
+		<div class="col-12 ">
+			Deposit Btccash address
+		</div>
+		<div class="col-12">{{ wallet.address1 }}</div>
+	</div>
+	<div class="row" style="margin-top: 50px; margin-bottom: 200px; ">
+		<div class="col-12 col-sm-12 text-center">
+			<img src="{{ qrcode(wallet.address1) }}" width="200px" height="200px;">
+		</div>
+	</div>
+    {% endif %}
+
+    {% if wallet.address2status ==1 %}
+
+	<div class="row" style="margin-top: 50px;">
+		<div class="col-12">
+			Deposit Btccash address:
+		</div>
+		<div class="col-12 ">{{ wallet.address2 }}</div>
+	</div>
+	<div class="row" style="margin-top: 50px; margin-bottom: 200px; ">
+		<div class="col-12 col-sm-12 text-center">
+			<img src="{{ qrcode(wallet.address2) }}" width="200px" height="200px;">
+		</div>
+	</div>
+    {% endif %}
+
+        {% if wallet.address3status ==1 %}
+
+	<div class="row" style="margin-top: 50px;">
+		<div class="col-12">
+			Deposit Btccash address:
+		</div>
+		<div class="col-12">{{ wallet.address3 }}</div>
+	</div>
+	<div class="row" style="margin-top: 50px; margin-bottom: 200px; ">
+		<div class="col-12 text-center">
+			<img src="{{ qrcode(wallet.address3) }}" width="200px" height="200px;">
+		</div>
+	</div>
+    {% endif %}
+
+        {% if wallet.address1status == 0 and wallet.address2status == 0 and wallet.address3status == 0%}
+
+	<div class="row" style="margin-top: 50px;">
+		<div class="col-12 col-sm-6">
+			<h4>Wallet being created </h4>
+		</div>
+		<div class="col-12 col-sm-6"></div>
+	</div>
+
+    {% endif %}
+{% endblock %}

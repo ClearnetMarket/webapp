@@ -1,0 +1,114 @@
+
+<div class="hidden-xs">
+    <div class="row linkcolor_topbar border clearnetlightblue" style="color:#ffffff; max-width: 220px;">
+
+        <!--username-->
+        <div class="col-sm-12 text-center">
+            <a href="{{ url_for('profile.user',username=user.username) }}">{{ user.username }}</a>
+        </div>
+
+        <!--Image-->
+        <div class="col-sm-12 text-center">
+            <img src="{{ user.id|profilepicture }}" width="125px" height="125px">
+        </div>
+
+        <!--country-->
+        <div class="col-sm-12 text-center">
+            {{ user.country|countryformat }}
+        </div>
+
+        <!--Badge-->
+        <div class="col-sm-12 text-center">
+            <img src="{{ url_for('static', filename='/images/rank-badge/' + userpictureid + '.png')  }}"
+                 width="40px" height="40px">
+        </div>
+
+        <!--Level-->
+        <div class="col-sm-12 text-center">
+            Lvl {{ usergetlevel.level }}<br>
+            {% if user.id|trustlevel == '0' %}
+            {% else %}
+                <a href="{{ url_for('main.levels') }}">
+                    <img src="{{ url_for('static', filename='/images/trustlevel/' + user.id|trustlevel + '.png')  }}"
+                         width="125px" height="30px">
+                </a>
+            {% endif %}
+        </div>
+
+        <!--Stats-->
+        {% if current_user.username == user.username %}
+        {% else %}
+            <div class="col-sm-12 text-center">
+                <a class="btn btn-warning btnwhite"
+                   href="{{ url_for('message.messagecenter_Compose_specificperson', person=user.username) }}"
+                   role="button">Send Message</a>
+            </div>
+        {% endif %}
+
+        <!--Rating-->
+        <div class="col-sm-12 text-center">
+            Rating
+            {% if userstats.userrating == 0 %}
+                0
+            {% else %}
+                {{ userstats.userrating }}
+            {% endif %}
+            <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="20px" height="20px">
+        </div>
+        <div class="col-sm-12 text-center">
+            Items Bought:  {{ userstats.totalitemsbought }}
+        </div>
+
+        <div class="col-sm-12 text-center">
+            Reviews Given: {{ userstats.totalreviews }}
+        </div>
+
+        <!--Achievements-->
+        {% if userach.ach1 %}
+            {% if userach.ach1 == '0'  %}
+            {% else %}
+                <div class="col-sm-12 text-center">
+                     <img src="{{ url_for('static', filename='/images/achievement/' +  userach.ach1_cat  + '/' + userach.ach1 + '.png')  }}" width="195px" height="60px" >
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if userach.ach1 %}
+            {% if userach.ach2 == '0' %}
+            {% else %}
+                <div class="col-sm-12 text-center">
+                    <img src="{{ url_for('static', filename='/images/achievement/' +  userach.ach2_cat  + '/' + userach.ach2 + '.png')  }}" width="195px" height="60px" >
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if userach.ach3 %}
+            {% if userach.ach3 == '0' %}
+            {% else %}
+                <div class="col-sm-12 text-center">
+                    <img src="{{ url_for('static', filename='/images/achievement/' +  userach.ach3_cat  + '/' + userach.ach3 + '.png')  }}" width="195px" height="60px" >
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if userach.ach4 %}
+            {% if userach.ach4 == '0' %}
+            {% else %}
+                <div class="col-sm-12 text-center">
+                    <img src="{{ url_for('static', filename='/images/achievement/' +  userach.ach4_cat  + '/' + userach.ach4 + '.png')  }}" width="195px" height="60px" >
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if userach.ach5 %}
+            {% if userach.ach5 == '0' %}
+            {% else %}
+                <div class="col-sm-12 text-center">
+                    <img src="{{ url_for('static', filename='/images/achievement/' +  userach.ach5_cat  + '/' + userach.ach5 + '.png')  }}" width="195px" height="60px" >
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    </div>
+</div>
+<hr>

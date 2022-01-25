@@ -1,0 +1,90 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+<!-- help topics Questions-->
+<div class="row">
+    <h2>Disputes</h2>
+</div>
+    <a name='backtotop'></a>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other1">Who keeps the fee during a dispute?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other2">Can I pursue action after a dispute has been settled?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other3">How are disputes evaluated?</a>
+	</div>
+</div>
+<!-- END help topics Questions -->
+
+
+
+<br><br><br><br>
+    <h2>Answers</h2>
+<!-- END help topics Answers -->
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other1'></a>
+    <h4>Who keeps the fee during a dispute?</h4>
+    <div class="text-right">
+
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    The customer never pays a fee while on Clearnet Market(except wallet txt fees for withdrawls).
+    If a dispute is issued with an unsuccessful trade, no fee is applied to the vendor.
+    Fees are only applied upon successful trades and purchases.
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other2'></a>
+    <h4>Can I pursue action after a dispute has been settled?</h4>
+    <div class="text-right">
+
+	    <a href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    Once a dispute has been settled by a moderator, it is final.  You can read our terms and conditions that you agreed upon when signing up
+    to go over official actions and consequences.
+	</div>
+</div>
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other3'></a>
+    <h4>How are disputes evaluated?</h4>
+    <div class="text-right">
+
+	    <a href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+Disputes are evaluated as is per dispute basis.  We judge the overall conversation, proof of documents, receipts, feedback, etc
+    to determine an outcome of a dispute.
+	</div>
+</div>
+
+
+
+{% endblock %}

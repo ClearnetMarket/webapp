@@ -1,0 +1,183 @@
+<!--Holder-->
+{% if current_user.is_authenticated %}
+<!--Holder-->
+{% if user1.admin ==1 %}
+<div
+  class="row linkcolor_topbar clearnetorangebackground text-center text-white"
+>
+  {% else %}
+  <div class="row linkcolor_topbar clearnetblue text-center text-white">
+    {% endif %}
+    <!--username-->
+    <div class="col-12">
+      {% if user1.vendor_account ==1 %}
+      <div class="col-12 mb-2" style="font-size: 15px">
+        <a href="{{ url_for('profile.vendorprofile',username=user1.username) }}"
+          >{{ user1.username }}</a
+        >
+      </div>
+      {% else %}
+      <div class="col-12 mb-2" style="font-size: 15px">
+        <a href="{{ url_for('profile.user',username=user1.username) }}"
+          >{{ user1.username }}</a
+        >
+      </div>
+
+      {% endif %}
+    </div>
+    <!--Image-->
+    <div class="col-12 mb-2" style="overflow: hidden">
+      <img src="{{user1.id|profilepicture }}" width="125px" height="125px" />
+    </div>
+
+    <!--country-->
+    <div class="col-12 mb-2">{{ user1.country|countryformat }}</div>
+
+    <!--Badge-->
+    <div class="col-12 mb-1">
+      <img
+        src="{{ url_for('static', filename='/images/rank-badge/' + user1pictureid + '.png')  }}"
+        width="40px"
+        height="40px"
+      />
+    </div>
+
+    <!--Level-->
+    <div class="col-12 mb-1">
+      Lvl {{ user1level.level }}<br />
+      {% if user1.id|trustlevel == '0' %} {% else %}
+      <a href="{{ url_for('main.levels') }}">
+        <img
+          src="{{ url_for('static', filename='/images/trustlevel/' + user1.id|trustlevel + '.png')  }}"
+          width="125px"
+          height="30px"
+        />
+      </a>
+      {% endif %}
+    </div>
+
+    {% if user1width %}
+
+    <div class="col-12 mb-2">
+      Lvl ({{ user1width }}%)
+      <div class="progress">
+        <div
+          class="progress-bar progress-bar-warning"
+          role="progressbar"
+          aria-valuenow="{{ user1width }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          style="width: '{{ user1width }}%'"
+        ></div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!--msg-->
+    {% if current_user.id == user1.id%} {% else %}
+    <div class="col-12 mb-2">
+      <a
+        class="btn btn-warning btnwhite"
+        href="{{ url_for('message.messagecenter_Compose_specificperson',
+                     person=user1.username) }}"
+        role="button"
+        >Send Message</a
+      >
+    </div>
+    {% endif %}
+
+    <!--Stats-->
+    {% if user1.vendor_account == 1 %}
+
+    <div class="col-12">Vendor Rating</div>
+    <div class="col-12 mb-2">
+      {{ user1vendorstats.vendorrating }}
+      <img
+        src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+        width="15px"
+        height="15px"
+      />
+    </div>
+
+    <div id="col-12 mt-1">Items Sold</div>
+    <div id="col-12 mb-2">{{ user1vendorstats.totalsales }}</div>
+
+    <div class="col-12">Reviews</div>
+    <div class="col-12 mb-2">{{user1vendorstats.totalreviews }}</div>
+
+    {% else %}
+
+    <div id="col-12 ">Rating</div>
+    <div id="col-12 mb-2">
+      {{ user1stats.userrating }}
+      <img
+        src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+        width="20px"
+        height="20px"
+      />
+    </div>
+
+    <div id="col-12">Items Bought</div>
+    <div id="col-12 mb-2">{{ user1stats.totalitemsbought }}</div>
+
+    <div id="col-12">Reviews</div>
+    <div id="col-12 mb-2">{{ user1stats.totalreviews }}</div>
+
+    {% endif %} {% if user1ach.ach1 == '0' %} {% else %}
+    <div class="text-center mb-2">
+      <img
+        src="{{ url_for('static', filename='/images/achievement/' +  user1ach.ach1_cat  + '/' + user1ach.ach1 + '.png')  }}"
+        width="195px"
+        height="60px"
+      />
+    </div>
+    {% endif %} {% if user1ach.ach2 == '0' %} {% else %}
+    <div class="text-center mb-2">
+      <img
+        src="{{ url_for('static', filename='/images/achievement/' +  user1ach.ach2_cat  + '/' + user1ach.ach2 + '.png')  }}"
+        width="195px"
+        height="60px"
+      />
+    </div>
+    {% endif %} {% if user1ach.ach3 == '0' %} {% else %}
+    <div class="text-center mb-2">
+      <img
+        src="{{ url_for('static', filename='/images/achievement/' +  user1ach.ach3_cat  + '/' + user1ach.ach3 + '.png')  }}"
+        width="195px"
+        height="60px"
+      />
+    </div>
+    {% endif %} {% if user1ach.ach4 == '0' %} {% else %}
+    <div class="text-center mb-2">
+      <img
+        src="{{ url_for('static', filename='/images/achievement/' + user1ach.ach4_cat  + '/' + user1ach.ach4 + '.png')  }}"
+        width="195px"
+        height="60px"
+      />
+    </div>
+    {% endif %} {% if user1ach.ach5 == '0' %} {% else %}
+    <div class="text-center mb-2">
+      <img
+        src="{{ url_for('static', filename='/images/achievement/' +  user1ach.ach5_cat  + '/' + user1ach.ach5 + '.png')  }}"
+        width="195px"
+        height="60px"
+      />
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% else %}
+<div class="row linkcolor_topbar clearnetblue text-center">
+  <div class="col-12">
+    <a href="{{ url_for('auth.register') }}">Sign Up</a>
+    <div class="col-12">
+      <img src="{{ url_for('static', filename="/images/profileimages/0.png" )
+      }}" width="100%">
+    </div>
+    <div class="col-12" class="text-center linkcolor_topbar clearnetwhite">
+      level 0
+    </div>
+  </div>
+</div>
+{% endif %}

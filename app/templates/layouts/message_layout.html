@@ -1,0 +1,103 @@
+{% from "_formhelpers.html" import render_field %} {% include
+'layouts/headers/_headerplain.html' %}
+<body>
+  <div class="container clearnetcontainer">
+    <nav aria-label="breadcrumb" class="linkcolor">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ url_for('index') }}">Home</a>
+        </li>
+      </ol>
+    </nav>
+    <!--flashbar-->
+    <div class="row">
+      <div class="col-xs-hidden col-sm-3"></div>
+      <div class="col-12 col-sm-6">
+        {% include 'layouts/sublayout/_flashbar.html' %}
+      </div>
+      <div class="col-xs-hidden col-sm-3"></div>
+    </div>
+
+    <div class="row">
+      <!--sidebar -->
+      <div class="col-12 col-sm-4">
+        <div class="classWithPad border" style="">
+          <ul>
+            <a
+              class="btn btn-warning"
+              href="{{ url_for('message.messagecenter_Compose') }}"
+              role="button"
+            >
+              Compose
+              <span
+                class="fa fa- pencil"
+                aria-hidden="true"
+                style="font-size: 20px"
+              >
+              </span>
+            </a>
+            <br /><br />
+            <li class="linkcolor">
+              <a href="{{ url_for('message.messagecenter') }}" role="button"
+                >New Messages ({{ allmsgcount }})
+              </a>
+            </li>
+            <li class="linkcolor">
+              <a
+                class="linkcolor"
+                href="{{ url_for('message.messagecenter_oldmsgs') }}"
+                role="button"
+                >Read Messages ({{ oldmsgcount }})
+              </a>
+            </li>
+
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('message.messagecenter_official') }}"
+                role="button"
+              >
+                Official ({{ officialmsgcount }})
+              </a>
+            </li>
+
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('message.messagecenter_disputes') }}"
+                role="button"
+              >
+                Disputes ({{ disputesmsgcount }})
+              </a>
+            </li>
+
+            <br /><br />
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('message.messagecenter_Sent') }}"
+                role="button"
+              >
+                Sent
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!--Content-->
+
+      <div class="col-12 col-sm-8">{% block content %} {% endblock %}</div>
+      <!-- END Content-->
+    </div>
+    <!--END ROW-->
+  </div>
+  <!--END Container-->
+
+  <script>
+    function toggle(source) {
+      var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i] != source) checkboxes[i].checked = source.checked;
+      }
+    }
+  </script>
+</body>
+{% include 'layouts/subindex/_footer.html' %}

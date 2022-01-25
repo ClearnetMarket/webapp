@@ -1,0 +1,149 @@
+
+<!---ratings bar --->
+<div class="row">
+    <div class="col-sm-12" style="font-size: 20px; ">
+        Vendor Ratings
+    </div>
+</div>
+<hr>
+
+
+<div class="row" style="margin-bottom: 20px;">
+    <div class="col-sm-4 text-center">
+        <div class="classWithPad" style="height: 150px;font-size: 18px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Vendor Rating<br><br><h4> {{ vendorscore }} out of 5</h4>
+        </div>
+    </div>
+    <div class="col-sm-4 text-center" >
+        <div class="classWithPad" style="height: 150px;font-size: 18px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Item Rating<br><br><h4> {{ itemscore }} out of 5</h4>
+        </div>
+    </div>
+    <div class="col-sm-4 text-center" >
+        <div class="classWithPad" style="height: 150px;font-size: 18px; background-color:#0d579b;color:#FFFFFF;min-width:225px;">
+            Past 6 months<br><br><h4> +- 0</h4>
+        </div>
+    </div>
+
+</div>
+
+<!---ratings Table --->
+{% if ratingscount >= 1 %}
+    <table class="table table-condensed">
+        <tr>
+            <th class="col-2 bluetable">
+                Age
+            </th>
+
+            <th class="col-2 bluetable">
+                Vendor Rating
+            </th>
+            <th class="col-2 bluetable">
+                Item Rating
+            </th>
+
+            <th class="col-6 bluetable">
+                Comment
+            </th>
+        </tr>
+        {% for rate in ratings %}
+            <tr>
+                <td class="col-2 linkcolor">
+                    {{ moment(timestamp=rate.timestamp, local=False).fromNow(refresh=True)  }}
+                </td>
+                <td class="col-2 linkcolor">
+
+                    {% if rate.vendorrating == 1 %}
+                        <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+
+                    {% endif %}
+
+                    {% if rate.vendorrating == 2 %}
+                        <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}" >
+
+                    {% endif %}
+
+                    {% if rate.vendorrating == 3 %}
+                        <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}">
+
+                    {% endif %}
+
+                    {% if rate.vendorrating == 4 %}
+                        <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+
+                    {% endif %}
+
+                    {% if rate.vendorrating == 5 %}
+                        <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
+
+                    {% endif %}
+                </td>
+
+                <td class="col-2 linkcolor">
+                    {% if rate.itemrating == 1 %}
+                        <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+
+                    {% endif %}
+
+                    {% if rate.itemrating == 2 %}
+                        <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}" >
+
+                    {% endif %}
+
+                    {% if rate.itemrating == 3 %}
+                        <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}" >
+
+                    {% endif %}
+
+                    {% if rate.itemrating == 4 %}
+                        <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+
+                    {% endif %}
+
+                    {% if rate.itemrating == 5 %}
+                        <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}" >
+
+                    {% endif %}
+                </td>
+
+                <td class="col-6 linkcolor">
+                    {{ rate.comment }}
+                </td>
+
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
+    <div class="row text-center">
+        <div class="col-2"></div>
+        <div class="col-7">
+            {{ paginationvendorreview.info }}
+        </div>
+        <div class="col-2"></div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-2"></div>
+        <div class="col-7">
+            {{ paginationvendorreview.links }}
+        </div>
+        <div class="col-2"></div>
+    </div>
+
+
+
+{% else %}
+    <div class="row" style="margin-bottom: 200px;">
+        <div class="col-12">
+            Vendor has no ratings ..
+        </div>
+    </div>
+{% endif %}
+
+
+<div class="row" style="margin-bottom: 100px;">
+
+</div>
+

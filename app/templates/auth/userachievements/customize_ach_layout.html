@@ -1,0 +1,36 @@
+{% from "_formhelpers.html" import render_field %} {% include
+'layouts/headers/_headerplain.html' %} {% include
+'layouts/sublayout/_flashbar.html' %}
+<body>
+  <nav aria-label="breadcrumb" class="linkcolor">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+    </ol>
+  </nav>
+  <div class="clearnetcontainer container">
+    <div class="row">
+      <div class="hidden-sm hidden-xs col-sm-3">
+        <!-- user Profile-->
+
+        {% if current_user.vendor_account == 1 %} {% include
+        '/profile/profiles/_vendorprofile.html' %} {% else %} {% include
+        '/profile/profiles/_userprofile.html' %} {% endif %}
+      </div>
+      <!-- END user Profile-->
+
+      <div class="col-sm-9">
+        <!-- Content-->
+
+        <div class="row text-center" style="font-size: 22px">
+          <div class="col-12 col-sm-12">{{ title }}</div>
+        </div>
+
+        {% block content %} {% endblock %}
+      </div>
+      <!--End Content-->
+    </div>
+    <!-- End Page Row-->
+  </div>
+
+  {% include 'layouts/subindex/_footer.html' %}
+</body>

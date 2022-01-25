@@ -1,0 +1,18 @@
+<div class="clearnetblue">
+  <div id="userprofile_name" class="linkcolor blue text-center">
+    <a href="{{ url_for('auth.register') }}">Sign Up</a>
+  </div>
+  <div id="userprofile_image">
+    <img src="{{ url_for('static', filename="/images/profileimages/0.png" ) }}"
+    width="125px" height="125px">
+  </div>
+
+  <div id="userprofile_badges" class="text-center linkcolor">
+    <a href="{{ url_for('wallet.walletHome') }}">My Wallets</a><br />
+    Level 0<br /><br />
+    Buy with Crypto<br />
+    Free wallets<br />
+    Create your Store<br />
+    <br />
+  </div>
+</div>

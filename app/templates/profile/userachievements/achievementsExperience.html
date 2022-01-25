@@ -1,0 +1,8 @@
+{% extends "/profile/userachievements/_layout.html" %}
+{% block content %}
+    {% for f in x %}
+        {% if f.startswith('e') %}
+      {% include "auth/userachievements/_achievement.html" %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

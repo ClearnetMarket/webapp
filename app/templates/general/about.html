@@ -1,0 +1,74 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        </ol>
+    </nav>
+<div class="row">
+    <div class="col-12">
+        <h3>Welcome to Clearnet Market</h3>
+        <p>
+        Our goal at Clearnet Market is to provide a safe and easy way to buy, sell, and trade with bitcoin.
+        We believe strongly in user privacy, digital currencies, and the future of bitcoin.  We built this site with
+        the idea in mind that any person, from a poor to rich country, has the same opportunity to buy and sell
+        there goods.  We do not require yearly fees or that are a barrier for people to enter the market.
+        </p>
+    </div>
+</div>
+
+
+<div class="row graybg border" style="margin-bottom: 10px; padding: 10px;">
+    <div class="col-12 col-sm-9 col-md-10">
+        <h3>Privacy</h3>
+        <hr>
+        Our privacy policy is pretty simple.  We don't sell or even want your personal information.
+        To help with privacy protection,  we take the following measures.
+        <ul>
+            <li>We dont get your email and spam you.</li>
+            <li>We dont take your personal info or store it.</li>
+            <li>Shipping and tracking information is deleted once an order is finalized</li>
+            <li>Messages are deleted after 14 days</li>
+        </ul>
+    </div>
+    <div class="hidden-xs col-sm-3 col-md-2">
+        <img src="{{ url_for('static', filename='/images/about/lock.png')  }}" width="150px" height="150px">
+    </div>
+</div>
+
+
+<div class="row graybg border" style="margin-bottom: 10px;">
+    <div class="col-12 col-sm-9 col-md-10">
+        <h3>Built on User Reputation</h3><hr>
+        Clearnet Market is built on the reputation of the user.  Every user of the site has statistics and feedback
+        shown to the users.  Level up by getting experience from selling, buying, trading, or contributing to Clearnet Market.
+        Level down by bad reputation.  Decide who you want to trade with based on reputation.
+    </div>
+     <div class="hidden-xs col-sm-3 col-md-2">
+        <img src="{{ url_for('static', filename='/images/about/about_star.png')  }}" width="150px" height="150px">
+    </div>
+</div>
+
+
+<div class="row graybg border" style="margin-bottom: 10px;">
+    <div class="col-12 col-sm-9 col-md-10">
+        <h3>Buy and Sell Items for Bitcoin</h3><hr>
+        We are creating a better way to due commerce.  No need for a credit card, no hassles of banks, or creditors.
+        Anyone worldwide can use the same single currency on our site.
+    </div>
+    <div class="hidden-xs col-sm-3 col-md-2">
+    <img src="{{ url_for('static', filename='/images/about/For_Sale_by_Owner_Sign.png')  }}" width="150px" height="150px">
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

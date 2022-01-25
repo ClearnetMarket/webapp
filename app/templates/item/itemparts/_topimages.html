@@ -1,0 +1,76 @@
+<script>
+    $('.showImg').hover(function(){
+        $(".showImg").removeClass("active");
+        $(this).addClass("active");
+        var imgURL = $(this).find('img').attr("src");
+        $('#imgHolder').find('img').attr("src", imgURL);
+    });​
+</script>
+
+<div class="row">
+    <div class="col-12" style="min-height:300px; min-width: 300px;">
+        {% if item.imageone != '0' %}
+
+            <img id="large-image-id" src="{{ url_for('userdata.media_file',
+             filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_250x.jpg"))  }}"
+                 alt="large image" class="itempage_image_full">
+
+        {% else %}
+            <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" class="searchresultimage">
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        {% if item.imagetwo == '0' and item.imagethree == '0' and item.imagefour == '0' and item.imagefive == '0' %}
+
+        {% else %}
+            {% if item.imageone != '0' %}
+                <img
+                        onclick="document.getElementById('large-image-id').src=this.src"
+                        onmouseover="document.getElementById('large-image-id').src=this.src"
+                        src="{{ url_for('userdata.media_file',
+                 filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_250x.jpg"))  }}"
+                        style="width:100px; height:80px; margin-top: 10px;"
+                        alt="thumb image">
+            {% endif %}
+        {% endif %}
+        {% if item.imagetwo != '0' %}
+            <img
+                    onclick="document.getElementById('large-image-id').src=this.src"
+                    onmouseover="document.getElementById('large-image-id').src=this.src"
+                    src="{{ url_for('userdata.media_file',filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagetwo + "_250x.jpg"))  }}"
+                    style="width:100px; height:80px; margin-top: 10px;"
+
+                    alt="thumb image">
+        {% endif %}
+        {% if item.imagethree != '0' %}
+            <img
+                    onclick="document.getElementById('large-image-id').src=this.src"
+                    onmouseover="document.getElementById('large-image-id').src=this.src"
+                    src="{{ url_for('userdata.media_file',  filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagethree + "_250x.jpg"))  }}"
+                    style="width:100px; height:80px; margin-top: 10px;"
+                    alt="thumb image">
+        {% endif %}
+
+
+        {% if item.imagefour != '0' %}
+            <img
+                    onclick="document.getElementById('large-image-id').src=this.src"
+                    onmouseover="document.getElementById('large-image-id').src=this.src"
+                    src="{{ url_for('userdata.media_file', filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagefour + "_250x.jpg"))  }}"
+                    style="width:106px; height:80px;margin-top: 10px;"
+
+                    alt="thumb image">
+        {% endif %}
+        {% if item.imagefive != '0' %}
+            <img
+                    onclick="document.getElementById('large-image-id').src=this.src"
+                    onmouseover="document.getElementById('large-image-id').src=this.src"
+                    src="{{ url_for('userdata.media_file',filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagefive + "_250x.jpg"))  }}"
+                    style="width:106px; height:80px;margin-top: 10px;"
+
+                    alt="thumb image">
+        {% endif %}
+    </div>
+</div>

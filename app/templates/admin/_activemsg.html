@@ -1,0 +1,35 @@
+
+
+
+            <table cellspacing="20" cellpadding="20" width="100%">
+                    <tr>
+                    <th style="background-color: #0d579b; color: #fff; height: 25px;">Post#</th>
+                    <th style="background-color: #0d579b; color: #fff; height: 25px;">Subject</th>
+                    <th style="background-color: #0d579b; color: #fff;">User</th>
+                    <th style="background-color: #0d579b; color: #fff;">Time</th>
+                    <th style="background-color: #0d579b; color: #fff;"></th>
+
+                    </tr>
+                    <tr class="graybg">
+                        <td class="linkcolor" width="10%">{{ item.id }} </td>
+
+                        <td class="linkcolor" width="20%">
+                           {{ item.subject }}
+                        </td>
+
+                        <td class="linkcolor" width="20%">
+                         {{ item.author }}
+                        </td>
+
+
+                        <td class="linkcolor" width="15%">
+                            {{ moment(timestamp=item.timestamp, local=False).fromNow(refresh=True)  }}
+                        </td>
+
+
+
+                        <td width="5%">
+                            <a class="btn btn-warning" href="{{ url_for('admin.messenger', id=item.id) }}" role="button">View</a>
+                        </td>
+                    </tr>
+            </table>

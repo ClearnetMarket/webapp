@@ -1,0 +1,214 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <ol class="breadcrumb linkcolor">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('auth.orders') }}">Orders</a></li>
+    </ol>
+    <div class="row">
+        <div class="col-12 col-sm-4 border linkcolor" style="padding-bottom: 10px;"><!--left side -->
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <a  href="{{ url_for('item.Itemforsale', id=order.item_id) }}">
+                        <h3>{{ order.title}}</h3>
+                    </a>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12" style="margin: 0 auto;">
+                    <img src="{{ url_for('userdata.media_file',
+                     filename=('item/' + order.stringnodeid + order.stringauctionid + order.imageone + "_250x.jpg"))  }}"
+                     class="boximage">
+                </div>
+            </div>
+
+            <hr style="color: black; width:90%; margin-left: 0px;">
+
+            <b>Vendor:</b>
+            <a href="{{ url_for('profile.user',username=order.vendor) }}" >
+                {{ order.vendor }}
+                ({{ order.vendor_id|avgvendorrating }}
+                <img src="{{ url_for('static', filename='/images/stars/1s.png') }}"
+                                                           width="20px" height="20px">)
+                ({{ order.vendor_id|vendorratingcount }})
+            </a>
+            <br>
+            <b>Order id:</b>{{ order.id }}<br>
+
+            {% if order.completed == 1 %}
+                <b>Order Completed:</b>{{ moment(timestamp=order.completed_time, local=False).format('L')  }}<br>
+            {% endif %}
+
+            {%  if order.new_order == 1 %}
+                <b>Order Status:</b>
+
+                <div class="greenstatus">
+                    Waiting to be accepted<br>
+                </div>
+            {%  elif order.accepted_order == 1 %}
+                <b>Order Status:</b>
+
+                <div class="greenstatus">
+                    Order accepted waiting for shipment<br>
+                </div>
+
+            {%  elif order.waiting_order == 1 %}
+                <b>Order Status:</b>
+
+                <div class="greenstatus">
+                    Order Shipped<br>
+                </div>
+            {%  else %}
+            {%  endif %}
+
+
+            {% if order.request_cancel == 1 %}
+                <b>Order Status:</b>
+                <div class="redstatus">
+                    Request to Cancel Order Sent to Vendor<br>
+                </div>
+            {% endif %}
+
+            {% if order.cancelled == 1 %}
+                <b>Order Status:</b>
+                <div class="redstatus">Order Cancelled</div><br>
+            {% endif %}
+            {% if order.request_return == 1 %}
+                <b>Order Status:</b>
+                <div class="redstatus">Return Address Needed by Vendor</div><br>
+            {% endif %}
+
+            {% if order.request_return == 2 %}
+                <b>Order Status:</b>
+                <div class="redstatus"> Waiting on customer to mark as shipped</div><br>
+            {% endif %}
+
+            {% if order.request_return == 3 %}
+                <b>Order Status:</b>
+                <div class="redstatus"> Waiting on vendor to mark as received</div><br>
+            {% endif %}
+            {% if order.request_return == 4 %}
+                <b>Order Status:</b>
+                <div class="greenstatus">It was successfully returned</div><br>
+            {% endif %}
+
+
+            <b>Quantity:</b> {{ order.quantity }}<br>
+
+        </div><!--end left side-->
+
+
+        <div class="hidden-xs col-sm-1"></div><!--spacer-->
+
+
+        <div class="col-12 col-sm-7 border">	<!--right side -->
+            <h4>Tracking</h4><!-- topright side -->
+            <hr style="color: black; width:90%; margin-left: 0px;">
+            {% if order.type == 1 %}
+                {% if tracking %}
+
+
+
+                    {% if tracking.carrier1 == 1 %}
+                        <b> Carrier :</b>USPS<br>
+                    {% elif tracking.carrier1 == 2 %}
+                        <b>Carrier:</b> UPS<br>
+                    {% elif tracking.carrier1 == 3 %}
+                        <b>Carrier:</b> FEDEX<br>
+                    {% elif tracking.carrier1 == 4 %}
+                        <b> Carrier:</b> DHL<br>
+                    {% else %}
+                        <b>Carrier:</b> Other Carrier <br>{{ tracking.othercarrier1 }}<br>
+                    {% endif %}
+
+                    <b>Tracking Number:</b> {{ tracking.tracking1 }}<br>
+
+
+                    {% if tracking.tracking2|length > 5 %}
+                        {% if tracking.carrier2 == 1 %}
+                            <b> Carrier 2:</b> USPS<br>
+                        {% elif tracking.carrier2 == 2 %}
+                            <b> Carrier 2:</b> UPS<br>
+                        {% elif tracking.carrier2 == 3 %}
+                            <b>Carrier 2:</b> FEDEX<br>
+                        {% elif tracking.carrier2 == 4 %}
+                            <b> Carrier 1:</b> DHL<br>
+                        {% else %}
+                            <b> Carrier 2:</b>  <br>{{ tracking.othercarrier2 }}<br>
+                        {% endif %}
+
+                        <b>Tracking Number:</b> {{ tracking.tracking2 }}<br>
+                    {% endif %}
+
+                    {% if tracking.tracking3|length > 5 %}
+                        {% if tracking.carrier3 == 1 %}
+                            <b> Carrier 3:</b> USPS<br>
+                        {% elif tracking.carrier3 == 2 %}
+                            <b> Carrier 3:</b> UPS<br>
+                        {% elif tracking.carrier3 == 3 %}
+                            <b> Carrier 3:</b> FEDEX<br>
+                        {% elif tracking.carrier3 == 4 %}
+                            <b> Carrier 3:</b> DHL<br>
+                        {% else %}
+                            <b> Carrier 3:</b> Other Carrier <br>{{ tracking.othercarrier3 }}<br>
+                        {% endif %}
+
+                        <b>Tracking Number:</b> {{ tracking.tracking3 }}<br>
+                    {% endif %}
+                {% else %}
+                    No Tracking Available
+                {% endif %}
+            {% endif %}
+
+            <br><br>
+
+            <h4>Shipping Info</h4><!--bottom side -->
+            <hr style="color: black; width:90%; margin-left: 0px;">
+
+            <div class="row" style="position:relative; min-height:250px;white-space: pre-line;  word-break: keep-all;width:740px;">
+                <div class="col-12">
+                    {% if msg %}
+                        {{ msg.txtmsg }}
+                    {% else %}
+                        <strong>There is no tracking with this order.</strong><br>  If order is completed, tracking is deleted.
+                        <br>If order is not completed,
+                        you can msg the vendor and ask for tracking if it is available.
+                    {% endif %}
+                </div>
+            </div>
+
+
+
+            {% if order.released == 1 %}
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-5">
+                        <div class="red"><b>*Shipping has been deleted*</b></div>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+            {% else %}
+                <div class="row">
+
+                <div class="col-12 text-center">
+                    Shipping is deleted once the order is finalized
+                </div>
+
+            {% endif %}
+
+
+
+            </div><!--end right side-->
+
+
+        </div><!--end row-->
+    </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+
+<!-- help topics Questions-->
+<div class="row">
+    <h2>Common Cancellation Questions</h2>
+</div>
+    <a name='backtotop'></a>
+<div class="row">
+	<div class="col-12 question linkcolor">
+		<a href="#cancel1">Can I cancel an order?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+		<a href="#cancel2">What if it has already shipped?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+		<a href="#cancel3">The vendor is taking too long and I need my coin back</a>
+	</div>
+</div>
+
+
+<br>
+
+
+<!-- END help topics Questions -->
+
+
+
+<br><br><br><br>
+    <h2>Answers</h2>
+<!-- END help topics Answers -->
+<div class="row question linkcolor">
+	<div class="col-12 ">
+	<a name='cancel1'></a>
+    <h4>Can I cancel an order?</h4>
+    <div class="text-right">
+	    <a href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+	Yes you are allowed to cancel an item.  If you mistakenly ordered, navigate to your <a href="{{ url_for('auth.orders',
+	username=current_user.username) }}"> orders Page.</a>  From there you can cancel the item
+
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+	<a name='cancel2'></a>
+    <h4>What if it has already shipped?</h4>
+    <div class="text-right">
+	    <a href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+	If the item has already been marked as shipped.  You will have to initiate a return.  You can talk to a representative to speed up the process.
+	</div>
+</div>
+
+
+
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+	<a name='cancel3'></a>
+    <h4>The vendor is taking too long and I need my coin back</h4>
+    <div class="text-right">
+	    <a href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+	If you requested to cancel, if the vnedor has not accepted the order then you will be immediatly given back the coin.  If the vendor has accepted,
+    he has 24 hours to respond before you are refunded automatically.
+	</div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "/layouts/plain_nofooter.html" %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <form method="post">
+            {{ form.csrf_token }}
+            <div class="row text-center">
+                <div class="col-12">
+                    <h3>New Pin</h3>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-12">Pin</label>
+                <div class="col-12">
+                    {{ render_field(form.newpin1,
+                    placeholder="Enter New 4 Digit Pin", class="form-control") }}
+                    <div id="form_error">
+					<span class="error">
+					{% if form.newpin1.errors %}
+                        {% for error in form.newpin1.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    {% endif %}
+					</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-12">Confirm Pin</label>
+                <div class="col-12">
+                    {{ render_field(form.newpin2, placeholder="Confirm Pin", class="form-control") }}
+                    <div id="form_error">
+					<span class="error">
+					{% if form.newpin2.errors %}
+                        {% for error in form.newpin2.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    {% endif %}
+					</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-12 text-center">
+                    {{ render_field(form.submit,  value="Reset Pin", autocomplete="off", class="btn btn-primary") }}
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,279 @@
+{% extends "/layouts/plain.html" %} {% block content %}
+
+<nav aria-label="breadcrumb" class="linkcolor">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin.adminHome') }}">Admin Home</a>
+    </li>
+  </ol>
+</nav>
+
+<form method="Post">
+  {{ form.csrf_token }}
+  <div class="row text-center" style="margin-bottom: 25px">
+    <div class="col-6">
+      {{ render_field(form.searchbar, autocomplete="off",class="form-control",
+      type="text", placeholder="Search") }}
+    </div>
+    <div class="col-6">
+      {{ render_field(form.finduser, class="btn btn-success", type="submit",
+      value="Find User") }} {{ render_field(form.findorder, class="btn
+      btn-warning", type="submit", value="Find Order") }}
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col-12 linkcolor">
+    <a href="{{ url_for('admin.admin_viewallorders') }}">View All Orders</a>
+  </div>
+</div>
+
+{% if current_user.admin_role ==10 %}
+<div class="row linkcolor border graybg">
+  <h3>Level 10 area only</h3>
+  <ul>
+    <li>
+      <a
+        href="{{ url_for('admin.admin_clearnetprofit',
+                            username=current_user.username) }}"
+        >Profit
+      </a>
+    </li>
+  </ul>
+  <ul>
+    <li>
+      <a href="{{ url_for('admin.admin_movemoney') }}">Move Funds to user</a>
+    </li>
+    <li>
+      <a href="{{ url_for('admin.admin_movemoney_fromuser') }}"
+        >Take funds from user</a
+      >
+    </li>
+  </ul>
+  <ul>
+    <li>
+      <a href="{{ url_for('admin.changeitem') }}">Change item stats</a>
+    </li>
+  </ul>
+  <h5>Change user</h5>
+  <form method="Post">
+    {{ form.csrf_token }}
+    <div class="row text-center" style="margin-bottom: 25px">
+      <div class="col-6">
+        {{ render_field(form.changeuser_searchbar,
+        autocomplete="off",class="form-control", type="text",
+        placeholder="username ") }}
+      </div>
+      <div class="col-6">
+        {{ render_field(form.change_usersearch, class="btn btn-success",
+        type="submit", value="Find User") }}
+      </div>
+    </div>
+  </form>
+</div>
+{% else %} {% endif %}
+<div class="row border">
+  <div class="col-12 col-sm-6">
+    <div class="text-center">
+      <h4>You have {{ modorderscount }} active issues</h4>
+      <br />
+    </div>
+    {% for item in modorders %} {% include '/admin/_activedispute.html' %} {%
+    endfor %}
+  </div>
+  <div class="col-12 col-sm-6">
+    <div class="text-center">
+      <h4>You have {{ msgs_mod_count }} active messages</h4>
+      <br />
+    </div>
+    {% for item in currentmod_mod %} {% include '/admin/_activemsg.html' %} {%
+    endfor %}
+  </div>
+</div>
+
+<h4>item Disputes</h4>
+<table class="table-condensed col-12">
+  <tr>
+    <th class="bluetable col-2">Order Id</th>
+    <th class="bluetable col-2">Vendor</th>
+    <th class="bluetable col-2">User</th>
+    <th class="bluetable col-2">Price</th>
+    <th class="bluetable col-2">Time</th>
+    <th class="bluetable col-2"></th>
+  </tr>
+  {% if countitemdisputes > 0 %} {% for item in itemdisputes %}
+  <tr>
+    <td class="linkcolor col-2">{{ item.id }}</td>
+
+    <td class="linkcolor col-2">
+      <a href="{{ url_for('profile.user',username=item.vendor) }}">
+        {{ item.vendor }} ({{ item.vendor_id|vendorratingcount }}) ({{
+        item.vendor_id|avgvendorrating }}<img
+          src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+          width="15px"
+          height="15px"
+        />)
+      </a>
+    </td>
+
+    <td class="linkcolor col-2">
+      <a href="{{ url_for('profile.user',username=item.customer) }}">
+        {{ item.customer }} ({{ item.customer_id|userrating }}) ({{
+        item.customer_id|avguserrating }}<img
+          src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+          width="15px"
+          height="15px"
+        />)
+      </a>
+    </td>
+
+    <td class="linkcolor col-2">{{ item.price }} BTC</td>
+
+    <td class="linkcolor col-2">
+      {{ moment(timestamp=item.disputedtimer, local=False).fromNow(refresh=True)
+      }}
+    </td>
+
+    <td class="btnwhite col-2">
+      <a
+        class="btn btn-warning"
+        href="{{ url_for('admin.order_becomeadmin', id=item.id) }}"
+        role="button"
+        >Become Admin</a
+      >
+      <a
+        class="btn btn-primary"
+        href="{{ url_for('admin.dispute', id=item.id) }}"
+        role="button"
+        >View Dispute</a
+      >
+    </td>
+  </tr>
+  {% endfor %} {% else %}
+  <tr>
+    <td>No items ...</td>
+  </tr>
+  {% endif %}
+</table>
+
+<h4>Support messages</h4>
+<table class="table-condensed col-12">
+  <tr>
+    <th class="bluetable col-2">Post#</th>
+    <th class="bluetable col-2">User</th>
+    <th class="bluetable col-2">Time</th>
+    <th class="bluetable col-2"></th>
+  </tr>
+
+  {% if msgs_mod_count > 0 %} {% for item in msgs_mod %}
+  <tr class="graybg">
+    <td class="linkcolor col-2">{{ item.id }}</td>
+
+    <td class="linkcolor col-2">{{ item.author_id|username }}</td>
+
+    <td class="linkcolor col-2">
+      {{ moment(timestamp=item.timestamp, local=False).fromNow(refresh=True) }}
+    </td>
+
+    <td class="btnwhite col-2">
+      <a
+        class="btn btn-warning"
+        href="{{ url_for('service.helpwithissue_active',
+                                id=item.id) }}"
+        role="button"
+        >View</a
+      >
+    </td>
+  </tr>
+  {% endfor %} {% else %}
+  <tr>
+    <td>No admin support msgs</td>
+  </tr>
+
+  {% endif %}
+</table>
+
+<h4>Wallet Issues</h4>
+<table class="table-condensed col-12">
+  <tr>
+    <th class="bluetable col-3">id</th>
+    <th class="bluetable col-3">Userid</th>
+    <th class="bluetable col-3">time</th>
+    <th class="bluetable col-4">txtcomment</th>
+  </tr>
+
+  {% if countbadbtc > 0 %} {% for item in msgs_mod %}
+  <tr class="graybg">
+    <td class="linkcolor col-3">{{ badbtcissues.id }}</td>
+
+    <td class="linkcolor col-3">
+      {% if badbtcissues %} {{ badbtcissues.userid|username }} {{
+      badbtcissues.userid }} {% endif %}
+    </td>
+
+    <td class="linkcolor col-3">
+      {{ moment(timestamp=badbtcissues.created,
+      local=False).fromNow(refresh=True) }}
+    </td>
+
+    <td class="btnwhite col-4">{{ badbtcissues.txtcomment }}</td>
+  </tr>
+  {% endfor %} {% else %}
+  <tr>
+    <td>No wallet issues</td>
+  </tr>
+
+  {% endif %}
+</table>
+
+<h4>Feedback</h4>
+<table class="table-condensed col-12" style="margin-bottom: 200px">
+  <tr>
+    <th class="bluetable col-2">User name</th>
+    <th class="bluetable col-2">Category</th>
+    <th class="bluetable col-2">Message</th>
+    <th class="bluetable col-2">Email</th>
+    <th class="bluetable col-2">Time</th>
+    <th class="bluetable col-2"></th>
+  </tr>
+  {% if feedback %} {% for comment in feedback %}
+  <tr class="graybg">
+    <td class="linkcolor col-2">
+      <a href="{{ url_for('profile.user', username=comment.username) }}">
+        {{ comment.username }} ({{ comment.userid|userrating }}) ({{
+        comment.userid|avguserrating }}<img
+          src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+          width="15px"
+          height="15px"
+        />)
+      </a>
+    </td>
+
+    <td class="linkcolor col-2">{{ comment.type|feedbackcategory }}</td>
+
+    <td class="linkcolor col-2">{{ comment.comment }}</td>
+
+    <td class="linkcolor col-2">
+      {{ moment(timestamp=comment.timestamp, local=False).calendar() }}
+    </td>
+
+    <td class="btnwhite col-2">
+      <a
+        class="btn btn-danger btnwhite"
+        href="{{ url_for('admin.feedback_delete',id=comment.id) }}"
+        role="button"
+      >
+        Delete
+      </a>
+    </td>
+  </tr>
+  {% endfor %} {% else %}
+  <tr>
+    <td>No items ...</td>
+  </tr>
+  {% endif %}
+</table>
+
+<div class="row" style="margin-bottom: 300px"></div>
+{% endblock %}

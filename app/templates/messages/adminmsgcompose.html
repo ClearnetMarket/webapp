@@ -1,0 +1,90 @@
+{% extends "/layouts/message_layout.html" %}
+{% block content %}
+
+
+
+ <div id="form_error">
+ <div class="form-group row-bottom-margin">
+<label class="col-sm-2 control-label"></label>
+<div class="col-sm-8">
+
+
+<span class="error">
+{% if form.subject.errors %}
+{% for error in form.subject.errors %}
+Subject Error: {{ error }}
+{% endfor %}
+{% endif %}
+</span>
+
+</div>
+ </div>
+ </div>
+
+ <div id="form_error">
+ <div class="form-group row-bottom-margin">
+<label class="col-sm-2 control-label"></label>
+<div class="col-sm-8">
+<span class="error">
+{% if form.body1.errors %}
+{% for error in form.body1.errors %}
+Body Error: {{ error }}
+{% endfor %}
+{% endif %}
+</span>
+
+</div>
+</div>
+</div>
+
+
+
+
+<form method="post" class="form-group">
+    {{ form.csrf_token }}
+	<div class="row">
+    <div class="form-group col-12">
+        <label>Send To:</label>
+        {{ user.username }}
+    </div>
+	</div>
+	<div class="row">
+    <div class="form-group col-12">
+        <label>Subject</label>
+        {{ render_field(form.subject, class="form-control") }}
+    </div>
+	</div>
+
+
+<div class="row">
+    <div class="form-group col-12">
+       {{ render_field(form.body1, rows=15, cols=45, class="form-control"  ) }}
+    </div>
+</div>
+
+
+<div class="row text-center">
+
+    {{ render_field(form.submit, autocomplete="off", class="btn btn-primary", value="Send") }}
+
+</div>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

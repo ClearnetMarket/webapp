@@ -1,0 +1,257 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <h5>Promote your Item</h5>
+            <hr>
+        </div>
+    </div>
+
+
+
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <h5>{{ item.itemtitlee }}</h5>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center" style="margin-top: 25px; margin-bottom: 25px;">
+            {%  if item.itemrating == 0 %}
+                No Ratings Yet
+            {%  endif %}
+            {%  if 0.4999 >= item.itemrating >= 0.00001  %}
+                <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" >
+            {%  endif %}
+            {%  if 0.999 >= item.itemrating >= 0.5  %}
+                <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" >
+            {%  endif %}
+            {%  if 1.499 >= item.itemrating >= 1  %}
+                <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+            {%  endif %}
+            {%  if 1.99999 >= item.itemrating >= 1.5  %}
+                <img src="{{ url_for('static', filename='/images/stars/15stars.png'  )  }}" >
+            {%  endif %}
+            {%  if 2.4999 >= item.itemrating >= 2  %}
+                <img src="{{ url_for('static', filename='/images/stars/20stars.png')}}">
+            {%  endif %}
+            {%  if 2.99999 >= item.itemrating >= 2.5  %}
+                <img src="{{ url_for('static', filename='/images/stars/25stars.png')}}" >
+            {%  endif %}
+            {%  if 3.499 >= item.itemrating >= 3  %}
+                <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}">
+            {%  endif %}
+            {%  if 3.99999 >= item.itemrating >= 3.5  %}
+                <img src="{{ url_for('static', filename='/images/stars/35stars.png'  )  }}">
+            {%  endif %}
+            {%  if 4.499 >= item.itemrating >= 4  %}
+                <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+            {%  endif %}
+            {%  if 4.99999 >= item.itemrating >= 4.5  %}
+                <img src="{{ url_for('static', filename='/images/stars/45stars.png'  )  }}">
+            {%  endif %}
+            {%  if item.itemrating == 5  %}
+                <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
+            {%  endif %}
+            {%  if item.itemrating == 0 %}
+            {% else %}
+                {{ item.reviewcount }} total reviews
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12" style="margin-bottom: 10px;">
+            {% include '/item/itemparts/_topimages_small.html' %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <b>Item Pricing</b><br>
+            {{ item.price }} {{ item.currency|currencyformat }}
+            <br>
+            <div style="font-size: 12px;">
+                {% if current_user.is_authenticated %}
+                    {% if item.currency != current_user.currency %}
+                        {{ item.price|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                        {{ current_user.currency|currencyformat }}
+                    {% endif %}
+                {% endif %}
+                <br>
+            </div>
+            {% if item.digital_currency2 == 1 %}
+                <div class="btcorange">
+                    {{ item.price|btcprice(currency=item.currency) }}
+                </div>BTC
+                <br>
+            {% endif %}
+            {% if item.digital_currency3 == 1 %}
+                <div class="btccash">
+                    {{ item.price|btcprice_btccash(currency=item.currency) }}
+                </div> BCH
+            {% endif %}
+            <br>
+            <br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% if item.itemcount >=1 %}
+                <b>Quantity:</b> {{ item.itemcount }}
+            {% else %}
+                <div class="red">Item is sold out</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {%  if item.itemcondition == 1 %}
+                <b>Condition:</b>  New
+            {%  elif item.itemcondition == 2 %}
+                <b>Condition:</b>  Manufacturer Refurbished
+            {%  elif item.itemcondition == 3 %}
+                <b>Condition:</b>  Seller Refurbished
+            {%  elif item.itemcondition == 4 %}
+                <b>Condition:</b>  Used
+            {%  elif item.itemcondition == 5 %}
+                <b>Condition:</b>  For Parts
+            {%  else %}
+                <b>Condition:</b>  Not Specified
+            {%  endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <b>Ships From:</b>
+            {{ item.origincountry|countryformat }}
+            {% if item.destinationcountry == 1
+                or item.destinationcountrytwo == 1
+                or item.destinationcountrythree == 1
+                or item.destinationcountryfour == 1
+                or item.destinationcountryfive == 1 %}
+                <b>Ships to: </b> WORLDWIDE SHIPPING
+
+                <br>
+
+            {% elif item.destinationcountry == 2
+                or item.destinationcountrytwo == 2
+                or item.destinationcountrythree == 2
+                or item.destinationcountryfour == 2
+                or item.destinationcountryfive == 2 %}
+                    <b>Ships to: </b> WORLDWIDE WEB
+                    <br>
+            {% elif item.destinationcountry == 3
+                or item.destinationcountrytwo == 3
+                or item.destinationcountrythree == 3
+                or item.destinationcountryfour == 3
+                or item.destinationcountryfive == 3 %}
+                    <b>Ships to:</b>
+                    TOR
+                    <br>
+            {% else %}
+                {{ item.destinationcountry|countryformat }}
+
+                {% if item.destinationcountrytwo != 0 %}
+                    , <br>
+                    {{ item.destinationcountrytwo|countryformat }}
+                {% endif %}
+
+                {% if item.destinationcountrythree != 0 %}
+                    , <br>
+                    {{ item.destinationcountrythree|countryformat }}
+                {% endif %}
+
+                {% if item.destinationcountryfour != 0 %}
+                    , <br>
+                    {{ item.destinationcountryfour|countryformat }}
+                {% endif %}
+
+                {% if item.destinationcountryfive != 0 %}
+                    , <br>
+                    {{ item.destinationcountryfive|countryformat }}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <br>
+    <hr>
+
+    <div class="row">
+        <div class="col-12">
+            <b>Please note once you hit promote, the amount will be deducted from your account immediatly.  </b>
+        </div>
+    </div>
+    <form method="post" class="form-inline">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label class="sr-only" for="exampleInputAmount">Select Listing Type</label>
+            <div class="input-group">
+                {{ render_field(form.promotype, autocomplete="off", class="form-control") }}
+            </div>
+        </div>
+        {{ render_field(form.submit,  value="Promote and Pay", autocomplete="off", class="btn btn-primary") }}
+    </form>
+
+    <hr>
+    <div class="row">
+        <div class="col-12">
+            <h5>Promoting your item is easy and cheap.  You can promote your item to top of a category or the front page.
+            </h5>
+            <br>
+            <strong>Current Pricing of Promotions</strong>
+            <ul>
+                <li>Category Promotion: ({{ 1|usdtocurrency(currency = current_user.currency) }}
+                    {{ current_user.currency|currencyformat }}) / week
+                    <br>
+                    {{ catcost }} BTC
+                </li>
+                <li>FrontPage Promotion: ({{ 10|usdtocurrency(currency = current_user.currency) }}
+                    {{ current_user.currency|currencyformat }}) / week
+                    <br>
+                    {{ frontpagecost }} BTC
+                    <br>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h5>FAQ </h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <br>
+            <strong>What payment is accepted?</strong>
+            <p>Currently we only support bitcoin for promotions</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <br>
+            <strong>How often will my promotion appear in the category?</strong>
+            <p>Your ad will appear 100% of the time in the category if you have paid at the top position.  This stat is calculated dynamically.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <br>
+            <strong>How often will my promotion appear on the main page?</strong>
+            <p>Your item will appear 100% of the time on the front page.   This stat is calculated dynamically. </p>
+        </div>
+    </div>
+{% endblock %}

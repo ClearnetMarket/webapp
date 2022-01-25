@@ -1,0 +1,130 @@
+
+
+<div class="row" style="margin-bottom: 20px">
+
+
+
+    <div class="col-12 col-sm-12 col-md-4"><!-- END Image -->
+        <a href="{{ url_for('item.Itemforsale', id=item.id) }}">
+
+            {% if item.imageone != '0' %}
+                <img src="{{ url_for('userdata.media_file',
+            filename=('item/' +
+            item.stringnodeid +item.stringauctionid + item.imageone + "_250x.jpg")) }}" class="searchresultimage">
+            {% else %}
+                <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" class="imagefrontpage">
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="col-6 col-sm-6 col-md-4 linkcolor"><!--Middle -->
+
+        <a href="{{ url_for('item.Itemforsale', id=item.id) }}">
+            <b>   {{ item.itemtitlee |truncate(100) }} </b>
+        </a><br>
+
+
+        Sold by:
+        {{ item.vendor_name }}
+        ({{ item.vendor_id|avgvendorrating }}
+        <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="20px" height="20px">)
+
+
+
+
+    </div><!-- END Middle -->
+    <div class="col-6 col-sm-6 col-md-4"><!-- END Right -->
+
+        {%  if item.itemrating == 0 %}
+
+        {%  endif %}
+
+        {%  if 0.499 >= item.itemrating >= 0.001  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" ><br>
+        {%  endif %}
+
+        {%  if 0.999 >= item.itemrating >= 0.5  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" ><br>
+        {%  endif %}
+
+        {%  if 1.4999 >= item.itemrating >= 1  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" ><br>
+        {%  endif %}
+
+
+        {%  if 1.99999 >= item.itemrating >= 1.5  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/15stars.png'  )  }}" ><br>
+        {%  endif %}
+
+
+        {%  if 2.4999 >= item.itemrating >= 2  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}"><br>
+        {%  endif %}
+
+        {%  if 2.99999 >= item.itemrating >= 2.5  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/25stars.png'  )  }}" ><br>
+        {%  endif %}
+
+
+        {%  if 3.499 >= item.itemrating >= 3  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}" ><br>
+        {%  endif %}
+
+        {%  if 3.99999 >= item.itemrating >= 3.5  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/35stars.png'  )  }}"><br>
+        {%  endif %}
+
+
+        {%  if 4.499 >= item.itemrating >= 4  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}"><br>
+        {%  endif %}
+
+        {%  if 4.99999 >= item.itemrating >= 4.5  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/45stars.png'  )  }}" ><br>
+        {%  endif %}
+
+        {%  if item.itemrating == 5  %}({{ item.reviewcount }})
+            <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}"><br>
+        {%  endif %}
+
+        Sponsored Item<br>
+        <b>Buy Price</b><br>
+        {% if current_user.is_authenticated %}
+            {{ item.price }} {{ item.currency|currencyformat }}<br>
+            {% if item.currency != current_user.currency %}
+                <div style="font-size: 11px;">
+                    {{ item.price|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                    {{ current_user.currency|currencyformat }}</div>
+                <br>
+            {% endif %}
+
+            {%  if item.digital_currency2 == 1  %}
+                <div class="btcorange">
+                    {{ item.price|btcprice(currency=user.currency) }}  BTC
+                </div><br>
+            {% endif %}
+            {%  if item.digital_currency3 == 1  %}
+                <div class="btccash">
+                    {{ item.price|btcprice(currency=user.currency) }}  BCH
+                </div><br>
+            {% endif %}
+
+        {% else %}
+            {{ item.price }} {{ item.currency|currencyformat }}<br>
+            {%  if item.digital_currency2 == 1  %}
+                <div class="btcorange">
+                    BTC Accepted
+                </div><br>
+            {% endif %}
+            {%  if item.digital_currency3 == 1  %}
+                <div class="btccash">
+                    BCH Accepted
+                </div><br>
+            {% endif %}
+        {% endif %}
+        <a href="{{ url_for('item.Itemforsale', id=item.id) }}">
+            <button type="button" class="btn btn-warning">View Item</button>
+        </a><br>
+
+    </div>
+</div>

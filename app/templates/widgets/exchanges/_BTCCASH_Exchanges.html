@@ -1,0 +1,13 @@
+<div class="row linkcolor" style="margin-bottom: 10px;margin-top: 10px">
+    <div class="col-12">
+        <h5>BCH Prices <span class="fa fa-bitcoin icon"></span></h5>
+    </div>
+
+        {% for btc_cash in btc_cash_price %}
+
+            <div class="col-12"> {{ btc_cash.currency }}: {{ btc_cash.price }}</div>
+
+        {% endfor %}
+
+
+</div>

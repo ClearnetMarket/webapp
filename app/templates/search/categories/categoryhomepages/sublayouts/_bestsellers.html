@@ -1,0 +1,15 @@
+<div class="row" style="">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 linkcolororange">
+                <h4>Best Selling</h4>
+            </div>
+        </div>
+        <hr class="style13" >
+        <div class="owl-carousel owl-theme col-12">
+            {% for item in bestsellers %}
+             {% include 'search/categories/categoryhomepages/itemlayouts/_item.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

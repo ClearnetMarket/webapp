@@ -1,0 +1,139 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+<!-- help topics Questions-->
+<div class="row">
+    <h2>Common Shipping Questions</h2>
+</div>
+    <a name='backtotop'></a>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#shipping1">I never received my item.</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#shipping2">My item is taking a long time.</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#shipping3">The vendor didn't provide tracking.</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#shipping4">The tracking is showing issues with the carrier.</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#shipping5">Can I get faster shipping?</a>
+	</div>
+</div>
+
+
+
+
+<!-- END help topics Questions -->
+
+
+
+<br><br><br><br>
+    <h2>Answers</h2>
+<!-- END help topics Answers -->
+<div class="row question linkcolor">
+	<div class="col-12">
+	<a name='shipping1'></a>
+    <h4>I never received my item.</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+		If you didn't receive your item, or cant find it.<br>
+     <ul>
+		<li>Verify the tracking says delivered</li>
+		<li>Check for notices left around the house</li>
+		<li>Wait 36 hours, sometimes carriers mark as delivered a day early</li>
+		<li>Contact your carrier directly</li>
+	</ul>
+	</div>
+</div>
+
+
+
+<div class="row question linkcolor">
+	<div class="col-12">
+	<a name='shipping2'></a>
+    <h4>My item is taking a long time.</h4>
+    <div class="text-right">
+	    <a href="#backtotop" role="button">Back to top</a>
+    </div>
+	If the item was mark as shipped, the tracking will provide the progress.
+    If the tracking is blank, the vendor has not delivered
+    it to the carrier yet.
+	</div>
+</div>
+
+
+
+
+
+<div class="row question linkcolor">
+	<div class="col-12">
+	<a name='shipping3'></a>
+    <h4>The vendor didn't provide tracking.</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+	If a vendor did not provide tracking, you can ask him for it.
+    If he doesnt have it, then you are still protected under our 30 day protection.
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12">
+	<a name='shipping4'></a>
+    <h4>The tracking is showing issues with the carrier.</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+	Weather, delivery issues, and other problems can slow down your package.
+    You can request the vendor send another one, and issue a return if your shows up.
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12">
+	<a name='shipping5'></a>
+    <h4>Can I get faster shipping?</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    The vendor states in his shipping options if there is options for speed.
+    It doesnt hurt to directly message and ask for other options.
+    Vendors usually try to accommodate there customers
+	</div>
+</div>
+
+
+{% endblock %}

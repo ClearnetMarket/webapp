@@ -1,0 +1,42 @@
+
+
+{% from "_formhelpers.html" import render_field %}
+{% include 'layouts/headers/_headerplain.html' %}
+
+
+<body>
+    <!--User side -->
+    <div id="leftwing_holder">
+
+    {% include '/profile/profiles/_userprofile.html' %}
+
+
+
+    <!--vendor side -->
+	    <div id="rightwing_holder">
+	    {% if current_user.is_authenticated %}
+	        {% if vendor == 0 %}
+	        {% else %}
+	        {% include '/profile/profiles/_vendorprofile.html' %}
+	        {% endif %}
+	    {% else %}
+	        {% include '/profile/profiles/_profile_guest.html' %}
+		{% endif %}
+	    </div>
+    <!--end vendor side -->
+	    <!--content -->
+	    <div class="container clearnetcontainer" >
+
+	    {% include 'layouts/sublayout/_flashbar.html' %}
+	        {% block content %}
+
+
+	        {% endblock %}
+	    </div>
+    <!--endcontent -->
+
+
+</body>
+
+{% include 'layouts/subindex/_footer.html' %}
+

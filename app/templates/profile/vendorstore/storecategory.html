@@ -1,0 +1,110 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+
+        <div class="row">
+            <div class="hidden-sm hidden-xs col-md-3">
+                {% include '/profile/profiles/_vendorprofile_small.html' %}
+                <!-- Categories -->
+                <div class="col-12 border linkcolor" style="max-width: 200px;">
+                    <b>Items</b><br>
+                    <ul>
+                        {% for item in allcat  %}
+                            <li>
+                                <a href="{{ url_for('profile.vendorStoreCategory',
+                                         username=user.username,
+                                          category=item.id) }}">
+                                        {{ item.subname1 }}
+                                        ({{ item.catcount }})
+                                </a>
+                            </li>
+
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <!-- Bio of user -->
+            <div class="col-sm-9">
+
+                <div class="row" style="margin-bottom: 25px;">
+                    <div class="row blue border btnwhite">
+                        <div class="col-12">
+                            <div class="topnav" id="myTopnav">
+                                <a href="{{ url_for('profile.frontpage',username=user.username) }}">
+                                    {{ user.username }}
+                                </a>
+                                {% if user.vendor_account == 1 %}
+                                    <a href="{{ url_for('profile.vendorStore',username=user.username) }}"
+                                       class="active">Store</a>
+                                    <a href="{{ url_for('profile.vendorprofile',username=user.username) }}">
+                                        Vendor Overview</a>
+                                {% else %}
+                                {% endif %}
+                                <a href="{{ url_for('profile.user',username=user.username) }}">
+                                    Customer Overview</a>
+                                <a href="{{ url_for('profile.achs',username=user.username) }}">
+                                    Achievements</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--content-->
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3>{{ categorylabel }}</h3>
+                    </div>
+                </div>
+
+                {% if categoryid == 0 %}
+                    {% for item in getitems  %}
+                        {% include 'search/searchresults/_btctrade.html' %}
+                    {% endfor %}
+                    <div  style="clear:both"></div>
+                {% elif categoryid == 100 %}
+                    {% for item in getitems  %}
+                        {% include 'search/searchresults/_digitalitem.html' %}
+                    {% endfor %}
+                    <div  style="clear:both"></div>
+                {% elif 100000 <= categoryid <= 199999 %}
+                    {% for item in getitems  %}
+                        {% include 'search/searchresults/_digitalitem.html' %}
+                    {% endfor %}
+                    <div  style="clear:both"></div>
+                {% elif 200000 <= categoryid <= 299999 %}
+                    {% for item in getitems  %}
+                        {% include 'search/searchresults/_btctrade.html' %}
+                    {% endfor %}
+                    <div  style="clear:both"></div>
+                {% else %}
+                    {% for item in getitems %}
+                        {% include 'search/searchresults/_simpleitem.html' %}
+                    {% endfor %}
+                    <div  style="clear:both"></div>
+                {% endif %}
+
+
+
+                <div class="row text-center" style="margin-top: 50px;">
+                    <div class="col-sm-3"></div>
+                    <div class="col-12 col-sm-6">
+                        {{ paginationgetitems.info }}
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+
+                <div class="row text-center">
+                    <div class="col-3"></div>
+                    <div class="col-12 col-sm-6">
+                        {{ paginationgetitems.links }}
+                    </div>
+                    <div class="col-sm3"></div>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}

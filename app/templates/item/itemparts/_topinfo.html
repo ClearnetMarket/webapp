@@ -1,0 +1,354 @@
+
+
+<!--Top Title -->
+<div class="row"><!--Main Row -->
+    <div class="col-12">
+        <ol class="linkcolor">
+            {% if item.categoryid0 != 0%}
+                {% if item.categoryname0 != '0' %}
+                    <nav aria-label="breadcrumb" class="linkcolor">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+                            <li class="breadcrumb-item"> <a href="{{ url_for('category.viewcategory',maincatid=item.categoryid0) }}" >
+                                {{ item.categoryname0 }}
+                            </a></li>
+                        </ol>
+                    </nav>
+                {% else %}
+                {% endif %}
+            {% else %}
+            {% endif %}
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+
+
+    <!--FIRST ROW -->
+    <div class="col-12 col-md-5 img-responsive ">
+        {% include 'item/itemparts/_topimages.html' %}
+    </div>
+
+
+    <!--SECOND ROW -->
+    <div class="col-md-5"><!--Info Column size 8 -->
+        <div class="row"><!-- Top Column row -->
+            <div class="col-12">
+                <h4> {{ item.itemtitlee|truncate(250) }}</h4>
+                <hr>
+            </div>
+            <div class="col-2">
+                {% if preview == 0 %}
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.admin_role >=1 %}
+                            <form method="post">
+                                {% if finditem.flaggeduserid1 == current_user.id %}
+                                    <div class="redstatus"> Item Flagged</div>
+                                {% elif finditem.flaggeduserid2 == current_user.id %}
+                                    <div class="redstatus">Item Flagged</div>
+                                {% elif finditem.flaggeduserid3 == current_user.id %}
+                                    <div class="redstatus">Item Flagged</div>
+                                {% elif finditem.flaggeduserid4 == current_user.id %}
+                                    <div class="redstatus">Item Flagged</div>
+                                {% elif finditem.flaggeduserid5 == current_user.id %}
+                                    <div class="redstatus">Item Flagged</div>
+                                {% else %}
+                                    {{ flag.csrf_token }}
+                                    {{ render_field(flag.flagit, value="Flag Item", class="btn btn-danger") }}
+                                {% endif %}
+                            </form>
+                        {% else %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                {% if current_user.admin == 1 %}
+                    <form method="post">
+                        {{ flag.csrf_token }}
+                        {{ render_field(flag.banit, value="Delete Item", class="btn btn-danger") }}
+                    </form>
+                {% endif %}
+            </div>
+        </div><!--END Column row -->
+        <div class="row"><!-- Column row -->
+            <div class="col-6"><!--Column row -->
+                {%  if item.itemrating == 0 %}
+                    {% if vendorfeedbackcount > 0 %}
+                        Vendor Rating: {{ vendorstats.vendorrating }} <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px">
+                    {% else %}
+                        <div id="top_title_reviews_Vendor_none">
+                            No Item Ratings Yet
+                        </div>
+                    {% endif %}
+                {%  endif %}
+                {%  if 0.4999 >= item.itemrating >= 0.00001  %}
+                    <div id="top_title_reviews_Vendor_0">
+                        <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" >
+                    </div>
+                {%  endif %}
+
+                {%  if 0.999 >= item.itemrating >= 0.5  %}
+                    <div id="top_title_reviews_Vendor_0">
+                        <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" >
+                    </div>
+                {%  endif %}
+
+                {%  if 1.499 >= item.itemrating >= 1  %}
+                    <div id="top_title_reviews_Vendor_1">
+                        <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+                    </div>
+                {%  endif %}
+
+                {%  if 1.99999 >= item.itemrating >= 1.5  %}
+                    <div id="top_title_reviews_Vendor_1">
+                        <img src="{{ url_for('static', filename='/images/stars/15stars.png'  )  }}" >
+                    </div>
+                {%  endif %}
+
+                {%  if 2.4999 >= item.itemrating >= 2  %}
+                    <div id="top_title_reviews_Vendor_2">
+                        <img src="{{ url_for('static', filename='/images/stars/20stars.png')}}">
+                    </div>
+                {%  endif %}
+
+                {%  if 2.99999 >= item.itemrating >= 2.5  %}
+                    <div id="top_title_reviews_Vendor_2">
+                        <img src="{{ url_for('static', filename='/images/stars/25stars.png')}}" >
+                    </div>
+                {%  endif %}
+
+                {%  if 3.499 >= item.itemrating >= 3  %}
+                    <div id="top_title_reviews_Vendor_3">
+                        <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}">
+                    </div>
+                {%  endif %}
+
+                {%  if 3.99999 >= item.itemrating >= 3.5  %}
+                    <div id="top_title_reviews_Vendor_3">
+                        <img src="{{ url_for('static', filename='/images/stars/35stars.png'  )  }}">
+                    </div>
+                {%  endif %}
+
+                {%  if 4.499 >= item.itemrating >= 4  %}
+                    <div id="top_title_reviews_Vendor_4">
+                        <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+                    </div>
+                {%  endif %}
+
+                {%  if 4.99999 >= item.itemrating >= 4.5  %}
+                    <div id="top_title_reviews_Vendor_4">
+                        <img src="{{ url_for('static', filename='/images/stars/45stars.png'  )  }}">
+                    </div>
+                {%  endif %}
+
+                {%  if item.itemrating == 5  %}
+                    <div id="top_title_reviews_Vendor_5">
+                        <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
+                    </div>
+                {%  endif %}
+                {%  if item.itemrating == 0 %}
+                    <div id="top_title_reviews_Vendor_count"> </div>
+                {% else %}
+                    <div id="top_title_reviews_Vendor_count">
+                        {{ item.reviewcount }} total reviews
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-6 justify-content-center">
+                Item number: {{ item.id }}
+            </div><!-- END Column row -->
+        </div><!--End Top title -->
+
+
+        <div class="row"><!--Info Row-->
+            <div class="col-12 bg-white border"><!--Pricing and buttons Box-->
+                <div class="col-7" style="padding: 20px;">
+                    <b>Price</b>
+                    {{ item.price }} {{ item.currency|currencyformat }}
+                    <br>
+                    {% if current_user.is_authenticated %}
+                        {% if item.currency != current_user.currency %}
+                            {{ item.price|currencytocurrency(currency = current_user.currency,
+                                 currentusercurrency = item.currency) }}
+                            {{ current_user.currency|currencyformat }}
+                            <br>
+                        {% else %}
+                        {% endif %}
+                    {% else %}
+                    {% endif %}
+                    <br>
+                    Pay with Crypto<br>
+                    {% if item.digital_currency2 == 1 %}
+                        <div class="btcorange">
+                            {{ item.price|btcprice(currency=item.currency) }}
+                        </div>BTC
+                        <br>
+                    {% endif %}
+                    {% if item.digital_currency3 == 1 %}
+                        <div class="btccash">
+                            {{ item.price|btcprice_btccash(currency=item.currency) }}
+                        </div> BCH
+                    {% endif %}
+                </div>
+
+                <div class="col-5 btnwhite" style="padding: 20px;">
+                    {% if item.itemcount >=1 %}
+                        <form method="post">
+                            {{ form.csrf_token }}
+                            {{ render_field(formcart.addtocart1, value="Add to Cart",
+                                class="btn btn-warning") }}
+                        </form>
+                        <br><br>
+
+                    {% else %}
+                        <div class="red">
+                            Item is sold out.
+                        </div>
+                    {% endif %}
+                </div>
+            </div><!--END Pricing and buttons Box-->
+            <div class="col-12"><!--Quanity Box-->
+                {% if item.itemcount >=1 %}
+                    <b>Quantity:</b> {{ item.itemcount }}
+                {% else %}
+                    <div class="red">
+                        Item is sold out
+                    </div>
+                {% endif %}
+            </div><!-- END Quanity Box-->
+            <div class="col-12"><!--Condition Box-->
+                {%  if item.itemcondition == 1 %}
+                    <b>Condition:</b>  New
+                {%  elif item.itemcondition == 2 %}
+                    <b>Condition:</b>  Manufacturer Refurbished
+                {%  elif item.itemcondition == 3 %}
+                    <b>Condition:</b>  Seller Refurbished
+                {%  elif item.itemcondition == 4 %}
+                    <b>Condition:</b>  Used
+                {%  elif item.itemcondition == 5 %}
+                    <b>Condition:</b>  For Parts
+                {%  else %}
+                    <b>Condition:</b>  Not Specified
+                {%  endif %}
+            </div><!--END Condition Box-->
+
+            {% if item.vendor_id != 1 %}
+                <div class="col-12"><!--Returns Box-->
+                    {% if item.return_allowed == 1 %}
+                        <b>Returns:</b>
+                        <div class="greenstatus">
+                            Returns are allowed on this item
+                        </div>
+                    {% else %}
+                        <b>Returns:</b>
+                        <div class="redstatus">
+                            Returns are NOT allowed on this item
+                        </div>
+                    {% endif %}
+                </div><!--END Item Points Box-->
+            {% endif %}
+
+            <!--Shipping-->
+            <div class="col-md-12">
+                <!--If its not a Clearnet Market item-->
+                {% if item.vendor_id != 1 %}
+                    <b>Ships From:</b>
+                    {{ item.origincountry|countryformat }}<br>
+                    {% if item.destinationcountry == 1
+                                     or item.destinationcountrytwo == 1
+                                      or item.destinationcountrythree == 1
+                                     or item.destinationcountryfour == 1
+                                      or item.destinationcountryfive == 1 %}
+                        <b>Ships to: </b> WORLDWIDE SHIPPING<br>
+                    {% else %}
+                        <br>
+                        <b>Ships to:</b>
+                        {{ item.destinationcountry|countryformat }}
+                        {% if item.destinationcountrytwo != 0 %}
+                            ,
+                            {{ item.destinationcountrytwo|countryformat }}
+                        {% endif %}
+                        {% if item.destinationcountrythree != 0 %}
+                            ,
+                            {{ item.destinationcountrythree|countryformat }}
+                        {% endif %}
+                        {% if item.destinationcountryfour != 0 %}
+                            ,
+                            {{ item.destinationcountryfour|countryformat }}
+                        {% endif %}
+                        {% if item.destinationcountryfive != 0 %}
+                            ,
+                            {{ item.destinationcountryfive|countryformat }}
+                        {% endif %}
+
+                    {% endif %}
+
+                    <div class="col-md-12"><!--Ship pricing table -->
+                        <table class="table" >
+                            <tr>
+                                <th style="font-size: 12px;">Options</th>
+                                <th style="font-size: 12px;">Price</th>
+                            </tr>
+                            {% if item.shippingfree == 1 %}
+                                <tr>
+                                    <td style="font-size: 10px;">{{ item.shippinginfo0 }}</td>
+                                    <td style="font-size: 10px;"><div class="btcorange">FREE</div> </td>
+                                </tr>
+                            {% endif %}
+                            {% if item.shippingtwo == 1 %}
+                                <tr>
+                                    <td style="font-size: 10px;">{{ item.shippinginfo2 }}</td>
+                                    <td style="font-size: 10px;">{{ item.shippingprice2 }} {{item.currency|currencyformat}}
+
+                                        {% if current_user.is_authenticated %}
+                                            {% if item.currency != current_user.currency %}
+
+                                                {{ item.shippingprice2|currencytocurrency(currency = current_user.currency,
+                                                     currentusercurrency = item.currency) }}
+                                                {{ current_user.currency|currencyformat }}
+
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% if item.shippingthree == 1 %}
+                                <tr>
+                                    <td style="font-size: 10px;">{{ item.shippinginfo3 }}</td>
+                                    <td style="font-size: 10px;">{{ item.shippingprice3 }} {{item.currency|currencyformat}}
+
+                                        {% if current_user.is_authenticated %}
+                                            {% if item.currency != current_user.currency %}
+                                                {{ item.shippingprice3|currencytocurrency(currency = current_user.currency,
+                                                     currentusercurrency = item.currency) }}
+                                                {{ current_user.currency|currencyformat }}
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                {% else %}
+                    <hr>
+                    <!-- Its a Clearnet Market item -->
+                    <div class="text-center" style="font-size: 16px"><b>Shipping</b></div>
+                    <b>Shipping:</b> Shipped via Amazon Prime as a gift.
+                    <br>
+                    <b>Destination:</b> USA Only
+                    <br>
+                    <b>Returns:</b> 30 Day return to Amazon.
+                    <br>
+                    <div class="linkcolororange text-center">
+                    <a href="{{ url_for('service.customerservice_returnitem') }}" >View the Return Policy</a>
+                    </div>
+                    <br>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!--Third ROW -->
+    <div class="col-12 col-md-2">     <!-- Vendor Profile -->
+        {% include '/profile/profiles/_vendorprofile_nobadge.html' %}
+    </div>  <!--END Vendor Profile -->
+</div>

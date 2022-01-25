@@ -1,0 +1,18 @@
+{% extends "layouts/home.html" %}
+{% block content %}
+
+
+{% include 'layouts/owlstuff/owlstuff.html' %}
+
+{% if current_user.vendor_account == 1 %}
+	{% include 'layouts/subindex/_smallvendorbar.html' %}
+{% else %}
+{% endif %}
+
+
+
+
+
+{% include 'layouts/owlstuff/owlstuffregular.html' %}
+
+{% endblock %}

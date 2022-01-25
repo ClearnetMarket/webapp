@@ -1,0 +1,149 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+<!-- help topics Questions-->
+<div class="row">
+    <h2>Shipment Failures</h2>
+</div>
+    <a name='backtotop'></a>
+
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other1">What If I don't provide a return method/address?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other2">What if the customer doesnt ship the item within 5 days?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other3">What if I don't receive the item in 14 days?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other4">What happens if I don't mark as received?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other5">What happens if the package is lost/damaged by the courier. </a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#other6">What if we need more time?</a>
+</div>
+</div>
+<!-- END help topics Questions -->
+
+
+
+<br><br><br><br>
+    <h2>Answers</h2>
+<!-- END help topics Answers -->
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other1'></a>
+    <h4>What If I don't provide a return method/address?</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+    <div class="col-12">
+    A vendor must provide a means of return within two days of a return request.  Failure to do so will auto-grant the BTC back to the customer, and they are
+    no longer obligated by Clearnet Market to return the item.
+    <br><br>Its the vendors responsibility to ensure a return address if returns are allowed on the item.
+	</div>
+</div>
+
+
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other2'></a>
+    <h4>What if the customer doesnt ship the item within 5 days?</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    The customer must mark the item as shipped within 5 days.  Failure to do so will auto-grant the BTC to the vendor.
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other3'></a>
+    <h4>What if I don't receive the item in 14 days?</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    Once the item is marked as sent, if the vendor does not receive the item within 14 days, then the vendor can wait for more time,
+    or mark the item as not returned.  The vendor will be auto-granted the BTC.
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other4'></a>
+    <h4>What happens if I don't mark as received?</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    Once the timer expires, the return will be automatically marked as received.
+    You can extend the time by marking the item as disputed.
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other5'></a>
+    <h4>What happens if the package is lost/damaged by the courier.</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    It is the shippers responsibility for the delivery of the item.  If the vendor shipped, and the item is lost/damaged,
+    the the vendor takes responsibility and can dispute with the carrier.  If the customer shipped the item,
+    then the customer takes responsibility,
+    and can dispute any shipping problems with the carrier.
+	</div>
+</div>
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='other6'></a>
+    <h4>What if we need more time?</h4>
+    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    The customer or vendor can mark the item as disputed. This will make take the item out of the timer.
+	</div>
+</div>
+
+
+{% endblock %}

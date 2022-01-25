@@ -1,0 +1,49 @@
+
+{% for f in achievements %}
+
+
+<div class="row border blue" style="margin-bottom: 10px; ">
+
+    <div class="col-12 col-sm-4" style="padding: 20px;">
+        {% if f.category == 1 %}
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='/images/achievement/a/' + f.categoryid + '.png')  }}" width="198px" height="60px" >
+            </div>
+        {% elif f.category == 2%}
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='/images/achievement/e/' + f.categoryid + '.png')  }}" width="198px" height="60px" >
+            </div>
+        {% elif f.category == 3%}
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='/images/achievement/c/' + f.categoryid + '.png')  }}" width="198px" height="60px" >
+            </div>
+        {% elif f.category == 4%}
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='/images/achievement/v/' + f.categoryid + '.png')  }}" width="198px" height="60px" >
+            </div>
+        {% elif f.category == 5%}
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='/images/achievement/b/' + f.categoryid + '.png')  }}" width="198px" height="60px" >
+            </div>
+        {% elif f.category == 6%}
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='/images/achievement/u/' + f.categoryid + '.png')  }}" width="198px" height="60px" >
+            </div>
+        {% else %}
+        {% endif %}
+    </div>
+
+
+    <div class="col-12 col-sm-8 btnwhite text-center" style="padding: 5px; padding-bottom: 15px;">
+
+           <h4>{{ f.title }}</h4><hr style="max-height: 1px;">
+
+	    {{ f.description }}
+    </div>
+
+
+
+
+</div>
+
+{% endfor %}

@@ -1,0 +1,318 @@
+
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h3>{{ item.itemtitlee }}</h3>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-12 text-center" style="margin-top: 25px; margin-bottom: 25px;">
+        {%  if item.itemrating == 0 %}
+
+            No Ratings Yet
+
+        {%  endif %}
+
+        {%  if 0.4999 >= item.itemrating >= 0.00001  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" >
+
+        {%  endif %}
+
+        {%  if 0.999 >= item.itemrating >= 0.5  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" >
+
+        {%  endif %}
+
+        {%  if 1.499 >= item.itemrating >= 1  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+
+        {%  endif %}
+
+
+        {%  if 1.99999 >= item.itemrating >= 1.5  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/15stars.png'  )  }}" >
+
+        {%  endif %}
+
+
+        {%  if 2.4999 >= item.itemrating >= 2  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/20stars.png')}}">
+
+        {%  endif %}
+
+        {%  if 2.99999 >= item.itemrating >= 2.5  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/25stars.png')}}" >
+
+        {%  endif %}
+
+        {%  if 3.499 >= item.itemrating >= 3  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}">
+
+        {%  endif %}
+
+        {%  if 3.99999 >= item.itemrating >= 3.5  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/35stars.png'  )  }}">
+
+        {%  endif %}
+
+
+        {%  if 4.499 >= item.itemrating >= 4  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+
+        {%  endif %}
+
+        {%  if 4.99999 >= item.itemrating >= 4.5  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/45stars.png'  )  }}">
+
+        {%  endif %}
+
+        {%  if item.itemrating == 5  %}
+
+            <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
+
+        {%  endif %}
+        {%  if item.itemrating == 0 %}
+
+        {% else %}
+            {{ item.reviewcount }} total reviews
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12" style="margin-bottom: 10px;">
+        {% include '/item/itemparts/_topimages_small.html' %}
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <b>Item Pricing</b><br>
+
+
+        {{ item.price }} {{ item.currency|currencyformat }}
+        <br>
+        <div style="font-size: 12px;">
+            {% if current_user.is_authenticated %}
+                {% if item.currency != current_user.currency %}
+
+                    {{ item.price|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                    {{ current_user.currency|currencyformat }}
+
+                {% endif %}
+            {% endif %}
+            <br>
+        </div>
+
+        {% if item.digital_currency2 == 1 %}
+            <div class="btcorange">
+                {{ item.price|btcprice(currency=item.currency) }}
+            </div>BTC
+            <br>
+        {% endif %}
+        {% if item.digital_currency3 == 1 %}
+            <div class="btccash">
+                {{ item.price|btcprice_btccash(currency=item.currency) }}
+            </div> BCH
+        {% endif %}
+        <br>
+        <br>
+        <div class="form-group">
+            {% if item.itemcount >=1 %}
+                <form method="post">
+                    {{ form.csrf_token }}
+                    {{ render_field(formcart.addtocart1, value="Add to Cart", class="btn btn-warning") }}
+                    {{ render_field(formcart.save, value="Save for Later", class="btn btn-primary") }}
+                </form>
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <ul>
+            {%  if item.point1 %}
+                <li> {{ item.point1 }}</li>
+            {%  endif %}
+            {%  if item.point2 %}
+                <li>{{ item.point2 }}</li>
+            {%  endif %}
+            {%  if item.point3 %}
+                <li> {{ item.point3 }}</li>
+            {%  endif %}
+            {%  if item.point4 %}
+                <li>{{ item.point4 }}</li>
+            {%  endif %}
+        </ul>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+
+        {% if item.itemcount >=1 %}
+            <b>Quantity:</b> {{ item.itemcount }}
+        {% else %}
+            <div class="red">Item is sold out</div>
+        {% endif %}
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        {%  if item.itemcondition == 1 %}
+            <b>Condition:</b>  New
+        {%  elif item.itemcondition == 2 %}
+            <b>Condition:</b>  Manufacturer Refurbished
+        {%  elif item.itemcondition == 3 %}
+            <b>Condition:</b>  Seller Refurbished
+        {%  elif item.itemcondition == 4 %}
+            <b>Condition:</b>  Used
+        {%  elif item.itemcondition == 5 %}
+            <b>Condition:</b>  For Parts
+        {%  else %}
+            <b>Condition:</b>  Not Specified
+        {%  endif %}
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-12">
+        <b>Ships From:</b>
+
+        {{ item.origincountry|countryformat }}
+        {% if item.destinationcountry == 1
+	or item.destinationcountrytwo == 1
+	or item.destinationcountrythree == 1
+	or item.destinationcountryfour == 1
+	or item.destinationcountryfive == 1 %}
+            <b>Ships to: </b> WORLDWIDE SHIPPING
+
+
+            <br>
+
+        {% elif item.destinationcountry == 2
+	or item.destinationcountrytwo == 2
+	or item.destinationcountrythree == 2
+	or item.destinationcountryfour == 2
+	or item.destinationcountryfive == 2 %}
+            <b>Ships to: </b> WORLDWIDE WEB
+
+
+
+
+        {% elif item.destinationcountry == 3
+	or item.destinationcountrytwo == 3
+	or item.destinationcountrythree == 3
+	or item.destinationcountryfour == 3
+	or item.destinationcountryfive == 3 %}
+            <b>Ships to:</b>
+
+            <img src="{{ url_for('static', filename='/images/torlogo.png')  }}" width="100px" height="75px">
+
+        {% else %}
+            {{ item.destinationcountry|countryformat }}
+
+            {% if item.destinationcountrytwo != 0 %}
+                ,
+                {{ item.destinationcountrytwo|countryformat }}
+            {% endif %}
+
+            {% if item.destinationcountrythree != 0 %}
+                ,
+                {{ item.destinationcountrythree|countryformat }}
+            {% endif %}
+
+            {% if item.destinationcountryfour != 0 %}
+                ,
+                {{ item.destinationcountryfour|countryformat }}
+            {% endif %}
+
+            {% if item.destinationcountryfive != 0 %}
+                ,
+                {{ item.destinationcountryfive|countryformat }}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<br>
+
+
+<div class="row">
+    <div class="col-12">
+        <b>Shipping Options</b>
+
+        <table class="table table-condensed col-12" >
+            <tr>
+                <th class="bluetable col-6">Options</th>
+                <th class="bluetable col-6">Price</th>
+            </tr>
+            {% if item.shippingfree == 1 %}
+                <tr>
+                    <td>{{ item.shippinginfo0 }}</td>
+                    <td><div class="btcorange">FREE</div> </td>
+                </tr>
+            {% endif %}
+            {% if item.shippingtwo == 1 %}
+                <tr>
+                    <td>{{ item.shippinginfo2 }}</td>
+                    <td>{{ item.shippingprice2 }}
+                        {{item.currency|currencyformat}}
+                        {% if current_user.is_authenticated %}
+                            {% if item.currency != current_user.currency %}
+
+                                ({{ item.shippingprice2|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                                {{ current_user.currency|currencyformat }})
+
+                            {% endif %}
+                        {% endif %}
+
+
+                    </td>
+                </tr>
+            {% endif %}
+            {% if item.shippingthree == 1 %}
+                <tr>
+                    <td>{{ item.shippinginfo3 }}</td>
+                    <td>{{ item.shippingprice3 }} {{item.currency|currencyformat}}
+                        {% if current_user.is_authenticated %}
+                            {% if item.currency != current_user.currency %}
+
+                                ({{ item.shippingprice3|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                                {{ current_user.currency|currencyformat }})
+
+                            {% endif %}
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% endif %}
+
+
+        </table>
+    </div>
+</div>

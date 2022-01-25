@@ -1,0 +1,47 @@
+{% extends "/layouts/message_layout.html" %}
+{% block content %}
+
+
+
+
+
+{% if posts %}
+
+{% for post in posts %}
+
+
+
+
+    <div id="message_messagecontainer">
+        <div id="message_checkbox"> </div>
+        <div id="message_usernamee"><b>{{ post.author_id|username }}</b></div>
+        <div id="message_messagecontent">
+                        <div id="message_title">{{ post.subject }}
+            <hr>
+            </div>
+            <div id="message_text">{{ post.body }}</div>
+        </div>
+        <div id="message_date"><div class="text-right">{{ moment(timestamp=post.timestamp, local=False).format('L')  }}<br>
+            <a class="btn btn-primary" href="{{ url_for('message.post',id=post.id) }}" role="button">View</a>
+            <a class="btn btn-primary" href="{{ url_for('message.post',id=post.id) }}" role="button">Reply</a>
+            <a class="btn btn-danger" href="{{ url_for('message.messagecenter_delete',id=post.id) }}" role="button">Delete</a>
+        </div></div>
+
+    </div>
+
+
+{% endfor %}
+
+{% else %}
+    No messages...
+{% endif %}
+
+
+
+{% endblock %}
+
+
+
+
+
+

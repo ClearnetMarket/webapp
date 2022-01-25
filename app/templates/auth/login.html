@@ -1,0 +1,72 @@
+{% extends "/layouts/plain_nofooter.html" %} {% block content %}
+
+<div id="form_error">
+  {% if form.username.errors %} {% for error in form.username.errors %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    Username: {{ error }}
+  </div>
+  {% endfor %} {% endif %}
+</div>
+
+<div id="form_error">
+  {% if form.password_hash.errors %} {% for error in form.password_hash.errors
+  %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    Password: {{ error }}
+  </div>
+  {% endfor %} {% endif %}
+</div>
+
+<div class="row mt-5">
+  <div class="col-4 offset-4 bg-white rounded-3">
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div class="row text-center">
+        <div class="col-12">
+          <h3>Login</h3>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-12">Username</label>
+        <div class="col-12">
+          {{ render_field(form.username, placeholder="Username",
+          autocomplete="off", class="form-control") }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-12">Password</label>
+        <div class="col-12">
+          {{ render_field(form.password_hash, placeholder="Password",
+          autocomplete="off", class="form-control") }}
+        </div>
+
+        <div class="col-md-12 text-center mt-3">
+          <div class="col-12">
+            {{ render_field(form.submit, value="Login", autocomplete="off",
+            class="btn btn-primary ") }}
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-12 text-center linkcolor">
+            <a href="{{ url_for('auth.register') }}">Register Here</a>
+          </div>
+          <div class="col-12 text-center linkcolor">
+            <a href="{{ url_for('auth.retrievepassword') }}"
+              >Lost your password?</a
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+<div class="row linkcolor" style="margin-bottom: 10px;margin-top: 10px">
+<div class="col-12">
+    <h5>BTC Prices <span class="fa fa-bitcoin icon"></span></h5>
+</div>
+
+    {% for btc in btcprice %}
+        <div class="col-12">  {{ btc.currency }}: {{ btc.price }}</div>
+    {% endfor %}
+
+</div>

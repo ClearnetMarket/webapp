@@ -1,0 +1,77 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<div id="holder_box">
+
+        <div id="reasontocanceltop">
+            <div id="reasontocanceltopbox"><h4>Add Address</h4>{{ reason }}</div>
+
+           <form method="post">
+               {{ form.csrf_token }}
+        <div id="orderinfo_formorder" class="graybg border">
+            <div class="text-center">
+                <h4>Enter the Destination address of the return</h4>
+                Note:  A default return address is optional.  You can send a message, or enter the address, after a return is requested by the customer.
+            </div><br>
+
+            <div class="form-vertical">
+
+                <div class="row">
+                        <label class="col-sm-2 control-label">Name:   </label>
+                        <div class="col-sm-6">
+                        {{ render_field(form.name, class="form-control input-sm ") }}
+                        </div>
+                </div><br>
+                <div class="row">
+                        <label class="col-sm-2 control-label">Street:  </label>
+                        <div class="col-sm-6">
+                        {{ render_field(form.street, class="form-control input-sm ") }}
+                        </div>
+                </div><br>
+                <div class="row">
+                        <label class="col-sm-2 control-label">City:   </label>
+                        <div class="col-sm-4">
+                        {{ render_field(form.city, class="form-control input-sm ") }}
+                        </div>
+                </div><br>
+                <div class="row">
+                        <label class="col-sm-2 control-label">State/Province:   </label>
+                        <div class="col-sm-4">
+                        {{ render_field(form.state, class="form-control input-sm ") }}
+                        </div>
+                </div><br>
+                <div class="row">
+                        <label class="col-sm-2 control-label">Zip:   </label>
+                        <div class="col-sm-4">
+                        {{ render_field(form.zip, class="form-control input-sm ") }}
+                        </div>
+                </div><br>
+                <div class="row">
+                        <label class="col-sm-2 control-label"> Country:   </label>
+                        <div class="col-sm-4">
+                        {{ render_field(form.country, class="form-control input-sm ") }}
+                        </div>
+                </div><br>
+
+                <div class="row">
+                        <label class="col-sm-2 control-label"> Message   </label>
+                        <div class="col-sm-10">
+                        {{ render_field(form.messagereturn,class="form-control", rows=12) }}
+                        </div>
+                </div><br>
+
+                        <div class="text-center">
+                        {{ render_field(form.submit, value="Add Return Address", class="btn btn-primary") }}
+                        </div>
+            </div>
+
+        </div>
+    </form>
+
+
+        </div>
+
+</div>
+
+{% endblock %}

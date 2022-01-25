@@ -1,0 +1,442 @@
+{% extends "/auth/userachievements/customize_ach_layout.html" %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-12 border">
+            You can select up to 5 achievements to display on your profile.  This helps show off your accomplishments
+            on Clearnet Market.  It can help lead to more sales as a vendor or display your status as a customer. Find the Id of the
+            Achievement that <b>You currently have</b> and enter it into "My current display"
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 border">
+            <h5>My Current display</h5>
+        </div>
+    </div>
+
+    <form method="post">
+        {{ form.csrf_token }}
+
+        <table width="100%">
+            <tr>
+                <th class="col-6 col-sm-6 bluetable"></th>
+                <th class="col-1 bluetable">Id</th>
+                <th class="col-5 bluetable">Buttons</th>
+            </tr>
+
+            {% if size <= 1 %}
+                {% if specificach.ach1 == '0' %}
+                    <tr>
+                        <td class="linkcolor">
+                            None Chosen!
+                        </td>
+                        <td class="linkcolor text-center">
+                        </td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach1, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectone, class="btn btn-primary", Value="Add") }}
+                        </td>
+
+                    </tr>
+
+                {% else %}
+                    <tr>
+
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach1_cat  + '/' + specificach.ach1 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">
+                            {{ specificach.ach1 }}
+                        </td>
+                        <td class="linkcolor">
+                            {{ render_field(form.deleteone, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% elif size <= 2 %}
+                {% if specificach.ach1 == '0' %}
+                    <tr>
+                        <td class="linkcolor">
+                            None Chosen!
+                        </td>
+                        <td class="linkcolor text-center">
+                        </td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach1, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectone, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+                {% else %}
+                    <tr>
+
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach1_cat  + '/' + specificach.ach1 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">
+                            {{ specificach.ach1 }}
+                        </td>
+
+
+                        <td class="linkcolor">
+                            {{ render_field(form.deleteone, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if specificach.ach2 == '0' %}
+                    <tr>
+                        <td class="linkcolor">
+                            None Chosen!
+                        </td>
+                        <td class="linkcolor text-center">
+                        </td>
+                        <td class="linkcolor" width="15%">
+                            {{ render_field(form.ach2, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selecttwo, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor" width="25%">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach2_cat  + '/' + specificach.ach2 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center" width="20%">
+                            {{ specificach.ach2 }}
+                        </td>
+                        <td class="linkcolor" width="15%">
+                            {{ render_field(form.deletetwo, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+            {% elif size <= 3 %}
+                {% if specificach.ach1 == '0' %}
+                    <tr>
+                        <td class="linkcolor">
+                            None Chosen!
+                        </td>
+                        <td class="linkcolor text-center">
+                        </td>
+
+                        <td class="linkcolor">
+                            {{ render_field(form.ach1, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectone, class="btn btn-primary", Value="Add") }}
+                        </td>
+
+                    </tr>
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach1_cat  + '/' + specificach.ach1 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center" >
+                            {{ specificach.ach1 }}
+                        </td>
+                        <td class="linkcolor" width="15%">
+                            {{ render_field(form.deleteone, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if specificach.ach2 == '0' %}
+                    <tr>
+                        <td class="linkcolor">None Chosen!</td>
+                        <td class="linkcolor text-center"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach2, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selecttwo, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach2_cat  + '/' + specificach.ach2 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">
+                            {{ specificach.ach2 }}
+                        </td>
+                        <td class="linkcolor">
+                            {{ render_field(form.deletetwo, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if specificach.ach3 == '0' %}
+                    <tr>
+                        <td class="linkcolor">
+                            None Chosen!
+                        </td>
+                        <td class="linkcolor text-center">
+                        </td>
+                        <td class="linkcolor"> {{ render_field(form.ach3, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectthree, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach3_cat  + '/' + specificach.ach3 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">
+                            {{ specificach.ach3 }}
+                        </td>
+                        <td class="linkcolor">
+                            {{ render_field(form.deletethree, class="btn btn-danger", Value="Remove") }}
+                        </td>
+                    </tr>
+                {% endif %}
+
+
+
+
+
+
+
+
+
+            {% elif size <= 4 %}
+                {% if specificach.ach1 == '0' %}
+                    <tr>
+                        <td class="linkcolor">None Chosen! </td>
+                        <td class="linkcolor text-center" ></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach1, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectone, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach1_cat  + '/' + specificach.ach1 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">
+                            {{ specificach.ach1 }}
+                        </td>
+                        <td class="linkcolor">
+                            {{ render_field(form.deleteone, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if specificach.ach2 == '0' %}
+                    <tr>
+                        <td class="linkcolor">None Chosen!</td>
+                        <td class="linkcolor text-center"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach2, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selecttwo, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach2_cat  + '/' + specificach.ach2 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">
+                            {{ specificach.ach2 }}
+                        </td>
+                        <td class="linkcolor">
+                            {{ render_field(form.deletetwo, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if specificach.ach3 == '0' %}
+                    <tr>
+                        <td class="linkcolor">None Chosen!</td>
+                        <td class="linkcolor text-center" width="20%"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach3, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectthree, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach3_cat  + '/' + specificach.ach3 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">{{ specificach.ach3 }}</td>
+                        <td class="linkcolor"> {{ render_field(form.deletethree, class="btn btn-danger", Value="Remove ") }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if specificach.ach4 == '0' %}
+                    <tr>
+                        <td class="linkcolor" >None Chosen!</td>
+                        <td class="linkcolor text-center"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach4, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectfour, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach4_cat  + '/' + specificach.ach4 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">{{ specificach.ach4 }}</td>
+                        <td class="linkcolor"> {{ render_field(form.deletefour, class="btn btn-danger", Value="Remove ") }}</td>
+                    </tr>
+                {% endif %}
+
+
+
+
+
+
+            {% elif size >= 5 %}
+                {% if specificach.ach1 == '0' %}
+                    <tr>
+                        <td class="linkcolor">None Chosen! </td>
+                        <td class="linkcolor text-center"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach1, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectone, class="btn btn-primary", Value="Add") }}
+                        </td>
+
+                    </tr>
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach1_cat  + '/' + specificach.ach1 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">{{ specificach.ach1 }}</td>
+                        <td class="linkcolor"> {{ render_field(form.deleteone, class="btn btn-danger", Value="Remove ") }}</td>
+                    </tr>
+                {% endif %}
+                {% if specificach.ach2 == '0' %}
+                    <tr>
+
+                        <td class="linkcolor">None Chosen!</td>
+                        <td class="linkcolor text-center"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach2, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selecttwo, class="btn btn-primary", Value="Add") }}
+                        </td>
+
+                    </tr>
+
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach2_cat  + '/' + specificach.ach2 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">{{ specificach.ach2 }}</td>
+                        <td class="linkcolor"> {{ render_field(form.deletetwo, class="btn btn-danger", Value="Remove ") }}</td>
+                    </tr>
+                {% endif %}
+                {% if specificach.ach3 == '0' %}
+                    <tr>
+
+                        <td class="linkcolor">None Chosen!</td>
+                        <td class="linkcolor text-center"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach3, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectthree, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach3_cat  + '/' + specificach.ach3 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">{{ specificach.ach3 }}</td>
+                        <td class="linkcolor"> {{ render_field(form.deletethree, class="btn btn-danger", Value="Remove ") }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if specificach.ach4 == '0' %}
+                    <tr>
+                        <td class="linkcolor">None Chosen!</td>
+                        <td class="linkcolor text-center"></td>
+                        <td class="linkcolor">
+                            {{ render_field(form.ach4, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectfour, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach4_cat  + '/' + specificach.ach4 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">{{ specificach.ach4 }}</td>
+                        <td class="linkcolor"> {{ render_field(form.deletefour, class="btn btn-danger", Value="Remove ") }}</td>
+                    </tr>
+                {% endif %}
+                {% if specificach.ach5 == '0' %}
+                    <tr>
+                        <td class="linkcolor">None Chosen!</td>
+                        <td class="linkcolor text-center"></td>
+
+
+                        <td class="linkcolor">
+                            {{ render_field(form.ach5, placeholder="ID #",class="form-control") }}
+                            {{ render_field(form.selectfive, class="btn btn-primary", Value="Add") }}
+                        </td>
+                    </tr>
+
+
+                {% else %}
+                    <tr>
+                        <td class="linkcolor">
+                            <img src="{{ url_for('static', filename='/images/achievement/' +  specificach.ach5_cat  + '/' + specificach.ach5 + '.png')  }}" width="198px" height="60px" >
+                        </td>
+                        <td class="linkcolor text-center">{{ specificach.ach5 }}</td>
+                        <td class="linkcolor">
+                            {{ render_field(form.deletefive, class="btn btn-danger", Value="Remove ") }}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% else %}
+            {% endif %}
+        </table>
+
+    </form>
+
+
+    <hr>
+
+    {% for f in x %}
+
+        <h4>ID: {{ f }}</h4>
+
+
+        <div class="row border blue" style="margin-bottom: 10px; ">
+            <div class="col-12 col-sm-4 text-center" style="padding: 20px;">
+
+                <img src="{{ url_for('static', filename='/images/achievement/' +  f[0]  + '/' + f + '.png')  }}" width="198px" height="60px" >
+            </div>
+
+            <div class="col-12 col-sm-8 btnwhite text-center" style="padding: 5px; padding-bottom: 15px;">
+                <h4>{{ f|achievementtitle }}</h4><hr style="max-height: 1px;">
+                {{ f|achievementdescription }}
+            </div>
+        </div>
+
+    {% endfor %}
+
+
+
+{% endblock %}

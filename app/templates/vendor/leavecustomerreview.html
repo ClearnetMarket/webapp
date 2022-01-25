@@ -1,0 +1,139 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <ol class="breadcrumb linkcolor">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+    </ol>
+    <div class="row">
+        <div class="col-12 col-sm-9 text-left">
+            <h4>Item Info</h4>
+        </div>
+        <div class="col-12 col-sm-3 text-left">
+            <a class="btn btn-warning" href="{{ url_for('message.messagecenter_Compose_specificperson', person=order.customer) }}" role="button">Message Buyer</a>
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-12">
+            {% include 'vendor/_ordersspecs.html' %}
+        </div>
+    </div>
+
+    {%  if order.userfeedback == 0 and order.cancelled == 0 %}
+        <div class="row">
+            <div class="col-12 col-sm-11 text-left">
+                <h4>Leave a Review</h4>
+            </div>
+        </div>
+
+        <form method="post" class='form-horizontal linkcolor graybg border'>
+            {{ form.csrf_token }}
+            <div class="form-group">
+                <label class="col-2 control-label">User rating</label>
+                <div class="col-10">
+                    <label>
+                        <input type="radio" name="itemrating" value="1"/>1
+                    </label>
+                    <label>
+                        <input type="radio" name="itemrating" value="2"/>2
+                    </label>
+                    <label>
+                        <input type="radio" name="itemrating" value="3"/>3
+                    </label>
+                    <label>
+                        <input type="radio" name="itemrating" value="4"/>4
+                    </label>
+                    <label>
+                        <input type="radio" name="itemrating" value="5"/>5
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-2 control-label">Comment</label>
+                <div class="col-7">
+                    {{ render_field(form.reviewcomment, class="form-control" )}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-2 control-label"></label>
+                <div class="col-10">
+                    {{ render_field(form.submit, value="Leave Review", class="btn btn-primary") }}
+                </div>
+            </div>
+
+        </form>
+
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12 col-sm-12 text-left">
+            <h4>User Reviews</h4>
+        </div>
+    </div>
+
+
+    <table class="col-12 linkcolor" style="margin-bottom: 100px;">
+        <tr>
+            <th class="col-2 bluetable">
+                Username
+            </th>
+            <th class="col-2 bluetable">
+                Age
+            </th>
+            <th class="col-2 bluetable">
+                Rating
+            </th>
+            <th class="col-6 bluetable">
+                Review
+            </th>
+        </tr>
+
+        <tr>
+            {% for review in userreviews %}
+                <tr>
+                    <!-- Title -->
+                    <td class="col-2 linkcolor">
+                        {{ review.customer }}
+                    </td>
+                    <!-- Quanity-->
+                    <td class="col-2 linkcolor">
+
+                        {{ moment(timestamp=review.dateofreview, local=False).fromNow(refresh=True)  }}
+                    </td>
+                    <!-- Price -->
+                    <td class="col-2 linkcolor">
+                        {% if review.rating == 1 %}
+                            <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+                        {% endif %}
+
+                        {% if review.rating == 2 %}
+                            <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}">
+                        {% endif %}
+
+                        {% if review.rating == 3 %}
+                            <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}" >
+                        {% endif %}
+
+                        {% if review.rating == 4 %}
+                            <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+                        {% endif %}
+
+                        {% if review.rating == 5 %}
+                            <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}" >
+                        {% endif %}
+                    </td>
+                    <td class="col-6 linkcolor">
+                        {{ review.review }}
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+
+
+
+{% endblock %}

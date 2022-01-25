@@ -1,0 +1,401 @@
+<div class="row">
+  <div class="hidden-xs col-sm-3"></div>
+  <div class="col-12 col-sm-6">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+
+    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+    {% for category, message in messages %} {% if category == 1 %}
+    <div class="col-12" style="margin-top: 10px">
+      <div class="row alert alert-dismissible" role="alert">
+        <div class="text-center" style="font-size: 20px">
+          You have earned a new achievement
+        </div>
+        <div class="row border">
+          <div class="col-12 col-sm-6 clearnetblue">
+            {% if message == 1 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/a/a1.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 2 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/e/e2.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 3 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/e/e3.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 4 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/e/e1.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 5 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/e/e5.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 6 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/e/e6.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 7 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/e/e7.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 8 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/u/u1.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 9 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/u/u2.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 10 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/u/u3.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 11 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v4.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 12 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v1.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 13 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v2.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 14 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/b/b1.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 15 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/a/a1.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 16 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/a/a2.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 17 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v3.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 18 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/b/b2.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 19 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c3.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 20 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c2.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 21 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c4.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 22 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c5.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 23 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c6.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 24 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c7.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 25 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c8.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 26 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v5.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 27 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v6.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 28 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v7.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 29 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v8.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 30 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v9.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 31 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v10.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 32 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c9.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 33 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c10.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 34 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/c/c11.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 35 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/a/c12.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 36 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v11.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 37 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v12.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 38 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v13.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 39 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v14.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 40 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v15.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+            {% elif message == 41 %}
+            <div class="text-center">
+              <img
+                src="{{ url_for('static', filename='/images/achievement/v/v16.png')  }}"
+                width="198px"
+                height="60px"
+              />
+            </div>
+
+            {% else %} {% endif %}
+          </div>
+          <div
+            class="col-12 col-sm-4 btnwhite text-center clearnetblue"
+            style="padding-top: 20px; overflow: hidden; min-height: 60px"
+          >
+            {{ moment(timestamp=now, local=False).format('L') }}
+          </div>
+          <div class="col-12 col-sm-2 clearnetblue" style="min-height: 60px">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              data-toggle="collapse"
+              data-target="#message_flashbox"
+            >
+              <span
+                aria-hidden="true"
+                style="font-size: 30px; margin-right: 25px;margin-top5px;color:red"
+                >×</span
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12" style="margin-bottom: 10px"></div>
+    </div>
+
+    {% else %}
+
+    <div class="row" style="margin-bottom: 10px">
+      <div
+        class="alert alert-dismissible alert-info"
+        role="alert"
+        style="margin-top: 20px"
+      >
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+          data-toggle="collapse"
+          data-target="#message_flashbox"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        {{message}}
+      </div>
+    </div>
+
+    {% endif %} {% endfor %} {% else %} {% endif %} {% endwith %}
+  </div>
+  <div class="hidden-xs col-sm-3"></div>
+</div>

@@ -1,0 +1,62 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"> <a  href="{{ url_for('wallet.walletHome') }}">Wallets</a></li>
+        </ol>
+    </nav>
+
+
+
+ <div id="neworderstable">
+        <h3>Profit account</h3>
+ <h3>Total: {{ aprofit }} BTC</h3>
+                <table cellspacing="20" cellpadding="20" width="100%">
+                    <tr>
+                    <th style="background-color: #0d579b; color: #fff; height: 25px;">Id</th>
+                    <th style="background-color: #0d579b; color: #fff;">Order id</th>
+                    <th style="background-color: #0d579b; color: #fff;">Timestamp</th>
+                    <th style="background-color: #0d579b; color: #fff;">Amount</th>
+
+                    </tr>
+
+                    {% for profit in profita %}
+                        <tr>
+
+
+                        <td class="linkcolor" width="5%">
+                            {{ profit.id }}
+                        </td>
+                        <td class="linkcolor" width="15%">
+                            {{ profit.order }}
+                        </td>
+                       <td class="linkcolor" width="15%">
+                           {{ moment(timestamp=profit.timestamp, local=False).fromNow(refresh=True)  }}
+                        </td>
+                         <td class="linkcolor" width="15%">
+                            {{ profit.total }}
+                        </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+
+                <div class="row text-center">
+					<div class="col-sm-3"></div>
+					<div class="col-12 col-sm-6">
+	                    {{ pagination.info }}
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+
+     <div class="d-flex justify-content-center linkcolor">
+         {{ pagination.links }}
+     </div>
+
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<div id="signupvendorwallpaper"></div>
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        </ol>
+    </nav>
+
+
+
+
+	<div class="row">
+		<div class="col-12 text-center">
+            <h4>Vendor Verification</h4>
+		</div>
+	</div>
+	<div class="row" style="margin-bottom: 100px;">
+		<div class="col-12 text-center">
+	        Digital Currency is one of the best inventions of modern time.  It allows the world to trade goods and services
+	        with the ease of a single currency.  It enables a free market, and puts the power back into peoples hands.  We
+	        can create a better market, built on the free hand of reputation, to enable even the basic of services and goods in every country.
+	        Start selling today, and build a better world for tomorrow.
+        </div>
+	</div>
+    <div class="row" style="margin-bottom: 50px;">
+		<div class="col-12 col-sm-4 text-center">
+	        <span class="fa fa- btc" aria-hidden="true" style="font-size: 40px;"></span><br>
+			<h3>No  Fees</h3><br>
+					Selling without any hidden fees. No signup or annual fee.
+
+			</div>
+
+            <div class="col-12 col-sm-4 text-center">
+	            <span class="fa fa- random" aria-hidden="true" style="font-size: 40px;"></span><br>
+		    <h3>
+	            Privacy
+		    </h3><br>
+	        Sell with privacy.  We don't store your personal information.  Sell with
+	        confidence that your information is never sold, distributed, or used without your knowledge.
+            </div>
+
+        <div class="col-12 col-sm-4 text-center">
+	        <span class="fa fa- user" aria-hidden="true" style="font-size: 40px;"></span>
+
+	        <h3>Build your rep</h3><br>
+	        With our unique leveling system, you can showcase your achievements and experience. Our profile box
+	        helps customers have trust in you.
+        </div>
+    </div>
+
+
+
+	<div class="row" style="margin-bottom: 100px;">
+		<div class="col-12 text-center">
+	        <form method="post">
+	            {{ form.csrf_token }}
+	        {{ render_field(form.submit, class="btn btn-primary ", value="Start Selling") }}
+	        </form>
+	    </div>
+
+	</div>
+
+
+
+
+
+{% endblock %}
+
+

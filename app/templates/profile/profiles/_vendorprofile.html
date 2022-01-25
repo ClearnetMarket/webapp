@@ -1,0 +1,136 @@
+<!--Holder-->
+
+<div
+  class="row linkcolor_topbar clearnetblue"
+  style="color: #ffffff; max-width: 220px"
+>
+  <!--username-->
+  <div class="col-sm-12 text-center">
+    <div class="linkcolor_topbar">
+      <a href="{{ url_for('profile.vendorprofile',username=vendor.username) }}"
+        >{{ vendor.username }}</a
+      >
+    </div>
+  </div>
+
+  <!--Image-->
+  <div class="col-sm-12 text-center">
+    <img src="{{vendor.id|profilepicture }}" width="125px" height="125px" />
+  </div>
+  <!--country-->
+  <div class="col-sm-12 text-center">{{ vendor.country|countryformat }}</div>
+  <!--Badge-->
+  <div class="col-sm-12 text-center">
+    <img
+      src="{{ url_for('static', filename='/images/rank-badge/' + vendorpictureid + '.png')  }}"
+      width="40px"
+      height="40px"
+    />
+  </div>
+  <!--Level-->
+  <div class="col-sm-12 text-center">
+    Lvl {{ vendorgetlevel.level }}<br />
+    {% if vendor.id|trustlevel == '0' %} {% else %}
+    <a href="{{ url_for('main.levels') }}">
+      <img
+        src="{{ url_for('static', filename='/images/trustlevel/' + vendor.id|trustlevel + '.png')  }}"
+        width="125px"
+        height="30px"
+      />
+    </a>
+    {% endif %}
+  </div>
+  {% if vendorwidth %}
+  <div class="col-sm-12 text-center">
+    Level({{ vendorwidth }}%)
+    <div class="progress">
+      <div
+        class="progress-bar progress-bar-warning"
+        role="progressbar"
+        aria-valuenow="{{"
+        level.experiencepoints
+        }}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        style="width:{{ vendorwidth }}%"
+      ></div>
+    </div>
+  </div>
+  {% endif %}
+  <!--msg-->
+  {% if current_user.id == vendor.id%} {% else %}
+  <div class="col-sm-12 text-center">
+    <a
+      class="btn btn-warning btnwhite"
+      href="{{ url_for('message.messagecenter_Compose_specificperson', person=vendor.username) }}"
+      role="button"
+      >Send Message</a
+    >
+  </div>
+  {% endif %}
+
+  <!--Stats-->
+  <div class="col-sm-12 text-center">
+    Vendor Rating: {% if vendorstats.vendorrating == 0 %} 0 {% else %} {{
+    vendorstats.vendorrating }} {% endif %}
+    <img
+      src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+      width="15px"
+      height="15px"
+    />
+  </div>
+
+  <div class="col-sm-12 text-center">
+    Items Sold: {{ vendorstats.totalsales }}
+  </div>
+
+  <div class="col-sm-12 text-center">
+    Reviews Received: {{ vendorstats.totalreviews }}
+  </div>
+
+  {% if vendorach.ach1 %} {% if vendorach.ach1 == '0' %} {% else %}
+  <div class="col-sm-12 text-center">
+    <img
+      src="{{ url_for('static', filename='/images/achievement/' +  vendorach.ach1_cat  + '/' + vendorach.ach1 + '.png')  }}"
+      width="195px"
+      height="60px"
+    />
+  </div>
+  {% endif %} {% endif %} {% if vendorach.ach2 %} {% if vendorach.ach2 == '0' %}
+  {% else %}
+  <div class="col-sm-12 text-center">
+    <img
+      src="{{ url_for('static', filename='/images/achievement/' +  vendorach.ach2_cat  + '/' + vendorach.ach2 + '.png')  }}"
+      width="195px"
+      height="60px"
+    />
+  </div>
+  {% endif %} {% endif %} {% if vendorach.ach3 %} {% if vendorach.ach3 == '0' %}
+  {% else %}
+  <div id="seller_info_ach1">
+    <img
+      src="{{ url_for('static', filename='/images/achievement/' +  vendorach.ach3_cat  + '/' + vendorach.ach3 + '.png')  }}"
+      width="195px"
+      height="60px"
+    />
+  </div>
+  {% endif %} {% endif %} {% if vendorach.ach4 %} {% if vendorach.ach4 == '0' %}
+  {% else %}
+  <div class="col-sm-12 text-center">
+    <img
+      src="{{ url_for('static', filename='/images/achievement/' +  vendorach.ach4_cat  + '/' + vendorach.ach4 + '.png')  }}"
+      width="195px"
+      height="60px"
+    />
+  </div>
+  {% endif %} {% endif %} {% if vendorach.ach5 %} {% if vendorach.ach5 == '0' %}
+  {% else %}
+  <div class="col-sm-12 text-center">
+    <img
+      src="{{ url_for('static', filename='/images/achievement/' +  vendorach.ach5_cat  + '/' + vendorach.ach5 + '.png')  }}"
+      width="195px"
+      height="60px"
+    />
+  </div>
+  {% endif %} {% endif %}
+</div>

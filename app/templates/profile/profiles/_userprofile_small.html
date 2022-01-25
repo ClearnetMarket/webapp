@@ -1,0 +1,60 @@
+<!--Holder-->
+<div
+  class="row linkcolor_topbar clearnetblue"
+  style="color: #ffffff; max-width: 220px"
+>
+  <!--username-->
+  <div class="col-sm-12 text-center linkcolor_topbar">
+    <a href="{{ url_for('profile.user',username=user.username) }}"
+      >{{ user.username }}</a
+    >
+  </div>
+
+  <!--Image-->
+  <div class="col-sm-12 text-center">
+    {% if user.profileimage == '0' %}
+    <img
+      src="{{ url_for('static', filename='/images/profileimages/0.png')  }}"
+      width="125px"
+      height="125px"
+    />
+    {% else %}
+    <img src="{{user.id|profilepicture }}" width="125px" height="125px" />
+    {% endif %}
+  </div>
+  <!--country-->
+  <div class="col-sm-12 text-center">{{ user.country|countryformat }}</div>
+
+  <!--Badge-->
+  <div class="col-sm-12 text-center">
+    <img
+      src="{{ url_for('static', filename='/images/rank-badge/' + userpictureid + '.png')  }}"
+      width="40px"
+      height="40px"
+    />
+  </div>
+  <!--Level-->
+  <div class="col-sm-12 text-center">
+    Lvl {{ usergetlevel.level }}<br />
+    {% if user.id|trustlevel == '0' %} {% else %}
+    <a href="{{ url_for('main.levels') }}">
+      <img
+        src="{{ url_for('static', filename='/images/trustlevel/' + user.id|trustlevel + '.png')  }}"
+        width="125px"
+        height="30px"
+      />
+    </a>
+    {% endif %}
+  </div>
+  <!--msg-->
+  {% if current_user.id == user.id%} {% else %}
+  <div class="col-sm-12 text-center">
+    <a
+      class="btn btn-warning btnwhite"
+      href="{{ url_for('message.messagecenter_Compose_specificperson', person=vendor.username) }}"
+      role="button"
+      >Send Message</a
+    >
+  </div>
+  {% endif %}
+</div>

@@ -1,0 +1,234 @@
+
+<!--HEADERS-->
+<!--Feedback at bottom-->
+{% if order.delivered_order == 1 %}
+    <!-- finished -->
+    {% if order.feedback == 0 and order.vendor_id != current_user.id and order.cancelled == 0%}
+        <div class="card border graybg" style="margin-bottom: 10px; ">
+    {% else %}
+        <div class="card border graybg" style="margin-bottom: 10px;">
+    {% endif %}
+{% else %}
+    <!-- not delivered yet -->
+    {% if order.request_cancel == 1 %}
+        <div class="card border bg-danger" style="margin-bottom: 10px;">
+    {% elif order.request_return >=1 and order.request_return != 5%}
+        <div class="card border bg-warning" style="margin-bottom: 10px;">
+    {% elif order.disputed_order == 1 %}
+        <div class="card border bg-danger" style="margin-bottom: 10px;">
+    {% else %}
+        <div class="card border graybg" style="margin-bottom: 10px;">
+    {% endif %}
+{% endif %}
+
+<div class="card-header linkcolor">
+        <div class="col-md-4">
+            <b>Order ID: #<a href="{{ url_for('vendor.viewOrder', id=order.id) }}">{{ order.id }}</a></b>
+        </div>
+        <div class="col-md-4">
+            <b> Ordered on:</b> {{ moment(timestamp=order.age, local=False).format('L')  }}<br>
+        </div>
+
+    </div>
+
+
+<div class="card-body">
+<div class="row">
+    <!-- small title -->
+    <div class="col-12 d-sm-none linkcolor" style="font-size: 17px;">
+        <a href="{{ url_for('item.Itemforsale',id=order.item_id) }}" >
+            {{ order.title|truncate(50) }}
+        </a>
+        <br>
+    </div>
+
+
+    <!--FIRST COLUMN-->
+    <!-- image -->
+    <div class="col-12 col-sm-4 col-md-3">
+        <img src="{{ url_for('userdata.media_file',
+        filename=('item/' + order.stringnodeid + order.stringauctionid + order.imageone + "_250x.jpg"))  }}"
+             class="boximage">
+    </div>
+
+    <!-- info -->
+    <div class="col-12 col-sm-4 col-md-6 linkcolor ">
+
+        <div class="d-none d-sm-block" style="font-size: 17px;">
+            <a href="{{ url_for('item.Itemforsale',id=order.item_id) }}" >
+                {{ order.title|truncate(50) }}
+            </a><br>
+        </div>
+
+
+        <b>Vendor:</b>
+        <a href="{{ url_for('profile.vendorprofile', username=order.vendor) }}">
+            {{ order.vendor }}
+            ({{ order.vendor_id|avgvendorrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="20px" height="20px";>)
+            ({{ order.vendor_id|vendorratingcount }})
+        </a><br>
+
+        {% if order.request_return == 0 %}
+            {% if order.cancelled== 0 and order.return_by > now %}
+                <b>Return By:</b>
+                {{ moment(timestamp=order.return_by, local=False).format('L')  }}<br>
+            {% else %}
+            {% endif %}
+        {% elif order.request_return == 1%}
+            <div class="redstatus"> <b>Return Status:</b>
+                Waiting on vendor to give return info</div><br>
+            <b>Return Quantity:</b> {{ order.return_quantity }}<br>
+            <b>Return Refund:</b> {{ order.return_amount }}<br>
+        {% elif order.request_return == 2%}
+            <div class="redstatus"><b>Return Status:</b>
+                Waiting on customer to mark as shipped</div><br>
+            <b>Return Quantity:</b> {{ order.return_quantity }}<br>
+            <b>Return Refund:</b> {{ order.return_amount }}<br>
+        {% elif order.request_return == 3%}
+            <div class="redstatus"> <b>Return Status:</b>
+                Waiting on vendor to mark as recieved</div><br>
+            <b>Return Quantity:</b> {{ order.return_quantity }}<br>
+            <b>Return Refund:</b> {{ order.return_amount }}<br>
+        {% elif order.request_return == 4%}
+            <div class="redstatus"><b>Return Status:</b> Item returned</div>
+            <br>
+            <b>Return Quantity:</b> {{ order.return_quantity }}<br>
+            <b>Return Refund:</b> {{ order.return_amount }}<br>
+        {% elif order.request_return == 5%}
+            <div class="greenstatus"> <b>Return Status:</b> Successful return</div>
+            <br>
+            <b>Return Quantity:</b> {{ order.return_quantity }}<br>
+            <b>Return Refund:</b> {{ order.return_amount }}<br>
+        {% else %}
+        {% endif %}
+
+        {% if order.digital_currency == 3 %}
+            <b>BCH:</b> {{ order.price|formatbtctostring }}<br>
+        {% elif order.digital_currency == 2 %}
+            <b>BTC:</b> {{ order.price|formatbtctostring }}<br>
+        {% else %}
+        {% endif %}
+        {% if order.order_status == 0 %}
+            <b>Order Cancelled by Vendor</b><br>
+        {%  endif %}
+        {% if order.new_order == 1 %}
+            <b>Pending</b><br>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="10" aria-valuemax="100" style="width: 3%">
+                </div>
+            </div>
+        {%  endif %}
+        {% if order.accepted_order == 1 %}
+            <b>Order Accepted</b>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="10" aria-valuemax="100" style="width: 10%">
+                </div>
+            </div>
+        {%  endif %}
+        {% if order.waiting_order == 1 and order.request_return == 0%}
+            <b>Order Shipped</b>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+                </div>
+            </div>
+        {%  endif %}
+        {% if order.delivered_order == 1 %}
+            {% if order.cancelled == 1 %}
+                <div class="red"> <b>Order Cancelled</b></div>
+            {% else %}
+                <div class="green"><b>Order Delivered</b></div>
+            {% endif %}
+            {% if order.cancelled == 1 %}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    </div>
+                </div>
+            {% else %}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    </div>
+                </div>
+            {% endif %}
+        {%  endif %}
+        {% if order.cancelled == 1 and order.delivered_order == 0 %}
+            <div class="red"><b>Order Cancelled</b></div>
+        {% endif %}
+        {% if order.order_status == 6 %}
+            <b>Order Delayed/Issue</b>
+            <div class="progress">
+                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                </div>
+            </div>
+        {%  endif %}
+    </div>
+    <!--END SECOND COLUMN-->
+    <!--THIRD COLUMN-->
+    <div class="col-12 col-sm-3 col-md-3 btnwhite card text-left">
+        <a class="btn btn-warning btn-sm w-100 mb-2 mt-1"  href="{{ url_for('item.buyitagain', id=order.item_id) }}" role="button">Buy It Again</a>
+        <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('auth.orders_viewtracking', id=order.id) }}" role="button">View Tracking</a>
+        <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('service.helpwithitem', id=order.id) }}" role="button">Customer Service</a>
+
+        {% if order.new_order == 1%}
+            <a class="btn btn-danger btn-sm w-100 mb-2 mt-1" href="{{ url_for('auth.orders_cancelorder', id=order.id) }}" role="button">Cancel Order</a>
+        {%  endif %}
+
+        {% if order.accepted_order == 1 %}
+            {% if order.request_cancel == 0 %}
+                <a class="btn btn-danger btn-sm w-100 mb-2 mt-1" href="{{ url_for('auth.orders_requestcancelorder', id=order.id) }}" role="button">Request Cancel </a>
+            {% elif order.request_cancel == 1 %}
+            {% else %}
+            {% endif %}
+        {%  endif %}
+
+        <!--allow return button -->
+        <!--ir order was shipped -->
+        {% if order.waiting_order == 1 or order.delivered_order == 1  %}
+            <!--if not new with no disputes -->
+            {% if order.new_order ==0
+                and order.accepted_order == 0
+                and order.disputed_order == 0
+                and order.released == 0
+                and order.completed == 0
+                    %}
+
+                <!--if not currently being returned -->
+                {% if order.request_return == 0 %}
+                    {% if order.return_allowed == 1 %}
+                        {% if order.return_by > now %}
+                            <a class="btn btn-danger" href="{{ url_for('auth.customerOrders_return', id=order.id) }}"
+                               role="button">Return Item </a>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {%  endif %}
+
+        {% if order.request_return >= 1  %}
+            <a class="btn btn-danger" href="{{ url_for('auth.customerOrders_returninstructions', id=order.id) }}"
+               role="button">View Return</a>
+        {%  endif %}
+
+        {% if order.accepted_order == 1  or order.waiting_order == 1 %}
+            <a class="btn btn-success" href="{{ url_for('auth.orders_markasrecieved', id=order.id) }}" role="button">
+                Finalize Purchase</a>
+        {%  endif %}
+    </div>
+
+    <!--END THIRD COLUMN-->
+
+    <!--FEEDBACK-->
+    {% if order.feedback == 0
+         and order.vendor_id != current_user.id
+          and order.cancelled == 0
+           and order.customer_id== current_user.id%}
+        {% if order.delivered_order == 1 %}
+            {% include '/auth/orders/_feedback.html' %}
+        {% endif %}
+    {% else %}
+
+    {%  endif %}
+</div>
+</div>
+</div>
+
+

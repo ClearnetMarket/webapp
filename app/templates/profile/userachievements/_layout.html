@@ -1,0 +1,69 @@
+{% from "_formhelpers.html" import render_field %} {% include
+'layouts/headers/_headerplain.html' %} {% include
+'layouts/sublayout/_flashbar.html' %}
+<body>
+  <div class="container clearnetcontainer">
+    {% include '/profile/account_widgets/_topbar.html' %}
+    <div class="row">
+      <div class="col-12 col-sm-3">
+        <div class="classWithPad" style="height: 150px; min-height: 500px">
+          <b>Achievement Category</b>
+          <ul>
+            <li class="linkcolor">
+              <a href="{{ url_for('profile.achs', username=user.username) }}"
+                >Newest added</a
+              >
+            </li>
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('profile.achievements_common', username=user.username) }}"
+                >Common</a
+              >
+            </li>
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('profile.achievements_experience', username=user.username) }}"
+                >Experience</a
+              >
+            </li>
+
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('profile.achievements_unique', username=user.username) }}"
+                >Unique</a
+              >
+            </li>
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('profile.achievements_customer', username=user.username) }}"
+                >Customer</a
+              >
+            </li>
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('profile.achievements_vendor', username=user.username) }}"
+                >Vendor</a
+              >
+            </li>
+            <li class="linkcolor">
+              <a
+                href="{{ url_for('profile.achievements_coin', username=user.username) }}"
+                >Coin</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-9">
+        <div class="row text-center" style="font-size: 22px">
+          <div class="col-12 col-sm-12">{{ title }}</div>
+        </div>
+
+        {% block content %} {% endblock %}
+      </div>
+    </div>
+  </div>
+
+  {% include 'layouts/subindex/_footer.html' %}
+</body>

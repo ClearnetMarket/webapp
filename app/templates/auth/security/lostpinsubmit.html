@@ -1,0 +1,91 @@
+{% extends "/layouts/plain_nofooter.html" %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h4>Confirm your seed to Reset Pin</h4><br>
+
+            <form method="post" class="form-group">
+                {{ form.csrf_token }}
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Username:</label>
+                        <div class="col-12">
+                            {{ render_field(form.username, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12 col-md-1">Word 1:</label>
+                        <div class="col-12 col-md-2">
+                            {{ render_field(form.seedanswer0, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 2:</label>
+                        <div class="col-12">
+                            {{ render_field(form.seedanswer1, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 3:</label>
+                        <div class="col-12">
+                            {{ render_field(form.seedanswer2, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 4:</label>
+                        <div class="col-12">
+                            {{ render_field(form.seedanswer3, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 5:</label>
+                        <div class="col-12">
+                            {{ render_field(form.seedanswer4, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 6:</label>
+                        <div class="col-12">
+                            {{ render_field(form.seedanswer5, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 25px;">
+                    <div class="text-center">
+                        <div class="col-12">
+                            {{ render_field(form.submit,
+                     class="btn btn-primary",
+                      value="Confirm Seed") }}
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+
+    <div class="row border graybg" style="width: 350px; padding: 10px; margin: 0 auto; margin-bottom: 200px;">
+		<div class="col-12">
+	        <div class="row" style="padding:10px;">
+	            <div class="col-4 col-sm-5 col-md-5 col-lg-5"></div>
+	            <div class="col-4 col-sm-2 col-md-2 col-lg-2">
+	                <span class="fa fa- info-sign" aria-hidden="true" style="font-size: 40px;"></span>
+	            </div>
+	            <div class="col-4 col-sm-5 col-md-5 col-lg-5"></div>
+
+	        </div>
+	        <div class="row" style="padding:10px;">
+	            <div class="col-md-1"></div>
+	            <div class="col-md-10 text-center">
+	              <h3>We want your feedback</h3><br> Found a bug? Want to improve the site?  Missing a category?
+                    We want your suggestions, comments, and feedback.
+	            </div>
+	            <div class="col-md-1"></div>
+
+	        </div>
+
+
+
+
+
+
+            <form method="post">
+                {{ form.csrf_token }}
+                    <div class="form-group">
+                    <label>Feedback Type</label>
+                    {{ render_field(form.type, class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                    <label>Message</label>
+                    {{ render_field(form.message2,class="form-control", rows="3") }}
+                    </div>
+
+
+                    <div class="form-group">
+                     <label>Recaptcha</label>
+                        <div class="text-center">
+                      <img src="{{ url_for('static', filename='/recaptcha/' + randompicture)  }}" width="236px" height="48px" >
+                        </div>
+                    </div>
+
+
+                <div id="form-group">
+                 {{ render_field(form.recaptchaanswer, class="form-control", placeholder='Recaptcha answer') }}
+                    <label></label>
+                </div>
+                        <div class="text-center">
+                    {{ render_field(form.submit, class="btn btn-warning", value="submit") }}
+                        </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

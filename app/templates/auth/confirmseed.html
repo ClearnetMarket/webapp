@@ -1,0 +1,93 @@
+{% extends "/layouts/plain_nofooter.html" %}
+
+{% block content %}
+
+    <div class="row mt-5">
+        <div class="col-4 offset-4 bg-white  rounded-3">
+        <div class="col-12">
+            <h4>Confirm your seed </h4><br>
+
+            <p>In order to activate your account please enter the seed below.
+                Your seed will not be shown to you again.</p>
+            <form method="post" class="form-group">
+                {{ form.csrf_token }}
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 1:</label>
+                        <div class="col-12 ">
+                            {{ render_field(form.seedanswer0, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 2:</label>
+                        <div class="col-12 ">
+                            {{ render_field(form.seedanswer1, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12 ">Word 3:</label>
+                        <div class="col-12 ">
+                            {{ render_field(form.seedanswer2, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 4:</label>
+                        <div class="col-12 ">
+                            {{ render_field(form.seedanswer3, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12">Word 5:</label>
+                        <div class="col-12 ">
+                            {{ render_field(form.seedanswer4, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-12 ">Word 6:</label>
+                        <div class="col-12 ">
+                            {{ render_field(form.seedanswer5, class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row mt-3 mb-2" >
+                    <div class="text-center">
+                        <div class="col-12 ">
+                            {{ render_field(form.submit,
+                     class="btn btn-primary",
+                      value="Confirm Seed") }}
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
+
+            <p>Want to see your seed again?  go back to
+                <a href="{{ url_for('auth.createaccountseed') }}"
+                   class="btn btn-primary">wallet seed</a>.
+            </p>
+        </div>
+    </div>
+
+
+{% endblock %}

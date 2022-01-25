@@ -1,0 +1,209 @@
+{% extends 'wallet/wallet_btccash/wallet_layout.html' %} {% from
+"_formhelpers.html" import render_field %} {% block content %}
+
+<h4>Recent Transactions</h4>
+<div id="wallet_color_chart">
+  *Transactions are processed in the order recieved and can take a bit of time
+  to show depending on volume.
+  <div id="wallet_color_chart_1">Green: Deposit</div>
+  <div id="wallet_color_chart_1">Red: Withdrawl</div>
+  <div id="wallet_color_chart_1">Blue: Recieved BCH Cash</div>
+  <div id="wallet_color_chart_1">Orange: Sent BCH</div>
+</div>
+<div class="row">
+  <div class="col-12">
+    White: Pending<br />
+    <strong>Confirmed at 6 Confirmations</strong>
+  </div>
+</div>
+{% if transactcount >= 1 %}
+
+<!--#1 = Wallet created -->
+<!--#2 = Withdrawl -->
+<!--#3 = Deposit -->
+<!--#4 = send coin to escrow -->
+<!--#5 = send coin to user -->
+<!--#6 = clearnet_webapp profit -->
+<!--#7 = sent coin to holdings -->
+<!--#8 = sent coin from holdings -->
+<!--#9 = sent coin for ad -->
+<table class="table" cellspacing="20" cellpadding="20" width="100%">
+  <tr>
+    <th style="background-color: #0d579b; color: #fff; width: 10%">Age</th>
+    <th style="background-color: #0d579b; color: #fff; width: 25%">
+      Description
+    </th>
+    <th style="background-color: #0d579b; color: #fff; width: 10%">Coin</th>
+    <th style="background-color: #0d579b; color: #fff; width: 10%">Balance</th>
+    <!-- set colors-->
+  </tr>
+  {% for t in transact %} {% if t.category == 0 %}
+  <tr>
+    {% elif t.category == 1 %}
+  </tr>
+
+  <tr class="bg-danger">
+    {% elif t.category == 2 %} {% if t.confirmations == 0 %}
+  </tr>
+
+  <tr>
+    {% else %}
+  </tr>
+
+  <tr class="danger">
+    {% endif %} {% elif t.category == 3 %} {% if t.confirmations == 0 %}
+  </tr>
+
+  <tr>
+    {% else %}
+  </tr>
+
+  <tr class="bg-success">
+    {% endif %} {% elif t.category == 4 %}
+  </tr>
+
+  <tr class="bg-warning">
+    {% elif t.category == 5 %}
+  </tr>
+
+  <tr class="bg-info">
+    {% elif t.category == 6 %}
+  </tr>
+
+  <tr class="bg-success">
+    {% elif t.category == 7 %}
+  </tr>
+
+  <tr class="bg-warning">
+    {% elif t.category == 8 %}
+  </tr>
+
+  <tr class="bg-info">
+    {% elif t.category == 9 %}
+  </tr>
+
+  <tr class="clearnetorangebackground" style="color: #ffffff">
+    {% elif t.category == 10 %}
+  </tr>
+
+  <tr class="clearnetorangebackground" style="color: #ffffff">
+    {% elif t.category == 11 %}
+  </tr>
+
+  <tr class="bg-success">
+    {% else %}
+  </tr>
+
+  <tr class="bg-info">
+    {% endif %}
+
+    <!--First column: Time-->
+    <td width="15%">{{ moment(timestamp=t.created).fromNow(refresh=True) }}</td>
+
+    <!--Second column: Description-->
+    <td class="linkcolor" width="35%">
+      {% if t.category == 1 %} Wallet Created
+      <br />
+      {% elif t.category == 2 %} Withdrawl<br />
+      {% if t %} {% if t.confirmations >= 7 %}
+      <div class="greenstatus">Confirmed</div>
+      <br />
+      <div style="font-size: 10px">
+        Fee: {{ t.fee }}
+        <a href="https://blockchain.info/tx/{{ t.txid }}">{{ t.txid }}</a>
+      </div>
+
+      {% if t.commentbtc %}
+      <br />{{ t.commentbtc }} {% endif %} {% else %} Confirmations: {{
+      t.confirmations }}<br />
+      <div style="font-size: 10px">
+        Fee: {{ t.fee }}
+        <a href="https://blockchain.info/tx/{{ t.txid }}">{{ t.txid }}</a>
+      </div>
+
+      {% if t.commentbtc %}
+      <br />{{ t.commentbtc }} {% endif %} {% endif %} {% endif %}
+      <br />
+
+      {% elif t.category == 3 %} Deposit<br />
+      {% if t %} {% if t.confirmations >= 6 %}
+      <div class="greenstatus">Confirmed</div>
+      <br />
+      <div style="font-size: 10px">
+        <a href="https://blockchain.info/tx/{{ t.txid }}">{{ t.txid }}</a>
+      </div>
+      {% else %} Confirmations: {{ t.confirmations }}<br />
+      <div style="font-size: 10px">
+        <a href="https://blockchain.info/tx/{{ t.txid }}">{{ t.txid }}</a>
+      </div>
+      {% endif %} {% endif %} {% elif t.category == 4 %} {% if t.orderid %}
+      Transaction -
+      <a href="{{ url_for('vendor.viewOrder', id =t.orderid) }}"
+        >Order# {{ t.orderid }}</a
+      ><br />
+      {% endif %} {% elif t.category == 5 %} {% if t.orderid %} Transaction -
+      <a href="{{ url_for('vendor.viewOrder', id =t.orderid) }}"
+        >Order# {{ t.orderid }}</a
+      ><br />
+      {% endif %} {% elif t.category == 6 %} {% if t.orderid %} Profit -
+      <a href="{{ url_for('vendor.viewOrder', id =t.orderid) }}"
+        >Order# {{ t.orderid }}</a
+      ><br />
+      {% endif %} {% elif t.category == 7 %} {% if t.commentbtc %} {{
+      t.commentbtc }}<br />
+      {% endif %} {% elif t.category == 8 %} {% if t.commentbtc %} {{
+      t.commentbtc }}<br />
+      {% endif %} {% elif t.category == 9 %} {% if t.commentbtc %} Admin Action
+      -{{ t.commentbtc }}<br />
+      {% endif %} {% elif t.category == 10 %} {% if t.commentbtc %} Admin Action
+      - {{ t.commentbtc }}<br />
+      {% endif %} {% elif t.category == 11 %} {% if t.commentbtc %} {{
+      t.commentbtc }}<br />
+      {% endif %} {% else %} {% if t.orderid %} {{ t.commentbtc }}<br /><br />
+      {% endif %} {% endif %}
+    </td>
+    <td width="15%">
+      <!--Third column: Amount traded-->
+      {% if t.category == 1 %} -- {% elif t.category == 2 %} -{{
+      t.amount|otherformatbtctostring }} {% elif t.category == 3 %} {% if 0 <=
+      t.amount > 0.0001 %} {{ t.amount }} {% else %} {{
+      t.amount|otherformatbtctostring }} {% endif %} {% elif t.category == 4 %}
+      {% if 0 <= t.amount > 0.0001 %} -{{ t.amount }} {% else %} -{{
+      t.amount|otherformatbtctostring }} {% endif %} {% elif t.category == 5 %}
+      {% if 0 <= t.amount > 0.0001 %} {{ t.amount }} {% else %} {{
+      t.amount|otherformatbtctostring }} {% endif %} {% elif t.category == 10 %}
+      {% if 0 <= t.amount > 0.0001 %} -{{ t.amount }} {% else %} -{{
+      t.amount|otherformatbtctostring }} {% endif %} {% else %} {% if 0 <=
+      t.amount > 0.0001 %} {{ t.amount }} {% else %} {{
+      t.amount|otherformatbtctostring }} {% endif %} {% endif %}
+    </td>
+    <td width="15%">
+      <!--Fourth  column: User balance-->
+      {% if t.category == 1 %} {% elif t.category == 3 %} {% if t.confirmed == 0
+      %} {{ t.balance - t.amount}} + {{ t.amount }} {% else %} {{ t.balance }}
+      {% endif %} {% elif t.category == 4 %} {% if 0 <= t.balance >= 0.0001 %}
+      {{ t.balance }} {% else %} {{ t.balance|otherformatbtctostring }} {% endif
+      %} {% elif t.category == 5 %} {% if 0 <= t.balance >= 0.0001 %} {{
+      t.balance }} {% else %} {{ t.balance|otherformatbtctostring }} {% endif %}
+      {% else %} {% if 0 <= t.balance >= 0.0001 %} {{ t.balance }} {% else %} {{
+      t.balance|otherformatbtctostring }} {% endif %} {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div class="row text-center">
+  <div class="col-sm-3"></div>
+  <div class="col-12 col-sm-6">{{ pagination.info }}</div>
+  <div class="col-sm-3"></div>
+</div>
+
+<div class="d-flex justify-content-center linkcolor">
+  {{ pagination.links }}
+</div>
+
+{% else %}
+<div class="text-center" style="font-size: 20px; margin-top: 25px">
+  *You have no recent transactions*
+</div>
+{% endif %} {% endblock %}

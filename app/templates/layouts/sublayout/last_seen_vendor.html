@@ -1,0 +1,53 @@
+<div id="last_seen">
+
+    <div id="last_seen_text"><a href="{{ url_for('profile.user',username=vendor.username) }}">{{ vendor.username }}</a></div>
+
+    {% if vendor.id|lastseen  == 1%}
+    <div id="last_seen_globe">1</div>
+
+
+    {% elif vendor.id|lastseen  == 2%}
+    <div id="last_seen_globe">2</div>
+
+
+    {% elif vendor.id|lastseen  == 3%}
+    <div id="last_seen_globe">3</div>
+
+
+    {% elif vendor.id|lastseen  == 4%}
+    <div id="last_seen_globe">4</div>
+
+
+    {% elif vendor.id|lastseen  == 5%}
+    <div id="last_seen_globe">5</div>
+
+
+    {% elif vendor.id|lastseen  == 6%}
+    <div id="last_seen_globe">6</div>
+
+
+    {% elif vendor.id|lastseen  == 7%}
+    <div id="last_seen_globe">7</div>
+
+
+    {% elif vendor.id|lastseen  == 8%}
+    <div id="last_seen_globe">8</div>
+
+
+    {% elif vendor.id|lastseen  == 9%}
+    <div id="last_seen_globe">9</div>
+
+
+    {% elif vendor.id|lastseen  == 10 %}
+    <div id="last_seen_globe">10</div>
+
+
+    {% elif vendor.id|lastseen  == 11%}
+    <div id="last_seen_globe">11</div>
+
+    {% else %}
+        <div id="last_seen_globe">{{ vendor.id|lastseen }}</div>
+    {% endif %}
+
+</div>
+

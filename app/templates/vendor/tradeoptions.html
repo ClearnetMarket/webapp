@@ -1,0 +1,37 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+	<table class="table table-bordered">
+	    <tr>
+	        <td>
+		        <div class="text-center" style="padding-top: 50px;">
+	            <a class="btn btn-warning" href="{{ url_for('vendor.createItem') }}" role="button">Sell a Physical Item</a>
+	            </div>
+	        <td>
+	            <div class="text-center">
+	                <h3>Create a physical item</h3>
+                </div>
+	                Sell your items for bitcoin.  Art, cars and car parts, computers/pc parts, or any physical good is waiting to be seen by the world.
+	                    <ul>
+	                        <li>Set your shipping terms and rates.</li>
+	                        <li>Set your quantity and sell till your items are gone.</li>
+	                        <li>Returns are allowed unless specified as "non-returnable". 30 day escrow for returnable items. </li>
+	                    </ul>
+
+	        </td>
+	    </tr>
+
+
+
+
+	</table>
+
+{% endblock %}

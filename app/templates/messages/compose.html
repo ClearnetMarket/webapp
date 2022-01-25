@@ -1,0 +1,97 @@
+{% extends "/layouts/message_layout.html" %}
+{% block content %}
+
+    <div id="form_error">
+        <div class="form-group row-bottom-margin">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-8">
+                <span class="error">
+                    {% if form.subject.errors %}
+                        {% for error in form.subject.errors %}
+                            Subject Error: {{ error }}
+                        {% endfor %}
+                    {% endif %}
+                    </span>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="form_error">
+        <div class="form-group row-bottom-margin">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-8">
+                 <span class="error">
+                    {% if form.body1.errors %}
+                        {% for error in form.body1.errors %}
+                            Body Error: {{ error }}
+                        {% endfor %}
+                    {% endif %}
+                 </span>
+            </div>
+        </div>
+    </div>
+
+
+    <form method="post" class="form-group">
+        {{ form.csrf_token }}
+
+            <div class="form-group">
+                <label class="col-12">Send To:</label>
+                <div class="col-12">
+                    {{ render_field(form.username, class="form-control") }}
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="col-12">Subject</label>
+                <div class="col-12">
+                    {{ render_field(form.subject,  class="form-control") }}
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="col-12">Body</label>
+                <div class="col-12">
+                    {{ render_field(form.body1, class="form-control", rows="20", cols="50") }}
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label>Recaptcha</label>
+                <div class="col-12 text-center">
+                    <img src="{{ url_for('static', filename='/recaptcha/' + randompicture)  }}" width="236px" height="48px" >
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+
+                <div class="col-12">
+                    {{ render_field(form.recaptchaanswer, class="form-control", placeholder='Captcha Answer') }}
+                </div>
+
+            </div>
+
+
+
+        <div class="row">
+            <div class="col-12 text-center">
+                {{ render_field(form.submit, class="btn btn-primary", value="Send") }}
+            </div>
+        </div>
+
+
+    </form>
+
+
+
+
+{% endblock %}

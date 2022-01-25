@@ -1,0 +1,283 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+		<div class="row">
+			<div class="col-12 text-center">
+                <h3>Vendor Verification</h3>
+			</div>
+		</div>
+
+
+    <div class="row">
+		<div class="col-12 col-sm-4 text-center">
+	        <span class="fa fa- btc" aria-hidden="true" style="font-size: 40px;"></span><br>
+				<h3>
+	            Become Verified
+				</h3><br>
+			Vendor Verification is a way to get users trust by showing
+		        you are serious about trading. Money will be put into escrow in the event of any issues with your account.
+	                This process is optional..
+		</div>
+	    <div class="col-12 col-sm-4 text-center">
+	        <span class="fa fa- user" aria-hidden="true" style="font-size: 40px;"></span><br>
+		    <h3>
+	            Optional
+		    </h3><br>
+		    Vendor Verification is 100% optional.  You can skip this completely.
+		        It might be harder to gain a reputation on the market.
+	    </div>
+	    <div class="col-12 col-sm-4 text-center">
+
+		        <span class="fa fa- random" aria-hidden="true" style="font-size: 40px;"></span>
+			    <h3>
+		            Refundable
+			    </h3><br>
+			    Want to quit vending?  Think your reputation is high enough?
+			        If you have no open trades, you can get your deposit back.  No Fees or strings attached.
+
+	    </div>
+    </div>
+<div class="row">
+	<div class="col-12">
+		<p>The process overview:</p>
+	    <ul>
+	        <li><b>This process is optional.</b></li>
+	        <li>You select a vendor trust level and the BTC is deducted from your wallet.</li>
+	        <li>A badge is given with your new trust level.</li>
+	        <li>If you have had no orders within 7 days, you may request it back and it will be transferred into your wallet.</li>
+	        <li>The amount transferred back will be the exact bitcoin deposited at the time, despite the price going up or down.</li>
+		    <li>You can upgrade your badge at any time, only downgrading is hindered by the "1 week rule".</li>
+	    </ul>
+	</div>
+</div>
+
+
+{% if getverify.vendor_level > 0 %}
+
+
+
+    <p><div class="clearnetred">*Please note, once you hit the button, the BTC will be withdrawn from your account immediately.
+	    You will be refunded your old amount, and the new amount will be withdrawn from your account.
+        </div>
+    </p>
+     <form method="post">
+            <table class="table table-bordered col-12">
+                {{ form.csrf_token }}
+
+
+        {% if getverify.vendor_level == 1 %}
+                        <tr>
+                            <td>
+                                <div id="posttrade_movebuttondown">
+                               {{ render_field(form.leveltwo, class="btn btn-warning", Value="Level 2") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 2</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '2.png')  }}"
+                                         width="125px" height="30px">
+                               </div>
+
+
+                            <b>{{ twofity }} BTC </b> ({{ 250|usdtocurrency(currency = current_user.currency) }}
+                            {{ current_user.currency|currencyformat }})
+                                       A level 2 badge will be displayed
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelthree, class="btn btn-warning", Value="Level 3") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 3</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '3.png')  }}" width="125px" height="30px">
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ fivehundred }} BTC </b> ({{ 500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 3 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelfour, class="btn btn-warning", Value="Level 4") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 4</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '4.png')  }}" width="125px" height="30px">
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ thousand }} BTC </b> ({{ 1000|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 4 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelfive, class="btn btn-warning", Value="Level 5") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 5</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '5.png')  }}" width="125px" height="30px">
+
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ twentyfivehundred }} BTC </b> ({{ 2500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 5 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+        {% endif %}
+        {% if getverify.vendor_level == 2 %}
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelthree, class="btn btn-warning", Value="Level 3") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 3</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '3.png')  }}" width="125px" height="30px">
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ fivehundred }} BTC </b> ({{ 500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 3 badge will be displayed</li>
+                                    </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelfour, class="btn btn-warning", Value="Level 4") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 4</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '4.png')  }}" width="125px" height="30px">
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ thousand }} BTC </b> ({{ 1000|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 4 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelfive, class="btn btn-warning", Value="Level 5") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 5</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '5.png')  }}" width="125px" height="30px">
+
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ twentyfivehundred }} BTC </b> ({{ 2500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 5 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+        {% endif %}
+        {% if getverify.vendor_level == 3 %}
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelfour, class="btn btn-warning", Value="Level 4") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 4</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '4.png')  }}" width="125px" height="30px">
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ thousand }} BTC </b> ({{ 1000|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 4 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelfive, class="btn btn-warning", Value="Level 5") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 5</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '5.png')  }}" width="125px" height="30px">
+
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ twentyfivehundred }} BTC </b> ({{ 2500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 5 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+        {% endif %}
+        {% if getverify.vendor_level == 4 %}
+                        <tr>
+                            <td><div id="posttrade_movebuttondown">
+                               {{ render_field(form.levelfive, class="btn btn-warning", Value="Level 5") }}
+                            </div>
+
+                            <td>
+                                <div class="text-center">
+                                    <h4>Level 5</h4>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '5.png')  }}" width="125px" height="30px">
+
+                               </div>
+
+                                    <ul>
+                                        <li><b>Cost: {{ twentyfivehundred }} BTC </b> ({{ 2500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})</li>
+                                        <li>A level 5 badge will be displayed</li>
+                                    </ul>
+
+                            </td>
+                        </tr>
+        {% endif %}
+        {% if getverify.vendor_level == 5 %}
+            <div class="text-center"><strong>You are currently level 5 Trust.  Cannot go any higher</strong><br>
+                                        <h4>{{ current_user.username }}</h4>
+                                        <h4>Level 5</h4><br>
+                                    <img src="{{ url_for('static', filename='/images/trustlevel/'  + '5.png')  }}" width="125px" height="30px">
+            </div>
+        {% endif %}
+
+
+    </table>
+   </form>
+{% endif %}
+
+
+
+
+{% endblock %}

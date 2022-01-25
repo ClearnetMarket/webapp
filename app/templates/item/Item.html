@@ -1,0 +1,45 @@
+{% extends "/layouts/default.html" %}
+{% block content %}
+
+            <!--Top Info -->
+            <div class="col-12 col-md-12 col-lg-12">
+                {% include '/item/itemparts/_topinfo.html' %}
+            </div>
+
+            <!--Same Keyword -->
+            <div class="col-12 ">
+                {% include '/item/itemparts/related/_samekeyword.html' %}
+            </div>
+
+            <!--Item Info -->
+            <div class="col-12">
+                {% include '/item/itemparts/_iteminfo.html' %}
+            </div>
+
+            <!--Vendors Other items -->
+            <div class="col-12 ">
+                {% include '/item/itemparts/related/_otheritemsvendorsells.html' %}
+            </div>
+
+            <!--Shipping -->
+            <div class="col-12">
+                {% include '/item/itemparts/_shipping.html' %}
+            </div>
+
+            <!--Returns -->
+            <div class="col-12">
+                {% include '/item/itemparts/_returns.html' %}
+            </div>
+
+            <!--Top Selling in Category -->
+            <div class="col-12 ">
+                {% include '/item/itemparts/related/_topsellingcat.html' %}
+            </div>
+            <hr>
+            <!--Feedback -->
+
+                {% include '/item/itemparts/_feedback.html' %}
+
+    <div class="col-2"></div>
+{% endblock %}
+

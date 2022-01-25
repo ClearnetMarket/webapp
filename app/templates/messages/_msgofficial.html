@@ -1,0 +1,27 @@
+				{% if post.unread == 1 %}
+				<div class="row bg-warning">
+				{% else %}
+				<div class="row graybg">
+				{% endif %}
+
+							<div class="col-12 col-sm-4 linkcolor">
+								<input type="checkbox" name='checkit' value={{ post.id }}>
+	                            <b>{{ post.author_id|username }}</b>
+							</div>
+							<div class="col-12 col-sm-6 linkcolor">
+	                            <a href="{{ url_for('message.post',id=post.postid) }}"> <b>Subject: </b>{{ post.subject }}</a>
+							</div>
+							<div class="col-12 col-sm-2 linkcolor">
+	                            {{ moment(timestamp=post.timestamp, local=False).format('L')  }}
+							</div>
+
+
+	                        <div class="hidden-xs col-sm-2">
+
+	                        </div>
+	                        <div class="col-12 col-sm-10">
+	                                {{ post.body }}
+	                        </div>
+                </div>
+
+                <hr>

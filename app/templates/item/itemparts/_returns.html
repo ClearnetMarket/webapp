@@ -1,0 +1,16 @@
+{% if item.return_allowed == 1 %}
+    <div class="row bg-white border mb-3 p-2">
+    <div class="col-12 text-left">
+        <h5>Returns</h5>
+        <hr>
+    </div>
+    <div class="col-12" >
+    <div class="greenstatus"><b>Returns are allowed on this item</b></div>
+    <br>
+    {{ item.itemrefundpolicy }}
+
+
+</div>
+</div>
+{% else %}
+{% endif %}

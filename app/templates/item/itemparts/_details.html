@@ -1,0 +1,80 @@
+
+
+<div class="row bg-white border mb-3 p-1">
+    <div class="col-12 text-left">
+        <h5>Details</h5>
+        <hr>
+    </div>
+
+    <table class="table table-condensed col-12">
+
+        {% if item.details1 or item.details2 %}
+        <tr>
+            {% if item.details1 %}
+            <td>{{ item.details1 }}:</td>
+            <td>{{ item.details1answer }}</td>
+            {% endif %}
+
+            {% if item.details2 %}
+            <td>{{ item.details2 }}:</td>
+            <td>{{ item.details2answer }}</td>
+            {% endif %}
+        </tr>
+    {% endif %}
+
+        {% if item.details3 or item.details4 %}
+        <tr>
+            {% if item.details3 %}
+            <td>{{ item.details3 }}:</td>
+            <td>{{ item.details3answer }}</td>
+            {% endif %}
+            {% if item.details4 %}
+            <td>{{ item.details4 }}:</td>
+            <td>{{ item.details4answer }}</td>
+            {% endif %}
+        </tr>
+    {% endif %}
+
+        {% if item.details5 or item.details6 %}
+        <tr>
+            {% if item.details5 %}
+            <td>{{ item.details5 }}:</td>
+            <td>{{ item.details5answer }}</td>
+            {% endif %}
+
+            {% if item.details6 %}
+            <td>{{ item.details6 }}:</td>
+            <td>{{ item.details6answer }}</td>
+            {% endif %}
+        </tr>
+        {% endif %}
+
+
+        {% if item.details7 or item.details8 %}
+        <tr>
+            {% if item.details7 %}
+            <td>{{ item.details7 }}:</td>
+            <td>{{ item.details7answer }}</td>
+            {% endif %}
+            {% if item.details8 %}
+            <td>{{ item.details8 }}:</td>
+            <td>{{ item.details8answer }}</td>
+            {% endif %}
+        </tr>
+        {% endif %}
+
+
+        {% if item.details9 or item.details10 %}
+        <tr>
+            {% if item.details9 %}
+            <td>{{ item.details9 }}:</td>
+            <td>{{ item.details9answer }}</td>
+            {% endif %}
+            {% if item.details10 %}
+            <td>{{ item.details10 }}:</td>
+            <td>{{ item.details10answer }}</td>
+            {% endif %}
+        </tr>
+        {% endif %}
+    </table>
+</div>

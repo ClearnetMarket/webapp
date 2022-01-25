@@ -1,0 +1,28 @@
+{% extends "/profile/userachievements/_layout.html" %}
+{% block content %}
+
+
+        <div class="row">
+            <div class="col-12">
+                <h3>Lvl: {{ usergetlevel.level }}</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-10">
+               <b> Next Level({{ width }}%)</b>
+                <div class="progress">
+                      <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow={{ width }}
+                      aria-valuemin="0" aria-valuemax="100" style="width:{{ width }}%">
+
+                      </div>
+                </div>
+            </div>
+            <div class="col-2" style="font-size: 20px;padding-top: 12px;">Lvl {{ nextlevel }}</div>
+        </div>
+
+
+
+                {% include 'profile/account_widgets/_recentexp.html' %}
+                {% include '/profile/account_widgets/_recentach.html' %}
+{% endblock %}

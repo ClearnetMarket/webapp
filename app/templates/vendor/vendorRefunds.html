@@ -1,0 +1,201 @@
+{% extends "/layouts/plain.html" %} {% block content %}
+
+<nav aria-label="breadcrumb" class="linkcolor">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+  </ol>
+</nav>
+
+{% if current_user.is_authenticated %} {% if current_user.vendor_account ==1 %}
+<div class="row clearnetblue" style="margin-bottom: 25px">
+  <div class="hidden-xs hidden-sm col-md-12">
+    {% include '/layouts/subindex/_vendorbar.html' %}
+  </div>
+</div>
+
+{% else %} {% endif %} {% endif %}
+<div class="row">
+  <div class="col-12 text-center">
+    <h4>Returns and Disputes</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <h5>After Initial Claim if the item is a physical sale:</h5>
+    <ul>
+      <li>
+        <b>2 days</b> You have to provide a return address if default return
+        address not provided<br />
+      </li>
+      <li><b>5 days</b> - Customer has to mark order as shipped<br /></li>
+      <li>
+        <b>14 days</b> - Shipping has to be completed within 14 days after
+        marked as sent<br />
+      </li>
+      <li>
+        <b>24 days</b> - Buyer has to mark received within of initial return
+        claim<br /><br />
+      </li>
+    </ul>
+    <br />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 linkcolor">
+    <a href="{{ url_for('service.customerservice_shipmentfailure') }}">
+      What if customer or vendor fails to meet these time limits?
+    </a>
+  </div>
+</div>
+
+<!--- Contacts Table --->
+{% if returnorder %}
+<table class="linkcolor col-12">
+  <caption>
+    Returns
+  </caption>
+  <tr>
+    <th class="col-1 bluetable">Sale Id</th>
+    <th class="hidden-xs col-sm-2 bluetable">Customer</th>
+    <th class="col-3 bluetable">Item Title</th>
+    <th class="hidden-xs col-sm-1 bluetable">Age</th>
+    <th class="hidden-xs col-sm-1 bluetable">Coin</th>
+    <th class="col-3 bluetable">Return Status</th>
+  </tr>
+
+  {% for order in returnorder %}
+
+  <tr>
+    <td class="col-1 linkcolor bg-danger">
+      <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+        {{ order.id }}
+      </a>
+    </td>
+    <td class="hidden-xs col-sm-2 linkcolor bg-danger" width="15%">
+      <a href="{{ url_for('profile.user',username=order.customer) }}">
+        {{ order.customer }} ({{ order.customer_id|userrating }}) ({{
+        order.customer_id|avguserrating }}
+        <img
+          src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+          width="15px"
+          height="15px"
+          ;
+        />)
+      </a>
+    </td>
+
+    <td class="col-3 linkcolor bg-danger">{{ order.title }}</td>
+    <td class="hidden-xs col-sm-1 linkcolor bg-danger">
+      {{ moment(timestamp=order.age, local=False).fromNow(refresh=True) }}
+    </td>
+    <td class="hidden-xs col-sm-1 linkcolor bg-danger">
+      {{ order.price|formatbtctostring }} BTC
+    </td>
+    <td class="col-3 linkcolor bg-danger">
+      <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+        {% if order.request_return == 1 %} Return Address Needed {% endif %} {%
+        if order.request_return == 2 %} Waiting on customer to mark as shipped
+        {% endif %} {% if order.request_return == 3 %} Waiting on vendor to mark
+        as received {% endif %}
+      </a>
+    </td>
+  </tr>
+
+  {% endfor %}
+</table>
+{% else %}
+
+<div class="row">
+  <div class="col-12 text-left">
+    <h4>No Returns ..</h4>
+  </div>
+</div>
+{% endif %}
+
+<!--dispute table -->
+{% if disputed %}
+<table class="linkcolor col-12" style="margin-top: 50px">
+  <caption>
+    Disputes
+  </caption>
+  <tr>
+    <th class="col-1 bluetable">Sale Id</th>
+    <th class="hidden-xs col-sm-2 bluetable">Customer</th>
+    <th class="col-3 bluetable">Item Title</th>
+    <th class="hidden-xs col-sm-1 bluetable">Age</th>
+    <th class="hidden-xs col-sm-1 bluetable">Coin</th>
+    <th class="col-3 bluetable">Status</th>
+  </tr>
+
+  {% for order in disputed %}
+  <tr>
+    <td class="col-1 linkcolor bg-danger">
+      <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+        {{ order.id }}
+      </a>
+    </td>
+    <td class="hidden-xs col-sm-2 linkcolor bg-danger" width="15%">
+      <a href="{{ url_for('profile.user',username=order.customer) }}">
+        {{ order.customer }} ({{ order.customer_id|userrating }}) ({{
+        order.customer_id|avguserrating }}<img
+          src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+          width="15px"
+          height="15px"
+          ;
+        />)
+      </a>
+    </td>
+    <td class="col-3 linkcolor bg-danger">{{ order.title }}</td>
+
+    <td class="hidden-xs col-sm-1 linkcolor bg-danger">
+      {{ moment(timestamp=order.age, local=False).fromNow(refresh=True) }}
+    </td>
+    <td class="hidden-xs col-sm-1 linkcolor bg-danger">
+      {{ order.price|formatbtctostring }} BTC
+    </td>
+    <td class="col-3 bg-danger">
+      {% if order.type == 1 %} {% if order.return_id == 0 and
+      order.request_return >= 1%}
+      <div class="linkcolor">
+        <a href="{{ url_for('vendor.addtempaddress', id=order.id) }}"
+          >Add Return Address</a
+        >
+      </div>
+
+      <div class="linkcolor">
+        <a href="{{ url_for('vendor.edittempaddress', id=order.id) }}"
+          >Edit Return Address</a
+        >
+      </div>
+      {% else %} Customer asked Clearnet Market a question {% endif %} {% elif
+      order.type ==2 %}
+      <div class="btnwhite">
+        <a
+          class="btn btn-danger"
+          href="{{ url_for('digital.digitaltrade_active',id=order.item_id) }}"
+          >Digital Item Dispute</a
+        >
+      </div>
+
+      {% else %}
+      <div class="btnwhite">
+        <a
+          class="btn btn-danger"
+          href="{{ url_for('bitcoin.bitcoinviewtraderouting',id=order.item_id) }}"
+          >BTC Dispute</a
+        >
+      </div>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<div class="row">
+  <div class="col-12 text-left" style="margin-top: 50px">
+    <h4>No Disputes</h4>
+  </div>
+</div>
+{% endif %} {% endblock %}

@@ -1,0 +1,494 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('item.shoppingcart') }}">Shopping Cart</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('item.checkout') }}">Checkout</a></li>
+        </ol>
+    </nav>
+
+    <div class="row"><!--LEFT SIDE -->
+        <div class="col-12 col-sm-12 col-md-8">
+
+            <!--Timer -->
+            <div class="row border graybg text-center" style="margin-bottom: 25px;padding: 5px;">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            {% include '/addons/carttimer.html' %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            Payment must be made before the timer
+                            runs out. press "send coin" to finalize transaction.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--shipping message -->
+            <div class="row">
+                <div class="col-12 clearnetorange">
+                    <h4>Ships to:</h4>
+                </div>
+            </div>
+            <div class="row border graybg" style="margin-bottom: 25px; padding: 5px;">
+                <div class="col-12 ">
+                    {% if secretmsg == 1 %}
+                        <div class="row">
+                            <div class="col-8 col-xs-offset-2 ">
+                                Attach a PRIVATE message.
+                                Once it is sent, messages are automatically deleted after an order is
+                                finalized or cancelled.
+                                We dont sell
+                                or give away your information.  We are for privacy, built on privacy.
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                        <form method="post">
+                            {{ secretinfo.csrf_token }}
+                            <div class="form-group">
+                                <div class="col-2"></div>
+                                <div class="col-8" style="wrap-option: off">
+                                    {{ render_field(secretinfo.privatemsg,
+                                         class="form-control textarea",
+                                          rows=10, cols=50) }}
+                                </div>
+                                <div class="col-2"></div>
+                            </div>
+                            <div class="form-group text-center">
+                                <div class="col-12 ">
+                                    {{ render_field(secretinfo.custommsgbtn,
+                                        class="btn btn-primary",
+                                        value="Use This Message As Address") }}
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <form method="post">
+                            {{ secretinfo.csrf_token }}
+                            <div class="col-12" style="position:relative; min-height:250px;white-space: pre-line;">
+                                {{ msg.txtmsg|safe }}
+                            </div>
+                            <div class="col-12 text-center">
+                                {{ render_field(secretinfoDelete.deletemsgbtn,
+                                    class="btn btn-danger",
+                                     value="Delete/Redo Message") }}
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+
+
+
+            <!--Gift card / promo -->
+            {% if promocodewasadded == 0 %}
+            <div class="row">
+                <div class="col-12 clearnetorange">
+                    <h4>Add Promo Code:</h4>
+                </div>
+            </div>
+
+                <div class="row" style="margin-bottom: 25px">
+                    <form class="form-inline" method="post">
+                        {{ promogift.csrf_token }}
+                        <div class="form-group">
+
+                            {{ render_field(promogift.promocode, placeholder="Promo Code",
+                                    class="form form-control") }}
+                        </div>
+                        {{ render_field(promogift.addpromo,
+                                    class="btn btn-primary",
+                                     value="Add Promo") }}
+                    </form>
+                </div>
+            {% else %}
+
+            {% endif %}
+
+
+
+
+
+            <!--Review Items -->
+            <div class="row">
+                <div class="col-12 clearnetorange">
+                    <h4>Review Items and Shipping:</h4>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 100px;">
+                <div class="col-12">
+                    <table class="table table-condensed col-12"><!--Item table -->
+                        <tr>
+                            <th class="col-2" style="background-color: lightgray"></th>
+                            <th class="col-6" style="background-color: lightgray">Information</th>
+                            <th class="col-4" style="background-color: lightgray">Pricing</th>
+                        </tr>
+                        {% for sale in order %}
+                            <tr>
+                                <!-- Image -->
+                                <td class="col-2">
+                                    <img src="{{ url_for('userdata.media_file',
+                                        filename=('item/' + sale.stringnodeid + sale.stringauctionid + sale.imageone + "_250x.jpg"))  }}"
+                                        >
+                                </td>
+                                <!-- Title / Info-->
+                                <td class="col-6">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h4>{{ sale.title }}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            Quantity: {{ sale.quantity }}
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- Price/shipping-->
+                                <td class="col-4" style="font-size:12px;">
+                                    {% if sale.digital_currency == 2 %}
+                                         {% if promocodewasadded == 1 %}
+                                             Original Price: {{ sale.price_beforediscount|formatbtctostring }} BTC <br>
+                                             Discount: {{ sale.affiliate_discount_percent }}%
+                                         {% else %}
+                                         {% endif %}
+                                        <div class="row">
+                                            <div class="col-12">
+                                                Price:<div class="btcorange">
+                                                {{ sale.price|formatbtctostring }} BTC
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        {% if sale.shipping_price == 0 %}
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    Shipping:<div class="btcorange"> FREE</div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    Shipping:<div class="btcorange">
+                                                    {{ sale.shipping_price|formatbtctostring }} BTC
+                                                </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% elif sale.digital_currency == 3 %}
+                                         {% if promocodewasadded == 1 %}
+                                             Original Price: {{ sale.price_beforediscount|formatbtctostring }} BCH
+                                             <br>
+                                             Discount: {{ sale.affiliate_discount_percent }}%
+                                         {% else %}
+                                         {% endif %}
+                                        <div class="row">
+                                            <div class="col-12">
+                                                Price:<div class="btccash">
+                                                {{ sale.price|formatbtctostring }} BCH
+                                            </div>
+                                            </div>
+                                        </div>
+                                        {% if  sale.shipping_price == 0 %}
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    Shipping:<div class="btccash"> FREE</div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    Shipping:<div class="btccash">
+                                                    {{ sale.shipping_price|formatbtctostring }} BCH
+                                                </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% if sale.shipdescription|length > 2 %}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            Info: {{ sale.shipdescription }}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                {% endif %}
+                                    {% if sale.return_allowed == 1 %}
+                                        <div class="row clearnetgreen">
+                                        <div class="col-12">
+                                            <b>Returns are allowed</b>
+                                        </div>
+                                    {% else %}
+                                        <div class="row clearnetred">
+                                            <div class="col-12">
+                                                <b>Returns are NOT allowed</b>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table><!--END Item table  -->
+                </div><!--END Item table column -->
+            </div><!--END Item table row -->
+        </div><!--END LEFT SIDE -->
+
+
+
+        <div class="hidden-xs hidden-sm col-md-1"></div><!--Middle spacer side -->
+
+
+
+
+        <!--checkout large -->
+        <div class="hidden-xs hidden-sm col-md-3"><!--right side large or bigger -->
+            <form method="post">
+                {{ finalize.csrf_token }}
+                <div class="row">
+                    <div class="col-12 border graybg" style="padding: 5px; font-size:13px;">
+
+                        <!--Current wallet totals-->
+                        <div class="row">
+                            <div class="col-12" style="margin-bottom: 5px;">
+                                <b>BTC Wallet:</b>
+                                {% if btc_wallet.currentbalance == 0 %}
+                                    0
+                                {% else %}
+                                    {{ btc_wallet.currentbalance|formatbtctostring }}
+                                {% endif %}
+
+                                <br>
+                                <b>BCH Wallet:</b>
+                                {% if btc_cash_wallet.currentbalance == 0 %}
+                                    0
+                                {% else %}
+                                    {{ btc_cash_wallet.currentbalance|formatbtctostring }}
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12"  style="margin-bottom: 5px;">
+                                <b>Items in cart:</b>
+                                {{ gettotalcart.btc_sumofitem + gettotalcart.btc_cash_sumofitem}}
+                            </div>
+                        </div>
+                        <!-- END Current wallet totals-->
+
+                        <!--BTC TOTALS -->
+                        {% if gettotalcart.totalbtcprice  > 0 %}
+                            <hr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <strong>BTC</strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12"  style="margin-bottom: 5px;">
+                                    <b>Item Costs:</b>
+                                    <div class="btcorange">
+                                        {{ gettotalcart.btcprice|formatbtctostring }} BTC
+                                    </div>
+                                </div>
+                            </div>
+                            {% if gettotalcart.shippingbtcprice  == 0 %}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <b>Shipping:</b>
+                                        <div class="btcorange">
+                                            FREE
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <b>Shipping:</b>
+                                        <div class="btcorange">
+                                            {% if gettotalcart.shippingbtcprice == 0 %}
+                                                0 BTC
+                                            {% else %}
+                                            {{ gettotalcart.shippingbtcprice  }} BTC
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        <!--BTC CASH TOTALS -->
+                        {% if gettotalcart.total_btc_cash_price  > 0 %}
+                            <br>
+                            <div class="row">
+                                <div class="col-12">
+                                    <strong>BTC Cash</strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12" style="margin-bottom: 5px;">
+                                    <b>Item Costs:</b>
+                                    <div class="btccash">
+                                        {{ gettotalcart.btc_cash_price|formatbtctostring }} BCH
+                                    </div>
+                                </div>
+                            </div>
+                            {% if gettotalcart.shipping_btc_cashprice  == 0 %}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <b>Shipping:</b>
+                                        <div class="btccash">
+                                            FREE
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <b>Shipping:</b>
+                                        <div class="btccash">
+                                            {% if gettotalcart.shipping_btc_cashprice == 0%}
+                                                0 BCH
+                                            {% else %}
+                                                {{ gettotalcart.shipping_btc_cashprice  }} BCH
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+
+                        <div class="row">
+                            <div class="col-12" style="min-height: 20px;">
+                            </div>
+                        </div>
+
+                        <!-- PROMO Code off -->
+                        {% if gettotalcart.percent_off_order > 0  %}
+                            <div class="row clearnetgreen" >
+                                <div class="col-12">
+                                    <b>Promo Percent: {{ gettotalcart.percent_off_order }}%</b><br>
+                                    <b>Discount</b><br>
+                                    {% if gettotalcart.btc_off > 0 %}
+                                        {{ gettotalcart.btc_off }} BTC<br>
+                                    {% else %}
+                                    {% endif %}
+                                    {% if gettotalcart.btc_cash_off > 0 %}
+                                         {{ gettotalcart.btc_cash_off }} BCH<br>
+                                    {% else %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                        {% endif %}
+                        <!-- END PROMO -->
+
+                        <!-- TOTALS -->
+                        <hr>
+                        <div class="row">
+                            <div class="col-12">
+                                <b>Total</b>
+                            </div>
+                            {% if gettotalcart.total_btc_cash_price  > 0 %}
+                                <div class="col-12">
+                                    <b>BCH: </b>
+                                    <div class="btccash">
+                                        {{ gettotalcart.total_btc_cash_price|formatbtctostring  }} BCH
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if gettotalcart.totalbtcprice  > 0 %}
+                                <div class="col-12">
+                                    <b>BTC: </b><div class="btcorange">
+                                    {{ gettotalcart.totalbtcprice|formatbtctostring  }} BTC
+                                </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <!-- END TOTALS -->
+
+                        <!-- Checkout Button -->
+                        <div class="row"><!-- Spacer -->
+                            <div class="col-12" style="min-height: 20px;">
+                            </div>
+                        </div>
+
+                        {% if gettotalcart.total_btc_cash_price > 0 and gettotalcart.totalbtcprice > 0 %}
+                            {% if btc_wallet.currentbalance >= gettotalcart.totalbtcprice
+                                 and btc_cash_wallet.currentbalance >= gettotalcart.total_btc_cash_price %}
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        {% if secretmsg == 0 %}
+                                            {{ render_field(finalize.MakePayment,
+                                                 class="btn btn-warning",
+                                                 value="Send Coin") }}
+                                        {% else %}
+                                            <b>Add address to Checkout</b>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if gettotalcart.total_btc_cash_price > 0 and gettotalcart.totalbtcprice == 0 %}
+                            {% if btc_cash_wallet.currentbalance >= gettotalcart.total_btc_cash_price %}
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        {% if secretmsg == 0 %}
+                                            {{ render_field(finalize.MakePayment,
+                                                 class="btn btn-warning",
+                                                  value="Send Coin") }}
+                                        {% else %}
+                                            <b>Add address to Checkout</b>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if gettotalcart.total_btc_cash_price == 0 and gettotalcart.totalbtcprice > 0 %}
+                            {% if btc_wallet.currentbalance >= gettotalcart.totalbtcprice %}
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        {% if secretmsg == 0 %}
+                                            {{ render_field(finalize.MakePayment,
+                                                 class="btn btn-warning",
+                                                 value="Send Coin") }}
+                                        {% else %}
+                                            <b>Add address to Checkout</b>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        <!-- End checkout button -->
+
+                        <!-- Terms of service -->
+                        <div class="row">
+                            <div class="col-12 text-center linkcolor">
+                                By Clicking this button, you agree to
+                                <a href="{{ url_for('main.termsofservice') }}">Terms of Service</a>
+                            </div>
+                        </div>
+                        <!-- END Terms of service -->
+
+                    </div>
+                </div>
+            </form>
+        </div><!--END right side -->
+    </div><!--END row -->
+
+{% endblock %}
+
+
+

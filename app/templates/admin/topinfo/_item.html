@@ -1,0 +1,129 @@
+
+
+
+    <!--Feedback at bottom-->
+
+    <div id="orderboxHoldernofeedback" class="linkcolor border graybg">
+
+
+    <div id="imageholderorder" class="linkcolor">
+        <img src="{{ order.item_id|orderpicture(type=1) }}" width="200px" height="200px">
+    </div>
+
+    <div id="middleboxorder" class="linkcolor">
+        <div id="ordertitle"><a href="{{ url_for('item.Itemforsale',id=order.item_id) }}" >
+            <h4>{{ order.title }}</h4>
+        </a>
+        </div>
+        <div id="middlebox_leftorright">
+            <div id="middlebox_left">
+                        <div id="trade_orderbox_info">
+                        <b>Order id: #<a href="{{ url_for('vendor.viewOrder', id=order.id) }}">{{ order.id }}</a></b>
+
+            </div>
+                <div id="order_soldby"><b>Vendor:</b> {{ order.vendor }}</div>
+                <div id="orderorderdate_order"><b> Ordered on:</b> {{ moment(timestamp=order.age, local=False).format('L')  }}</div>
+                <div id="orderorderdate_return"><b>Return By:</b>{{ moment(timestamp=order.age, local=False).format('L')  }}</div>
+                <div id="orderprice" class="btcorange"><b>BTC:</b> {{ order.price|formatbtctostring }}</div>
+            </div>
+            <div id="middlebox_right">
+                    <div id="Cancelorreturn">
+                    {% if order.request_cancel == 1 %}
+                        <b>Request to Cancel Order Sent to Vendor</b>
+                    {% endif %}
+
+                    {% if order.cancelled == 1 %}
+                        <b>Order Cancelled</b>
+                    {% endif %}
+                    {% if order.request_return == 1 %}
+                        Return Address Needed by Vendor
+                    {% endif %}
+
+                    {% if order.request_return == 2 %}
+                        Waiting on customer to mark as shipped
+                    {% endif %}
+
+                    {% if order.request_return == 3 %}
+                        Waiting on vendor to mark as received
+                    {% endif %}
+                    {% if order.request_return == 4 %}
+                        It was successfully returned
+                    {% endif %}
+            </div>
+        </div>
+
+        <div id="middlebox_bottom">
+                {% if order.order_status == 0 %}
+                    <div id="orderstatus_cancelledbyvendor" class="text-center">
+                           <b>Order Cancelled by Vendor</b>
+                    </div>
+                {%  endif %}
+                {% if order.new_order == 1 %}
+                    <div id="orderstatus_accepted">
+                        <b>Pending</b>
+                    </div>
+                    <div id="ordertracking">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="10" aria-valuemax="100" style="width: 3%">
+                            </div>
+                        </div>
+                    </div>
+                {%  endif %}
+                {% if order.accepted_order == 1 %}
+                    <div id="orderstatus_accepted">
+                        <b>Order Accepted</b>
+                    </div>
+                    <div id="ordertracking">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="10" aria-valuemax="100" style="width: 10%">
+                            </div>
+                        </div>
+                    </div>
+                {%  endif %}
+                {% if order.waiting_order == 1 %}
+                    <div id="orderstatus_shipped">
+                        <b>Order Shipped</b>
+                    </div>
+                    <div id="ordertracking">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+                            </div>
+                        </div>
+                    </div>
+                {%  endif %}
+
+                {% if order.delivered_order == 1 %}
+                    <div id="orderstatus_delivered">
+                        <b>Order Delivered</b>
+                    </div>
+                    <div id="ordertracking">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                            </div>
+                        </div>
+                    </div>
+                {%  endif %}
+                {% if order.order_status == 6 %}
+                    <div id="orderstatus_delivered">
+                        <b>Order Delayed/Issue</b>
+                    </div>
+                    <div id="ordertracking">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                            </div>
+                        </div>
+                    </div>
+                {%  endif %}
+        </div>
+    </div>
+    </div>
+    <div id="buttonbox" class="btnwhite text-left">
+        <div id="ordernumber">Order#{{ order.id }}</div>
+
+
+    </div>
+
+
+</div>
+
+

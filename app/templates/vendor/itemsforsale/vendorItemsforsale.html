@@ -1,0 +1,231 @@
+{% extends "/layouts/plain.html" %} {% block content %}
+
+<nav aria-label="breadcrumb" class="linkcolor">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+  </ol>
+</nav>
+
+{% if current_user.is_authenticated %} {% if current_user.vendor_account ==1 %}
+<div class="row clearnetblue" style="margin-bottom: 25px">
+  <div class="hidden-xs hidden-sm col-md-12">
+    {% include '/layouts/subindex/_vendorbar.html' %}
+  </div>
+</div>
+
+{% else %} {% endif %} {% endif %}
+<div class="row">
+  <div class="col-12 text-center">
+    <h3>My Items for Sale</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 text-center mb-2">
+    <a
+      class="btn btn-warning"
+      href="{{ url_for('vendor.tradeOptions', username=current_user.username) }}"
+      role="button"
+      >Post an item</a
+    >
+  </div>
+</div>
+
+{% if forsale %}
+<form method="post">
+  {{ form.csrf_token }}
+
+  <div class="row mb-1">
+    <div class="col-4 col-sm-1">
+      <input type="checkbox" onclick="toggle(this);" />Toggle<br />
+    </div>
+
+    <div class="col-4 col-sm-3">
+      {{ render_field(form.submitcheckbox, class="btn btn-primary", value="Turn
+      on/off Listings" ) }}
+    </div>
+    <div class="col-12 col-sm-4 text-right linkcolor">
+      <a href="{{ url_for('vendor.ebayimporter') }}">Ebay Bulk Importer</a>
+    </div>
+    <div class="col-12 col-sm-3 text-right linkcolor">
+      <a href="{{ url_for('promote.promotehome') }}" role="button"
+        >Manage Promotions</a
+      >
+    </div>
+  </div>
+
+  <table class="table table-condensed col-12">
+    <tr>
+      <th class="col-1 bluetable">CheckBox</th>
+      <th class="hidden-xs col-sm-1 bluetable">Picture</th>
+      <th class="col-3 bluetable">Title</th>
+      <th class="col-1 bluetable">Price</th>
+
+      <th class="col-3 bluetable">Buttons</th>
+    </tr>
+    {% for sale in forsale %} {% if sale.online == 0 %}
+    <tr class="danger">
+      {% else %}
+    </tr>
+
+    <tr class="success">
+      {% endif %}
+      <td class="col-1 linkcolor">
+        <label>
+          <input type="checkbox" name="checkit" value="{{" sale.id }} />
+        </label>
+      </td>
+
+      <td class="hidden-xs col-sm-2 linkcolor">
+        {% if sale.imageone == '0' %}
+        <img
+          src="{{ url_for('static', filename=('images/no-product-image.png')) }}"
+          width="125px"
+          height="125px"
+        />
+        {% elif sale.imageone == 0 %}
+        <img
+          src="{{ url_for('static', filename=('images/no-product-image.png')) }}"
+          width="125px"
+          height="125px"
+        />
+
+        {% else %} <img src="{{ url_for('userdata.media_file', filename=('item/'
+        +sale.stringnodeid +sale.stringauctionid + sale.imageone + "_250x.jpg"))
+        }}"> {% endif %}
+      </td>
+      <td class="col-3 linkcolor">
+        <a href="{{ url_for('item.Itemforsale',id=sale.id) }}">
+          <div style="font-size: 20px">{{ sale.itemtitlee }}</div>
+        </a>
+        <b>Item #:</b> {{ sale.id }}<br />
+        {% if sale.aditem == 0 %} {% else %}
+        <div style="color: #ffd700"><b>Promoted</b></div>
+        <br />
+        {% endif %}
+        <b>Quantity Left:</b> {{ sale.itemcount }}<br />
+        <b>Total Sold:</b> {{ sale.totalsold }}<br />
+        <b>Item Views:</b> {{ sale.viewcount }}<br />
+        <b>Item Rating:</b>
+
+        {% if sale.itemrating == 0 %} No ratings {% endif %} {% if 0.499 >=
+        sale.itemrating >= 0.0001 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}"
+        />
+        {% endif %} {% if 0.999 >= sale.itemrating >= 0.5 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}"
+        />
+        {% endif %} {% if 1.4999 >= sale.itemrating >= 1 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}"
+        />
+        {% endif %} {% if 1.99999 >= sale.itemrating >= 1.5 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/15stars.png'  )  }}"
+        />
+        {% endif %} {% if 2.4999 >= sale.itemrating >= 2 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/20stars.png')}}"
+        />
+        {% endif %} {% if 2.99999 >= sale.itemrating >= 2.5 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/25stars.png')}}"
+        />
+        {% endif %} {% if 3.499 >= sale.itemrating >= 3 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}"
+        />
+        {% endif %} {% if 3.99999 >= sale.itemrating >= 3.5 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/35stars.png'  )  }}"
+        />
+        {% endif %} {% if 4.499 >= sale.itemrating >= 4 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}"
+        />
+        {% endif %} {% if 4.99999 >= sale.itemrating >= 4.5 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/45stars.png'  )  }}"
+        />
+        {% endif %} {% if sale.itemrating == 5 %}
+        <img
+          src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}"
+        />
+        {% endif %}
+      </td>
+
+      <td class="col-1 linkcolor">
+        {{sale.price }} {{ sale.currency|currencyformat }}
+      </td>
+
+      <td class="col-3 btnwhite">
+        <!-- edit -->
+        <a
+          class="btn btn-primary btn-sm"
+          href="{{ url_for('vendor.editItem', id=sale.id) }}"
+          role="button"
+          >Edit</a
+        >
+
+        <!-- clone -->
+        <a
+          class="btn btn-primary btn-sm"
+          href="{{ url_for('vendor.cloneItem', id=sale.id) }}"
+          role="button"
+          >Clone</a
+        >
+        <br />
+        <!-- delete -->
+
+        <a
+          class="btn btn-danger btn-sm"
+          href="{{ url_for('vendor.deleteItem',id=sale.id) }}"
+          role="button"
+          >Delete</a
+        >
+        <br />
+        {% if sale.aditem == 0 %}
+
+        <a
+          class="btn btn-success btn-sm"
+          href="{{ url_for('promote.promoteitem',itemid=sale.id) }}"
+          role="button"
+          >Promote</a
+        >
+
+        {% else %} {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</form>
+{% else %}
+<div class="row">
+  <div class="col-12">
+    Looks like you have no items or services for sale ..<br /><br />
+    Creating items is free and easy!
+  </div>
+</div>
+{% endif %}
+<div class="row text-center">
+  <div class="col-sm-3"></div>
+  <div class="col-12 col-sm-6">{{ pagination.info }}</div>
+  <div class="col-sm-3"></div>
+</div>
+
+<div class="d-flex justify-content-center linkcolor">
+  {{ pagination.links }}
+</div>
+
+<script>
+  function toggle(source) {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] != source) checkboxes[i].checked = source.checked;
+    }
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'layouts/plain.html' %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"> <a  href="{{ url_for('wallet.walletHome') }}">Wallets</a></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12 col-md-2 d-none d-md-block">
+            {% if current_user.is_authenticated %}
+                {% include '/profile/profiles/prototype.html' %}
+            {% endif %}
+        </div>
+
+
+        <div class="col-12 col-sm-8 col-md-10">
+
+            <div class="row mb-3" >
+                <div class="col-12 text-center">
+                    <h3> My Wallets</h3><br>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">BTC Wallet</h5>
+                            <p class="card-text">
+
+                                {% if userwallet_btc.currentbalance == 0 %}
+                                    <div class="col-md-12 linkcolororange">
+                                        <a href="{{ url_for('wallet_btc.wallet_btc_overview') }}">
+                                            BTC : 0.00 BTC
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-12 linkcolororange">
+                                        <a href="{{ url_for('wallet_btc.wallet_btc_overview') }}">
+                                            BTC:{{ userwallet_btc.currentbalance|otherformatbtctostring }}
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                            {% if userwallet_btc.unconfirmed > 0 %}
+                                <div class="col-md-12 linkcolororange">
+                                    <a href="{{ url_for('wallet_btc.wallet_btc_overview') }}">
+                                        Unconfirmed: {{ userwallet_btc.unconfirmed|otherformatbtctostring }}
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="col-md-12 linkcolororange">
+                                    Unconfirmed: 0
+                                </div>
+                            {% endif %}
+
+
+
+                            </p>
+                            <div class="text-center linkcolor" style="margin-top: 5px; margin-bottom: 5px;font-size: 9px;">
+                                <a href="{{ url_for('wallet_btc_test.wallet_btc_overview') }}">
+                                    Test Wallet
+                                </a>
+                            </div>
+                            <div class="text-center" style="margin-top: 20px; margin-bottom: 10px;">
+                                <a class="btn btn-warning " href="{{ url_for('wallet_btc.wallet_btc_overview') }}"
+                                   role="button">
+                                    View Wallet
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">BCH Wallet</h5>
+                            <p class="card-text">
+                                {% if userwallet_btc_cash.currentbalance == 0 %}
+                                    <div class="col-md-12 linkcolororange">
+                                        <a href="{{ url_for('wallet_btccash.wallet_btccash_overview') }}">
+                                            BCH : 0.00 BTC
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-12 linkcolororange">
+                                        <a href="{{ url_for('wallet_btccash.wallet_btccash_overview') }}">
+                                            BCH:{{ userwallet_btc_cash.currentbalance|otherformatbtctostring }}
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                            {% if userwallet_btc_cash.unconfirmed > 0 %}
+                                <div class="col-md-12 linkcolororange">
+                                    <a href="{{ url_for('wallet_btccash.wallet_btccash_overview') }}">
+                                        Unconfirmed: {{ userwallet_btc_cash.unconfirmed|otherformatbtctostring }}
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="col-md-12 linkcolororange">
+                                    Unconfirmed: 0
+                                </div>
+                            {% endif %}
+
+                            </p>
+                            <div class="text-center linkcolor" style="margin-top: 5px; margin-bottom: 5px;font-size: 9px;">
+                                <a href="{{ url_for('wallet_btccash_test.wallet_btccash_overview') }}">
+                                    Test Wallet
+                                </a>
+                            </div>
+                            <div class="text-center" style="margin-top: 20px; margin-bottom: 10px;">
+                                <a class="btn btn-warning"
+                                   href="{{ url_for('wallet_btccash.wallet_btccash_overview') }}"
+                                   role="button">
+                                    View Wallet
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

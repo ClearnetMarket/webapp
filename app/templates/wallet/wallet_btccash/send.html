@@ -1,0 +1,134 @@
+{% extends 'wallet/wallet_btccash/wallet_layout.html' %}
+{% block content %}
+{% from "_formhelpers.html" import render_field %}
+
+    {% if wallet.locked == 1 %}
+        <p class="bg-danger text-center">
+            Your wallet is currently locked.  Withdrawls are temporarily disabled till dispute is finished.
+        </p>
+    {% else %}
+        <form method="post" class="form-horizontal">
+            {{ form.csrf_token }}
+
+            <div class="form-group">
+                <label class="col-sm-2">Send to:</label>
+                <div class="col-sm-10">
+                    {{ render_field(form.sendto, placeholder="BTC Address", class="form-control input-sm " ) }}
+                </div>
+
+                <div id="form_error">
+                    <div class="form-group">
+                        <label class="col-sm-2"></label>
+                        <div class="col-sm-8">
+                <span class="error">
+                {% if form.sendto.errors %}
+                    {% for error in form.sendto.errors %}
+                        Address Error: {{ error }}
+                    {% endfor %}
+                {% endif %}
+                </span>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-sm-2">Description</label>
+                <div class="col-sm-10">
+                    {{ render_field(form.description, placeholder="Optional", username="eddwinn", class="form-control input-sm ") }}
+                </div>
+
+                <div id="form_error">
+                    <div class="form-group">
+                        <label class="col-sm-2"></label>
+                        <div class="col-sm-8">
+                <span class="error">
+                {% if form.description.errors %}
+                    {% for error in form.description.errors %}
+                        Description Error: {{ error }}
+                    {% endfor %}
+                {% endif %}
+                </span>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-sm-2">Amount</label>
+                <div class="col-sm-5">
+                    {{ render_field(form.amount, placeholder="Amount in BTC",class="form-control input-sm " ) }}
+                </div>
+                <div id="form_error">
+                    <div class="form-group">
+                        <label class="col-sm-2"></label>
+                        <div class="col-sm-8">
+                    <span class="error">
+                    {% if form.amount.errors %}
+                        {% for error in form.amount.errors %}
+
+                            Amount Error: {{ error }}
+                        {% endfor %}
+                    {% endif %}
+
+                    </span>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-sm-2">Wallet Pin</label>
+                <div class="col-sm-4">
+                    {{ render_field(form.pin, placeholder="4 digit pin",class="form-control input-sm " ) }}
+                </div>
+
+                <div id="form_error">
+                    <div class="form-group">
+                        <label class="col-sm-2"></label>
+                        <div class="col-sm-8">
+                    <span class="error">
+                    {% if form.pin.errors %}
+                        {% for error in form.pin.errors %}
+                            Wallet Pin: {{ error }}
+                        {% endfor %}
+                    {% endif %}
+                    </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <label class="col-sm-2">Captcha </label>
+                    <div class="col-sm-6">
+                        <img src="{{ url_for('static', filename='/recaptcha/' + randompicture)  }}" width="236px" height="48px">
+                    </div>
+
+
+
+                    <label class="col-sm-6"></label>
+                    <div class="col-sm-6">
+                        {{ render_field(form.recaptchaanswer, class="form-control  input-sm", placeholder='Answer') }}
+                    </div>
+
+                </div>
+                <div class="form-group">
+
+                    <div class="text-center">Estimated Fee 6 blocks:</div>
+                    <div class="text-center">
+                        <b>{{ wfee }} BTC</b>
+                    </div>
+                </div>
+
+                {% if wallet.currentbalance == 0 %}
+                    <br>
+                    <h4>Add some coin first to withdraw...</h4>
+                {% else %}
+
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            {{ render_field(form.submit, value="Send Coin", class="btn btn-warning") }}
+                        </div>
+                    </div>
+                    </div>
+                {% endif %}
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

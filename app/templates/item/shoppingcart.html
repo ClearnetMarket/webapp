@@ -1,0 +1,1029 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('item.shoppingcart') }}">Shopping Cart</a></li>
+        </ol>
+    </nav>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        <div class="row text-center">
+            {% if cart %}
+                <div class="col-12 text-center">
+                    <h3>Shopping Cart</h3>
+                </div>
+            {% else %}
+            {% endif %}
+        </div>
+
+        <div class="col-12 col-sm-12 hidden-md hidden-lg  border graybg" style="padding:10px;margin-bottom: 25px;"><!--shopping cart Side-->
+
+            <div class="row">
+                <div class="col-12"><b>Items in cart:</b> {{ gettotalcart.sumofitem }}</div>
+            </div>
+            {% if btc_wallet.currentbalance == 0 %}
+                <div class="row">
+                    <div class="col-12"><b>BTC Balance:</b> 0.00 BTC</div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-12"><b>BTC Balance:</b> {{ btc_wallet.currentbalance }} BTC</div>
+                </div>
+            {% endif %}
+            {% if btc_cash_wallet.currentbalance == 0 %}
+                <div class="row">
+                    <div class="col-12 btcorange"><b>BCH Balance:</b> 0.00 BTC</div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-12 btccash"><b>BCH Balance:</b> {{ btc_wallet.currentbalance }} BTC</div>
+                </div>
+            {% endif %}
+
+            {% if gettotalcart.btcprice == 0 %}
+            {% else %}
+                <div class="row ">
+                    <div class="col-12"><b>Cost:</b> {{ gettotalcart.btcprice  }} BTC</div>
+                </div>
+            {% endif %}
+            <hr>
+            <div class="row " style="min-height:25px;">
+                <div class="col-12"></div>
+            </div>
+            {% if proceed == 1 %}
+                <div class="row text-center">
+                    <div class="col-12">
+                        {{ render_field(form.gotocheckout, value="Go to Checkout", class="btn btn-warning") }}</div>
+                </div>
+            {% else %}
+                <div class="row text-center">
+                    <div class="col-12">
+                        <a class="btn btn-danger" href="{{ url_for('wallet.walletHome') }}"
+                           role="button">Add Funds<span class="fa fa- chevron-right" aria-hidden="true" style="font-size: 20px;">
+                      </span>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-8 graybg border" style="padding: 5px"> <!---left side -->
+                {% if cart %}
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-1">
+                            <input type="checkbox" onclick="toggle(this);" /><br />
+                        </div>
+                        <div class="col-11">
+                            {{ render_field(form.saveforlater, value="Save for Later", class="btn btn-primary") }}
+                            {{ render_field(form.delete, value="Delete", class="btn btn-danger") }}
+                            {{ render_field(form.update, value="Update", class="btn btn-warning") }}
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-12">
+                            In order to update your cart, check the item.  Then press update, save or delete.
+                        </div>
+                    </div>
+                {% else %}
+                {% endif %}
+                {% if cart %}<!---If items in shopping cart -->
+                    <div class="col-12">
+                        <div class="row bluetable" style="margin-bottom: 10px;">
+                            <div class="col-8 text-center">Info</div>
+                            <div class="col-2">Quantity</div>
+                            <div class="col-2">Price</div>
+                        </div>
+                    </div>
+                    {% for sale in cart %}
+                        <div class="row">
+                            <div class="col-12 col-sm-1 col-md-1 col-lg-1">
+                                <input type="checkbox" name='checkit-{{ sale.id }}' value={{ sale.id}}>
+                            </div>
+                            <!-- Image -->
+                            <div class="hidden-xs hidden-sm col-md-2">
+                                <img src="{{ url_for('userdata.media_file',
+
+                                 filename=('item/' +sale.stringnodeid +sale.stringauctionid + sale.image_of_item + "_250x.jpg")) }}"
+                                     width="100px" height="100px">
+                            </div>
+                            <!-- Item    Info -->
+                            <div class="col-12 col-sm-5 col-md-5">
+                                <div class="row" style="padding: 10px"><!---Title -->
+                                    <div class="col-12 linkcolor" style="font-size:20px;">
+                                        <a href="{{ url_for('item.Itemforsale', id=sale.item_id) }}">
+                                            <b>{{ sale.title_of_item }}</b>
+                                        </a>
+                                    </div>
+
+                                    <div class="row" style="padding: 10px"><!---Vendor -->
+                                        <div class="col-12 ">
+                                            Vendor: {{ sale.vendor }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="padding: 10px"><!---Shipping OPtions -->
+                                        <div class="col-12">
+                                            <b> Select Shipping Option</b>
+                                        </div>
+                                    </div>
+
+                                    {% if sale.shippingfree == 1 %}<!---Shipping free -->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        {% if sale.selected_shipping == 1 and sale.shippingfree == 1 %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="1" checked>
+                                                        {% elif sale.selected_shipping != 1 and sale.selected_shipping != 0 and sale.shippingfree == 1 %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="1" checked>
+                                                        {% else %}
+                                                        {% endif %}
+
+                                                        {% if sale.selected_shipping == 0 and sale.shippingfree == 1 %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="1" checked>
+                                                        {% else %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                {% if (sale.shippinginfo0)|length > 3 %}
+                                                                    {{ sale.shippinginfo0 }}
+                                                                {% else %}
+                                                                    FREE Shipping
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ sale.shippingdayleast0 }} to {{ sale.shippingdaymost0 }} days
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12">FREE</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    {% else %}
+                                    {% endif %}
+
+                                    {% if sale.shippingtwo == 1 %}<!---Shipping two -->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        {% if sale.selected_shipping == 2 %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="2" checked>
+                                                        {% elif sale.selected_shipping == 0 and sale.shippingfree == 0 and sale.shippingtwo == 1 %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="2" checked>
+                                                        {% else %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="2">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                {{ sale.shippinginfo2  }}
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ sale.shippingdayleast2 }} to {{ sale.shippingdaymost2 }} days
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-5">
+                                                                {{ sale.shippingprice2 }} {{ sale.currency|currencyformat }}
+                                                                <br>
+                                                                {% if current_user.is_authenticated %}
+                                                                    {% if sale.currency != current_user.currency %}
+                                                                        {{ sale.shippingprice2|currencytocurrency(currency = current_user.currency,
+                                                                        currentusercurrency = sale.currency) }}
+                                                                        {{ current_user.currency|currencyformat }}
+
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-7">
+                                                                {% if sale.selected_currency == 2 %}
+                                                                    <div class="btcorange">
+                                                                        {{ sale.shippingprice2|btcprice(currency=sale.currency) }} BTC
+                                                                    </div>
+                                                                {% endif %}
+                                                                {% if sale.selected_currency == 3 %}
+                                                                    <div class="btccash">
+                                                                        <b> {{ sale.shippingprice2|btcprice_btccash(currency=sale.currency) }}  BCH</b>
+                                                                    </div>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    {% else %}
+                                    {% endif %}
+
+                                    {% if sale.shippingthree == 1 %}<!---Shipping three -->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        {% if sale.selected_shipping == 3 %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="3" checked>
+                                                        {% else %}
+                                                            <input type="radio" name="shipit-{{ sale.id }}" value="3">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <div class="row">
+                                                            <div class="col-6">{{ sale.shippinginfo3  }}</div>
+                                                            <div class="col-6">{{ sale.shippingdayleast3 }} to {{ sale.shippingdaymost3 }} days</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-5">{{ sale.shippingprice3 }} {{ sale.currency|currencyformat }}<br>
+                                                                {% if current_user.is_authenticated %}
+                                                                    {% if sale.currency != current_user.currency %}
+                                                                        {{ sale.shippingprice3|currencytocurrency(currency = current_user.currency,
+                                                                         currentusercurrency = sale.currency) }}
+                                                                        {{ current_user.currency|currencyformat }}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-7">
+                                                                {% if sale.selected_currency == 2 %}
+                                                                    <div class="btcorange">
+                                                                        {{ sale.shippingprice3|btcprice(currency=sale.currency) }} BTC
+                                                                    </div>
+                                                                {% endif %}
+                                                                {% if sale.selected_currency == 3 %}
+                                                                    <div class="btccash">
+                                                                        <b> {{ sale.shippingprice3|btcprice_btccash(currency=sale.currency) }} BCH</b>
+                                                                    </div>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- Quanity-->
+                            <div class="col-12 col-sm-3 col-md-2">
+                                {% if sale.vendorsupply == 0 %}
+                                {% endif %}
+                                {% if sale.vendorsupply == 1 %}
+                                    1 Avaliable
+                                {% endif %}
+                                {% if sale.vendorsupply == 2 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 3 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 4 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 5 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 6 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 7 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 8 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 9 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 10 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 11 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 12 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 13 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 14 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 15 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 16 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 17 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 18 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 19 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 20 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 21 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 22 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 23 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply == 24 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                    </select>
+                                {% endif %}
+                                {% if sale.vendorsupply >= 25 %}
+                                    <select class="form-control" name="quant-{{ sale.id }}" id="{{ sale.id }}">
+                                        <option value={{ sale.quantity_of_item }}>{{ sale.quantity_of_item }}</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                    </select>
+                                {% endif %}
+                            </div>
+
+                            <!-- Price -->
+                            <div class="col-12 col-sm-2 text-left" style="margin-top: 10px;">
+                                {% if sale.selected_currency == 2 %}
+                                    <div class="btcorange text-left">BTC<br>
+                                        <b> {{ sale.price_of_item|btcprice(currency=sale.currency) }} </b>
+                                    </div>
+                                {% endif %}
+                                {% if sale.selected_currency == 3 %}
+                                    <div class="btccash text-left">BCH<br>
+                                        <b> {{ sale.price_of_item|btcprice_btccash(currency=sale.currency) }} </b>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <label class="col-12 col-sm-6">Currency</label>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <select class="form-control" name="currency-{{ sale.id }}" id="{{ sale.id }}">
+
+                                    {% if sale.selected_currency == 1 %}
+                                    {% elif sale.selected_currency == 2 %}
+                                        <option value="2">Bitcoin</option>
+                                    {% elif sale.selected_currency == 3 %}
+                                        <option value="3">Bitcoin Cash</option>
+                                    {% endif %}
+
+                                    {% if sale.digital_currency2 == 1 and sale.selected_currency != 2 %}
+                                        <option value="2">Bitcoin</option>
+                                    {% endif %}
+                                    {% if sale.digital_currency3 == 1 and sale.selected_currency != 3 %}
+                                        <option value="3">Bitcoin Cash</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% else %}
+                    <h4 class="text-center">Your Shopping cart is empty</h4>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12"></div>
+                    {% if cart %}
+
+                        <div class="col-12 hidden-sm hidden-md hidden-lg text-right">
+                            {{ render_field(form.update, value="Update checked quantities", class="btn btn-warning") }}
+                        </div>
+                        <div class="col-12 text-right">
+                            {% if gettotalcart.btcprice == 0  %}
+                                <h4> Subtotal:<div class="btcorangeinline"> 0.00 BTC</div>  </h4>
+                            {% else %}
+                                <h4> Subtotal:<div class="btcorangeinline"> {{ gettotalcart.btcprice }} BTC</div>  </h4>
+                            {% endif %}
+                        </div>
+                        <div class="col-12 text-right">
+                            {% if gettotalcart.btc_cash_price == 0  %}
+                                <h4> Subtotal:<div class="btccash"> 0.00 BCH</div>  </h4>
+                            {% else %}
+                                <h4> Subtotal:<div class="btccash"> {{ gettotalcart.btc_cash_price }} BCH</div>  </h4>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="col-12"></div>
+                    {% endif %}
+                </div>
+
+
+                {% if cartsaved %}
+                    <!-- saved for later -->
+                    <div class="row" style="margin-top:100px;">
+                        <div class="col-4"><h3>Saved For Later</h3></div>
+                        <div class="col-6"></div>
+                        <div class="col-2"></div>
+                    </div>
+
+                    <!-- table code -->
+
+                    <table class="table col-12" style="margin-bottom: 150px;">
+                        <tr class="text-center">
+                            <th style="background-color: lightgray">Picture</th>
+                            <th style="background-color: lightgray">Title</th>
+                            <th style="background-color: lightgray">Price</th>
+                            <th style="background-color: lightgray"></th>
+                        </tr>
+                        {% for sale in cartsaved %}
+                            <tr>
+                                <!-- Image -->
+                                <td class="col-2">
+                                    <img src="{{ url_for('userdata.media_file',
+                                    filename=('item/' + sale.stringnodeid + sale.stringauctionid + sale.image_of_item)) }}"
+                                         width="100px" height="100px">
+                                </td>
+                                <!-- Title -->
+                                <td class="col-5">
+                                    {{ sale.title_of_item }}
+                                </td>
+                                <!-- Quanity-->
+                                <!-- Price -->
+                                <td class="col-3">
+                                    {{ sale.price_of_item|btcprice(currency=sale.currency) }} BTC<br>
+                                    <b> {{ sale.price_of_item|btcprice_btccash(currency=sale.currency) }} BCH</b>
+                                </td>
+                                <td class="col-2">
+                                    <a class="btn btn-danger" href="{{ url_for('item.deletecartitem', id=sale.id) }}" role="button">Delete</a>
+                                    <a class="btn btn-primary" href="{{ url_for('item.movecartitem', id=sale.id) }}" role="button">Move to cart</a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+
+                {% else %}
+
+                {% endif %}
+
+
+            </div>
+            <!--End Table side-->
+            <!--Hide this on small side-->
+            <div class="hidden-xs hidden-sm col-md-1 "></div> <!---left side -->
+            <div class="hidden-xs hidden-sm col-md-3 border graybg" style="padding:10px;"><!--shopping cart Side-->
+
+                {% if btc_wallet.currentbalance == 0 %}
+                    <div class="row">
+                        <div class="col-12 btcorange"><b>BTC Balance:</b> 0.00</div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-12 btcorange"><b>BTC Balance:</b> {{ btc_wallet.currentbalance }}</div>
+                    </div>
+                {% endif %}
+                {% if btc_cash_wallet.currentbalance == 0 %}
+                    <div class="row">
+                        <div class="col-12 btccash"><b>BCH Balance:</b> 0.00</div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-12 btccash"><b>BCH Balance:</b> {{ btc_cash_wallet.currentbalance }}</div>
+                    </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12"><b>Items in cart:</b> {{ gettotalcart.btc_sumofitem + gettotalcart.btc_cash_sumofitem  }}</div>
+                </div>
+
+
+                {% if gettotalcart.btcprice == 0 %}
+                {% else %}
+                    <hr>
+                    <div class="row ">
+                        <div class="col-12">
+                            <b>BTC Price:</b> <div class="btcorange"> {{ gettotalcart.btcprice  }}</div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-12">
+                            {% if gettotalcart.shippingbtcprice == 0 %}
+                                <b>BTC Shipping:</b><div class="btcorange"> 0.00</div>
+                            {% else %}
+                                <b>BTC Shipping:</b><div class="btcorange"> {{ gettotalcart.shippingbtcprice  }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-12">
+                            <b>BTC Total:</b><div class="btcorange"> {{ gettotalcart.totalbtcprice  }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if gettotalcart.btc_cash_price == 0 %}
+                {% else %}
+                    <hr>
+                    <div class="row ">
+                        <div class="col-12">
+                            <b>BCH Price:</b> <div class="btccash"> {{ gettotalcart.btc_cash_price  }}</div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-12">
+                            {% if gettotalcart.shipping_btc_cashprice == 0 %}
+                                <b>BCH Shipping:</b><div class="btccash"> 0.00</div>
+                            {% else %}
+                                <b>BCH Shipping:</b><div class="btccash"> {{ gettotalcart.shipping_btc_cashprice  }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-12">
+                            <b>BCH Total:</b><div class="btccash"> {{ gettotalcart.total_btc_cash_price  }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <hr>
+                <div class="row " style="min-height:25px;">
+                    <div class="col-12"></div>
+                </div>
+
+
+                {% if gettotalcart.total_btc_cash_price > 0 and gettotalcart.totalbtcprice > 0 %}
+                    {% if btc_wallet.currentbalance >= gettotalcart.totalbtcprice and btc_cash_wallet.currentbalance >= gettotalcart.total_btc_cash_price %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                {{ render_field(form.gotocheckout, value="Go to Checkout", class="btn btn-warning") }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <a class="btn btn-danger" href="{{ url_for('wallet.walletHome') }}"
+                                   role="button">Add Funds<span class="fa fa- chevron-right" aria-hidden="true" style="font-size: 20px;">
+                              </span>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if gettotalcart.total_btc_cash_price > 0 and gettotalcart.totalbtcprice == 0 %}
+                    {% if btc_cash_wallet.currentbalance >= gettotalcart.total_btc_cash_price %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                {{ render_field(form.gotocheckout, value="Go to Checkout", class="btn btn-warning") }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <a class="btn btn-danger" href="{{ url_for('wallet.walletHome') }}"
+                                   role="button">Add Funds<span class="fa fa- chevron-right" aria-hidden="true" style="font-size: 20px;">
+                              </span>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if gettotalcart.total_btc_cash_price == 0 and gettotalcart.totalbtcprice > 0 %}
+                    {% if btc_wallet.currentbalance >= gettotalcart.totalbtcprice %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                {{ render_field(form.gotocheckout, value="Go to Checkout", class="btn btn-warning") }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <a class="btn btn-danger" href="{{ url_for('wallet.walletHome') }}"
+                                   role="button">Add Funds<span class="fa fa- chevron-right" aria-hidden="true" style="font-size: 20px;">
+                              </span>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+    {% if related1 == 1 %}
+
+        <div class="row" style="margin-top: 100px; margin-bottom:50px;">
+            <div class="col-12">
+                {% include '/layouts/owlstuff/owlstuff.html' %}
+                {% include '/related/_shoppingcartrelated.html' %}
+                {% include '/layouts/owlstuff/owlstuffshoppingcart.html' %}
+
+            </div>
+        </div>
+    {% endif %}
+
+
+    <!-- END right side -->
+
+
+    <script>
+        function toggle(source) {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] != source)
+                    checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
+{% endblock %}

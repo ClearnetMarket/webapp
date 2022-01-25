@@ -1,0 +1,24 @@
+{% extends "/layouts/auth_achievement_holder.html" %}
+{% block content %}
+
+
+    <hr>
+
+        {% for f in x %}
+
+			<div class="row border blue" style="margin-bottom: 10px; ">
+			    <div class="col-12 col-sm-4 text-center" style="padding: 20px;">
+			                    <img src="{{ url_for('static', filename='/images/achievement/' +  f[0]  + '/' + f + '.png')  }}" width="198px" height="60px" >
+			                </div>
+			    <div class="col-12 col-sm-8 btnwhite text-center" style="padding: 5px; padding-bottom: 15px;">
+			           <h4>{{ f|achievementtitle }}</h4><hr style="max-height: 1px;">
+				    {{ f|achievementdescription }}
+			    </div>
+
+			</div>
+
+        {% endfor %}
+
+
+
+{% endblock %}

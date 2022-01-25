@@ -1,0 +1,65 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <h4>Request Cancel</h4>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 50px;">
+
+        <div class="col-md-3 col-sm-3 col-3 col-lg-3"></div>
+        <div class="col-md-6 col-sm-6 col-6 col-lg-6">
+        <strong>Please Note</strong><br><br>
+            Your order has already been accepted by the vendor.
+            Please leave a note on why you want<br>
+            to cancel.  Some items take custom measures to produce, and your reason is valuable.
+        </div>
+        <div class="col-md-3 col-sm-3 col-3 col-lg-3"></div>
+
+    </div>
+
+
+
+
+        <div class="row">
+
+			<div class="hidden-xs col-md-3 col-sm-3 col-lg-3"></div>
+            <div class="col-12 col-sm-9">
+            <div class="row border graybg" style="width: 500px; padding: 20px; ">
+                    <form method="post" class="form-horizontal">
+                        {{ form.csrf_token }}
+                        <div class="form-group">
+
+                            <label class="col-2 col-sm-2 col-md-2 col-lg-2 control-label">Category</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+							{{ render_field(form.type, class="form-control") }}
+							</div>
+                         </div>
+
+                        <div class="form-group">
+
+							<label class=" col-2 col-sm-2 col-md-2 col-lg-2 control-label">Reason</label>
+							<div class="col-8 col-sm-8 col-md-8 col-lg-8">
+							{{ render_field(form.messagewhy,class="form-control", rows=5, cols=10) }}
+							</div>
+                        </div>
+
+                        <div class="text-center">
+                             {{ render_field(form.submit, class="btn btn-danger", value="Submit") }}
+                        </div>
+
+                    </form>
+            </div>
+            <div class="hidden-xs col-md-3 col-sm-3 col-lg-3"></div>
+        </div>
+        </div>
+
+{% endblock %}

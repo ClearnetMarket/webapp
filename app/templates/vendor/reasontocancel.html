@@ -1,0 +1,19 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<div id="holder_box">
+
+        <div id="reasontocanceltop">
+            <div id="reasontocanceltopbox"><h4>Reason:</h4></div>
+
+                <div id="reasontocancelbottombox"><h4>Customer Response:</h4> {{ item.overallreason }}</div>
+
+                <div id="reasontocancelbuttons">
+                    <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject', id=item.id) }}" role="button">Cancel Order</a>
+                   </div>
+        </div>
+
+</div>
+
+{% endblock %}

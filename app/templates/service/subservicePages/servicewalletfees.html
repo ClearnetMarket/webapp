@@ -1,0 +1,90 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+<!-- help topics Questions-->
+<div class="row">
+    <h2>Fee Questions</h2>
+</div>
+    <a name='backtotop'></a>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#bitcoin1">Are there any fees for a buyer?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#bitcoin2">Can you explain the wallet fees?</a>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-12 question linkcolor">
+	<a href="#bitcoin3">I have leftover coins, how do I get them off?.</a>
+	</div>
+</div>
+<br>
+
+
+
+<!-- END help topics Questions -->
+
+
+
+<br><br><br><br>
+    <h2>Answers</h2>
+<!-- END help topics Answers -->
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='bitcoin1'></a>
+    <h4>Are there any fees for a buyer?</h4>
+	    <div class="text-right">
+	    <a href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    The buyer is responsible for no transaction fees on Clearnet Market.  The only fee a buyer will incur is wallet fees.  They are universal
+    with digital currencies and miners get there part.
+	</div>
+</div>
+
+
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='bitcoin2'></a>
+    <h4>Can you explain the wallet fee?</h4>
+	    <div class="text-right">
+	    <a  href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    Currently the fees are set dynamically.  We calculate the average of fees sent in the last few hours and use that as our wallet fee.
+    Everyone pays the same fees to withdraw as calculated by our site.
+
+	</div>
+</div>
+
+<div class="row question linkcolor">
+	<div class="col-12 ">
+<a name='bitcoin3'></a>
+    <h4>I have leftover coins but its smaller than the required txt fee, how do I get them off?</h4>
+	    <div class="text-right">
+	    <a href="#backtotop" role="button">Back to top</a>
+	    </div>
+	</div>
+	<div class="col-12">
+    Currently you cannot withdraw if your amount is less than the walletfee.
+	</div>
+</div>
+
+
+
+{% endblock %}

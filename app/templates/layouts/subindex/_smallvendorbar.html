@@ -1,0 +1,55 @@
+
+
+<div class="row">
+
+
+    <div class="col-12 d-md-none border" style="font-size: 20px;">
+        <div class="col-12 linkcolor text-center">
+            <caption>
+                Vendor Control Center
+            </caption>
+        </div>
+
+        <div class="col-12 linkcolor">
+            <a href="{{ url_for('vendor.itemsforSale') }}">
+                My Items
+            </a>
+        </div>
+        <div class="col-12 linkcolor">
+
+        </div>
+
+
+        <!--Issues -->
+        {% if issues == 0 %}
+            <div class="col-12 linkcolor">
+                <a href="{{ url_for('vendor.vendorRefunds') }}">
+                    Issues
+                </a>
+            </div>
+        {% else %}
+            <div class="col-12 linkcolororange">
+                <a href="{{ url_for('vendor.vendorRefunds') }}">
+                    Issues({{ issues }})
+                </a>
+            </div>
+        {% endif %}
+
+
+        <!--Orders -->
+        {% if order == 0 %}
+            <div class="col-12 linkcolor">
+                <a href="{{ url_for('vendor.vendorOrders') }}">
+                    OpenOrders
+                </a>
+            </div>
+        {% else %}
+            <div class="col-12 linkcolororange">
+                <a href="{{ url_for('vendor.vendorOrders') }}">
+                    OpenOrders({{ order }})
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>

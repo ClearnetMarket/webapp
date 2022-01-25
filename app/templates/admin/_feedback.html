@@ -1,0 +1,31 @@
+
+{% for comment in feedback %}
+<div id="commentholder" class="graybg border">
+
+
+    <div id="comment_user" class="linkcolor">
+        <a href="{{ url_for('main.user', username=comment.username) }}">
+        {{ comment.username }}
+        ({{ comment.userid|userrating }})
+        ({{ comment.userid|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+        </a>
+
+
+    </div>
+    <div id="comment_time">{{ comment.type|feedbackcategory }}</div>
+    <div id="comment_time">{{ moment(timestamp=comment.timestamp, local=False).calendar()  }}</div>
+
+
+    <div id="comment_comment">{{ comment.comment }}</div>
+    <div id="comment_buttons">
+        <a class="btn btn-danger btnwhite" href="{{ url_for('message.messagecenter_delete_comment',id=comment.id) }}"role="button">
+            Delete
+        </a>
+
+    </div>
+
+
+</div>
+
+<hr>
+{% endfor %}

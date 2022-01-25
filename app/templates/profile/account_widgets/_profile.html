@@ -1,0 +1,13 @@
+
+
+
+    <div class="row" style="min-height:250px;white-space: pre-line; ">
+        <div class="col-sm-12" style="font-size: 12px;min-height:250px;">
+        {% if user.bio|length > 1%}
+            {{ user.bio|safe }}
+        {% else %}
+            This user doesnt have a profile...
+        {% endif %}
+
+        </div>
+    </div>

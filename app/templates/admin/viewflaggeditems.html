@@ -1,0 +1,74 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"> <a  href="{{ url_for('wallet.walletHome') }}">Wallets</a></li>
+        </ol>
+    </nav>
+            <h4>Most Flagged Items</h4>
+            <table class="table-condensed col-12">
+                    <tr>
+                    <th class="bluetable col-1">Item ID</th>
+                    <th class="bluetable col-4">Vendor</th>
+                    <th class="bluetable col-5">Item Title</th>
+                    <th class="bluetable col-2">How many flags</th>
+
+                    <th class="bluetable col-2"></th>
+                    </tr>
+            {% if countitem > 0 %}
+                {% for i in item %}
+                    <tr>
+                        <td class="linkcolor col-1">
+	                        {{ i.listingid }}
+                        </td>
+
+                        <td class="linkcolor col-4">
+                            <a href="{{ url_for('profile.user',username=i.vendorname) }}" >
+                                {{ i.vendorname }}
+                                ({{ i.userid|vendorratingcount }})
+                                ({{ i.userid|avgvendorrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px">)
+                            </a>
+                        </td>
+
+                        <td class="linkcolor col-5">
+                            {% if i.typeitem == 1 %}
+
+                            <a href="{{ url_for('item.Itemforsale',id=i.listingid) }}" >
+                            {{ i.listingtitle }}
+
+                            </a>
+                            {% elif i.typeitem == 2 %}
+                            {% elif i.typeitem == 3 %}
+                            {% else %}
+                            {% endif %}
+                        </td>
+
+
+                        <td class="linkcolor col-2">
+	                       {{ i.howmany }}
+                        </td>
+
+
+                        <td class="btnwhite col-2">
+                            {% if i.typeitem == 1 %}
+                            <a class="btn btn-danger" href="{{ url_for('admin.deleteItem', id=i.listingid) }}" role="button">Delete Item</a>
+                            <a class="btn btn-warning" href="{{ url_for('admin.removeflags', id=i.id) }}" role="button">Remove Flags</a>
+                            {% elif i.typeitem == 2 %}
+                                <a class="btn btn-warning" href="{{ url_for('admin.removeflags', id=i.id) }}" role="button">Remove Flags</a>
+                                <a class="btn btn-danger" href="{{ url_for('admin.deleteTrade', id=i.listingid) }}" role="button">Delete Item</a>
+                            {% elif i.typeitem == 3 %}
+                                <a class="btn btn-warning" href="{{ url_for('admin.removeflags', id=i.id) }}" role="button">Remove Flags</a>
+                            {% else %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td>No disputes ...</td></tr>
+            {% endif %}
+            </table>
+
+
+{% endblock %}

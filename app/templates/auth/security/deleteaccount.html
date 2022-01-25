@@ -1,0 +1,153 @@
+{% extends "/layouts/account_holder.html" %}
+
+{% block content %}
+
+    <div class="row" style="width: 500px; margin: auto">
+        <!--seed word 0 -->
+        <div id="form_error">
+            {% if form.seedanswer0.errors %}
+                {% for error in form.seedanswer0.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Seed word 1 - {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!--seed word 1 -->
+        <div id="form_error">
+            {% if form.seedanswer1.errors %}
+                {% for error in form.seedanswer1.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Seed word 2 - {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!--seed word 2 -->
+        <div id="form_error">
+            {% if form.seedanswer2.errors %}
+                {% for error in form.seedanswer2.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Seed word 3 - {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!--seed word 3 -->
+        <div id="form_error">
+            {% if form.seedanswer3.errors %}
+                {% for error in form.seedanswer3.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Seed word 4 - {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!--seed word 4 -->
+        <div id="form_error">
+            {% if form.seedanswer4.errors %}
+                {% for error in form.seedanswer4.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Seed word 5 - {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+
+
+    </div>
+    <div class="row">
+        <div class="col-12 linkcolor">
+            Deleting your account is permanent.  We do not keep any information afterwards.  It is wiped clean
+            from the server.  There is no way to recover the account after this.<br>
+            We delete ..<br>
+            <ul>
+                <li>Your general account info</li>
+                <li>Your account statistics</li>
+                <li>Your vendor statistics if you sold anything</li>
+                <li>Your browsing history</li>
+                <li>Your shopping cart information</li>
+                <li>Your order history</li>
+                <li>Any messages sent</li>
+                <li>Coin Transactions</li>
+                <li>and finally your seed ...</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-12">Word 1:</label>
+                    <div class="col-12 ">
+                        {{ render_field(form.seedanswer0, class="form-control") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-12 ">Word 2:</label>
+                    <div class="col-12">
+                        {{ render_field(form.seedanswer1, class="form-control") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-12">Word 3:</label>
+                    <div class="col-12">
+                        {{ render_field(form.seedanswer2, class="form-control") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-12">Word 4:</label>
+                    <div class="col-12">
+                        {{ render_field(form.seedanswer3, class="form-control") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-12 ">Word 5:</label>
+                    <div class="col-12">
+                        {{ render_field(form.seedanswer4, class="form-control") }}
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-12 text-center">
+                <label></label>
+                <div class="col-12">
+                    {{ render_field(form.submit, value="DELETE ACCOUNT", autocomplete="off", class="btn btn-danger") }}
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,64 @@
+<div class="row bg-white pl-5">
+    <div class="col-12">
+        Navigation
+    </div>
+    <div class="col-12 linkcolor">
+        <ul>
+
+            <li>
+                <a href="{{ url_for('service.customerserviceHome') }}">
+                    Customer Service
+                </a>
+            </li>
+
+            <li>
+                {% if allmsgcount >= 1 %}
+                    <div class="linkcolororange">
+                        <a href="{{ url_for('message.messagecenter') }}">
+                            Messages({{ allmsgcount }})
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('message.messagecenter') }}">
+                        Messages
+                    </a>
+                {% endif %}
+            </li>
+
+            <li>
+
+                {% if current_user.is_authenticated %}
+                    {% if current_user.vendor_account == 0 %}
+                        <a href="{{ url_for('auth.becomeVendor') }}">
+                            Post Item
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.becomeVendor') }}">Post Item</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('auth.becomeVendor') }}">Post Item</a>
+                {% endif %}
+            </li>
+
+            <li>
+
+                    My Wallets
+
+            </li>
+            <li>
+                <a href="{{ url_for('auth.orders',
+                                    username=current_user.username) }}">
+                    Orders
+                </a>
+            </li>
+            <li>
+
+                <a href="{{ url_for('item.shoppingcart') }}">
+                    {{ tot }} items
+                </a>
+
+            </li>
+
+        </ul>
+    </div>
+</div>

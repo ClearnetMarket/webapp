@@ -1,0 +1,36 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <h3>Clearnet Market Fees</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            Vendor Fees:  0% seller fees <br>
+            Buyer Fees:  0% buyer fees <br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            Clearnet Market Fees:  5% Fee on all items purchased.
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            Wallet Fees: Wallet Fees fluctuate to accomodate average miner rate at the time
+        </div>
+    </div>
+
+
+{% endblock %}

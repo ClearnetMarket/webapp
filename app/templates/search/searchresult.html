@@ -1,0 +1,57 @@
+{% extends "/layouts/default.html" %}
+{% block content %}
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+    <form method="POST">
+        {{ form.csrf_token }}
+
+    <div class="row">
+        <div class="hidden-xs col-sm-3 linkcolor"><!--sidebar -->
+            {% include 'search/subForms/_searchside.html' %}
+        </div><!--ENDsidebar -->
+
+        <div class="col-12 col-sm-9 linkcolor"> <!--- middle part -->
+            <div class="row">
+                <div class="col-12 text-center" style="margin-bottom: 50px;">
+                    You Searched for <b>{{ searchterm  }}</b> in <b>{{ function|maincatname }}</b>
+                </div>
+            </div>
+            {% for item in items %}
+                {% include 'search/searchresults/_item.html' %}
+                <hr style="width: 700px;">
+            {% endfor %}
+            {% if limitdata == 0 %}<!--- If search results were more than 10 -->
+                {% else %}<!--- Include other relevant results if possible -->
+                <div class="row">
+                    <div class="col-12 text-center">
+                        Your search result didnt have enough expected results :(  Here are some other results.
+                    </div>
+                </div>
+                <hr class="style1" style="width:725px;">
+
+                {% for item in limitdata %}
+                    {% include '/search/searchresults/_item.html' %}
+                    <hr style="width: 700px;">
+                {% endfor %}
+            {% endif %}
+
+            <div  style="clear:both"></div>
+            <div class="row text-center">
+                <div class="col-sm-3"></div>
+                <div class="col-12 col-sm-6">
+             
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+
+            <div class="d-flex justify-content-center linkcolor">
+                {{ pagination.links }}
+            </div>
+        </div><!--- END middle part -->
+    </div>
+    </form>
+{% endblock %}

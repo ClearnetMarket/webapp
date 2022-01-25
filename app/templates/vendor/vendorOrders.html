@@ -1,0 +1,479 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+    {% if current_user.is_authenticated %}
+	        {% if current_user.vendor_account ==1 %}
+	                <div class="row clearnetblue" style="margin-bottom: 25px;">
+	                    <div class="hidden-xs hidden-sm col-md-12">
+	                    {% include '/layouts/subindex/_vendorbar.html' %}
+	                    </div>
+	                </div>
+
+	        {% else %}
+	        {% endif %}
+    {% endif %}
+    <div class="row">
+	    <div class="col-12">
+	        <h5>Rules of Orders</h5>
+	        <ul>
+		        <li>You have 48 hours to accepted an order before its cancelled automatically.</li>
+		        <li>You have 7 days to ship an item before its cancelled automatically.</li>
+		        <li>After 30 days from shipping, orders will auto finalize.  <br>
+		        *This is only if there are no returns/ issues in this time</li>
+	        </ul>
+	    </div>
+    </div>
+
+		<!--New  -->
+	    <div class="row">
+		    <div class="col-12">
+
+                <h2>New Orders</h2>
+		    </div>
+	    </div>
+		{% if ordernewcount >= 1 %}
+	        <table class="col-12">
+	            <tr>
+		            <th class="col-1 bluetable">Sale Id</th>
+		            <th class="hidden-xs col-sm-2 bluetable">Customer</th>
+		            <th class="hidden-xs hidden-sm col-md-2 bluetable">Item Title</th>
+		            <th class="col-1 bluetable">Quantity</th>
+		            <th class="hidden-xs col-sm-1 bluetable">Age</th>
+		            <th class="hidden-xs col-sm-1 bluetable">Coin</th>
+		            <th class="col-2 bluetable">Shipping</th>
+		            <th class="col-1 bluetable"></th>
+	            </tr>
+
+	            {% for order in ordernew %}
+	            <tr>
+		            <td class="col-1 linkcolor">
+		                <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+		                            {{ order.id }}
+		                </a>
+		            </td>
+		            <td class="hidden-xs col-sm-1 linkcolor">
+		                <a href="{{ url_for('profile.user',username=order.customer) }}" >
+		                    {{ order.customer }}
+		                    ({{ order.customer_id|userrating }})
+		                    ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+		                </a>
+		            </td>
+
+		            <td class="hidden-xs hidden-sm col-md-1 linkcolor">
+			            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">{{ order.title }}</a>
+		            </td>
+		            <td class="col-1 linkcolor" >
+			            {{ order.quantity }}
+		            </td>
+		            <td class="hidden-xs col-sm-1 linkcolor">
+			            {{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}
+		            </td>
+		            <td class="hidden-xs col-sm-1 linkcolor">
+			            {{ order.price|formatbtctostring }} BTC
+		            </td>
+		            <td class="col-2 linkcolor">
+			            {{ order.shipdescription }}
+		            </td>
+
+		            <td class="col-1 btnwhite">
+
+		                <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject',id=order.id) }}" role="button">Reject</a>
+		                <a class="btn btn-primary" href="{{ url_for('vendor.vendorOrders_accept',id=order.id) }}" role="button">Accept</a>
+
+		            </td>
+	            </tr>
+	            {% endfor %}
+			</table>
+
+				<div class="row text-center">
+					<div class="col-3"></div>
+					<div class="col-6">
+	                    {{ paginationordernew.info }}
+					</div>
+					<div class="col-3"></div>
+				</div>
+
+				<div class="row text-center">
+
+					<div class="col-3"></div>
+					<div class="col-6">
+                    {{ paginationordernew.links }}
+                    </div>
+					<div class="col-3"></div>
+				</div>
+
+        {% else %}
+            <div class="row">
+	            <div class="col-12 text-center">
+		            <b>No new orders ..</b>
+	            </div>
+            </div>
+        {% endif %}
+
+
+
+
+		<!--accepted -->
+        <div class="row">
+		    <div class="col-12">
+
+                <h2>Accepted Orders</h2>
+		    </div>
+	    </div>
+		{% if orderacceptedcount >= 1 %}
+	        <table class="col-12">
+	                <tr>
+	                <th class="col-1 bluetable">Sale Id</th>
+	                <th class="hidden-xs col-sm-2 bluetable">Customer</th>
+	                <th class="col-4 bluetable">Item Title</th>
+	                <th class="hidden-xs col-sm-1 bluetable">Age</th>
+	                <th class="col-1 bluetable">Quantity</th>
+	                <th class="hidden-xs col-sm-1 bluetable">Coin</th>
+	                <th class="hidden-xs col-sm-1 bluetable">Issues</th>
+
+	                <th class="col-1 bluetable">Buttons</th>
+	                </tr>
+
+	                    {% for order in orderaccepted %}
+	                        {% if order.request_cancel == 0 %}
+                                    <tr>
+                                        <td class="col-1 linkcolor">
+                                            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+		                                    {{ order.id }}
+		                                    </a>
+                                        </td>
+                                        <td class="hidden-xs col-sm-2 linkcolor">
+                                            <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                                                {{ order.customer }}
+                                                ({{ order.customer_id|userrating }})
+                                                ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+                                            </a>
+                                        </td>
+
+                                        <td class="col-md-4 linkcolor">
+	                                        <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a>
+                                        </td>
+
+                                        <td class="hidden-xs col-sm-1 linkcolor">
+	                                        {{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}
+                                        </td>
+
+                                        <td class="col-1 linkcolor">
+	                                        {{ order.quantity }}
+                                        </td>
+
+                                        <td class="hidden-xs col-sm-1 linkcolor">
+	                                        {{ order.price|formatbtctostring }} BTC
+                                        </td>
+                                        <td class="hidden-xs col-sm-1 linkcolor">
+	                                       <!--placeholder for issues -->
+                                        </td>
+
+
+
+                                        <td class="col-1 btnwhite">
+                                            <div id="tablebuttons">
+                                            <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject',id=order.id) }}" role="button">Reject</a><br>
+                                            <a class="btn btn-primary" href="{{ url_for('vendor.vendorOrders_send',id=order.id) }}" role="button">Mark as Sent</a><br>
+                                            <a class="btn btn-success" href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add Tracking</a><br>
+                                            </div>
+                                        </td>
+                                    </tr>
+	                        {% else %}
+                                        <tr class="bg-danger">
+		                                    <td class="col-1 linkcolor">{{ order.id }}</td>
+		                                    <td class="col-1 linkcolor">
+		                                            <a href="{{ url_for('profile.user',username=order.customer) }}" >
+		                                                {{ order.customer }}
+		                                                ({{ order.customer_id|userrating }})
+		                                                ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+		                                            </a>
+		                                    </td>
+		                                    <td class="col-1 linkcolor"><a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a></td>
+		                                    <td class="col-1 linkcolor">{{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}</td>
+                                            <td class="col-1 linkcolor">
+	                                        {{ order.quantity }}
+                                            </td>
+		                                    <td class="col-1 linkcolor">{{ order.price|formatbtctostring }} BTC</td>
+		                                    <td class="col-1 linkcolor"><b>Customer wants <br>to cancel<br>
+		                                        <a href="{{ url_for('vendor.vendorOrders_reasonforcancel',id=order.id) }}">Reason why</a></b>
+		                                        </td>
+		                                    <td class="col-1 bg-danger" >
+		                                        <div id="tablebuttons">
+		                                        <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject',id=order.id) }}" role="button">Reject</a><br>
+		                                        <a class="btn btn-primary" href="{{ url_for('vendor.vendorOrders_send',id=order.id) }}" role="button">Mark as Sent</a><br>
+		                                        <a class="btn btn-success" href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add Tracking</a>
+		                                        </div>
+		                                    </td>
+	                                    </tr>
+	                        {% endif %}
+	                    {% endfor %}
+	            </table>
+
+
+				<div class="row text-center">
+					<div class="col-3"></div>
+					<div class="col-6">
+	                    {{ paginationorderaccepted.info }}
+					</div>
+					<div class="col-3"></div>
+				</div>
+
+				<div class="row text-center">
+
+					<div class="col-3"></div>
+					<div class="col-6">
+                    {{ paginationorderaccepted.links }}
+                    </div>
+					<div class="col-3"></div>
+				</div>
+
+
+                    {% else %}
+                       <div class="row">
+				            <div class="col-12 text-center">
+					            <b>No accepted orders ..</b>
+				            </div>
+			            </div>
+
+	                {% endif %}
+
+
+<!--Shipped -->
+		        <div class="row">
+				    <div class="col-12">
+
+		                <h2>Shipped Orders</h2>
+				    </div>
+			    </div>
+				{% if orderwaitingcount >= 1 %}
+		        <table class="col-12 text-center">
+	                <tr>
+
+	                    <th class="col-1 bluetable">Sale Id</th>
+	                    <th class="hidden-xs col-sm-2 bluetable">Customer</th>
+	                    <th class="hidden-xs hidden-sm col-md-2 bluetable">Item Title</th>
+	                    <th class="hidden-xs col-sm-1 bluetable">Age</th>
+	                    <th class="hidden-xs col-sm-1 bluetable">Coin</th>
+	                    <th class="col-3 bluetable">Issues</th>
+	                    <th class="col-1 bluetable"></th>
+	                </tr>
+
+	                    {% for order in orderwaiting %}
+	                        {% if order.request_return == 0 %}
+	                            <tr>
+	                                <td class="col-1 linkcolor">
+	                                    <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+	                                    {{ order.id }}
+	                                    </a>
+	                                </td>
+	                                <td class="hidden-xs col-sm-2 linkcolor">
+	                                     <a href="{{ url_for('profile.user',username=order.customer) }}" >
+	                                    {{ order.customer }}
+	                                    ({{order.customer_id|userrating }})
+	                                    ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+	                                     </a>
+	                                </td>
+	                                <td class="hidden-xs hidden-sm col-md-2 linkcolor">
+		                                <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a>
+	                                </td>
+	                                <td class="hidden-xs col-sm-1 linkcolor">
+		                                {{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}
+	                                </td>
+	                                <td class="hidden-xs col-sm-1 linkcolor">
+		                                {{ order.price|formatbtctostring }} BTC
+	                                </td>
+                                    <td class="col-3 linkcolor">
+	                                    --
+	                                    </td>
+	                                <td class="col-1 btnwhite">
+
+	                                    <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_cancelandrefund',id=order.id) }}" role="button">Cancel and Refund</a>
+	                                     <a class="btn btn-success" href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add/Edit Tracking</a>
+
+	                                </td>
+	                            </tr>
+	                            {% else %}
+
+	                            <tr class="bg-danger">
+                                    <td class=" linkcolor col-1">
+	                                    {{ order.id }}
+                                    </td>
+                                    <td class="linkcolor hidden-xs col-sm-2">
+                                            <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                                                {{ order.customer }}
+                                                ({{ order.customer_id|userrating }})
+                                                ({{ order.customer_id|avguserrating }}
+	                                            <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+                                            </a>
+                                    </td>
+                                    <td class=" linkcolor hidden-xs hidden-sm col-md-2">
+	                                    <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a>
+                                    </td>
+                                    <td class=" linkcolor hidden-xs col-sm-1">
+	                                    {{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}
+                                    </td>
+                                    <td class=" linkcolor hidden-xs col-sm-1">
+	                                    {{ order.price|formatbtctostring }} BTC
+                                    </td>
+                                    {% if order.request_return >= 1 %}
+                                        <td class=" linkcolor col-3"><b>Customer is returning item<br>
+                                    {% else %}
+                                        <td class="linkcolor col-3"><b>Customer wants <br>to cancel<br>
+                                        <a href="{{ url_for('vendor.vendorOrders_reasonforcancel',id=order.id) }}">Reason why</a></b>
+                                        </td>
+                                    {% endif %}
+
+                                    <td class=" col-1 linkcolor">
+                                        {% if order.request_return == 0 %}
+                                            <a href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add/Edit Tracking</a>
+                                        {% elif order.request_return == 1 %}
+                                             <a  href="{{ url_for('vendor.addtempaddress', id=order.id) }}" role="button">Return Address Needed</a>
+                                        {% elif order.request_return == 2 %}
+                                        {% elif order.request_return == 3 %}
+                                             <a  href="{{ url_for('vendor.vendorOrders_recievereturn',id=order.id) }}" role="button">Recieved Return</a>
+                                        {% else %}
+
+                                        {% endif %}
+                                    </td>
+	                            </tr>
+	                        {% endif %}
+	                    {% endfor %}
+		            </table>
+
+
+					<div class="row text-center">
+						<div class="col-3"></div>
+						<div class="col-6">
+		                    {{ paginationorderwaiting.info }}
+						</div>
+						<div class="col-3"></div>
+					</div>
+
+					<div class="row text-center">
+
+						<div class="col-3"></div>
+						<div class="col-6">
+	                    {{ paginationorderwaiting.links }}
+	                    </div>
+						<div class="col-3"></div>
+					</div>
+
+	            {% else %}
+	               <div class="row">
+			            <div class="col-12 text-center">
+				            <b>No shipped orders ..</b>
+			            </div>
+		            </div>
+
+	            {% endif %}
+
+
+
+
+		        <div class="row">
+				    <div class="col-12">
+		                <h2>Completed Orders</h2>
+				    </div>
+			    </div>
+
+				{% if completedcount >= 1 %}
+		        <table class="col-12">
+		            <tr>
+
+		                <th class="col-2 bluetable">Sale Id</th>
+		                <th class="col-2 bluetable">Customer</th>
+		                <th class="hidden-xs hidden-sm col-md-2 bluetable">Item Title</th>
+		                <th class="hidden-xs col-sm-1 bluetable">Age</th>
+		                <th class="hidden-xs col-sm-1 bluetable">Coin</th>
+		                <th class="col-3 bluetable"></th>
+		            </tr>
+
+	                {% for order in completed %}
+
+	                        <tr>
+	                            <td class="col-1 linkcolor">
+	                                <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+	                                {{ order.id }}
+	                                </a>
+	                            </td>
+	                            <td class="col-2 linkcolor">
+	                                 <a href="{{ url_for('profile.user',username=order.customer) }}" >
+	                                {{ order.customer }}
+	                                ({{order.customer_id|userrating }})
+	                                ({{ order.customer_id|avguserrating }}
+	                                 <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+	                                 </a>
+	                            </td>
+	                            <td class="hidden-xs hidden-sm col-md-2 linkcolor">
+		                            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+			                            {{ order.title }}
+		                            </a>
+	                            </td>
+	                            <td class="hidden-xs col-sm-1 linkcolor">
+		                            {{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}
+	                            </td>
+	                            <td class="hidden-xs col-sm-1 linkcolor">
+		                            {{ order.price|formatbtctostring }} BTC
+	                            </td>
+
+	                            <td class="col-3">
+	                                {% if order.userfeedback == 0 and order.cancelled == 0 %}
+	                                    <a class="btn btn-primary  btnwhite" href="{{ url_for('vendor.vendorOrders_leavereviewforuser',id=order.id) }}"
+	                                       role="button">Leave User Review
+	                                    </a>
+	                                {% endif %}
+                                    {% if order.cancelled == 1 %}
+	                                    Order was Cancelled
+	                                {% endif %}
+	                            </td>
+	                        </tr>
+	                {% endfor %}
+                </table>
+
+
+				<div class="row text-center">
+					<div class="col-3"></div>
+					<div class="col-6">
+	                    {{ paginationcompleted.info }}
+					</div>
+					<div class="col-3"></div>
+				</div>
+
+				<div class="row text-center">
+
+					<div class="col-3"></div>
+					<div class="col-6">
+                    {{ paginationcompleted.links }}
+                    </div>
+					<div class="col-3"></div>
+				</div>
+
+
+
+
+        {% else %}
+           <div class="row">
+	            <div class="col-12 text-center">
+		            <b>No completed orders ..</b>
+	            </div>
+            </div>
+
+        {% endif %}
+
+
+
+<div class="row" style="margin-bottom: 250px;margin-top: 100px;">
+
+</div>
+
+{% endblock %}
+
+

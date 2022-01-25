@@ -1,0 +1,63 @@
+{% extends "/layouts/user_layout.html" %}
+
+{% block content %}
+
+
+<ol class="breadcrumb linkcolor">
+  <li><a href="{{ url_for('index') }}">Home</a></li>
+  <li><a href="{{ url_for('admin.adminHome') }}">Admin Home</a></li>
+</ol>
+<div class="row graybg border">
+
+
+
+		<div class="col-4 linkcolor">
+	    <b>
+	        <a href="{{ url_for('profile.user',username=msg.username) }}" >
+	             {{ msg.username }}
+	            ({{ msg.author_id|userrating }})
+	            ({{ msg.author_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+
+	        </a>
+	    </b>
+	    </div>
+	    <div class="col-4">
+		    {{ moment(timestamp=msg.timestamp, local=False).fromNow(refresh=True)  }}
+	    </div>
+	    <div class="col-4">
+
+	        <a class="btn btn-danger" href="{{ url_for('admin.msg_delete', id=msg.id) }}" role="button">Delete</a>
+	        <a class="btn btn-warning" href="{{ url_for('admin.msg_dispute_settle', id=msg.id) }}" role="button">Resolved</a>
+	    </div>
+
+
+	<div class="row " style="margin-bottom: 20px; margin-top: 20px;">
+		<div class="col-12">
+		{{ msg.body }}
+		</div>
+	</div>
+
+
+
+	<div class="row">
+		<div class="col-12 col-sm-6 col-sm-offset-3">
+		    <form method="POST">
+		        {{ postform.csrf_token }}
+		    <div class="form-group">
+		        {{ render_field(postform.msgstufftosend, class="form-control", rows="3", placeholder="Your comment here") }}
+		    </div>
+			<div class="form-group col-12 col-sm-2 col-sm-offset-10">
+		            {{ render_field(postform.post, value= "Post", autocomplete="off", class="btn btn-primary") }}
+			</div>
+		    </form>
+		</div>
+	</div>
+</div>
+	<div class="row">
+	<div class="col-12 col-sm-6 col-sm-offset-3">
+
+        {% include '/posts/_comments.html' %}
+	</div>
+	</div>
+
+{% endblock %}

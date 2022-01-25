@@ -1,0 +1,17 @@
+{% from "_formhelpers.html" import render_field %}
+
+
+
+{% include 'layouts/headers/_header_normal.html' %}
+<body>
+
+
+<div class="container ">
+    {% include 'layouts/sublayout/_flashbar.html' %}
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+</body>
+{% include 'layouts/subindex/_footer.html' %}

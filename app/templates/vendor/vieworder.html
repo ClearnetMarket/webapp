@@ -1,0 +1,675 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+        <div class="row">
+            {% if order.request_return == 1 %}
+                {% if form %}
+                    <div id="form_error">
+                        {% if form.name.errors %}
+                            {% for error in form.name.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    Form Name: {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+
+                    <div id="form_error">
+                        {% if form.street.errors %}
+                            {% for error in form.street.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    Street: {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div id="form_error">
+                        {% if form.city.errors %}
+                            {% for error in form.city.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    City: {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div id="form_error">
+                        {% if form.state.errors %}
+                            {% for error in form.state.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    State: {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div id="form_error">
+                        {% if form.country.errors %}
+                            {% for error in form.country.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    Country: {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div id="form_error">
+                        {% if form.messagereturn.errors %}
+                            {% for error in form.messagereturn.errors %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    Message Return: {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+
+
+        <!-- Item info -->
+
+        <div class="row">
+            <div class="col-12 text-right">
+                {% if current_user.id == order.customer_id %}
+                    <a class="btn btn-warning" href="{{ url_for('message.messagecenter_Compose_specificperson', person=order.vendor) }}" role="button">Message Vendor</a>
+                {% else %}
+                    <a class="btn btn-warning" href="{{ url_for('message.messagecenter_Compose_specificperson', person=order.customer) }}" role="button">Message Buyer</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 text-left">
+                <h3>Order #: {{ order.id }}</h3>
+            </div>
+        </div>
+
+        {% include 'vendor/_ordersspecs.html' %}
+
+        <!-- if physical item -->
+        {% if order.type == 1 %}
+            <!-- Add shipping info -->
+            {% if current_user.id == order.vendor_id %}
+                {% if order.request_return == 1 %}
+                    <form method="post">
+                        {{ form.csrf_token }}
+
+                        <div class="row" style="margin-bottom: 50px; margin-top: 50px;">
+                            <div class="hidden-xs col-sm-1 col-md-2 col-lg-3"></div>
+                            <div class="col-12 col-sm-10 col-md-8 col-lg-6 bg-warning border">
+                                <div class="text-center">
+                                    <h4>Enter the Destination address of the return</h4>
+                                    Note:  All Fields are optional(incase your into that privacy thing).  You can send a message, or enter the address.
+                                </div>
+                                <br>
+                                <div class="form-vertical">
+                                    <div class="row">
+                                        <label class="col-2 control-label">Name:   </label>
+                                        <div class="col-6">
+                                            {{ render_field(form.name, class="form-control input-sm ") }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <label class="col-2 control-label">Street:  </label>
+                                        <div class="col-6">
+                                            {{ render_field(form.street, class="form-control input-sm ") }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <label class="col-2 control-label">City:   </label>
+                                        <div class="col-4">
+                                            {{ render_field(form.city, class="form-control input-sm ") }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <label class="col-2 control-label">State/Province:   </label>
+                                        <div class="col-4">
+                                            {{ render_field(form.state, class="form-control input-sm ") }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <label class="col-2 control-label">Zip:   </label>
+                                        <div class="col-4">
+                                            {{ render_field(form.zip, class="form-control input-sm ") }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <label class="col-2 control-label"> Country:   </label>
+                                        <div class="col-4">
+                                            {{ render_field(form.country, class="form-control input-sm ") }}
+                                        </div>
+                                    </div><br>
+
+                                    <div class="row">
+                                        <label class="col-2 control-label"> Message   </label>
+                                        <div class="col-10">
+                                            {{ render_field(form.messagereturn,class="form-control", rows=12) }}
+                                        </div>
+                                    </div><br>
+
+                                    <div class="text-center">
+                                        {{ render_field(form.submit, value="Add Return Address", class="btn btn-primary") }}
+                                    </div>
+                                </div>
+                                <div class="hidden-xs col-sm-1 col-md-2 col-lg-3"></div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="text-center"><h4>OR</h4></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="hidden-xs col-sm-1 col-md-2 col-lg-3"></div>
+                        <div class="col-12 col-sm-10 col-md-8 col-lg-6 bg-danger border">
+                            <div class="text-center">
+                                <h4>Cancel the return.  Give customer full amount. (Optional)</h4>
+                            </div>
+                            <p>This is optional and pertains to the following situations.</p>
+                            <ul>
+                                <li>You dont want to give your personal info to a customer.</li>
+                                <li>You dont want the item back.</li>
+                                <li>The return process is not worth it.</li>
+                            </ul>
+
+                            <div class="text-center">
+                                <strong>Once you press the "Cancel Return and Refund" button, the order is finalized and the customer
+                                    gets the item/items and the coin. Everything that pertains to this specific order with the following id.
+                                    <br>
+                                    Order ID: {{ order.id }}
+                                </strong>
+                                <br><br>
+                                <form method="post">
+                                    {{ form.csrf_token }}
+                                    {{ render_field(form.cancelandrefund, value="Cancel Return and Refund", class="btn btn-danger") }}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="hidden-xs col-sm-1 col-md-2 col-lg-3"></div>
+                    </div>
+                {% else %}
+                {% endif %}
+            {% endif %}
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h4>Customer Shipping Info (deleted after order finalized)</h4>
+                </div>
+            </div>
+
+            <div class="row graybg border"><!-- Customer info-->
+                <div class="col-12 col-sm-6 text-left"><!-- left ide-->
+
+
+                    <b>Shipping Method:  </b>{{ order.shipdescription|safe }} <br>
+                    {% if order.type == 1 %}
+                        {% if tracking %}
+
+
+
+                            {% if tracking.carrier1 == 1 %}
+                                <b> Carrier:</b> USPS<br>
+                            {% elif tracking.carrier1 == 2 %}
+                                <b>Carrier:</b> UPS<br>
+                            {% elif tracking.carrier1 == 3 %}
+                                <b>Carrier:</b> FEDEX<br>
+                            {% elif tracking.carrier1 == 4 %}
+                                <b> Carrier:</b> DHL<br>
+                            {% else %}
+                                <b>Carrier:</b> Other Carrier <br>{{ tracking.othercarrier1 }}<br>
+                            {% endif %}
+
+                            <b>Tracking Number:</b> {{ tracking.tracking1 }}<br>
+
+
+                            {% if tracking.tracking2|length > 5 %}
+                                {% if tracking.carrier2 == 1 %}
+                                    <b> Carrier 2:</b> USPS<br>
+                                {% elif tracking.carrier2 == 2 %}
+                                    <b> Carrier 2:</b> UPS<br>
+                                {% elif tracking.carrier2 == 3 %}
+                                    <b>Carrier 2:</b> FEDEX<br>
+                                {% elif tracking.carrier2 == 4 %}
+                                    <b> Carrier 1:</b> DHL<br>
+                                {% else %}
+                                    <b> Carrier 2:</b>  <br>{{ tracking.othercarrier2 }}<br>
+                                {% endif %}
+
+                                <b>Tracking Number:</b> {{ tracking.tracking2 }}<br>
+                            {% endif %}
+
+                            {% if tracking.tracking3|length > 5 %}
+                                {% if tracking.carrier3 == 1 %}
+                                    <b> Carrier 3:</b> USPS<br>
+                                {% elif tracking.carrier3 == 2 %}
+                                    <b> Carrier 3:</b> UPS<br>
+                                {% elif tracking.carrier3 == 3 %}
+                                    <b> Carrier 3:</b> FEDEX<br>
+                                {% elif tracking.carrier3 == 4 %}
+                                    <b> Carrier 3:</b> DHL<br>
+                                {% else %}
+                                    <b> Carrier 3:</b> Other Carrier <br>{{ tracking.othercarrier3 }}<br>
+                                {% endif %}
+
+                                <b>Tracking Number:</b> {{ tracking.tracking3 }}<br>
+                            {% endif %}
+                        {% else %}
+                            No Tracking Available<br>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if order.shipping_price == 0 %}
+
+                        <b>Shipping Amount:  </b>Free Shipping<br>
+
+                    {% else %}
+
+                        <b>Shipping Amount:  </b>{{ order.shipping_price}} BTC<br>
+
+                    {% endif %}
+                    <hr>
+
+                    <b>Customer Shipping Info</b><br>
+                    {% if msg %}
+                        {% if msg  ==  0 %}
+                        {% elif msg  ==  2 %}
+                            <div class="red"> Shipping info was deleted</div>
+
+                        {% else %}
+                            <div class="col-12" style="position:relative; min-height:250px;white-space: pre-line;">
+                                {{ msg.txtmsg|safe }}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="red"> Shipping info was deleted</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-12 col-sm-6 text-left"><!-- right side-->
+                    {% if order.request_return >=1 %}
+
+
+
+
+
+
+
+                        <b>Reason Category:  </b>
+                        {% if order.reason_cancel == 0 %}
+                            No Reason
+                        {% elif order.reason_cancel == 1 %}
+                            Ordered by Mistake
+                        {% elif order.reason_cancel == 2 %}
+                            Found a cheaper/better item
+                        {% elif order.reason_cancel == 3 %}
+                            Expensive Shipping
+                        {% elif order.reason_cancel == 4 %}
+                            Broken or Damaged item
+                        {% elif order.reason_cancel == 5 %}
+                            Item not as described
+                        {% elif order.reason_cancel == 6 %}
+                            Doesnt fit/wrong size
+                        {% elif order.reason_cancel == 5 %}
+                            I dont want to say
+                        {% endif %}
+
+
+                        <hr>
+
+                        <b>Reason Message:  </b><br>{{ order.overallreason|safe }}
+
+                    {% endif %}
+                </div><!-- End right side-->
+            </div><!-- End row-->
+
+
+
+
+
+
+
+            {% if order.request_return >= 1 %}
+                <div class="row" style="margin-top: 50px;">
+                    <div class="col-12 text-left">
+                        <h4>Return Info (deleted after order finalized)</h4>
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="row graybg border"><!-- Return info-->
+
+                    <!-- vendor needs info added-->
+                    {% if order.request_return == 1 %}
+                        <div class="col-12 col-sm-6 text-left"><!-- left ide-->
+                            {% if order.request_cancel == 1 %}
+
+                                <b> Order Status: </b>
+                                <div class="redstatus">
+                                    Request to Cancel Order Sent to Vendor
+                                </div>
+                                <br>
+                            {% endif %}
+
+                            {% if order.cancelled == 1 %}
+
+                                <b>Order Status: </b><div class="redstatus">Order Cancelled</div>
+                                <br>
+                            {% endif %}
+                            {% if order.request_return == 1 %}
+
+                                <b>Return Status:</b><div class="redstatus">  Return Address Needed by Vendor</div>
+                                <br>
+                            {% endif %}
+
+                            {% if order.request_return == 2 %}
+
+                                <b> Return Status:</b><div class="redstatus"> Waiting on customer to mark as shipped</div>
+                                <br>
+                            {% endif %}
+
+                            {% if order.request_return == 3 %}
+
+                                <b>  Return Status:</b><div class="redstatus"> Waiting on vendor to mark as received</div>
+                                <br>
+                            {% endif %}
+                            {% if order.request_return == 4 %}
+
+                                <b> Return Status:</b><div class="greenstatus"> It was successfully returned</div>
+                                <br>
+                            {% endif %}
+
+
+                            <b>Return Quantity:  </b>{{ order.return_quantity }}<br>
+
+
+                            <b>Return Refund:  </b>{{ order.return_amount }} BTC<br>
+
+
+                            <p>*customer handles return shipping costs.  Amount refunded is awarded after
+                                vendor has marked the order as "successfully returned." If Item was marked as
+                                shipped, vendor keeps shipping costs.</p>
+
+                        </div>
+
+
+
+
+                        <!-- customer needs to mark as returned-->
+
+
+                    {% elif order.request_return ==2 %}
+                        <div class="col-12 col-sm-6 text-left"><!-- left ide-->
+                            <!-- left side-->
+
+
+
+
+                            {% if order.request_cancel == 1 %}
+                                <b> Order Status: </b><div class="redstatus">Request to Cancel Order Sent to Vendor</div><br>
+                            {% endif %}
+
+                            {% if order.cancelled == 1 %}
+                                <b>Order Status: </b><div class="redstatus">Order Cancelled</div><br>
+                            {% endif %}
+                            {% if order.request_return == 1 %}
+                                <b>Return Status:</b><div class="redstatus">  Return Address Needed by Vendor</div><br>
+                            {% endif %}
+
+                            {% if order.request_return == 2 %}
+                                <b> Return Status:</b><div class="redstatus"> Waiting on customer to mark as shipped</div><br>
+                            {% endif %}
+
+                            {% if order.request_return == 3 %}
+                                <b>  Return Status:</b><div class="redstatus"> Waiting on vendor to mark as received</div><br>
+                            {% endif %}
+                            {% if order.request_return == 4 %}
+                                <b> Return Status:</b><div class="greenstatus"> It was successfully returned</div><br>
+                            {% endif %}
+
+
+                            <hr>
+
+
+                            <b>Return Quantity:  </b>{{ order.return_quantity }}<br>
+
+
+                            <b>Return Refund to customer:  </b>{{ order.return_amount }} BTC<br>
+
+
+
+
+
+                            <h4>Please Return Item  to:</h4>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <address>
+                                        <strong>Return Address:</strong><br><br>
+                                        {{ returns.name|safe }}<br>
+                                        {{ returns.street|safe }}<br>
+                                        {{ returns.city|safe }}
+                                        {{ returns.state|safe }}
+                                        {{ returns.zip|safe }}<br>
+                                        {{ returns.country|safe }}<br>
+                                    </address>
+
+                                </div>
+                            </div>
+                            <div class="row" style="position:relative; min-height:250px;white-space: pre-line; ">
+                                <div class="col-12">
+                                    <strong>Message:</strong><br>
+                                    {{ returns.message|safe }}
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-12 col-sm-6 text-left"><!-- right side-->
+                            {% if current_user.id == order.customer_id %}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <strong>Add return info here</strong><br>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <form method="post">
+                                    {{ trackingform.csrf_token }}
+                                    <div class="form-group">
+                                        <label>Carrier</label>
+                                        {{ render_field(trackingform.carrier, class="form-control" ) }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>If Other Carrier</label>
+                                        {{ render_field(trackingform.othercarrier, class="form-control" ) }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tracking Number</label>
+                                        {{ render_field(trackingform.trackingnumber, class="form-control" ) }}
+                                    </div>
+                                    <div class="text-center">
+                                        {{ render_field(trackingform.submit, class="btn btn-primary", value="Mark as Shipped Back") }}
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+
+
+
+
+
+
+                    {% elif order.request_return == 3 %}
+                        <div class="col-12 col-sm-6 text-left"><!-- left side-->
+
+                            {% if order.request_cancel == 1 %}
+                                <b> Order Status: </b><div class="redstatus">Request to Cancel Order Sent to Vendor</div><br>
+                            {% endif %}
+
+                            {% if order.cancelled == 1 %}
+                                <b>Order Status: </b><div class="redstatus">Order Cancelled</div><br>
+                            {% endif %}
+                            {% if order.request_return == 1 %}
+                                <b>Return Status:</b><div class="redstatus">  Return Address Needed by Vendor</div><br>
+                            {% endif %}
+
+                            {% if order.request_return == 2 %}
+                                <b> Return Status:</b><div class="redstatus"> Waiting on customer to mark as shipped</div><br>
+                            {% endif %}
+
+                            {% if order.request_return == 3 %}
+                                <b>  Return Status:</b><div class="redstatus"> Waiting on vendor to mark as received</div><br>
+                            {% endif %}
+                            {% if order.request_return == 4 %}
+                                <b> Return Status:</b><div class="greenstatus"> It was successfully returned</div><br>
+                            {% endif %}
+
+
+                            <b>Return Quantity:  </b>{{ order.return_quantity }}<br>
+
+                            <b>Return Refund:  </b>{{ order.return_amount }} BTC<br>
+
+                            {% if returntracking.othercarrier|length >2 %}
+                                <b>Another Carrier #:  </b>{{ returntracking.othercarrier }}<br>
+                            {% else %}
+                                <b>Return Carrier:  </b>{{ returntracking.carrier|carrierformat }}<br>
+                            {% endif %}
+
+                            <b>Return Tracking #:  </b>{{ returntracking.trackingnumber }}<br>
+
+                            <b>Return Age:  </b>{{ moment(timestamp=order.returncancelage, local=False).fromNow(refresh=True)  }}<br>
+
+                            <hr>
+
+
+
+                            <address>
+                                <strong>Return Address:</strong><br>
+                                {{ returninfo.name|safe }}<br>
+                                {{ returninfo.street|safe }}<br>
+                                {{ returninfo.city|safe }}
+                                {{ returninfo.state|safe }}
+                                {{ returninfo.zip|safe }}<br>
+                                {{ returninfo.country|safe }}<br>
+                            </address>
+
+
+
+
+
+                            <strong>Message:</strong>
+                            {{ returninfo.message|safe }}
+
+
+                            <hr>
+
+                            <div class="col-12" style="font-size: 11px;">
+                                *customer handles return shipping costs.  Amount refunded is awarded after
+                                vendor has marked the order as "successfully returned." If Item was marked as
+                                shipped, vendor keeps shipping costs.
+                            </div>
+                        </div>
+                        {% if current_user.id == order.vendor_id %}<!-- right side-->
+                            <div class="text-center"> <h4>Mark as Recieved</h4></div>
+                            <div class="col-12 col-sm-6 text-center">
+                                <a class="btn btn-warning" href="{{ url_for('vendor.vendorOrders_recievereturn',id=order.id) }}"
+                                   role="button">Recieved Return
+                                </a>
+                            </div>
+                            <br><br>
+                            <div style="font-size: 11px;">
+                                Once you mark an ordere as recieved, the return refund will be issued and the issue is resolved.  Only
+                                release if you are sure you have received the item.
+                            </div>
+                        {% endif %}
+
+
+                        </div>
+
+
+
+
+
+
+
+
+                        <!-- successful return -->
+                    {% elif order.request_return == 4 %}
+                        <div class="col-12 col-sm-6 text-left">
+
+                            {% if order.request_return == 4 %}
+                                <b> Return Status:</b><div class="greenstatus"> It was successfully returned</div><br>
+                            {% endif %}
+
+                            <b>Return Quantity:  </b>{{ order.return_quantity }}<br>
+                            <b>Return Refund:  </b>{{ order.return_amount }} BTC<br>
+
+                            <div class="row" style="font-size: 11px">
+
+                                *customer handles return shipping costs.  Amount refunded is awarded after
+                                vendor has marked the order as "successfully returned." If Item was marked as
+                                shipped, vendor keeps shipping costs.
+                            </div>
+
+
+                        </div>
+                        <!-- finalized -->
+                    {% elif order.request_return == 5 %}
+                        <div class="col-12 col-sm-6 text-left"><!-- left side-->
+
+                            <strong>Return Status:</strong> <div class="clearnetgreen"> Successful return</div><br>
+
+
+                            <strong>Return info:</strong><div class="clearnetred"> Deleted</div><br>
+
+
+                            <strong>Shipping info:</strong><div class="clearnetred"> Deleted</div><br>
+
+
+                        </div>
+                    {% else %}
+                    {% endif %}
+
+                </div>
+
+            {% else %}
+
+            {% endif %}
+
+
+        {% elif order.type == 2 %}
+
+        {% elif order.type == 3 %}
+
+        {% else %}
+
+        {% endif %}
+
+    <div class="row">
+        <div class="col-12" style="margin-bottom: 100px;">
+        </div>
+    </div>
+
+
+{% endblock %}

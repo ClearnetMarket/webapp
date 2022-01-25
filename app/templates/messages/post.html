@@ -1,0 +1,108 @@
+{% extends "/layouts/message_layout.html" %} {% block content %} {% if
+form2.adduserbody.errors %}
+
+<div id="form_error">
+  {% for error in form2.adduserbody.errors %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    {{ error }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %} {% if form1.msgplace.errors %}
+
+<div id="form_error">
+  {% for error in form1.msgplace.errors %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    {{ error }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %} {% if post %}
+
+<div class="row">
+  <div class="col-12 col-sm-4"><b>Conversation ID# :</b></div>
+  <div class="col-12 col-sm-1">{{ post.id }}</div>
+  <div class="col-12col-sm-7"></div>
+</div>
+
+<div class="row" style="margin-bottom: 10px">
+  <div class="col-12 col-sm-2"><b>Users :</b></div>
+  <div class="col-12 col-sm-3">
+    {{ user1.username }} <br />
+    {{ user2.username }} <br />
+    {{ user3.username }}
+  </div>
+</div>
+
+<form class="form-inline" method="POST" style="margin-bottom: 10px">
+  <div class="form-group">
+    {{ form2.csrf_token }} {{ render_field(form2.adduserbody,
+    placeholder="clearnet_webapp Username", autocomplete="off",
+    class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form2.submit2, value= "Add User to Conversation",
+    autocomplete="off", class="btn btn-primary") }}
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-12">
+    *If you want to add and Clearnet Market moderator to the conversation,then type
+    "Clearnet Market" for add user to conversation. This will bring a person help
+    with your message.
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <hr style="width: 100%" />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-4"><b>From: </b>{{ user1.author_id|username }}</div>
+  <div class="col-4"></div>
+  <div class="col-4">
+    {{ moment(timestamp=post.timestamp, local=False).format('L') }}
+  </div>
+</div>
+
+<div class="row" style="height: 15px">
+  <div class="col-12"><b>Subject: </b>{{ user1.subject }}</div>
+</div>
+
+<div class="row mb-1 mt-1 p-3">
+  <div class="col-12">{{ user1.body }}</div>
+</div>
+<form method="POST">
+  <div class="row">
+    {{ form1.csrf_token }}
+    <div class="form-group">
+      <div class="col-12">
+        {{ render_field(form1.msgplace, class="form-control", rows="4",
+        cols="70", placeholder="Your comment here") }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2 col-xs-offset-10">
+      {{ render_field(form1.submit1, value= "Reply", autocomplete="off",
+      class="btn btn-primary") }}
+    </div>
+  </div>
+</form>
+<hr style="width: 100%" />
+
+{% if comments %}
+<div class="row">
+  <div class="col-12">{% include '/posts/_comments.html' %}</div>
+</div>
+
+{% endif %} {% endif %} {% endblock %}

@@ -1,0 +1,68 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <div class="row">
+
+        <div class="col-12 col-md-2 d-none d-md-block">
+            {% include 'profile/profiles/prototype.html' %}
+        </div>
+
+        <div class="col-12 col-md-9 offset-md-1 offset-lg-1">
+                {% include '/profile/account_widgets/_topbar.html' %}
+            <!-- Top  Selling Items -->
+            {% if getitemscount > 0 %}
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-12" style="font-size: 20px;">
+                        {{ user.username }}'s top Items<hr>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {% for item in getitems %}
+                        <div class="col-12 col-sm-6 col-md-3 col-md-offset-1 pull-left border graybg ">
+                            <div class="row">
+                                {% include 'search/searchresults/_item_threecolumn.html' %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Newest Items -->
+
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-12" style="font-size: 20px;">
+                        {{ user.username }}'s Newest Items<hr>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {% for item in getnewitems %}
+                        <div class="col-12 col-sm-6 col-md-3 col-md-offset-1 pull-left border graybg ">
+                            <div class="row">
+                                {% include 'search/searchresults/_item_threecolumn.html' %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+
+
+            {% else %}
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-12" style="font-size: 20px;">
+                        {{ user.username }} has no items for sale<hr>
+                    </div>
+                </div>
+            {% endif %}
+
+
+
+
+
+
+        </div><!-- End Content column -->
+    </div><!-- end content-->
+
+
+
+{% endblock %}

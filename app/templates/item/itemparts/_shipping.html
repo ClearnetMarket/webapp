@@ -1,0 +1,118 @@
+<!--shipping-->
+<div class="row bg-white border mb-3 p-2">
+    <div class="col-12 text-left">
+        <h5>Shipping Info</h5>
+        <hr>
+    </div>
+
+    <table class="table col-12 border" >
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>From</th>
+            <th>To</th>
+        </tr>
+
+        {% if item.shippingfree == 1 %}
+            <tr>
+                <td>{{ item.shippinginfo0 }}</td>
+                <td><div class="btcorange">FREE</div></td>
+                <td>{{ item.shippingdayleast0 }} days</td>
+                <td>{{ item.shippingdaymost0 }} days</td>
+            </tr>
+        {% endif %}
+
+        {% if item.shippingtwo == 1 %}
+            <tr>
+                <td>{{ item.shippinginfo2 }}:</td>
+                <td>
+                    {{ item.shippingprice2 }}{{ item.currency|currencyformat }}
+                    {% if current_user.is_authenticated %}
+                        {% if item.currency != current_user.currency %}
+
+                            ({{ item.shippingprice3|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                            {{ current_user.currency|currencyformat }})
+
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>{{ item.shippingdayleast2 }} days</td>
+                <td>{{ item.shippingdaymost2 }} days</td>
+            </tr>
+        {% endif %}
+
+        {% if item.shippingthree == 1 %}
+            <tr>
+                <td>{{ item.shippinginfo3 }}:</td>
+                <td>{{ item.shippingprice3 }}{{ item.currency|currencyformat }}
+
+                    {% if current_user.is_authenticated %}
+                        {% if item.currency != current_user.currency %}
+
+                            ({{ item.shippingprice3|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                            {{ current_user.currency|currencyformat }})
+
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>{{ item.shippingdayleast3 }} days</td>
+                <td>{{ item.shippingdaymost3 }} days</td>
+            </tr>
+        {% endif %}
+    </table>
+</div>
+<!--END shipping-->
+
+<!--Not shipping-->
+    {% if item.notshipping1 != 0
+        or  item.notshipping2 != 0
+        or item.notshipping3 != 0
+        or item.notshipping4 != 0
+        or item.notshipping5 != 0
+        or item.notshipping6 != 0 %}
+
+
+
+        <div class="row bg-white border mb-3 p-2">
+            <div class="col-12 text-left">
+                <h5>Not Shipping Locations</h5>
+                <hr>
+            </div>
+                <div class="col-12 mb-1">
+                    <p class="font-weight-bold">The Vendor is not shipping to the follow locations and reserves the right
+                        to cancel the order: </p>
+                    {% if item.notshipping1 == 0 %}
+                    {% else %}
+                        {{ item.notshipping1|notshippingformat }}<br>
+                    {% endif %}
+
+                    {% if item.notshipping2 == 0 %}
+                    {% else %}
+                        {{ item.notshipping2|notshippingformat  }}<br>
+                    {% endif %}
+
+                    {% if item.notshipping3 == 0 %}
+                    {% else %}
+                        {{ item.notshipping3|notshippingformat  }}<br>
+                    {% endif %}
+
+                    {% if item.notshipping4 == 0 %}
+                    {% else %}
+                        {{ item.notshipping4|notshippingformat  }}<br>
+                    {% endif %}
+
+                    {% if item.notshipping5 == 0 %}
+                    {% else %}
+                        {{ item.notshipping5|notshippingformat  }}<br>
+                    {% endif %}
+
+                    {% if item.notshipping6 == 0 %}
+                    {% else %}
+                        {{ item.notshipping6|notshippingformat  }}<br>
+                    {% endif %}
+                </div>
+        </div>
+
+    {% else %}
+    {% endif %}
+<!--END Not shipping-->

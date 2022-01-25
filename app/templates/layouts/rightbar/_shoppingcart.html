@@ -1,0 +1,19 @@
+{% if tot >=1 %}
+    <div id="shoppingcart_mainpage" class="text-center">
+    <div id="center_shopping_icon">
+        <span class="fa fa- shopping-cart" aria-hidden="true"></span>
+    </div>
+    <hr>
+
+    Items in cart: {{ tot }}
+
+    <div id="shoppingcart_checkoutbutton">
+    <a class="btn btn-warning" href="{{ url_for('item.shoppingcart') }}" role="button">
+        Secure Checkout
+        <span class="fa fa- chevron-right" aria-hidden="true" style="font-size: 20px;">
+        </span>
+    </a>
+    </div>
+    </div>
+
+{% endif %}

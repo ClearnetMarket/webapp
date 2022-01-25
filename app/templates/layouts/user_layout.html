@@ -1,0 +1,20 @@
+{% from "_formhelpers.html" import render_field %} {% include
+'layouts/headers/_headerplain.html' %} {% include
+'layouts/sublayout/_flashbar.html' %}
+<body>
+  <!--User side -->
+  <div id="leftwing_holder">
+    {% if user %} {% if user.vendor_account == 1 %} {% include
+    '/profile/profiles/_vendorprofile.html' %} {% else %} {% include
+    '/profile/profiles/_userprofile.html' %} {% endif %} {% else %} {% include
+    '/profile/profiles/_profile_guest.html' %} {% endif %}
+  </div>
+  <!--end User side -->
+
+  <!--content -->
+  <div class="container clearnetcontainer">
+    {% block content %} {% endblock %}
+  </div>
+  <!--endcontent -->
+</body>
+{% include 'layouts/subindex/_footer.html' %}

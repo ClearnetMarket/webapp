@@ -1,0 +1,103 @@
+
+<div id="item_relevant_listings">
+    <h3>Relevant Listings</h3>
+        <div class="owl-carousel owl-theme">
+            {% for item in itemsinrelated %}
+                <div id="item_relevant_listings_itemholder">
+                            <div id="simpleitem_image">
+             <a href="{{ url_for('item.Itemforsale', id=item.id) }}">
+            <img src="{{ url_for('userdata.media_file',
+            filename=('item/' + sale.stringnodeid +item.stringauctionid + item.imageone + "_250x.jpg")) }}">
+            </a>
+        </div>
+        <div id="simpleitem_title" class="text-center"><b>{{ item.itemtitlee }}</b></div>
+        <div id="simpleitem_pricelocal" class="text-center"><b>
+            {{ item.price }}
+             {{ item.currency|currencyformat }}</b></div>
+        <div id="simpleitem_price" class="text-center">
+            {{ item.price|btcprice(currency=item.currency) }} BTC
+        </div>
+                    <div id="item_relevant_listings_rating" class="text-center">
+                        {%  if item.itemrating == 0 %}
+                        <div id="top_title_reviews_Vendor_5" class="text-center">
+                                No ratings
+                        </div>
+                        {%  endif %}
+
+                        {%  if 0.499 >= item.itemrating >= 0.0001  %}
+
+                            <img src="{{ url_for('static', filename='/images/stars/05stars.jpg'  )  }}" >
+
+                        {%  endif %}
+
+                        {%  if 0.999 >= item.itemrating >= 0.5  %}
+                             <div id="widthstars">
+                            <img src="{{ url_for('static', filename='/images/stars/05stars.jpg'  )  }}" >
+                            </div>
+                        {%  endif %}
+
+                        {%  if 1.4999 >= item.itemrating >= 1  %}
+                            <div id="widthstars" >
+                             <img src="{{ url_for('static', filename='/images/stars/10stars.jpg'  )  }}" >
+                            </div>
+                        {%  endif %}
+
+
+                        {%  if 1.99999 >= item.itemrating >= 1.5  %}
+                           <div id="widthstars" >
+                        <img src="{{ url_for('static', filename='/images/stars/15stars.jpg'  )  }}" >
+                            </div>
+                        {%  endif %}
+
+
+                        {%  if 2.4999 >= item.itemrating >= 2  %}
+                             <div id="widthstars">
+                            <img src="{{ url_for('static', filename='/images/stars/20stars.jpg' )}}" >
+                            </div>
+                        {%  endif %}
+
+                        {%  if 2.99999 >= item.itemrating >= 2.5  %}
+                           <div id="widthstars">
+                            <img src="{{ url_for('static', filename='/images/stars/25stars.jpg' )}}" >
+                            </div>
+                        {%  endif %}
+
+
+                        {%  if 3.499 >= item.itemrating >= 3  %}
+                           <div id="widthstars" >
+                            <img src="{{ url_for('static', filename='/images/stars/30stars.jpg'  )  }}" >
+                             </div>
+                        {%  endif %}
+
+                        {%  if 3.99999 >= item.itemrating >= 3.5  %}
+                            <div id="widthstars" >
+                            <img src="{{ url_for('static', filename='/images/stars/35stars.jpg'  )  }}" >
+                            </div>
+                        {%  endif %}
+
+
+                        {%  if 4.499 >= item.itemrating >= 4  %}
+                           <div id="widthstars" >
+                             <img src="{{ url_for('static', filename='/images/stars/40stars.jpg'  )  }}" >
+                            </div>
+                        {%  endif %}
+
+                        {%  if 4.99999 >= item.itemrating >= 4.5  %}
+                            <div id="widthstars" >
+                            <img src="{{ url_for('static', filename='/images/stars/45stars.jpg'  )  }}" >
+                            </div>
+                        {%  endif %}
+
+                        {%  if item.itemrating == 5  %}
+                             <div id="widthstars" >
+                            <img src="{{ url_for('static', filename='/images/stars/50stars.jpg'  )  }}">
+                            </div>
+                        {%  endif %}
+                    </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+

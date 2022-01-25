@@ -1,0 +1,77 @@
+{% if expcount > 0 %}
+            <div class="row">
+                <div class="col-sm-12" style="font-size: 20px; ">
+                    Recent Exp Points
+                </div>
+            </div>
+            <hr>
+
+
+            <table class="col-12" style="margin-bottom: 100px;">
+            <tr>
+
+                <th class="col-4 bluetable">
+                    Age
+                </th>
+                <th class="col-6 bluetable">
+                    Description
+                </th>
+                <th class="col-2 bluetable">
+                    Amount
+                </th>
+            </tr>
+
+            <tr>
+
+            {% for e in exp %}
+                <tr>
+                    <!-- Title -->
+
+                     <!-- Quanity-->
+                    <td class="col-4 linkcolor">
+
+                        {{ moment(timestamp=e.timestamp, local=False).fromNow(refresh=True)  }}
+                    </td>
+                     <!-- Price -->
+                    <td class="col-6 linkcolor">
+                        {% if e.type == 1 %}
+                            User bought an item
+                        {% elif e.type == 2 %}
+                            Vendor left a review for a user
+                        {% elif e.type == 3 %}
+                            User left a review for an item
+                        {% elif e.type == 4 %}
+                            Gave Clearnet Market feedback or found a bug
+                        {% elif e.type == 5 %}
+                            Finalized Early
+                        {% elif e.type == 6 %}
+                            User recieved a review
+                        {% elif e.type == 7 %}
+                            Vendor recieved a review
+                        {% elif e.type == 8 %}
+                            User cancelled an order
+                        {% elif e.type == 9 %}
+                            Vendor cancelled an order
+                        {% elif e.type == 10 %}
+                            Customer returned item
+                        {% elif e.type == 11 %}
+                            Vendor Sold an item
+                        {% elif e.type == 15 %}
+                            BTC Trade
+
+                        {% elif e.type == 20 %}
+                            Digital Trade
+                        {% else %}
+                        {% endif %}
+                    </td>
+                    <td class="col-2 btcorange">
+                        {{ e.amount }} points
+                    </td>
+                </tr>
+            {% endfor %}
+         </table>
+        {% else %}
+
+        {% endif %}
+
+

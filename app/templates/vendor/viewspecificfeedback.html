@@ -1,0 +1,125 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('vendor.itemsforSale') }}">My Items</a></li>
+        </ol>
+    </nav>
+
+    {% if form.addreply.errors %}
+        <div id="formerrorholder">
+        <!--Item title -->
+        <div id="form_error">
+            {% for error in form.addreply.errors %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    Add Reply: {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-12">
+            <h4>You Are Viewing Feedback For: Order #
+                {{ rating.sale_id }} </h4>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% include 'vendor/_ordersspecs.html' %}
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px; margin-top: 10px;  ">
+        <div class="col-12">
+            <b>Buyer:</b>
+            {{ rating.customername }}
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <b>The seller Left these stars:</b><br>
+            <b>Vendor Rating:</b>
+
+            {% if rating.vendorrating == 1 %}
+                <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}">
+            {% endif %}
+
+            {% if rating.vendorrating == 2 %}
+                <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}">
+            {% endif %}
+
+            {% if rating.vendorrating == 3 %}
+                <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}">
+            {% endif %}
+
+            {% if rating.vendorrating == 4 %}
+                <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}">
+            {% endif %}
+
+            {% if rating.vendorrating == 5 %}
+                <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
+            {% endif %}
+
+            {% if order.type == 3 %}
+            {% else %}
+                <b>Item Rating:</b>
+
+                {% if rating.itemrating == 1 %}
+                    <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}">
+                {% endif %}
+
+                {% if rating.itemrating == 2 %}
+                    <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}">
+                {% endif %}
+
+                {% if rating.itemrating == 3 %}
+                    <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}">
+                {% endif %}
+
+                {% if rating.itemrating == 4 %}
+                    <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}">
+                {% endif %}
+
+                {% if rating.itemrating == 5 %}
+                    <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <b>Comment:</b>
+            {{ rating.comment }}
+        </div>
+    </div>
+
+    {% if ileftfeedback %}
+        <div class="row">
+            <div class="col-12">
+                {{ ileftfeedback.timestamp }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{ ileftfeedback.body }}
+            </div>
+        </div>
+    {% else%}
+    {% endif %}
+
+
+{% endblock %}

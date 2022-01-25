@@ -1,0 +1,28 @@
+
+
+{% for btc in btcprice %}
+
+    {% if btc.hlUSD == 1 %}
+        <div class="row green" style="max-width: 1000px; margin: 0 auto; margin-bottom: 10px;">
+            <div class="hidden-xs col-sm-1"></div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-up" aria-hidden="true"></span>USD : {{ btc.USD }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-up" aria-hidden="true"></span> EUR: {{ btc.EUR }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-up" aria-hidden="true"></span>RUB: {{ btc.RUB }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-up" aria-hidden="true"></span>INR: {{ btc.INR }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-up" aria-hidden="true"></span>CNY: {{ btc.CNY }}</div>
+            <div class="hidden-xs col-sm-1"></div>
+        </div>
+
+    {% else  %}
+        <div class="row red" style="max-width: 1000px;margin: 0 auto; margin-bottom: 10px;">
+            <div class="hidden-xs col-sm-1"></div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-down" aria-hidden="true"></span>USD : {{ btc.USD }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-down" aria-hidden="true"></span> EUR: {{ btc.EUR }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-down" aria-hidden="true"></span>RUB: {{ btc.RUB }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-down" aria-hidden="true"></span>INR: {{ btc.INR }}</div>
+            <div class="hidden-xs col-sm-2"><span class="fa fa- arrow-down" aria-hidden="true"></span>CNY: {{ btc.CNY }}</div>
+            <div class="hidden-xs col-sm-1"></div>
+        </div>
+    {% endif  %}
+{% endfor %}
+

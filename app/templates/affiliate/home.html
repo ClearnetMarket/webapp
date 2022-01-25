@@ -1,0 +1,140 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+
+    <div style="margin-bottom: 50px;">
+        {% include '/affiliate/homecontent/_bannertop.html' %}
+    </div>
+    <div class="row">
+        <div class="col-12 text-center linkcolor" style="margin-bottom: 25px;">
+            Using images helps attract users to click on your promo ad.
+            <a href="{{ url_for('affiliate.aff_images') }}">
+                Find images to use for your site like the one below
+                <img src="{{ url_for('static', filename='/images/affiliate/afflogo1.png')  }}" width="325px" height="325px">
+            </a>
+        </div>
+    </div>
+    <div class="row border graybg" style="margin-bottom: 50px; padding: 10px;">
+        <div class="col-12 text-left">
+            {% if userpromocode == None %}
+                <form method="post">
+                    {{ promocodeform.csrf_token }}
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-12 col-sm-4 col-sm-offset-4">Create A Promo Code</label>
+                            <div class="col-12 col-sm-4 col-sm-offset-4">
+                                {{ render_field(promocodeform.thecode, class="form-control") }}
+                            </div>
+                            <div class="col-12 col-sm-4 col-sm-offset-4" style="font-size: 10px; margin-bottom: 20px;">
+                                5-15 character long code.  Make it easy to understand so people remember.  Cannot
+                                be changed.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            {{ render_field(promocodeform.submit, class="btn btn-warning", value="Create Code") }}
+                        </div>
+                    </div>
+                </form>
+            {% else %}
+                <div class="text-center"><h4><b>Promo Code:</b> {{ userpromocode.promocode }}<br></h4></div>
+
+                <b>Status:</b> Affiliate Active <br><br>
+                <b>Buyer Discount:</b> {{ userpromooverview.buyerdiscount }} %<br>
+                <b>Your Profit/per order:</b> {{ userpromooverview.aff_fee }} %<br>
+                <br>
+                <h4>Stats</h4>
+                <b>Total Orders:</b> {{ userpromostats.totalitemsordered }}<br>
+
+                <b>Promo Entered Count:</b> {{ userpromostats.promoenteredcount }}<br>
+                <br>
+                <h4>BTC</h4>
+
+                <b>BTC earned:</b>
+                {% if userpromostats.btc_earned == 0%}
+                    <div class="btcorange">  0 BTC</div>
+                {% else %}
+                    <div class="btcorange"> {{ userpromostats.btc_earned }} BTC</div>
+                {% endif %}
+                <br>
+
+                <br>
+                <h4>BCH</h4>
+                <b>BCH earned:</b>
+                {% if userpromostats.btc_cash_earned == 0%}
+                    <div class="btccash"> 0 BCH</div>
+                {% else %}
+                    <div class="btccash"> {{ userpromostats.btc_cash_earned }} BCH</div>
+                {% endif %}
+                <br>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+    <h4>Promo Codes Used on Orders</h4>
+    <table class="table col-12">
+        <tr>
+            <th class="bluetable col-1">Order ID</th>
+            <th class="bluetable col-2">Age</th>
+            <th class="bluetable hidden-xs col-sm-3">Customer</th>
+            <th class="bluetable col-3">Item</th>
+            <th class="bluetable col-3">Profit</th>
+        </tr>
+        {% if userpromocode == None %}
+            <tr>
+                <td class="col-12 text-center" style="margin-top: 25px; font-size: 18px">You do not have a promo code </td>
+            </tr>
+        {% else %}
+            {% for promoorder in latest_affiliates %}
+                <tr>
+                    <td class="col-1">
+                        {{ promoorder.id }}
+                    </td>
+                    <td class="col-2">
+                        {{ moment(timestamp=promoorder.age, local=False).fromTime(now)  }}
+                    <td class="col-3">
+                        {{ promoorder.customer }}
+                        ({{ promoorder.customer_id|userrating }})
+                        ({{ promoorder.customer_id|avguserrating }}
+                        <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
+                             width="15px" height="15px">)
+                    </td>
+                    <td class="hidden-xs col-sm-4 linkcolor">
+                        <a href="{{ url_for('item.Itemforsale',id=promoorder.item_id) }}">
+                            {{ promoorder.title }}
+                        </a>
+                    </td>
+                    <td class="col-6 col-sm-2">
+                        {% if promoorder.affiliate_discount_btc == 0%}
+
+                        {% else %}
+
+                            <div class="btcorange"> {{ promoorder.affiliate_profit }} BTC</div>
+                        {% endif %}
+
+
+                        {% if promoorder.affiliate_discount_btc_cash == 0%}
+
+                        {% else %}
+                            <div class="btccash"> {{ promoorder.affiliate_profit }} BTC</div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+
+
+{% endblock %}
+
+

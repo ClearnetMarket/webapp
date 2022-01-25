@@ -1,0 +1,47 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+
+        </ol>
+    </nav>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>Cancel Verification</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <p>Please Note:</p>
+                <ul>
+                    <li>If you request to an admin about getting your money, they cant help.  No open orders
+                        to get the money back.  A generic copy paste response will be given. </li>
+                    <li>You can always get a verification in the future.</li>
+
+                </ul>
+            </div>
+        </div>
+
+        <form method="post">
+            {{ form.csrf_token }}
+            <div class="row border graybg" style="margin: 0 auto; max-width: 300px;padding: 10px;">
+                <div class="col-12 text-center">
+                    <h4></h4>
+                    <br>
+                    <img src="{{ url_for('static', filename='/images/trustlevel/' + user1pictureid + '.png')  }}"
+                         width="125px" height="30px">
+                    <br><br><br>
+                    <b><b>Deposit Amount: {{ getverify.amount }}</b>
+                        <br>
+                        {{ render_field(form.confirmcancel, class="btn btn-warning", Value="Confirm Refund") }}
+                </div>
+            </div>
+        </form>
+
+
+{% endblock %}

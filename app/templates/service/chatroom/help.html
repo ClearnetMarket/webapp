@@ -1,0 +1,92 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceMessage') }}">My Issues</a></li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div id="form_error">
+            {% if postform.bodyofchat.errors %}
+                {% for error in postform.bodyofchat.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        Chat Error: {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if current_user.admin == 1 %}
+        <form method="post">
+        {{ adminform.csrf_token }}
+            <div class="row graybg border" style="margin-bottom: 25px;">
+                <div class="hidden-xs col-sm-6"></div>
+                <div class="col-4 col-sm-2">
+                    {{ render_field(adminform.resolved, value= "Resolved", autocomplete="off", class="btn btn-warning") }}
+                </div>
+                <div class="col-4 col-sm-2">
+                    {{ render_field(adminform.becomeadmin, value= "Become Admin", autocomplete="off", class="btn btn-primary") }}
+                </div>
+                <div class="col-4 col-sm-2">
+                    {{ render_field(adminform.delete, value= "Delete", autocomplete="off", class="btn btn-danger") }}
+                </div>
+            </div>
+        </form>
+    {% else %}
+    {% endif %}
+
+
+    <div class="row graybg border">  <!-- left side -->
+
+        <div class="col-12 col-sm-6"
+             style="border-right: solid;
+              border-right-color: gray;
+               border-right-width: 1px;">
+            <b>Issue ID:</b> {{ theissue.id }}<br>
+            {% if theissue.status == 0 %}
+                <b>Status:</b> Open Issue<br>
+            {% elif theissue.status == 1 %}
+                <b>Status:</b> Closed Issue<br>
+            {% else %}
+                <b>Status:</b><br>
+            {% endif %}
+            <b>Age:</b> {{ moment(timestamp=theissue.timestamp, local=False).fromNow(refresh=True)  }}<br>
+            {% if moderator == 0 %}
+                <b>Moderator:</b><br>
+                A mod will join the
+                conversation within 24 hours.
+                You can come back to this window later by viewing "customer service"
+                on the home page.
+                <br>
+                <hr>
+            {% else %}
+                <b>Moderator:</b> {{ getmod.username }}<br>
+            {% endif %}
+
+        </div>  <!-- left side -->
+
+        <div class="col-12 col-sm-6" ><!-- right side -->
+            {% if theissue.status == 0 %}
+                <form method="POST">
+                    {{ postform.csrf_token }}
+                    <div class="form-group">
+                        {{ render_field(postform.bodyofchat, class="form-control", rows="3", placeholder="Your comment here") }}
+                    </div>
+                    <div class="form-group text-center">
+                        {{ render_field(postform.post, value= "Post", autocomplete="off", class="btn btn-primary") }}
+                    </div>
+                </form>
+            {% else %}
+            {% endif %}
+        {% for comment in comments %}
+            {% include '/posts/_commentsinsidepicnoorder.html' %}
+        {% endfor %}
+        </div><!-- right side -->
+    </div>
+
+{% endblock %}

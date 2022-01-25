@@ -1,0 +1,62 @@
+
+<footer class="w-100 mt-5" style="background-color: #333; overflow: hidden">
+    <div class="row " style="max-width: 1000px; margin: auto;">
+
+        <div class="col-md-3 col-lg-3 d-none d-md-block">
+            <div class="btnwhite"> <h4>Wallet Directory</h4></div>
+            <ul class="nav nav-pills nav-stacked">
+
+                <li class="nav-item nav-link w-100"><a href="https://blockchain.info/">Blockchain</a></li>
+                <li class="nav-item nav-link w-100"><a href="https://blockchainbdgpzk.onion/">Blockchain Tor</a></li>
+            </ul>
+        </div>
+
+        <div class=" col-md-3 col-lg-3 d-none d-md-block">
+            <div class="btnwhite"> <h4>User Directory</h4></div>
+
+            <ul class="nav nav-pills nav-stacked">
+                <li class="nav-item nav-link w-100"><a href="{{ url_for('auth.myAccount', username=current_user.username) }}">Account Settings</a></li>
+                <li class="nav-item nav-link w-100"> <a href="{{ url_for('auth.retrievepassword') }}">Account Password</a></li>
+                {% if current_user.vendor_account == 1 %}
+                {% else %}
+                    <li class="nav-item nav-link w-100"><a href="{{ url_for('auth.becomeVendor', username=current_user.username) }}">Become a Vendor</a></li>
+                {% endif %}
+                <li class="nav-item nav-link w-100"><a href="{{ url_for('profile.user', username=current_user.username) }}">My Stats</a></li>
+                <li class="nav-item nav-link w-100"><a href="{{ url_for('main.levels') }}">Trust level and levels/EXP</a></li>
+                <li class="nav-item nav-link w-100"><a href="{{ url_for('main.allachievements_main') }}">View Achievements</a></li>
+            </ul>
+        </div>
+
+        <div class="col-12 col-sm-3 col-md-3 col-lg-3 ">
+            <div class="btnwhite"> <h4>Clearnet Market</h4></div>
+
+            <ul class="nav nav-pills nav-stacked">
+                <li class="nav-item nav-link w-100"><a href="{{ url_for('main.about') }}">About Clearnet</a></li>
+                 <li class="nav-item nav-link w-100"><a href="{{ url_for('service.customerserviceHome') }}">FAQ</a></li>
+                <li class="nav-item nav-link w-100"><a href="{{ url_for('service.feedback') }}">Feedback and Bug Reports</a></li>
+                <li class="nav-item nav-link w-100"><a href="{{ url_for('main.advertise') }}">Advertise</a></li>
+
+
+            </ul>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+
+
+        </div>
+    </div>
+  <div class="row" style="margin-top: 50px; max-width: 1000px;  border-top: 1px solid rgba(255,255,255,.25);">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6 " style="color: #FFFFFF ">
+          Copyright 2018 ProtosCoin LLC
+
+      </div>
+    <div class="col-12 col-sm-2 col-md-2 col-lg-2 " style="color: #FFFFFF ">
+        <a href="{{ url_for('main.privacy') }}">Privacy Policy</a>
+
+      </div>
+    <div class="col-12 col-sm-2 col-md-2 col-lg-2" style="color: #FFFFFF ">
+          <a href="{{ url_for('main.termsofservice') }}">Terms of Use</a>
+      </div>
+  </div>
+</footer>
+</div><!--clearnetcontainer-->
+</html>

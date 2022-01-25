@@ -1,0 +1,144 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+        </ol>
+    </nav>
+
+    <!-- help topics Questions-->
+    <div class="row">
+        <h2>Common Account Questions</h2>
+    </div>
+    <a name='backtotop'></a>
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            <a href="#account1">Where do I go for account help and security?</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            <a href="#account2">I forgot my username</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            <a href="#account3">I forgot my password</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            <a href="#account4">I forgot my username, password, or pin</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            <a href="#account5">Can I change my username?</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 question linkcolor">
+            <a href="#account6">Can I delete my account?</a>
+        </div>
+    </div>
+    <br>
+
+
+    <!-- END help topics Questions -->
+
+    <h2>Answers</h2>
+    <!-- END help topics Answers -->
+    <div class="row question linkcolor">
+        <div class="col-12 ">
+            <a name='account1'></a>
+            <h4>Where do I go for account help and security?</h4>
+            <div class="text-right">
+                <a href="#backtotop" role="button">Back to top</a>
+            </div>
+        </div>
+        <div class="col-12">
+            Your account management page is  <a href="{{ url_for('auth.myAccount', username=current_user.username) }}">here. </a>
+        </div>
+    </div>
+
+
+
+    <div class="row question linkcolor">
+        <div class="col-12 ">
+            <a name='account2'></a>
+            <h4>I forgot my username</h4>
+            <div class="text-right">
+                <a href="#backtotop" role="button">Back to top</a>
+            </div>
+        </div>
+        <div class="col-12">
+            If you forgot you username, you can request it by sending your seed to an admin.</a>
+        </div>
+    </div>
+
+
+
+
+    <div class="row question linkcolor">
+        <div class="col-12 ">
+            <a name='account3'></a>
+            <h4>I forgot my password</h4>
+            <div class="text-right">
+                <a href="#backtotop" role="button">Back to top</a>
+            </div>
+        </div>
+        <div class="col-12">
+            If you forgot your password, you can reset it by  <a href="{{ url_for('auth.myAccount', username=current_user.username) }}">here. </a>
+        </div>
+    </div>
+
+
+    <div class="row question linkcolor">
+        <div class="col-12 ">
+            <a name='account4'></a>
+            <h4>  I forgot my username, password, and seed</h4>
+            <div class="text-right">
+                <a href="#backtotop" role="button">Back to top</a>
+            </div>
+        </div>
+        <div class="col-12">
+            Due to hackers, vulnerabilities, and the fact that we dont collect data about people,<br> you would
+            not be able to retrieve an account without the seed.
+        </div>
+    </div>
+
+    <div class="row question linkcolor">
+        <div class="col-12 ">
+            <a name='account5'></a>
+            <h4>Can I change my username</h4>
+            <div class="text-right">
+                <a href="#backtotop" role="button">Back to top</a>
+            </div>
+        </div>
+        <div class="col-12">
+            Our market system relies upon username trust and due to this we cannot change a name.
+            You would need to start a new account.
+        </div>
+    </div>
+
+    <div class="row question linkcolor">
+        <div class="col-12 ">
+            <a name='account6'></a>
+            <h4>Can I delete my account?</h4>
+            <div class="text-right">
+                <a href="#backtotop" role="button">Back to top</a>
+            </div>
+        </div>
+        <div class="col-12">
+            We have implement a way to delete account or information <a href="{{ url_for('auth.myAccount', username=current_user.username) }}">here. </a>
+            EVERYTHING is deleted from your account, we dont secretly store your info after we delete it.  We have no need
+            for information.
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,243 @@
+{% extends "/layouts/plain.html" %} {% block content %}
+
+<!-- select all boxes -->
+<script>
+  function toggle(source) {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] != source) checkboxes[i].checked = source.checked;
+    }
+  }
+</script>
+
+<nav aria-label="breadcrumb" class="linkcolor">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+  </ol>
+</nav>
+
+{% if current_user.is_authenticated %} {% if current_user.vendor_account ==1 %}
+<div class="row clearnetblue" style="margin-bottom: 25px">
+  <div class="hidden-xs hidden-sm col-md-12">
+    {% include '/layouts/subindex/_vendorbar.html' %}
+  </div>
+</div>
+
+{% else %} {% endif %} {% endif %}
+<div class="row">
+  <div class="col-12 text-center">
+    <h4>Notifications</h4>
+  </div>
+</div>
+
+<form method="post">
+  {{ delormarkasread.csrf_token }}
+
+  <div class="row">
+    <div class="col-12 text-left">
+      {{ render_field(delormarkasread.markasread, value='Mark as Read',
+      class="btn btn-primary") }} {{ render_field(delormarkasread.delete,
+      value='Delete', class="btn btn-danger") }}
+    </div>
+  </div>
+
+  <!-- select all boxes -->
+
+  <div class="row">
+    <div class="col-12 text-left">
+      <input type="checkbox" onclick="toggle(this);" />Select all<br />
+    </div>
+  </div>
+
+  {% if notifications %}
+  <table class="col-12">
+    <tr>
+      <th class="col-1" style="background-color: #0d579b; color: #fff"></th>
+      <th class="col-2" style="background-color: #0d579b; color: #fff">Date</th>
+      <th class="col-2" style="background-color: #0d579b; color: #fff">Age</th>
+      <th class="col-7" style="background-color: #0d579b; color: #fff">
+        Notification
+      </th>
+    </tr>
+    {% for note in notifications %}
+    <tr>
+      {% if note.read == 1 %}
+      <td class="col-1 bg-warning">{% else %}</td>
+
+      <td class="col-1">
+        {% endif %}
+        <input type="checkbox" name="checkit" value="{{" note.id }} />
+      </td>
+
+      {% if note.read == 1 %}
+      <td class="col-2 bg-warning">{% else %}</td>
+
+      <td class="col-2">
+        {% endif %} {{ moment(timestamp=note.timestamp, local=False).format('L')
+        }}
+      </td>
+
+      {% if note.read == 1 %}
+      <td class="col-2 linkcolor bg-warning">{% else %}</td>
+
+      <td class="col-1 linkcolor bg warning">
+        {% endif %} {{ moment(timestamp=note.timestamp,
+        local=False).fromNow(refresh=True) }}
+      </td>
+
+      {% if note.read == 1 %}
+      <td class="col-7 linkcolor bg-warning">{% else %}</td>
+
+      <td class="col-7 linkcolor">
+        {% endif %}
+        <!--sale-->
+        {% if note.type == 1 %} You have a new order. Order#<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        {% endif %} {% if note.type == 111 %} Order#<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        Has Been Finalized and marked as recieved {% endif %} {% if note.type ==
+        112 %} Your order has been successful. Order#<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        {% endif %}
+        <!--message-->
+        {% if note.type == 2 %}
+        <a href="{{ url_for('message.messagecenter') }}"
+          >You have a new message</a
+        >
+        {% endif %}
+        <!--Feedback-->
+        {% if note.type == 3 %} You have received Feedback for order#<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        {% endif %}
+        <!--dispute-->
+        {% if note.type == 4 %} You have received a dispute on order#<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        {% endif %}
+        <!--return-->
+        {% if note.type == 5 %} A return has been requested for order#<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        {% endif %} {% if note.type == 55 %} Customer has added tracking for
+        return on order#<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        {% endif %}
+
+        <!--bitcoin credit-->
+        {% if note.type == 6 %} You Account has been credited with {{
+        note.bitcoin }}BTC {% endif %}
+        <!--Cancelled Order-->
+        {% if note.type == 7 %} Order#
+        <a href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        has been cancelled {% endif %}
+        <!-- successful return-->
+        {% if note.type == 8 %} Item #<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        has been successfully returned. {% endif %}
+        <!-- sold out-->
+        {% if note.type == 9 %} Item #{{ note.salenumber }} has been sold out
+        and delisted. {% endif %}
+
+        <!-- Digital Trade-->
+        {% if note.type == 10 %} Trade #<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        has been started. {% endif %}
+
+        <!-- Cancelled Digital Trade-->
+        {% if note.type == 11 %} Trade #<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        has been cancelled. {% endif %}
+
+        <!-- Success Digital Trade-->
+        {% if note.type == 12 %} Trade #<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        has been finalized. {% endif %}
+
+        <!-- Dispute Digital Trade-->
+        {% if note.type == 13 %} Trade #<a
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
+          >{{ note.salenumber }}</a
+        >
+        has been disputed. {% endif %}
+
+        <!-- BTC Trade-->
+        {% if note.type == 15 %} BTC Trade #{{ note.salenumber }} has been
+        started. {% endif %}
+
+        <!-- Cancelled BTC Trade-->
+        {% if note.type == 16 %} BTC Trade #{{ note.salenumber }} has been
+        cancelled. {% endif %}
+
+        <!-- Success BTC Trade-->
+        {% if note.type == 17 %} BTC Trade #{{ note.salenumber }} has been
+        finalized. {% endif %}
+
+        <!-- Dispute BTC Trade-->
+        {% if note.type == 18 %} BTC Trade #{{ note.salenumber }} has been
+        disputed. {% endif %}
+        <!-- Message BTC Trade-->
+        {% if note.type == 19 %} BTC Trade #{{ note.salenumber }} has a new
+        message {% endif %}
+
+        <!-- Incorrect btc address for withdrawl-->
+        {% if note.type == 30 %} A withdrawl had an incorrect address {% endif
+        %}
+        <!-- Not enough bitcoin in wallet_btc to do withdrawl-->
+        {% if note.type == 31 %} Your withdrawl amount was too little or too
+        much {% endif %} {% if note.type == 32 %} Your bitcoin withdrawl has
+        been processed {% endif %} {% if note.type == 33 %} {% endif %} {% if
+        note.type == 34 %} Not enough bitcoin for the wallet to proceed with
+        transaction. {% endif %} {% if note.type == 200 %} Item id: {{
+        note.salenumber }} was delisted for improper title {% endif %} {% if
+        note.type == 201 %} Item id: {{ note.salenumber }} was delisted for
+        improper destination country one {% endif %} {% if note.type == 202 %}
+        Item id: {{ note.salenumber }} was delisted for improper origin country
+        one {% endif %} {% if note.type == 203 %} {% endif %} {% if note.type ==
+        204 %} Item id: {{ note.salenumber }} was delisted for having 0 quantity
+        {% endif %} {% if note.type == 205 %} Item id: {{ note.salenumber }} was
+        delisted for improper title {% endif %} {% if note.type == 206 %} Item
+        id: {{ note.salenumber }} had improper shipping info #2 {% endif %} {%
+        if note.type == 207 %} Item id: {{ note.salenumber }} had improper
+        shipping info #3 {% endif %} {% if note.type == 208 %} Item id: {{
+        note.salenumber }} was delisted for improper price {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</form>
+{% if notifications %}
+
+<div class="row text-center">
+  <div class="col-sm-3"></div>
+  <div class="col-12 col-sm-6">{{ pagination.info }}</div>
+  <div class="col-sm-3"></div>
+</div>
+
+<div class="d-flex justify-content-center linkcolor">
+  {{ pagination.links }}
+</div>
+
+{% else %} {% endif %} {% else %} No New Notifications {% endif %} {% endblock
+%}

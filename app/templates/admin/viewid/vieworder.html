@@ -1,0 +1,52 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"> <a  href="{{ url_for('wallet.walletHome') }}">Wallets</a></li>
+        </ol>
+    </nav>
+
+{% include 'vendor/_ordersspecs.html' %}
+
+
+  <div id="btctable">
+
+
+         <div class="text-center"><h4>Coin Exchange</h4></div>
+
+        {% for trade in transact %}
+
+                <div id="admin_latesttrade_holder" class="border">
+                    <div id="latesttrade_toppart_holder">
+                        <div id="admin_lasttraded"> {{ trade.userid|adminusername }}</div>
+                        <div id="admin_lasttraded" class="text-center green"> <span class="fa fa- arrow-right" aria-hidden="true"></span></div>
+                        <div id="admin_lasttraded"> {{ trade.otheraccount|adminusername }}</div>
+                        <div id="admin_lasttraded">{{ moment(timestamp=trade.created, local=False).fromNow(refresh=True)  }}</div>
+                        <div id="admin_lasttraded">
+                         {%  if trade.category == 3 %}
+                            user recieved money
+                        {% elif trade.category == 4 %}
+                             user sent money
+                        {% else %}
+                        {% endif %}
+
+                        </div>
+                    </div>
+                    <div id="admin_amount_lasttraded"  class="text-center">
+                        {{ trade.amount }}
+
+                    </div>
+                </div>
+            <br> <br>
+
+        {% endfor %}
+
+        </div>
+
+
+
+{% endblock %}

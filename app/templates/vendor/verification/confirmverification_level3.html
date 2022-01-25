@@ -1,0 +1,51 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        </ol>
+    </nav>
+		<div class="row">
+			<div class="col-12 text-center">
+                <h3>Confirm Verification</h3>
+			</div>
+		</div>
+
+
+
+<div class="row">
+	<div class="col-12">
+		<p>Please Note:</p>
+	    <ul>
+
+            <li>If you request to an admin about getting your money back early, they cant help.  No orders within a week
+            to get the money back.  A generic copy paste response will be given. </li>
+
+            <li>Once you confirm, you can get the money back if you havn't had any orders within 7 days..</li>
+
+	    </ul>
+	</div>
+</div>
+<form method="post">
+{{ form.csrf_token }}
+<div class="row border graybg" style="margin: 0 auto; max-width: 300px;padding: 10px;">
+    <div class="col-12 text-center">
+    <h4>Confirm Level 3 Verification</h4>
+        <br>
+         <img src="{{ url_for('static', filename='/images/trustlevel/'  + '3.png')  }}" width="125px" height="30px">
+        <br><br><br>
+        <b>Cost: {{ fivehundred }} BTC </b> ({{ 500|usdtocurrency(currency = current_user.currency) }}
+        {{ current_user.currency|currencyformat }})
+        <br>
+        {{ render_field(form.levelthree, class="btn btn-warning", Value="Send Coin") }}
+    </div>
+</div>
+</form>
+
+
+
+
+{% endblock %}

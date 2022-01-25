@@ -1,0 +1,46 @@
+{% extends "/layouts/default.html" %}
+{% block content %}
+
+    <div class="row">
+
+
+        <div class="col-12" style="border-bottom: 1px solid black; "><!--header -->
+            <h3>{{ getmaincat.catname0 }}</h3>
+        </div><!--end header -->
+
+
+        <div class="hidden-xs col-sm-2 linkcolor" style="margin-top: 25px; border-right: 1px solid black;"> <!--sidebar -->
+            {% for subcat in getcats %}
+                <a href="{{ url_for('category.viewcategory',maincatid = categoryid, categoryid=subcat.catid1) }}">
+                <h5>{{ subcat.catname1 }}</h5>
+                </a>
+                <br>
+            {% endfor %}
+        </div> <!--ENDsidebar -->
+
+
+        <div class="col-12 col-sm-9"><!--- middle part -->
+            <div class="row"><!--- Sort results -->
+                <div class="col-12">
+
+                </div>
+            </div><!--- END Sort results -->
+            <div class="row"><!--- Category NAme -->
+                <div class="col-12">
+                    {% include 'layouts/owlstuff/owlstuff.html' %}
+                    {% include '/search/categories/maincat/_newitems.html' %}
+                    {% include '/search/categories/maincat/_topsellers.html' %}
+                    {% include 'layouts/owlstuff/owlstuffregular.html' %}
+                </div>
+            </div><!--End Category name -->
+            <!--get specific kind of item format for listings -->
+        </div><!--ENDMIDDLE part-->
+
+
+
+    </div><!--END-->
+
+
+
+
+{% endblock %}

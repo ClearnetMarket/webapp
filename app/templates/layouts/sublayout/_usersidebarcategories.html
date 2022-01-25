@@ -1,0 +1,49 @@
+    <div id="store_sidebar">
+        <div id="store_seller_info_mainprofile">
+                <div id="seller_info_header">
+                    {% if hasprofileimage =="noimage"%}
+                     <img src="{{ url_for('static', filename='/images/profileimages/0.png')  }}" width="125px" height="125px">
+
+                    {% else %}
+                    <img src="{{ url_for('userdata.profile_image', filename=store.profileimage)  }}" width="125px" height="125px">
+                    {% endif %}
+                </div>
+                <div id="seller_info_badges">
+                       <img src="{{ url_for('static', filename='/images/rank-badge/' + pictureid + '.png')  }}" width="40px" height="40px">
+                        Lvl {{ getlevel.level }}
+                </div>
+
+                <div id="seller_info_name" class="linkcolor">
+                        <a href="{{ url_for('store.vendorProfile',vendor=vendorprofile.username) }}">{{ vendorprofile.username }}</a>
+
+                </div>
+                <div id="seller_info_ach1">
+                    <div id="seller_info_ach1_top">Vendor Rating</div>
+                    <div id="seller_info_ach1_bottom">{{ vendorstats.vendorrating }} out of 5</div>
+
+                </div>
+
+              <div id="seller_info_msg_profile">
+                <a class="btn btn-warning btnwhite" href="{{ url_for('message.messagecenter_Compose_specificperson', person=vendorprofile.username) }}" role="button">Send Message</a>
+            </div>
+
+        </div>
+
+
+        <hr class="style13">
+
+        <div id="store_sidebar_categories" class="linkcolor">
+        <b>{{ vendorprofile.username }}'s categories</b><br><br>
+
+
+        {% for item in allcat  %}
+
+             <a href="{{ url_for('store.vendorStore_specific_category', vendor=vendorprofile.username, category=(item.itemnumber)) }}">
+                {{ item.subname1 }} ({{ item.catcount }})
+             </a>
+            <br>
+
+
+        {% endfor %}
+        </div>
+    </div>

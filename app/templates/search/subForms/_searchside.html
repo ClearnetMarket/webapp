@@ -1,0 +1,60 @@
+
+<div class="row">
+    <label class="col-sm-12">Price</label>
+
+    <div class="col-mr-12">
+
+            <div1>
+                {% if lowprice == None  %}
+                    {{ render_field(sortresults.pricelow, class="form-control input-sm", value=0) }}
+                {% else %}
+                    {{ render_field(sortresults.pricelow, class="form-control input-sm", value=lowprice) }}
+                {% endif %}
+            </div1>
+
+            <div1>
+                {% if highprice == None  %}
+                    {{ render_field(sortresults.pricehigh, class="form-control input-sm", value=0) }}
+                {% else %}
+                    {{ render_field(sortresults.pricehigh, class="form-control input-sm", value=highprice) }}
+                {% endif %}
+            </div1>
+
+            <div1>
+                {{ render_field(sortresults.sort, class="btn btn-primary btn-xs", value="sort") }}
+            </div1>
+
+        <hr>
+        <label class="col-sm-12">Payment Methods</label>
+        <div class="form-group">
+            <div class="form-check">
+                {{ render_field(sortresults.btc, autocomplete="off", value=btccash_sort) }}
+                <label class="form-check-label" for="gridCheck">
+                    BTC Accepted
+                </label>
+            </div>
+            <div class="form-check">
+                {{ render_field(sortresults.btccash, autocomplete="off", value=btccash_sort) }}
+                <label class="form-check-label" for="gridCheck">
+                    BCH Accepted
+                </label>
+            </div>
+        </div>
+
+        <hr>
+        <label class="col-sm-12">Shipping</label>
+        <div class="form-group">
+            <div class="form-check">
+                {{ render_field(sortresults.freeshipping, autocomplete="off", value=shipping_sort) }}
+                <label class="form-check-label" for="gridCheck">
+                    Free Shipping
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                {{ render_field(sortresults.sort, class="btn btn-primary btn-xs", value="sort") }}
+            </div>
+        </div>
+    </div>
+</div>

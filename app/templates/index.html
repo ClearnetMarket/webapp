@@ -1,0 +1,34 @@
+{% extends "/layouts/home.html" %}
+{% block content %}
+
+
+
+
+{% if current_user.vendor_account == 1 %}
+	{% include '/layouts/subindex/_smallvendorbar.html' %}
+{% else %}
+{% endif %}
+<div class="d-none d-md-block">
+
+</div>
+{% include 'indexcontent/_bestsellers.html' %}
+
+{% if current_user.is_authenticated %}
+{% else %}
+    {% include 'indexcontent/widgets/_introtop.html' %}
+{% endif %}
+
+
+
+{% include 'indexcontent/_todayfeatured.html' %}
+
+{% if promoteditemscount > 1 %}
+{% include 'indexcontent/_promoteditems.html' %}
+{% endif %}
+
+{% include 'indexcontent/widgets/_sellyourstuff.html' %}
+{% include 'indexcontent/_Electronics.html' %}
+
+
+
+{% endblock %}

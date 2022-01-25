@@ -1,0 +1,37 @@
+
+{% for comment in comments %}
+    <div class="row">
+        <div class="col-3">
+            <div class="thumbnail">
+                <img src="{{ comment.author_id|profilepicture|safe }}" width="100px" height="100px">
+            </div><!-- /thumbnail -->
+        </div><!-- /col-3 -->
+
+        <div class="col-9">
+
+            <div class="panel-heading">
+                <strong>
+                    {% if comment.modid == comment.author_id %}
+                        <div class="comment-author btcorange">
+                            Moderator - {{ comment.author_id|username }}
+                        </div>
+                    {% else %}
+                        <div class="comment-author linkcolor"><a href="{{ url_for('profile.user', username=comment.author) }}">
+                            {{ comment.author }}</a>
+                        </div>
+                    {% endif %}
+                </strong>
+                <span class="text-muted">{{ moment(timestamp=comment.timestamp,
+		         local=False).fromNow(refresh=True)  }}
+		        </span>
+            </div>
+
+            <div class="panel-body">
+                {{ comment.body|safe }}
+            </div><!-- /panel-body -->
+
+        </div><!-- /col-5 -->
+
+    </div><!-- /row -->
+    <hr>
+{% endfor %}

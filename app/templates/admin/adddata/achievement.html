@@ -1,0 +1,28 @@
+{% extends "/layouts/account_holder.html" %}
+
+{% block content %}
+
+
+        <form method="post" >
+        {{ achievementform.csrf_token }}
+    title
+    {{ render_field(achievementform.title, class="form-control" ) }}
+            description
+    {{ render_field(achievementform.description, class="form-control") }}
+            Achievement id
+    {{ render_field(achievementform.achid, class="form-control" ) }}
+            category
+      {{ render_field(achievementform.category, class="form-control") }}
+        value
+      {{ render_field(achievementform.value, class="form-control") }}
+
+
+      {{ render_field(achievementform.submit, class="btn btn-primary", value="submit") }}
+
+</form>
+
+
+
+
+
+{% endblock %}

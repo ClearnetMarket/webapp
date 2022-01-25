@@ -1,0 +1,105 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"> <a  href="{{ url_for('wallet.walletHome') }}">Wallets</a></li>
+        </ol>
+    </nav>
+
+
+        <h3>Escrow account</h3>
+
+   <table class="table" cellspacing="20" cellpadding="20" width="100%">
+            <tr>
+            <th style="background-color: #0d579b; color: #fff; width:10%;">Age</th>
+            <th style="background-color: #0d579b; color: #fff;width:25%;">Description</th>
+            <th style="background-color: #0d579b; color: #fff;width:10%;">Coin</th>
+            <th style="background-color: #0d579b; color: #fff;width:10%;">Balance</th>
+            </tr>
+            {% for t in transact %}
+                {% if t.category == 1 %}
+                    <tr class="bg-danger">
+                {% elif t.category == 2 %}
+                    <tr class="bg-success">
+                {% elif t.category == 3 %}
+                    <tr class="bg-info">
+                {% elif t.category == 4 %}
+                    <tr class="bg-warning">
+                {% else %}
+                    <tr>
+
+                {% endif %}
+                    <td width="15%">{{ moment(timestamp=t.created).fromNow(refresh=True) }}</td>
+
+                    <td class="linkcolor" width="35%" >
+                        {%  if t.category == 1 %}
+                            Withdrawl<br><a href="https://blockchain.info/tx/{{ t.txid }}">{{ t.address }}</a>
+                        {% elif t.category == 2 %}
+                            Deposit
+                        {% elif t.category == 3 %}
+                            Transaction
+                            {% if t.commentbtc  %}
+
+                                {% if "Vendor" in t.commentbtc %}
+                                     {{ t.commentbtc }}
+                                {% else %}
+
+                                    <a href="{{ url_for('vendor.viewOrder', id =t.commentbtc) }}">Order# {{ t.commentbtc }}</a><br>
+                                {% endif %}
+
+                            {% else %}
+                                Unspecified Transaction
+                            {% endif %}
+                        {% elif t.category == 4 %}
+                            Transaction
+                             {% if t.commentbtc  %}
+
+                                 {% if "Vendor" in t.commentbtc %}
+                                     {{ t.commentbtc }}
+                                 {% else %}
+                                <a href="{{ url_for('vendor.viewOrder', id =t.commentbtc) }}">Order# {{ t.commentbtc }}</a><br>
+                                 {% endif %}
+
+                            {% else %}
+                                 Unspecified Transaction
+                            {% endif %}
+
+
+                    {% endif %}
+
+                    </td>
+
+                    <td width="15%">
+
+                        {% if 0 <= t.amount > 0.0001 %}
+                            {{ t.amount }} BTC
+                        {% else %}
+                        {{ t.amount|otherformatbtctostring }} BTC
+                        {% endif %}
+                    </td>
+
+                    <td width="15%">{{ t.balance }} BTC</td>
+                </tr>
+            {% endfor %}
+            </table>
+
+                <div class="row text-center">
+					<div class="col-sm-3"></div>
+					<div class="col-12 col-sm-6">
+	                    {{ pagination.info }}
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+
+    <div class="d-flex justify-content-center linkcolor">
+        {{ pagination.links }}
+    </div>
+
+
+
+{% endblock %}

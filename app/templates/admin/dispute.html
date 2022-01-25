@@ -1,0 +1,249 @@
+{% extends "/layouts/uservendor_layout.html" %}
+
+{% block content %}
+
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"> <a  href="{{ url_for('wallet.walletHome') }}">Wallets</a></li>
+        </ol>
+    </nav>
+
+
+    {% if order.type == 1 %}
+                {% include '/auth/orders/_itemorder.html' %}
+            {% endif %}
+
+
+
+
+    {% if order.modid == 0 %}
+        <form method="POST">
+            {{ disputeform.csrf_token }}
+            <div id="dispute_startbar">
+            {{ render_field(disputeform.start, value="Become Mod",
+                            class="btn btn-success btn-lg btn-block",
+                            style="width:500px") }}
+            </div>
+        </form>
+    {% endif %}
+    {% if order.completed == 1 %}
+        <div class="text-center"><h3>Order is already completed.  Watch for scams...</h3></div>
+    {% endif %}
+    {% if order.released == 1 %}
+              <form method="POST">
+                {{ disputeform.csrf_token }}
+                <div class="row graybg border">
+
+                   <div class="col-2">
+                        {{ render_field(disputeform.undispute, value= "Undispute", autocomplete="off", class="btn btn-primary") }}
+                    </div>
+                    <div class="col-2">
+                        {{ render_field(disputeform.addtime1, value= "add 24 hrs", autocomplete="off", class="btn btn-primary") }}
+                    </div>
+                   <div class="col-2">
+                        {{ render_field(disputeform.addtimetwodays, value= "add 48 hrs", autocomplete="off", class="btn btn-primary") }}
+                    </div>
+                   <div class="col-2">
+                        {{ render_field(disputeform.addtimeweek, value= "add 1 week", autocomplete="off", class="btn btn-primary") }}
+                    </div>
+            </div>
+              </form>
+    {% else %}
+        <form method="POST">
+        {{ disputeform.csrf_token }}
+            <div class="row graybg border text-center">
+                {% if order.disputed_order == 1 %}
+
+	                <div class="col-12 ">
+	                <div class="row text-center">
+	                    <div class="col-2">
+	                    {{ render_field(disputeform.one, value= "Give Customer 100%", autocomplete="off", class="btn btn-warning") }}
+	                    </div>
+	                    <div id="dispute_decidebar_item">
+	                        {{ render_field(disputeform.two, value= "Give Customer 75%", autocomplete="off", class="btn btn-warning") }}
+
+	                    </div>
+	                    <div class="col-2">
+	                        {{ render_field(disputeform.three, value= "50/50 split", autocomplete="off", class="btn btn-warning") }}
+
+	                    </div>
+	                    <div class="col-2">
+	                        {{ render_field(disputeform.four, value= "Give Customer 25%", autocomplete="off", class="btn btn-warning") }}
+
+	                    </div>
+	                    <div class="col-2">
+	                        {{ render_field(disputeform.five, value= "Give Customer 0%", autocomplete="off", class="btn btn-warning") }}
+
+	                    </div>
+	                </div>
+	                </div>
+
+	                <div class="col-12">
+	                <div class="row text-center">
+	                    <div class="col-2">
+	                        {{ render_field(disputeform.undispute, value= "Undispute", autocomplete="off", class="btn btn-warning") }}
+	                    </div>
+	                    <div class="col-2">
+	                        {{ render_field(disputeform.addtime1, value= "add 24 hrs", autocomplete="off", class="btn btn-primary") }}
+	                    </div>
+	                    <div class="col-2">
+	                        {{ render_field(disputeform.addtimetwodays, value= "add 48 hrs", autocomplete="off", class="btn btn-primary") }}
+	                    </div>
+	                    <div class="col-2">
+	                        {{ render_field(disputeform.addtimeweek, value= "add 1 week", autocomplete="off", class="btn btn-primary") }}
+	                    </div>
+                        <div class="col-2">
+	                        {{ render_field(disputeform.abortorder, value= "Abort", autocomplete="off", class="btn btn-danger") }}
+	                    </div>
+	                </div>
+	                </div>
+                {% else %}
+                  <div class="greenstatus"> <h2>Item is not disputed</h2> </div>
+
+                {% endif %}
+            </div>
+        </form>
+    {% endif %}
+			{% if order.type == 1 %}
+	<div class="row border graybg" style="margin-top: 10px; margin-bottom: 10px;">
+	<div class="col-12">
+
+				<h4>User Reason</h4>
+		{% if order.reason_cancel %}
+			{{ order.reason_cancel|cancelwhy|safe }}<br>
+		{% endif %}
+		{% if order.private_note %}
+			{{ order.private_note }}
+		{% endif %}
+	</div>
+	</div>
+	{% endif %}
+    <!-- comments -->
+    <div class="row">
+        <div class="col-6 graybg border">
+        <h4>Enter your comments here</h4>
+            <form method="POST">
+                {{ postform.csrf_token }}
+                <div class="form-group">
+                {{ render_field(postform.msgstufftosend , class="form-control", rows="3", placeholder="Your comment here") }}
+                </div>
+                    <div id="move_right">
+                        {{ render_field(postform.post, value= "Post", autocomplete="off", class="btn btn-primary") }}
+                    </div>
+            </form>
+            <div id="chatcomments">
+                {% include '/posts/_commentsinsidepic_admin.html' %}
+            </div>
+        </div>
+        <!-- end comments -->
+
+        <!-- right sid3 -->
+        <div class="col-6 graybg border">
+            <h4>Customer reviews</h4>
+            <table class="xol-xs-12">
+                        <tr>
+	                         <th class="bluetable col-2">Rating</th>
+	                         <th class="bluetable col-2">Date</th>
+	                         <th class="bluetable col-8">Comment</th>
+                        </tr>
+                    {% if userreviews %}
+                        {% for review in userreviews %}
+                            <tr class="graybg">
+
+
+                                <td class="col-xs-`">
+                                {% if review.rating == 1 %}
+                                    <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+                                {% endif %}
+
+                                {% if review.rating == 2 %}
+                                    <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}" >
+                                {% endif %}
+
+                                {% if review.rating == 3 %}
+                                    <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}" >
+                                {% endif %}
+
+                                {% if review.rating == 4 %}
+                                    <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+                                {% endif %}
+
+                                {% if review.rating == 5 %}
+                                    <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}" >
+                                {% endif %}
+
+                            </td>
+                                <td class="col-5">
+                                    {{ moment(timestamp=review.dateofreview, local=False).fromNow(refresh=True)  }}
+                                </td>
+                                <td class="col-6">
+	                                {{ review.review }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+	                        <td class="col-12">No feedback for customer ...</td>
+                        </tr>
+                    {% endif %}
+             </table>
+            <hr>
+            <h4>Vendor reviews</h4>
+            <table class="xol-xs-12">
+                        <tr>
+
+	                         <th class="bluetable col-2">Rating</th>
+	                         <th class="bluetable col-2">Date</th>
+	                         <th class="bluetable col-8">Comment</th>
+
+                        </tr>
+                    {% if vendorreviews %}
+                        {% for review in vendorreviews %}
+                            <tr class="graybg">
+	                            <td class="col-1">
+	                                {% if review.vendorrating == 1 %}
+	                                    <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
+	                                {% endif %}
+
+                                    {% if review.vendorrating == 2 %}
+	                                    <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}" >
+	                                {% endif %}
+
+                                    {% if review.vendorrating == 3 %}
+	                                    <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}" >
+
+	                                {% endif %}
+
+                                    {% if review.vendorrating == 4 %}
+	                                    <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
+
+	                                {% endif %}
+
+	                                {% if review.vendorrating == 5 %}
+	                                    <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}" >
+	                                {% endif %}
+	                                </td>
+                                <td class="col-5">
+                                {{ moment(timestamp=review.timestamp, local=False).fromNow(refresh=True)  }}
+                                </td>
+
+                                <td class="col-6">
+	                                {{ review.comment }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    {% else %}
+                        <tr>
+	                        <td class="col-12">No feedback for customer ...</td>
+                        </tr>
+                    {% endif %}
+             </table>
+
+
+        </div>
+    </div>
+
+{% endblock %}

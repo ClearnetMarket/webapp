@@ -1,0 +1,99 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+    <nav aria-label="breadcrumb" class="linkcolor">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12 col-sm-3 border">
+            <h4>My Active Issues</h4><br>
+            <hr>
+            {% for p in post %}
+                {% if p.status == 0 %}
+                    <div class="row linkcolor bg-warning" style="margin-bottom: 10px;">
+                {% elif p.status == 1 %}
+                    <div class="row linkcolor" style="margin-bottom: 10px;">
+                {% else %}
+                    <div class="row linkcolor" style="margin-bottom: 10px;">
+                {% endif %}
+            <div class="col-12">
+                {% if p.status == 0 %}
+                    <b>Status:</b> Open Issue<br>
+                {% elif p.status == 1 %}
+                    <b>Status:</b> Closed Issue<br>
+                {% else %}
+                    <b>Status:</b><br>
+                {% endif %}
+                <strong>
+                    <a href="{{ url_for('service.helpwithissue_active', id=p.id) }}"> Issue id: #{{ p.id }} </a>
+                    <br>
+                    {{ moment(timestamp=p.timestamp, local=False).fromNow(refresh=True)  }}
+                </strong>
+                <br>
+            </div>
+            <hr>
+            </div>
+            {% endfor %}
+            </div>
+            <div class=" col-sm-1"></div>
+            <div class="col-12 col-sm-8 border">
+                <form method="post" class="form-group">
+                    {{ form.csrf_token }}
+                    <div class="row mb-5">
+                        <div class="form-group">
+                            <label class="col-12">Send To:</label>
+                            <div class="col-12">
+                                Clearnet Market Customer Service
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="form-group">
+                            <label class="col-12">Body</label>
+                            <div class="col-12">
+                                {{ render_field(form.body1, class="form-control", rows="10", cols="50") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-12">Recaptcha</label>
+
+                            <div class="col-12 text-center">
+                                <img src="{{ url_for('static', filename='/recaptcha/' + randompicture)  }}" width="236px" height="48px" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="form-group">
+                            <div class="col-12">
+                                {{ render_field(form.recaptchaanswer, class="form-control", placeholder='Captcha Answer') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            {{ render_field(form.submit, class="btn btn-primary", value="Send") }}
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
