@@ -176,54 +176,6 @@ def id_generator_picture5(size=30, chars=string.ascii_uppercase + string.digits)
     return ''.join(random.choice(chars) for _ in range(size))
 
 #
-# def priceaftermargin(margin, currency):
-#     getcurrentprice = db.session.query(btcPrices) \
-#         .filter_by(currency_id=currency).first()
-#     marginq = db.session.query(Query_margin).filter_by(id=margin).first()
-#     margin1 = marginq.value
-#     bt = getcurrentprice.price
-#     z = margin1
-#     if 0 > margin1:
-#         newprice = (z * -bt)
-#         x = (newprice - bt)
-#         y = (Decimal(bt) - Decimal(x))
-#         c = floating_decimals(y, 2)
-#         return c
-#     else:
-#         y = Decimal(z * bt)
-#         c = '{0:.2f}'.format(y)
-#         return c
-
-#
-# def usdtocurrency(price, currency):
-#     getcurrentprice = db.session.query(btcPrices)\
-#         .filter_by(currency_id=currency).first()
-#     if currency == 1:
-#         return price
-#     else:
-#         x = Decimal(price) / Decimal(getcurrentprice.price)
-#         bt = (Decimal(getcurrentprice.price) * x)
-#         c = '{0:.2f}'.format(bt)
-#         return c
-#
-#
-# def convertbtctolocal(amount, currency):
-#     getcurrentprice = db.session.query(btcPrices) \
-#         .filter_by(currency_id=currency).first()
-#     bt = getcurrentprice.price
-#     z = Decimal(bt) * Decimal(amount)
-#     c = floating_decimals(z, 2)
-#     return c
-
-#
-# def convertlocaltobtc(amount, currency):
-#     getcurrentprice = db.session.query(btcPrices) \
-#         .filter_by(currency_id=currency).first()
-#
-#     bt = getcurrentprice.price
-#     z = Decimal(amount) / Decimal(bt)
-#     c = floating_decimals(z, 8)
-#     return c
 
 
 def priceaftermargin_btccash(margin, currency):
@@ -257,9 +209,7 @@ def btc_cash_converttolocal(amount, currency):
 
 
 def btc_cash_convertlocaltobtc(amount, currency):
-    getcurrentprice = db.session.query(btc_cash_Prices) \
-        .filter_by(currency_id=currency).first()
-
+    getcurrentprice = db.session.query(btc_cash_Prices).filter_by(currency_id=currency).first()
     bt = getcurrentprice.price
     z = Decimal(amount) / Decimal(bt)
     c = floating_decimals(z, 8)

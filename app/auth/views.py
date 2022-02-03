@@ -82,6 +82,7 @@ from app.classes.service import \
     Returns, \
     ReturnsTracking, \
     Tracking
+from app.classes.models import WordSeeds 
 from app.classes.userdata import \
     userHistory, \
     Feedback
@@ -94,7 +95,8 @@ from app.classes.wallet_bch import \
 
 from app.classes.models import \
     btc_cash_Prices
-
+from sqlalchemy.sql import func
+from sqlalchemy.orm import load_only
 
 @auth.route("/logout", methods=["GET"])
 def logout():
@@ -330,7 +332,7 @@ def register():
     return render_template('/auth/register.html', form=form)
 
 
-@auth.route('/accountseed', methods=["GET", "POST"])
+@auth.route('/accountseed', methods=["GET"])
 @login_required
 def createaccountseed():
     import random
@@ -342,56 +344,50 @@ def createaccountseed():
         .query(AccountSeedWords) \
         .filter(user.id == AccountSeedWords.user_id) \
         .first()
-    if userseed is None:
-        # created the wallet seed
 
-        wordfile = "../../clearnet/word_seeds.txt"
+    if request.method == 'GET':
+        if userseed is None:
+            # created the wallet seed
+            word_list = []
 
-        with open(wordfile) as word_file:
-            valid_words = (word_file.read().split())
-            thelist = (list(valid_words))
-
-            word00 = (random.choice(thelist))
-            word01 = (random.choice(thelist))
-            word02 = (random.choice(thelist))
-            word03 = (random.choice(thelist))
-            word04 = (random.choice(thelist))
-            word05 = (random.choice(thelist))
-
-            word00filtered = word00.lower()
-            word01filtered = word01.lower()
-            word02filtered = word02.lower()
-            word03filtered = word03.lower()
-            word04filtered = word04.lower()
-            word05filtered = word05.lower()
+            get_words = db.session.query(WordSeeds).order_by(func.random()).limit(6)
+            for f in get_words:
+                word_list.append(f.text)
+                print(f.text)
+            word00 = str(word_list[0]).lower()
+            word01 = str(word_list[1]).lower()
+            word02 = str(word_list[2]).lower()
+            word03 = str(word_list[3]).lower()
+            word04 = str(word_list[4]).lower()
+            word05 = str(word_list[5]).lower()
 
             addseedtodb = AccountSeedWords(user_id=user.id,
-                                           word00=word00filtered,
-                                           word01=word01filtered,
-                                           word02=word02filtered,
-                                           word03=word03filtered,
-                                           word04=word04filtered,
-                                           word05=word05filtered,
-                                           )
+                                        word00=word00,
+                                        word01=word01,
+                                        word02=word02,
+                                        word03=word03,
+                                        word04=word04,
+                                        word05=word05,
+                                        )
             db.session.add(addseedtodb)
             db.session.commit()
 
-    else:
-        word00filtered = userseed.word00
-        word01filtered = userseed.word01
-        word02filtered = userseed.word02
-        word03filtered = userseed.word03
-        word04filtered = userseed.word04
-        word05filtered = userseed.word05
+        else:
+            word00 = userseed.word00
+            word01 = userseed.word01
+            word02 = userseed.word02
+            word03 = userseed.word03
+            word04 = userseed.word04
+            word05 = userseed.word05
 
-    return render_template('auth/accountseed.html',
-                           word00filtered=word00filtered,
-                           word01filtered=word01filtered,
-                           word02filtered=word02filtered,
-                           word03filtered=word03filtered,
-                           word04filtered=word04filtered,
-                           word05filtered=word05filtered,
-                           )
+        return render_template('auth/accountseed.html',
+                            word00=word00,
+                            word01=word01,
+                            word02=word02,
+                            word03=word03,
+                            word04=word04,
+                            word05=word05,
+                            )
 
 
 @auth.route('/accountseedconfirm', methods=["GET", "POST"])
@@ -400,47 +396,49 @@ def createaccountseed():
 def confirmseed():
 
     form = ConfirmSeed()
+    
     # get the user
     user = db.session\
         .query(User)\
         .filter(current_user.id == User.id)\
         .first()
 
-    if user.confirmed == 0:
+    if user.confirmed == 1:
+        flash("You have already been confirmed", category="danger")
+        return redirect(url_for('index'))
+    if request.method == 'POST':
         # get the users seed
         userseed = db.session.query(AccountSeedWords) \
             .filter(user.id == AccountSeedWords.user_id)\
             .first()
 
-        if request.method == 'POST':
-            w00 = form.seedanswer0.data
-            w01 = form.seedanswer1.data
-            w02 = form.seedanswer2.data
-            w03 = form.seedanswer3.data
-            w04 = form.seedanswer4.data
-            w05 = form.seedanswer5.data
+        w00 = form.seedanswer0.data
+        w01 = form.seedanswer1.data
+        w02 = form.seedanswer2.data
+        w03 = form.seedanswer3.data
+        w04 = form.seedanswer4.data
+        w05 = form.seedanswer5.data
 
-            if w00 == userseed.word00 and \
-                    w01 == userseed.word01 and \
-                    w02 == userseed.word02 and \
-                    w03 == userseed.word03 and \
-                    w04 == userseed.word04 and \
-                    w05 == userseed.word05:
+        if w00 == userseed.word00 and \
+            w01 == userseed.word01 and \
+            w02 == userseed.word02 and \
+            w03 == userseed.word03 and \
+            w04 == userseed.word04 and \
+            w05 == userseed.word05:
 
-                user.confirmed = 1
-                db.session.add(user)
-                db.session.commit()
+            user.confirmed = 1
 
-                flash("Account Confirmed.", category="danger")
-                return redirect(url_for('index'))
-            else:
-                flash("Incorrect Seed Entry", category="danger")
-                return redirect(url_for('index'))
-    else:
-        flash("You have already been confirmed", category="danger")
+            db.session.add(user)
+            db.session.commit()
 
-        return redirect(url_for('index'))
-    return render_template('/auth/confirmseed.html', form=form)
+            flash("Account Confirmed.", category="danger")
+            return redirect(url_for('index'))
+        else:
+            flash("Incorrect Seed Entry", category="danger")
+            return redirect(url_for('auth.confirmseed'))
+
+    if request.method == 'GET':
+        return render_template('/auth/confirmseed.html', form=form)
 
 
 def deleteprofileimage(id, img, type):

@@ -211,9 +211,7 @@
                                                             </div>
                                                             <div class="col-7">
                                                                 {% if sale.selected_currency == 2 %}
-                                                                    <div class="btcorange">
-                                                                        {{ sale.shippingprice2|btcprice(currency=sale.currency) }} BTC
-                                                                    </div>
+                                                                 
                                                                 {% endif %}
                                                                 {% if sale.selected_currency == 3 %}
                                                                     <div class="btccash">
@@ -258,9 +256,7 @@
                                                             </div>
                                                             <div class="col-7">
                                                                 {% if sale.selected_currency == 2 %}
-                                                                    <div class="btcorange">
-                                                                        {{ sale.shippingprice3|btcprice(currency=sale.currency) }} BTC
-                                                                    </div>
+                                                                  
                                                                 {% endif %}
                                                                 {% if sale.selected_currency == 3 %}
                                                                     <div class="btccash">
@@ -735,9 +731,7 @@
                             <!-- Price -->
                             <div class="col-12 col-sm-2 text-left" style="margin-top: 10px;">
                                 {% if sale.selected_currency == 2 %}
-                                    <div class="btcorange text-left">BTC<br>
-                                        <b> {{ sale.price_of_item|btcprice(currency=sale.currency) }} </b>
-                                    </div>
+                                  
                                 {% endif %}
                                 {% if sale.selected_currency == 3 %}
                                     <div class="btccash text-left">BCH<br>
@@ -781,11 +775,7 @@
                             {{ render_field(form.update, value="Update checked quantities", class="btn btn-warning") }}
                         </div>
                         <div class="col-12 text-right">
-                            {% if gettotalcart.btcprice == 0  %}
-                                <h4> Subtotal:<div class="btcorangeinline"> 0.00 BTC</div>  </h4>
-                            {% else %}
-                                <h4> Subtotal:<div class="btcorangeinline"> {{ gettotalcart.btcprice }} BTC</div>  </h4>
-                            {% endif %}
+                            
                         </div>
                         <div class="col-12 text-right">
                             {% if gettotalcart.btc_cash_price == 0  %}
@@ -832,7 +822,7 @@
                                 <!-- Quanity-->
                                 <!-- Price -->
                                 <td class="col-3">
-                                    {{ sale.price_of_item|btcprice(currency=sale.currency) }} BTC<br>
+                                   
                                     <b> {{ sale.price_of_item|btcprice_btccash(currency=sale.currency) }} BCH</b>
                                 </td>
                                 <td class="col-2">
@@ -882,27 +872,7 @@
 
                 {% if gettotalcart.btcprice == 0 %}
                 {% else %}
-                    <hr>
-                    <div class="row ">
-                        <div class="col-12">
-                            <b>BTC Price:</b> <div class="btcorange"> {{ gettotalcart.btcprice  }}</div>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-12">
-                            {% if gettotalcart.shippingbtcprice == 0 %}
-                                <b>BTC Shipping:</b><div class="btcorange"> 0.00</div>
-                            {% else %}
-                                <b>BTC Shipping:</b><div class="btcorange"> {{ gettotalcart.shippingbtcprice  }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row ">
-                        <div class="col-12">
-                            <b>BTC Total:</b><div class="btcorange"> {{ gettotalcart.totalbtcprice  }}</div>
-                        </div>
-                    </div>
+                 
                 {% endif %}
 
                 {% if gettotalcart.btc_cash_price == 0 %}

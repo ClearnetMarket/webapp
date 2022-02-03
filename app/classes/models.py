@@ -10,6 +10,12 @@ class QueryAdType(db.Model):
     value = db.Column(db.INTEGER)
     text = db.Column(db.TEXT)
 
+class WordSeeds(db.Model):
+    __tablename__ = 'query_word_list'
+    __bind_key__ = 'clearnet'
+    __table_args__ = {"schema": "public", 'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    text = db.Column(db.VARCHAR(100))
 
 class Categories(db.Model):
     __tablename__ = 'category'

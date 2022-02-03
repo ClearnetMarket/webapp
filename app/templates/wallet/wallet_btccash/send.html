@@ -94,21 +94,6 @@
 
                 <div class="form-group">
 
-                    <label class="col-sm-2">Captcha </label>
-                    <div class="col-sm-6">
-                        <img src="{{ url_for('static', filename='/recaptcha/' + randompicture)  }}" width="236px" height="48px">
-                    </div>
-
-
-
-                    <label class="col-sm-6"></label>
-                    <div class="col-sm-6">
-                        {{ render_field(form.recaptchaanswer, class="form-control  input-sm", placeholder='Answer') }}
-                    </div>
-
-                </div>
-                <div class="form-group">
-
                     <div class="text-center">Estimated Fee 6 blocks:</div>
                     <div class="text-center">
                         <b>{{ wfee }} BTC</b>

@@ -1,5 +1,6 @@
 {% from "_formhelpers.html" import render_field %} {% include
 'layouts/headers/_headerplain.html' %}
+
 <body>
   <div class="container clearnetcontainer">
     <nav aria-label="breadcrumb" class="linkcolor">
@@ -8,12 +9,10 @@
           <a href="{{ url_for('index') }}">Home</a>
         </li>
         <li class="breadcrumb-item">
-          <a href="{{ url_for('wallet.walletHome') }}">Wallets</a>
+          <a href="{{ url_for('wallet_bch.home') }}">Wallets</a>
         </li>
         <li class="breadcrumb-item">
-          <a href="{{ url_for('wallet_btccash.wallet_btccash_overview') }}"
-            >BCH Wallet</a
-          >
+          <a href="{{ url_for('wallet_bch.home') }}">BCH Wallet</a>
         </li>
       </ol>
     </nav>
@@ -24,41 +23,34 @@
 
       <div class="col-12 col-md-9 offset-md-1 offset-lg-1">
         <div class="text-center">
-          <img
-            src="{{ url_for('static', filename='/images/currency_logos/btccash_long.png'  )  }}"
+          <img src="{{ url_for('static', filename='/images/currency_logos/btccash_long.png'  )  }}"
             width="400px"
-            height="70px"
-          />
+            height="70px" />
         </div>
         <div class="row blue border btnwhite">
           <div class="col-12 col-sm-7">
             <div class="topnav" id="myTopnav">
-              <a href="{{ url_for('wallet_btccash.wallet_btccash_overview') }}"
-                >Wallet Overview</a
-              >
-              <a href="{{ url_for('wallet_btccash.wallet_btccash_send') }}"
-                >Send</a
-              >
-              <a href="{{ url_for('wallet_btccash.wallet_btc_cash_receive') }}"
-                >Receive</a
-              >
+              <a href="{{ url_for('wallet_bch.home') }}">Wallet Overview</a>
+              <a href="{{ url_for('wallet_bch.send') }}">Send</a>
+              <a href="{{ url_for('wallet_bch.receive') }}">Receive</a>
             </div>
           </div>
-          <div
-            class="col-12 col-sm-5 text-left"
-            style="padding: 10px; font-size: 14px"
-          >
-            {% if wallet.currentbalance == 0 %} BCH Balance: 0.00 {% else %} BCH
-            Balance: {{ wallet.currentbalance|otherformatbtctostring }} {% endif
-            %} {% if wallet.unconfirmed >= 0.0000001 %}
+          <div class="col-12 col-sm-5 text-left" style="padding: 10px; font-size: 14px">
+            {% if wallet.currentbalance == 0 %}
+            BCH Balance: 0.00
+            {% else %}
+            BCH Balance: {{ wallet.currentbalance|otherformatbtctostring }}
+            {% endif %}
+            {% if wallet.unconfirmed >= 0.0000001 %}
             <div class="btcorangeinline">
               <br />Unconfirmed: {{ wallet.unconfirmed }}
             </div>
-            {% else %} {% endif %}
+            {% else %}
+            {% endif %}
             <br />
             {{
-            wallet.currentbalance|btccashtocurrency(currency=current_user.currency)
-            }} {{ current_user.currency|currencyformat }}
+            wallet.currentbalance|btccashtocurrency(currency=current_user.currency) }}
+            {{ current_user.currency|currencyformat }}
           </div>
         </div>
         <div class="row">

@@ -3078,11 +3078,11 @@ def vendorverification():
         allow = 1
     else:
         allow = 0
-    hundred = btc_cash_convertlocaltobtc(amount=100, currency=1)
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=1)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=1)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=1)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=1)
+    hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
+    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
+    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
+    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
+    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
 
     if request.method == 'POST':
         if form.cancel.data:
@@ -3153,11 +3153,11 @@ def vendorverificationcancel():
         allow = 1
     else:
         allow = 0
-    hundred = btc_cash_convertlocaltobtc(amount=100, currency=1)
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=1)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=1)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=1)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=1)
+    hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
+    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
+    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
+    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
+    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
 
     if request.method == 'POST':
         if getverify.vendor_level != 0:
@@ -3223,7 +3223,7 @@ def vendorverification_confirm_level1():
             .first()
         useramount = userwallet.currentbalance
 
-        hundred = btc_cash_convertlocaltobtc(amount=100, currency=1)
+        hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
         Decimalhundred = Decimal(hundred)
 
         if request.method == 'POST':
@@ -3289,7 +3289,7 @@ def vendorverification_confirm_level2():
 
         useramount = userwallet.currentbalance
 
-        twofity = btc_cash_convertlocaltobtc(amount=250, currency=1)
+        twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
         Decimaltwofity = Decimal(twofity)
 
         if request.method == 'POST':
@@ -3354,7 +3354,7 @@ def vendorverification_confirm_level3():
             .first()
         useramount = userwallet.currentbalance
 
-        fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=1)
+        fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
         Decimalfivehundred = Decimal(fivehundred)
 
         if request.method == 'POST':
@@ -3418,7 +3418,7 @@ def vendorverification_confirm_level4():
             .first()
         useramount = userwallet.currentbalance
 
-        thousand = btc_cash_convertlocaltobtc(amount=1000, currency=1)
+        thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
         Decimalthousand = Decimal(thousand)
 
         if request.method == 'POST':
@@ -3477,7 +3477,7 @@ def vendorverification_confirm_level5():
             .first()
         useramount = userwallet.currentbalance
 
-        twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=1)
+        twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
         Decimaltwentyfivehundred = Decimal(twentyfivehundred)
 
         if request.method == 'POST':
@@ -3542,10 +3542,10 @@ def upgradevendorverification():
         .first()
     useramount = userwallet.currentbalance
 
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=1)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=1)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=1)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=1)
+    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
+    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
+    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
+    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
 
     Decimaltwofity = Decimal(twofity)
     Decimalfivehundred = Decimal(fivehundred)

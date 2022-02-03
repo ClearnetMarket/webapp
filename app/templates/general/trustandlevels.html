@@ -2,113 +2,119 @@
 {% block content %}
 
 <!-- select all boxes -->
+<nav aria-label="breadcrumb" class="linkcolor">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+	</ol>
+</nav>
 
+<div class="col-12">
+	<h4>What are levels and EXP?</h4><br>
 
-    <nav aria-label="breadcrumb" class="linkcolor">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-        </ol>
-    </nav>
-
-
-
-	<div class="col-12">
-		<h4>What are levels and EXP?</h4><br>
-
-		<p>Each time your help, shop, buy, sell on Clearnet Market you get experience.  Each amount of experience you have gained is
+	<p>Each time your help, shop, buy, sell on Clearnet Market you get experience. Each amount of experience you have
+		gained is
 		reflected in your level. </p>
 
-		    <p>Ways you can obtain experience and level up is by:</p>
-		    <ul>
-		        <li>Buying something on Clearnet Market</li>
-		        <li>Selling something on Clearnet Market</li>
-		        <li>Giving feedback or finding bugs</li>
-		        <li>Leaving vendor feedback</li>
-		        <li>Receiving great feedback.  The better the feedback, the higher the experience.</li>
-		        <li>Trading items</li>
-		        <li>Trading bitcoin</li>
-		        <li>Donating to great causes we sponsor</li>
-		        <li>more to come..</li>
-		    </ul>
+	<p>Ways you can obtain experience and level up is by:</p>
+	<ul>
+		<li>Buying something on Clearnet Market</li>
+		<li>Selling something on Clearnet Market</li>
+		<li>Giving feedback or finding bugs</li>
+		<li>Leaving vendor feedback</li>
+		<li>Receiving great feedback. The better the feedback, the higher the experience.</li>
+		<li>Trading items</li>
+		<li>Trading bitcoin</li>
+		<li>Donating to great causes we sponsor</li>
+		<li>more to come..</li>
+	</ul>
 
-		    <p>You can also lose feedback by:</p>
-		        <ul>
-		        <li>Going through disputes</li>
-		        <li>Receiving bad feedback</li>
-		        <li>more to come..just you wait</li>
-		    </ul>
+	<p>You can also lose feedback by:</p>
+	<ul>
+		<li>Going through disputes</li>
+		<li>Receiving bad feedback</li>
+		<li>more to come..just you wait</li>
+	</ul>
 
-		<br><br>
+	<br><br>
 
-		<h4>What are trust levels?</h4><br>
+	<h4>What are trust levels?</h4><br>
 
-		<p>Trust levels are obtained by vendors by holding an escrow with the site in-case of an incident.  They help verify the vendor is
-			serious and can help build trust at low levels.  A vendor can give up the badge and receive there escrow back. It is <strong>optional</strong> for a vendor to obtain a trust level.</p>
-		<div class="progress hidden-xs hidden-sm">
-            <div class="pone warning-color"></div>
-			<div class="ptwo warning-color"></div>
-			<div class="pthree warning-color"></div>
-			<div class="pfour warning-color"></div>
-			<div class="pfive warning-color"></div>
-  			<div class="progress-bar progress-bar-warning" style="width: 100%"></div>
-		</div>
-		<div class="row text-center" style="margin-top: 20px;">
-			<div class="col-1"></div>
-
-
-
-			<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;">
-				<img src="{{ url_for('static', filename='/images/trustlevel/'  + '1.png')  }}" width="125px" height="30px">
-				<br><b>{{ hundred }} BTC </b>
-				{% if current_user.is_authenticated %}
-				({{ 100|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
-				{% endif %}
-			</div>
-
-			<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;">
-				<img src="{{ url_for('static', filename='/images/trustlevel/'  + '2.png')  }}" width="125px" height="30px">
-				<br>
-				<b>{{ twofity }} BTC </b>
-				{% if current_user.is_authenticated %}
-				({{ 250|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
-				{% endif %}
-			</div>
-
-			<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;">
-				<img src="{{ url_for('static', filename='/images/trustlevel/'  + '3.png')  }}" width="125px" height="30px">
-				<br>
-				<b>{{ fivehundred }} BTC </b>
-				{% if current_user.is_authenticated %}
-				({{ 500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
-				{% endif %}
-			</div>
-
-			<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;" style="margin-bottom: 25px;">
-				<img src="{{ url_for('static', filename='/images/trustlevel/'  + '4.png')  }}" width="125px" height="30px">
-				<br> <b>{{ thousand }} BTC </b>
-				{% if current_user.is_authenticated %}
-				({{ 1000|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
-				{% endif %}
-			</div>
-
-			<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;" style="margin-bottom: 25px;">
-				<img src="{{ url_for('static', filename='/images/trustlevel/'  + '5.png')  }}" width="125px" height="30px">
-				<br>
-				<b>{{ twentyfivehundred }} BTC </b>
-				{% if current_user.is_authenticated %}
-				({{ 2500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
-				{% endif %}
-			</div>
-
-
-			<div class="col-1"></div>
-
-
-
-
-
-		</div>
+	<p>Trust levels are obtained by vendors by holding an escrow with the site in-case of an incident. They help verify
+		the vendor is
+		serious and can help build trust at low levels. A vendor can give up the badge and receive there escrow back. It
+		is <strong>optional</strong> for a vendor to obtain a trust level.</p>
+	<div class="progress hidden-xs hidden-sm">
+		<div class="pone warning-color"></div>
+		<div class="ptwo warning-color"></div>
+		<div class="pthree warning-color"></div>
+		<div class="pfour warning-color"></div>
+		<div class="pfive warning-color"></div>
+		<div class="progress-bar progress-bar-warning" style="width: 100%"></div>
 	</div>
+	<div class="row text-center" style="margin-top: 20px;">
+		<div class="col-1"></div>
+
+
+
+		<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;">
+			<img src="{{ url_for('static', filename='/images/trustlevel/'  + '1.png')  }}" width="125px" height="30px">
+			<br>
+			{{ hundred }}<br> Bitcoin Cash
+			{% if current_user.is_authenticated %}
+			<br>
+			({{ 100|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
+			{% endif %}
+		</div>
+
+		<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;">
+			<img src="{{ url_for('static', filename='/images/trustlevel/'  + '2.png')  }}" width="125px" height="30px">
+			<br>
+			{{ twofity }}<br> Bitcoin Cash
+			{% if current_user.is_authenticated %}
+			<br>
+			({{ 250|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
+			{% endif %}
+		</div>
+
+		<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;">
+			<img src="{{ url_for('static', filename='/images/trustlevel/'  + '3.png')  }}" width="125px" height="30px">
+			<br>
+			{{ fivehundred }}<br> Bitcoin Cash
+			{% if current_user.is_authenticated %}
+			<br>
+			({{ 500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
+			{% endif %}
+		</div>
+
+		<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;" style="margin-bottom: 25px;">
+			<img src="{{ url_for('static', filename='/images/trustlevel/'  + '4.png')  }}" width="125px" height="30px">
+			<br>
+			{{ thousand }}<br> Bitcoin Cash
+			{% if current_user.is_authenticated %}
+			<br>
+			({{ 1000|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
+			{% endif %}
+		</div>
+
+		<div class="col-12 col-sm-12 col-md-2" style="margin-bottom: 25px;" style="margin-bottom: 25px;">
+			<img src="{{ url_for('static', filename='/images/trustlevel/'  + '5.png')  }}" width="125px" height="30px">
+			<br>
+			{{ twentyfivehundred }}<br> Bitcoin Cash
+			{% if current_user.is_authenticated %}
+			<br>
+			({{ 2500|usdtocurrency(currency = current_user.currency) }} {{ current_user.currency|currencyformat }})
+			{% endif %}
+		</div>
+
+
+		<div class="col-1"></div>
+
+
+
+
+
+	</div>
+</div>
 
 
 {% endblock %}

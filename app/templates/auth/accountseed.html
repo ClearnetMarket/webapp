@@ -1,30 +1,26 @@
 {% extends "/layouts/plain_nofooter.html" %}
 
 {% block content %}
-    <div class="row mt-5">
-        <div class="col-4 offset-4 bg-white  rounded-3">
+<div class="row mt-5">
+    <div class="col-4 offset-4 bg-white  rounded-3">
         <div class="col-12">
             <h4>This is your seed</h4><br>
             <div class="row">
 
-                <div class="col-12 col-md-6 col-md-offset-3"
-                     style="background-color: #e5e5e5;
-                                             padding: 10px;
-                                              font-size: 14px;
-                                                margin-bottom: 25px;">
+                <div 
+                class="col-12 col-md-6 col-md-offset-3" 
+                style="background-color: #e5e5e5; padding: 10px; font-size: 14px; margin-bottom: 25px;">
                     <b>
-                    {{ word00filtered }}
-                    {{ word01filtered }}
-                    {{ word02filtered }}
-                    {{ word03filtered }}
-                    {{ word04filtered }}
-                    {{ word05filtered }}
-
-                </b>
+                        {{ word00 }}
+                        {{ word01 }}
+                        {{ word02 }}
+                        {{ word03 }}
+                        {{ word04 }}
+                        {{ word05 }}
+                    </b>
                 </div>
-
             </div>
-            <p>Your seed is your secret key to control your account.  It is asked for when</p>
+            <p>Your seed is your secret key to control your account. It is asked for when</p>
             <ul>
                 <li>Recovering a lost pin</li>
                 <li>Recovering a lost password</li>
@@ -33,19 +29,15 @@
             </ul>
             <p>
                 Your key will only be shown once. If it is lost your account is not recoverable
-                if a lost pin/password occurs.  An email solution for recovery is not available.
+                if a lost pin/password occurs. An email solution for recovery is not available.
                 Clearnet Market does not take personal information.
             </p>
-
             Do you understand the importance of the key?
             <br><br>
             <a href="{{ url_for('auth.confirmseed') }}" class="btn btn-primary">
                 I understand
             </a>
-
         </div>
-
     </div>
 
-
-{% endblock %}
+    {% endblock %}infructuously unhandsomeness winterless disrating meanspiritedly perinephral

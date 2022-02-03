@@ -140,10 +140,10 @@ def home():
                            )
 
 
-@wallet_bch.route('/bch-send', methods=['POST'])
+@wallet_bch.route('/bch-send', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def wallet_btccash_send():
+def send():
     now = datetime.utcnow()
     title = "Send"
     form = walletSendcoin(request.form)
@@ -176,7 +176,7 @@ def wallet_btccash_send():
         .query(BchWalletFee)\
         .filter_by(id=1)\
         .first()
-    wfee = Decimal(walletthefee.btc)
+    wfee = Decimal(walletthefee.bch)
 
     if request.method == "POST":
 
@@ -204,16 +204,14 @@ def wallet_btccash_send():
                         withdrawl(user_id=current_user.id)
                         db.session.commit()
                         flash("Bitcoin Sent: " + str(sendto), category="success")
-                        return redirect(url_for('wallet_btccash.wallet_btccash_send'))
+                        return redirect(url_for('wallet_bch.send'))
                     else:
                         flash("Cannot withdraw amount less than wallet_btc fee: " +
                               str(wfee), category="danger")
-                        return redirect(url_for('wallet_btccash.wallet_btccash_send'))
-
+                        return redirect(url_for('wallet_bch.send'))
                 else:
-                    flash(
-                        "Cannot withdraw more than your balance including fee", category="danger")
-                    return redirect(url_for('wallet_btccash.wallet_btccash_send'))
+                    flash("Cannot withdraw more than your balance including fee", category="danger")
+                    return redirect(url_for('wallet_bch.send'))
             else:
                 flash(
                     "Invalid Pin. Account will be locked with 5 failed attempts.", category="danger")
@@ -230,10 +228,8 @@ def wallet_btccash_send():
                     return redirect(url_for('auth.login'))
                 else:
                     db.session.commit()
-                    return redirect(url_for('wallet_btccash.wallet_btccash_send'))
-        else:
-            flash("Bad Recaptcha ", category="danger")
-            return redirect(url_for('wallet_btccash.wallet_btccash_send'))
+                    return redirect(url_for('wallet_bch.send'))
+
 
     return render_template('/wallet/wallet_btccash/send.html',
                            now=now,
@@ -264,7 +260,7 @@ def wallet_btccash_send():
 @wallet_bch.route('/btccash-receive', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def wallet_btc_cash_receive():
+def receive():
     now = datetime.utcnow()
     title = "Receive"
 

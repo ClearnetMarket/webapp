@@ -181,8 +181,8 @@ app.jinja_env.filters['vendorratingonorder'] = filters_filtersstuff.vendorrating
 app.jinja_env.filters['userrating'] = filters_filtersstuff.userrating
 app.jinja_env.filters['avguserrating'] = filters_filtersstuff.avguserrating
 app.jinja_env.filters['marginpercent'] = filters_filtersstuff.marginpercent
-
-
+app.jinja_env.filters['currencyformat'] = filters_filtersstuff.currencyformat
+app.jinja_env.filters['usdtocurrency'] = filters_filtersstuff.usdtocurrency
 
 # BTC_Cash FILTERS
 
@@ -194,7 +194,7 @@ app.jinja_env.filters['btcprice_btccash'] = filters_btc_cash.btcprice_btccash
 app.jinja_env.filters['currencytocurrency_btccash'] = filters_btc_cash.currencytocurrency_btccash
 app.jinja_env.filters['usdtocurrency_btccash'] = filters_btc_cash.usdtocurrency_btccash
 
-app.jinja_env.filters['currencyformat'] = filters_btc_cash.usdtocurrency_btccash
+
 # configuration
 app.url_map.converters['regex'] = RegexConverter
 app.config['UPLOADED_FILES_DEST'] = UPLOADED_FILES_DEST

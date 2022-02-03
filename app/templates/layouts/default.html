@@ -1,12 +1,29 @@
-{% from "_formhelpers.html" import render_field %}
+
 <!DOCTYPE html>
-{% include 'layouts/headers/_header_normal.html' %}
+<style>
+    html {
+        font-size: 13px;
+        font-family: 'Open Sans';
+    }
+
+    body {
+        background-color: #ffffff !important;
+        min-height: calc(100vh - 300px);
+    }
+</style>
+{% from "_formhelpers.html" import render_field %}
+
+    {% include 'layouts/headers/_metadata.html' %}
+    {% include 'layouts/headers/header_main/top_bar.html' %}
+    {% include 'layouts/headers/header_main/main_bar.html' %}
+    {% include 'layouts/headers/header_main/bottom_bar.html' %}
 <body>
 <div class="container ">
     {% include 'layouts/sublayout/_flashbar.html' %}
     {% block content %}
     {% endblock %}
 </div>
-</body>
+
 {% include 'layouts/subindex/_footer.html' %}
+</body>
 </html>

@@ -59,7 +59,11 @@ def customerserviceHome():
             .filter(Orders.customer == current_user.username)\
             .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2)).order_by(Orders.age.desc())\
             .all()
-        myorderscount = orders.count()
+        myorderscount = db.session\
+            .query(Orders)\
+            .filter(Orders.customer == current_user.username)\
+            .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2)).order_by(Orders.age.desc())\
+            .count()
 
         # See if user has any active issues for the sidebar
         post = db.session\

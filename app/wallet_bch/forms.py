@@ -36,8 +36,7 @@ class walletSendcoin(FlaskForm):
         Length(4, 4),
     ])
 
-    recaptchaanswer = StringField('', validators=[
-        DataRequired()])
+
     submit = SubmitField('')
 
     def __init__(self, *args, **kwargs):

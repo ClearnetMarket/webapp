@@ -409,3 +409,18 @@ def orderpicture(itemid, type):
         pass
     else:
         pass
+
+
+@app.template_filter('usdtocurrency')
+def usdtocurrency(price, currency):
+    from app.classes.models import btc_cash_Prices
+    from app import db
+    from decimal import Decimal
+    getcurrentprice = db.session.query(btc_cash_Prices).filter_by(currency_id=currency).first()
+    if currency == 0:
+        return price
+    else:
+        x = Decimal(price) / Decimal(getcurrentprice.price)
+        bt = (Decimal(getcurrentprice.price) * x)
+        c = '{0:.2f}'.format(bt)
+        return c

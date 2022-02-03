@@ -62,27 +62,29 @@
     {% for note in notifications %}
     <tr>
       {% if note.read == 1 %}
-      <td class="col-1 bg-warning">{% else %}</td>
+        <td class="col-1 bg-warning">{% else %}</td>
 
-      <td class="col-1">
+        <td class="col-1">
         {% endif %}
-        <input type="checkbox" name="checkit" value="{{" note.id }} />
+        <input type="checkbox" name="checkit" value="{{" note.id "}}" />
       </td>
 
       {% if note.read == 1 %}
-      <td class="col-2 bg-warning">{% else %}</td>
+      <td class=" col-2 bg-warning">
+        {% else %}
+      </td>
 
       <td class="col-2">
-        {% endif %} {{ moment(timestamp=note.timestamp, local=False).format('L')
-        }}
+        {% endif %}
+         {{ moment(timestamp=note.timestamp, local=False).format('L')}}
       </td>
 
       {% if note.read == 1 %}
       <td class="col-2 linkcolor bg-warning">{% else %}</td>
 
       <td class="col-1 linkcolor bg warning">
-        {% endif %} {{ moment(timestamp=note.timestamp,
-        local=False).fromNow(refresh=True) }}
+        {% endif %}
+         {{ moment(timestamp=note.timestamp, local=False).fromNow(refresh=True) }}
       </td>
 
       {% if note.read == 1 %}
@@ -92,107 +94,90 @@
         {% endif %}
         <!--sale-->
         {% if note.type == 1 %} You have a new order. Order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %} {% if note.type == 111 %} Order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
         Has Been Finalized and marked as recieved {% endif %} {% if note.type ==
         112 %} Your order has been successful. Order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %}
         <!--message-->
         {% if note.type == 2 %}
-        <a href="{{ url_for('message.messagecenter') }}"
-          >You have a new message</a
-        >
+        <a href="{{ url_for('message.messagecenter') }}">You have a new message</a>
         {% endif %}
         <!--Feedback-->
         {% if note.type == 3 %} You have received Feedback for order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %}
         <!--dispute-->
         {% if note.type == 4 %} You have received a dispute on order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %}
         <!--return-->
         {% if note.type == 5 %} A return has been requested for order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %} {% if note.type == 55 %} Customer has added tracking for
-        return on order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
+        return on order#
+        <a href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">
+          {{ note.salenumber }}
+        </a>
         {% endif %}
-
         <!--bitcoin credit-->
-        {% if note.type == 6 %} You Account has been credited with {{
-        note.bitcoin }}BTC {% endif %}
+        {% if note.type == 6 %} You Account has been credited with {{ note.bitcoin }}BTC
+        {% endif %}
         <!--Cancelled Order-->
         {% if note.type == 7 %} Order#
-        <a href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
-        has been cancelled {% endif %}
+        <a href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+        has been cancelled
+        {% endif %}
         <!-- successful return-->
         {% if note.type == 8 %} Item #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
-        has been successfully returned. {% endif %}
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+        has been successfully returned.
+        {% endif %}
         <!-- sold out-->
         {% if note.type == 9 %} Item #{{ note.salenumber }} has been sold out
-        and delisted. {% endif %}
+        and delisted.
+        {% endif %}
 
         <!-- Digital Trade-->
         {% if note.type == 10 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
-        has been started. {% endif %}
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+        has been started.
+        {% endif %}
 
         <!-- Cancelled Digital Trade-->
         {% if note.type == 11 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
-        has been cancelled. {% endif %}
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+        has been cancelled.
+        {% endif %}
 
         <!-- Success Digital Trade-->
         {% if note.type == 12 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
-        has been finalized. {% endif %}
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+        has been finalized.
+        {% endif %}
 
         <!-- Dispute Digital Trade-->
         {% if note.type == 13 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}"
-          >{{ note.salenumber }}</a
-        >
-        has been disputed. {% endif %}
+          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+        has been disputed.
+        {% endif %}
 
         <!-- BTC Trade-->
         {% if note.type == 15 %} BTC Trade #{{ note.salenumber }} has been
-        started. {% endif %}
+        started.
+        {% endif %}
 
         <!-- Cancelled BTC Trade-->
         {% if note.type == 16 %} BTC Trade #{{ note.salenumber }} has been
-        cancelled. {% endif %}
+        cancelled.
+        {% endif %}
 
         <!-- Success BTC Trade-->
         {% if note.type == 17 %} BTC Trade #{{ note.salenumber }} has been
-        finalized. {% endif %}
+        finalized.
+        {% endif %}
 
         <!-- Dispute BTC Trade-->
         {% if note.type == 18 %} BTC Trade #{{ note.salenumber }} has been
@@ -202,26 +187,46 @@
         message {% endif %}
 
         <!-- Incorrect btc address for withdrawl-->
-        {% if note.type == 30 %} A withdrawl had an incorrect address {% endif
-        %}
+        {% if note.type == 30 %} A withdrawl had an incorrect address
+        {% endif  %}
         <!-- Not enough bitcoin in wallet_btc to do withdrawl-->
-        {% if note.type == 31 %} Your withdrawl amount was too little or too
-        much {% endif %} {% if note.type == 32 %} Your bitcoin withdrawl has
-        been processed {% endif %} {% if note.type == 33 %} {% endif %} {% if
-        note.type == 34 %} Not enough bitcoin for the wallet to proceed with
-        transaction. {% endif %} {% if note.type == 200 %} Item id: {{
-        note.salenumber }} was delisted for improper title {% endif %} {% if
-        note.type == 201 %} Item id: {{ note.salenumber }} was delisted for
-        improper destination country one {% endif %} {% if note.type == 202 %}
+        {% if note.type == 31 %}
+        Your withdrawl amount was too little or too much
+        {% endif %}
+        {% if note.type == 32 %}
+        Your bitcoin withdrawl has
+        been processed {% endif %}
+        {% if note.type == 33 %}
+        {% endif %}
+        {% if note.type == 34 %}
+        Not enough bitcoin for the wallet to proceed with transaction.
+        {% endif %}
+        {% if note.type == 200 %}
+        Item id: {{note.salenumber }} was delisted for improper title
+        {% endif %}
+        {% if note.type == 201 %} Item id: {{ note.salenumber }} was delisted for
+        improper destination country one
+        {% endif %}
+        {% if note.type == 202 %}
         Item id: {{ note.salenumber }} was delisted for improper origin country
-        one {% endif %} {% if note.type == 203 %} {% endif %} {% if note.type ==
-        204 %} Item id: {{ note.salenumber }} was delisted for having 0 quantity
-        {% endif %} {% if note.type == 205 %} Item id: {{ note.salenumber }} was
-        delisted for improper title {% endif %} {% if note.type == 206 %} Item
-        id: {{ note.salenumber }} had improper shipping info #2 {% endif %} {%
-        if note.type == 207 %} Item id: {{ note.salenumber }} had improper
-        shipping info #3 {% endif %} {% if note.type == 208 %} Item id: {{
-        note.salenumber }} was delisted for improper price {% endif %}
+        one
+        {% endif %}
+        {% if note.type == 203 %}
+        {% endif %}
+        {% if note.type == 204 %} Item id: {{ note.salenumber }} was delisted for having 0 quantity
+        {% endif %}
+        {% if note.type == 205 %} Item id: {{ note.salenumber }} was
+        delisted for improper title
+        {% endif %}
+        {% if note.type == 206 %} Item
+        id: {{ note.salenumber }} had improper shipping info #2
+        {% endif %} {%
+        if note.type == 207 %}
+        Item id: {{ note.salenumber }} had improper
+        shipping info #3
+        {% endif %}
+        {% if note.type == 208 %} Item id: {{ note.salenumber }} was delisted for improper price
+        {% endif %}
       </td>
     </tr>
     {% endfor %}

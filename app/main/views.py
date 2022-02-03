@@ -556,12 +556,12 @@ def scheduledmaintenance():
 @main.route('/levels')
 @website_offline
 def levels():
-    hundred = btc_cash_convertlocaltobtc(amount=100, currency=1)
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=1)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=1)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=1)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=1)
-
+    hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
+    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
+    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
+    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
+    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
+  
     hundred = Decimal(hundred)
     twofity = Decimal(twofity)
     fivehundred = Decimal(fivehundred)
