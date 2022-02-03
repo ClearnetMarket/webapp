@@ -1,6 +1,5 @@
 
 
-
 def headerfunctions():
     from flask_login import current_user
     from app import db
@@ -13,11 +12,13 @@ def headerfunctions():
     from sqlalchemy.sql import func, or_
     from decimal import Decimal
     if current_user.is_authenticated:
-        user = db.session.query(User).filter_by(username=current_user.username).first()
+        user = db.session.query(User).filter_by(
+            username=current_user.username).first()
 
         # shopping cart total
         tcart = db.session.query(func.sum(ShoppingCart.quantity_of_item))
-        tcart = tcart.filter(ShoppingCart.customer_id == user.id, ShoppingCart.savedforlater == 0)
+        tcart = tcart.filter(ShoppingCart.customer_id ==
+                             user.id, ShoppingCart.savedforlater == 0)
         totalincart = tcart.all()
 
         # Vendor
@@ -36,7 +37,8 @@ def headerfunctions():
         # GET customer issues
         # new orders for physical items
         norders = db.session.query(Orders.new_order)
-        norders = norders.filter(Orders.vendor_id == user.id, Orders.new_order == 1)
+        norders = norders.filter(
+            Orders.vendor_id == user.id, Orders.new_order == 1)
         neworders = norders.count()
 
         # See if user has any active issues for the sidebar
@@ -48,24 +50,27 @@ def headerfunctions():
 
         # get returns or disputes as a customer
         myordersissues = db.session.query(Orders)
-        myordersissues = myordersissues.filter(Orders.customer == current_user.username)
-        myordersissues = myordersissues.filter(or_(Orders.disputed_order == 1, Orders.request_return == 2))
+        myordersissues = myordersissues.filter(
+            Orders.customer == current_user.username)
+        myordersissues = myordersissues.filter(
+            or_(Orders.disputed_order == 1, Orders.request_return == 2))
         myordersissues = myordersissues.order_by(Orders.age.desc())
         myordersissuesfullcount = myordersissues.count()
 
-
         # notifications
         gnotifications = db.session.query(Notifications.read)
-        gnotifications = gnotifications.filter(Notifications.userid == user.id, Notifications.read == 1)
+        gnotifications = gnotifications.filter(
+            Notifications.user_id == user.id, Notifications.read == 1)
         genotifications = gnotifications.count()
 
         # Get New messages count
         newmsg = db.session.query(PostUser)
-        newmsg = newmsg.filter(PostUser.userid == current_user.id)
+        newmsg = newmsg.filter(PostUser.user_id == current_user.id)
         newmsg = newmsg.filter(PostUser.unread == 1)
         allmsgcount = newmsg.count()
 
-        userwallet = db.session.query(BchWallet).filter_by(userid=user.id).first()
+        userwallet = db.session.query(
+            BchWallet).filter_by(user_id=user.id).first()
 
         try:
             userbalance = Decimal(userwallet.currentbalance)
@@ -103,6 +108,7 @@ def headerfunctions():
     getnotifications = (int(genotifications))
     return user, order, tot, issues, getnotifications, allmsgcount, userbalance, unconfirmed, customerdisputes
 
+
 def headerfunctions_vendor():
     from flask_login import current_user
     from app import db
@@ -111,36 +117,37 @@ def headerfunctions_vendor():
     from app.classes.vendor import Orders
     from sqlalchemy.sql import or_
 
-    user = db.session.query(User).filter_by(username=current_user.username).first()
+    user = db.session.query(User).filter_by(
+        username=current_user.username).first()
 
     # GET customer issues
     myorderscount = db.session\
-    .query(Orders)\
-    .filter(Orders.customer == current_user.username)\
-    .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2))\
-    .count()
+        .query(Orders)\
+        .filter(Orders.customer == current_user.username)\
+        .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2))\
+        .count()
 
     # new orders for physical items
     neworders = db.session\
-    .query(Orders.new_order)\
-    .filter(Orders.vendor_id == user.id, Orders.new_order == 1)\
-    .count()
+        .query(Orders.new_order)\
+        .filter(Orders.vendor_id == user.id, Orders.new_order == 1)\
+        .count()
 
     # disputes orders
     rdispute = db.session\
-    .query(Orders)\
-    .filter(Orders.completed == 0)\
-    .filter(Orders.vendor_id == user.id)\
-    .filter(or_(
-    Orders.request_return != 0,
-    Orders.disputed_order == 1))\
-    .count()
+        .query(Orders)\
+        .filter(Orders.completed == 0)\
+        .filter(Orders.vendor_id == user.id)\
+        .filter(or_(
+            Orders.request_return != 0,
+            Orders.disputed_order == 1))\
+        .count()
 
     # notifications
     gnotifications = db.session\
-    .query(Notifications.read)\
-    .filter(Notifications.userid == user.id, Notifications.read == 1)\
-    .count()
+        .query(Notifications.read)\
+        .filter(Notifications.user_id == user.id, Notifications.read == 1)\
+        .count()
 
     issues = (int(rdispute))
     order = (int(neworders))
@@ -148,4 +155,3 @@ def headerfunctions_vendor():
     customerdisputes = int(myorderscount)
 
     return user, order,  issues, getnotifications, customerdisputes
-

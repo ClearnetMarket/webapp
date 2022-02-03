@@ -11,7 +11,8 @@ def maincatname(catdid0):
         nameofcat = 'All Categories'
         return str(nameofcat)
     else:
-        thecat = db.session.query(Categories).filter(Categories.id == catdid0).first()
+        thecat = db.session.query(Categories).filter(
+            Categories.id == catdid0).first()
         if thecat:
             nameofcat = thecat.name
             return str(nameofcat)
@@ -49,19 +50,17 @@ def buyorsell(bors):
         return "Buying"
 
 
-
-
 # gets achievement title
 @app.template_filter('achievementtitle')
 def achievementtitle(categoryid):
     from app.classes.achievements import Achievements
     from app import db
-    getfilter = db.session.query(Achievements).filter_by(categoryid=categoryid).first()
+    getfilter = db.session.query(Achievements).filter_by(
+        categoryid=categoryid).first()
     if getfilter:
         return getfilter.title
     else:
         return ""
-
 
 
 # gets achievement title
@@ -70,7 +69,8 @@ def achievementdescription(categoryid):
     from app.classes.achievements import Achievements
     from app import db
 
-    getfilter = db.session.query(Achievements).filter_by(categoryid=categoryid).first()
+    getfilter = db.session.query(Achievements).filter_by(
+        categoryid=categoryid).first()
     if getfilter:
         return getfilter.description
     else:
@@ -84,25 +84,46 @@ def countryformat(id):
     from app import db
 
     try:
-        getcountry = db.session.query(Country).filter_by(numericcode=id).first()
+        getcountry = db.session.query(
+            Country).filter_by(numericcode=id).first()
         return getcountry.name
     except Exception:
         name = "World Wide"
         return name
 
+# converts id to country
+
+
+@app.template_filter('currencyformat')
+def currencyformat(id):
+    from app.classes.models import Currency
+    from app import db
+
+    try:
+        getcountry = db.session.query(
+            Currency).filter_by(numericcode=id).first()
+        return getcountry.name
+    except Exception:
+        name = "World Wide"
+        return name
 # get not shipping too name
+
+
 @app.template_filter('notshippingformat')
 def notshippingformat(id):
     from app.classes.models import Query_Continents
     from app import db
 
-    getnotshipping = db.session.query(Query_Continents).filter_by(value=id).first()
+    getnotshipping = db.session.query(
+        Query_Continents).filter_by(value=id).first()
     if not None:
         return getnotshipping.text
     else:
         return("")
 
 # get not shipping too name
+
+
 @app.template_filter('returnwhy')
 def returnwhy(id):
     from app.classes.models import Query_requestreturn
@@ -115,13 +136,15 @@ def returnwhy(id):
         return ("")
 
 # get not shipping too name
+
+
 @app.template_filter('cancelwhy')
 def cancelwhy(id):
     from app.classes.models import Query_requestcancel
     from app import db
     getreturn = db.session.query(Query_requestcancel).filter_by(id=id).first()
     if not None:
-        return  getreturn.text
+        return getreturn.text
     else:
         return ("")
 
@@ -137,6 +160,8 @@ def username(id):
     return getuser.username
 
 # Gets how many ratings for the user
+
+
 @app.template_filter('adminusername')
 def adminusername(id):
     from app.classes.auth import User
@@ -146,12 +171,14 @@ def adminusername(id):
     getuser = getuser.filter_by(id=id).first()
     if id == 1:
         return "Escrow"
-    elif id ==2:
+    elif id == 2:
         return "profit Account"
     else:
         return getuser.username
 
 # Gets how many ratings for the user
+
+
 @app.template_filter('profilepicture')
 def profilepicture(id):
     from app.classes.auth import User
@@ -162,10 +189,12 @@ def profilepicture(id):
     import platform
     x = (platform.system())
     if x == 'Windows':
-        useridlocation = str(user.id) + '/'
-        filenameofprofile = os.path.join('user/', '1/', str(useridlocation), user.profileimage)
+        user_idlocation = str(user.id) + '/'
+        filenameofprofile = os.path.join(
+            'user/', '1/', str(user_idlocation), user.profileimage)
     else:
-        filenameofprofile = os.path.join('user', '1', str(user.id), user.profileimage)
+        filenameofprofile = os.path.join(
+            'user', '1', str(user.id), user.profileimage)
 
     if user.profileimage == 'user-unknown.png':
         return url_for('userdata.profile_image', filename=('user/' + 'user-unknown.png'))
@@ -182,13 +211,12 @@ def userrating(id):
     from app import db
 
     getratings = db.session.query(StatisticsUser)
-    getratings = getratings.filter(StatisticsUser.usernameid == id)
+    getratings = getratings.filter(StatisticsUser.user_id == id)
     rate = getratings.first()
     if rate is None:
         return 0
     else:
         return rate.totalreviews
-
 
 
 # Gets avg of the ratings for the user
@@ -198,7 +226,7 @@ def avguserrating(id):
     from app import db
 
     getratings = db.session.query(StatisticsUser)
-    getratings = getratings.filter(StatisticsUser.usernameid==id)
+    getratings = getratings.filter(StatisticsUser.user_id == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -213,7 +241,7 @@ def vendorratingcount(id):
     from app import db
 
     getratings = db.session.query(StatisticsVendor)
-    getratings = getratings.filter(StatisticsVendor.vendorid==id)
+    getratings = getratings.filter(StatisticsVendor.vendorid == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -228,7 +256,7 @@ def avgvendorrating(id):
     from app import db
 
     getratings = db.session.query(StatisticsVendor)
-    getratings = getratings.filter(StatisticsVendor.vendorid==id)
+    getratings = getratings.filter(StatisticsVendor.vendorid == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -255,7 +283,8 @@ def feedbackcategory(id):
     from app.classes.models import Query_websitefeedback
     from app import db
 
-    feedback = db.session.query(Query_websitefeedback).filter_by(value=id).first()
+    feedback = db.session.query(
+        Query_websitefeedback).filter_by(value=id).first()
     return feedback.text
 
 
@@ -341,6 +370,8 @@ def itemsincatmain(id):
     return item
 
 # Gets the item count in marketitems main category
+
+
 @app.template_filter('carrierformat')
 def carrierformat(id):
     from app.classes.models import Query_Carriers
@@ -349,7 +380,6 @@ def carrierformat(id):
     getitems = getitems.filter(Query_Carriers.value == id).first()
     item = getitems.text
     return item
-
 
 
 # Gets an item picture if exists..else returns default image
@@ -361,7 +391,8 @@ def orderpicture(itemid, type):
     # <img src="{{ order.item_id|orderpicture(type=1) }}" width="200px" height="200px">
 
     if type == 1:
-        x = db.session.query(marketItem).filter(itemid == marketItem.id).first()
+        x = db.session.query(marketItem).filter(
+            itemid == marketItem.id).first()
         if x == None:
             # give default image
             return url_for('static', filename='/images/Noimage.png')
@@ -369,7 +400,7 @@ def orderpicture(itemid, type):
             if x.imageone == '0':
                 return url_for('static', filename='/images/Noimage.png')
             else:
-            # get primary image
+                # get primary image
                 return url_for('userdata.media_file', nodeid=x.stringnodeid, filename=('item/' + x.string + x.imageone))
     elif type == 2:
         pass

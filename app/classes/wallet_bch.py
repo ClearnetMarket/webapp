@@ -20,6 +20,8 @@ class BchWallet(db.Model):
     unconfirmed = db.Column(db.DECIMAL(20, 8))
 
 
+    shard = db.Column(db.INTEGER)
+
 class BchPrices(db.Model):
     __tablename__ = 'prices_bch'
     __bind_key__ = 'clearnet'
@@ -80,7 +82,7 @@ class BchWalletAddresses(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     bchaddress = db.Column(db.TEXT)
     status = db.Column(db.INTEGER)
-
+    shard = db.Column(db.INTEGER)
 
 class BchWalletFee(db.Model):
     __tablename__ = 'bch_walletfee'

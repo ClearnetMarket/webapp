@@ -7,7 +7,7 @@ from app.common.functions import floating_decimals
 from app.classes.wallet_bch import BchWallet
 
 
-def profilebar(userid1, userid2):
+def profilebar(user_id1, user_id2):
     global user1
     global user1pictureid
     global user1stats
@@ -26,13 +26,17 @@ def profilebar(userid1, userid2):
     global user2ach
     global user2vendorstats
 
-    if userid1:
-        user1 = db.session.query(User).filter_by(id=userid1).first()
-        user1getlevel = db.session.query(UserAchievements).filter_by(username=user1.username).first()
+    if user_id1:
+        user1 = db.session.query(User).filter_by(id=user_id1).first()
+        user1getlevel = db.session.query(UserAchievements).filter_by(
+            username=user1.username).first()
         user1pictureid = str(user1getlevel.level)
-        user1stats = db.session.query(StatisticsUser).filter_by(username=user1.username).first()
-        user1wallet = db.session.query(BchWallet).filter_by(userid=user1.id).first()
-        user1level = db.session.query(UserAchievements).filter_by(username=user1.username).first()
+        user1stats = db.session.query(StatisticsUser).filter_by(
+            username=user1.username).first()
+        user1wallet = db.session.query(
+            BchWallet).filter_by(user_id=user1.id).first()
+        user1level = db.session.query(UserAchievements).filter_by(
+            username=user1.username).first()
 
         if 1 <= user1level.level <= 3:
             user1widthh = (user1level.experiencepoints / 300)*100
@@ -71,25 +75,33 @@ def profilebar(userid1, userid2):
             user1widthh = (user1level.experiencepoints / 1000)*100
             user1width = floating_decimals(user1widthh, 0)
 
-        user1ach = db.session.query(whichAch).filter_by(userid=user1.id).first()
+        user1ach = db.session.query(whichAch).filter_by(
+            user_id=user1.id).first()
         if user1.vendor_account == 1:
-            user1vendorstats = db.session.query(StatisticsVendor).filter_by(username=user1.username).first()
+            user1vendorstats = db.session.query(
+                StatisticsVendor).filter_by(username=user1.username).first()
         else:
             user1vendorstats = 0
     else:
         user1 = 0
 
-    if userid2 != 0:
-        user2 = db.session.query(User).filter_by(id=userid2).first()
-        user2getlevel = db.session.query(UserAchievements).filter_by(username=user2.username).first()
+    if user_id2 != 0:
+        user2 = db.session.query(User).filter_by(id=user_id2).first()
+        user2getlevel = db.session.query(UserAchievements).filter_by(
+            username=user2.username).first()
         user2pictureid = str(user2getlevel.level)
-        user2stats = db.session.query(StatisticsUser).filter_by(username=user2.username).first()
-        user2wallet = db.session.query(BtcWallet).filter_by(userid=user2.id).first()
-        user2level = db.session.query(UserAchievements).filter_by(username=user2.username).first()
+        user2stats = db.session.query(StatisticsUser).filter_by(
+            username=user2.username).first()
+        user2wallet = db.session.query(
+            BtcWallet).filter_by(user_id=user2.id).first()
+        user2level = db.session.query(UserAchievements).filter_by(
+            username=user2.username).first()
         user2width = int(user2level.experiencepoints / 10)
-        user2ach = db.session.query(whichAch).filter_by(userid=user2.id).first()
+        user2ach = db.session.query(whichAch).filter_by(
+            user_id=user2.id).first()
         if user2.vendor_account == 1:
-            user2vendorstats = db.session.query(StatisticsVendor).filter_by(username=user2.username).first()
+            user2vendorstats = db.session.query(
+                StatisticsVendor).filter_by(username=user2.username).first()
         else:
             user2vendorstats = 0
     else:
@@ -104,19 +116,19 @@ def profilebar(userid1, userid2):
         user2vendorstats = 0
 
     return user1, \
-           user1pictureid, \
-           user1stats, \
-           user1wallet, \
-           user1level, \
-           user1width, \
-           user1ach, \
-           user1vendorstats, \
-           user2, \
-           user2pictureid, \
-           user2stats, \
-           user2wallet, \
-           user2level, \
-           user2width, \
-           user2ach, \
-           user2vendorstats, \
-           user2getlevel
+        user1pictureid, \
+        user1stats, \
+        user1wallet, \
+        user1level, \
+        user1width, \
+        user1ach, \
+        user1vendorstats, \
+        user2, \
+        user2pictureid, \
+        user2stats, \
+        user2wallet, \
+        user2level, \
+        user2width, \
+        user2ach, \
+        user2vendorstats, \
+        user2getlevel

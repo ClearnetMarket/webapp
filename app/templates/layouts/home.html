@@ -1,25 +1,46 @@
-{% from "_formhelpers.html" import render_field %}
+<!DOCTYPE html>
+<style>
+    html {
+        font-size: 13px;
+        font-family: 'Open Sans';
+    }
 
-{% include 'layouts/headers/_header_normal.html' %}
-<body>
-<div class="container" >
-    <div class="row">
-        <div class="col-12 col-md-2 d-none d-md-block">
-            {% include 'profile/profiles/prototype.html' %}
-            {% include 'layouts/catbar/_catsside.html' %}
-            {% include 'widgets/exchanges/_BTCCASH_Exchanges.html' %}
-            {% include 'layouts/rightbar/_admin.html' %}
-        </div>
+    body {
+        background-color: #ffffff !important;
+        min-height: calc(100vh - 300px);
+    }
+</style>
 
-        <div class="col-12 col-sm-12 col-md-10">
+<head>
+    {% from "_formhelpers.html" import render_field %}
+    {% include 'layouts/headers/_metadata.html' %}
+    {% include 'layouts/headers/header_main/top_bar.html' %}
+    {% include 'layouts/headers/header_main/main_bar.html' %}
+    {% include 'layouts/headers/header_main/bottom_bar.html' %}
 
-            {% include 'layouts/sublayout/_achievement_flash.html' %}
-            {% block content %}
-            {% endblock %}
-
+    {% if current_user.is_authenticated %}
+    {% if current_user.vendor_account ==1 %}
+    <div class="d-none d-md-block ">
+        <div class="d-none d-md-block col-md-12">
+            {% include '/layouts/subindex/_vendorbar.html' %}
         </div>
     </div>
-</div>
+    {% else %}
+    {% endif %}
+    {% endif %}
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-10">
+                {% include 'layouts/sublayout/_achievement_flash.html' %}
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    {% include 'layouts/subindex/_footer.html' %}
 </body>
 
-{% include 'layouts/subindex/_footer.html' %}
+</html>

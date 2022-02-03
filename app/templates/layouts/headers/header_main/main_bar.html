@@ -1,0 +1,201 @@
+<style>
+    .linkcolor_topb a:link {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .linkcolor_topb a:visited {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .linkcolor_topb a:hover {
+        color: #FF9900;
+        text-decoration: none;
+
+    }
+
+    .linkcolor_topb a:active {
+        color: #FF9900;
+        text-decoration: none;
+    }
+
+    .top_row {
+        font-size: 12px;
+
+    }
+
+    .border_gray_left {
+        border-left: 1px solid rgb(197, 195, 195);
+    }
+
+    .border_gray_right {
+        border-right: 1px solid rgb(197, 195, 195);
+    }
+
+    .sidebar_top_right {
+        line-height: normal;
+    }
+
+    .sidebar_top_left {
+        line-height: normal;
+    }
+
+    .bgcolor {
+        background-color: rgb(216, 214, 214);
+    }
+
+    .selectbutton {
+        background-color: rgb(216, 214, 214);
+        display: inline-block;
+        font-size: 12px;
+    }
+
+    .selectbutton:hover {
+        color: #FF9900;
+        text-decoration: none;
+
+    }
+
+    .selectbutton:active {
+        color: rgb(216, 214, 214);
+        text-decoration: none;
+
+    }
+
+    .boximage {
+        max-width: 100%;
+        max-height: 150px;
+    }
+
+    select.minimal {
+        background-image:
+            linear-gradient(45deg, transparent 50%, gray 50%),
+            linear-gradient(135deg, gray 50%, transparent 50%),
+            linear-gradient(to right, #ccc, #ccc);
+        background-position:
+            calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 15px) calc(1em + 2px),
+            calc(100% - 2.5em) 0.5em;
+        background-size:
+            5px 5px,
+            5px 5px,
+            1px 1.5em;
+        background-repeat: no-repeat;
+    }
+
+    select.minimal:hover {
+    
+        text-decoration: none;
+    }
+
+    select.minimal:active {
+        color: #ccc;
+        text-decoration: none;
+    }
+
+
+    select.minimal:focus {
+        background-image:
+            linear-gradient(45deg, #FF9900 50%, transparent 50%),
+            linear-gradient(135deg, transparent 50%, #FF9900),
+            linear-gradient(to right, #ccc, #ccc);
+        background-position:
+            calc(100% - 15px) 1em,
+            calc(100% - 20px) 1em,
+            calc(100% - 2.5em) 0.5em;
+        background-size:
+            5px 5px,
+            5px 5px,
+            1px 1.5em;
+
+        background-repeat: no-repeat;
+        border-color: #ccc;
+        outline: 0;
+    }
+
+    select:-moz-focusring {
+        color: transparent;
+        text-shadow: 0 0 0 #000;
+    }
+
+    select {
+        /* styling */
+        background-color: #eeeeee;
+        border: 1px solid #666666;
+      
+        border-radius: 1px;
+        display: inline-block;
+        font: inherit;
+        font-size: 12px;
+        line-height: 1.5em;
+        padding: 0.5em 3.5em 0.5em 1em;
+        margin: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        margin-right: 1px
+    }
+</style>
+
+<div class="container">
+    <div class="row linkcolor_topb pb-0 mb-3">
+        <!--left side-->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2 pt-2">
+            <a href="{{ url_for('index') }}">
+                <div class="text-center h4 text-primary">
+                    Clearnet Market
+                </div>
+            </a>
+        </div>
+
+        <!--middle-->
+        <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+            <!--End top Middle-->
+            <div class="row pt-2 pb-0 m-0">
+                <div class="col-12 ">
+                    <!--Bottom Middle-->
+                    <form class="form-inline  pb-0" method="POST">
+                        {{ form.csrf_token }}
+
+                        <div class="input-group pb-0">
+                            {{ render_field(form.category, class="minimal text-center", placeholder="Category") }}
+                            {{ render_field(form.searchString, autocomplete="off",class="form-control ", type="text", value=searchterm) }}
+                            <button type="button" class="btn btn-dark text-white pl-5">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--End Middle-->
+        <!--right side-->
+        <div class="col-6 offset-3 col-sm-3 offset-sm-0 col-md-3 col-lg-3">
+            <div class="row pt-2 border border-light p-2">
+
+                <div class="col-4 col-sm-4 col-md-3 pt-1 ">
+                    <a href="{{ url_for('item.shoppingcart') }}">
+                        <i class="float-end bi bi-bag text-white bg-primary p-2"></i></a>
+                </div>
+
+                <div class="col-8 col-sm-8 col-md-9 p-0 ">
+                    <div class="col-12  fw-bold" style="font-size: 12px;">
+                        <a href="{{ url_for('item.shoppingcart') }}">
+                            Shopping Cart
+                        </a>
+                    </div>
+                    <div class="col-12 " style="font-size: 11px;">
+                        <a href="{{ url_for('item.shoppingcart') }}">
+                            {{ tot }} items
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--end side-->
+        </div>
+        <!--end container-->
+    </div>
+</div>

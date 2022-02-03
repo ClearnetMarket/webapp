@@ -1,66 +1,85 @@
 {% include 'layouts/headers/_metadata_plain.html' %}
 
+<style>
+.linkcolor_header a:link {
+color: #fff;
+text-decoration: none;
+}
 
-<nav class="navbar navbar-expand-lg navbar-dark bluebox ">
-  <div class="container-fluid">
-    <div class="col-3">
-    <a class="navbar-brand" href="{{ url_for('index') }}">Clearnet Market</a>
-    </div>
-     <div class="col-7"></div>
-     <div class="col-2">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse bg-" id="navbarSupportedContent">
-      <ul class="navbar-nav  mb-2 mb-lg-0">
-        {% if current_user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('auth.myAccount', username=current_user.username) }}">
-            My Account
-          </a>
-        </li>
-        {% else %}
-        <li class=" w-50"></li>
-        <li class="nav-item ">
-          <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
-        </li>
-        {% endif %}
+.linkcolor_header a:visited {
+color: #fff;
+text-decoration: none;
+}
 
-        <li class="nav-item dropdown">
+.linkcolor_header a:hover {
+color: #FF9900;
+text-decoration: none;
+}
+
+.linkcolor_header a:active {
+color: #FF9900;
+text-decoration: none;
+}
+
+</style>
  
-          <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-            {% if current_user.is_authenticated %}
-            <li>
-              <a class="dropdown-item" href="{{ url_for('auth.myAccount', username=current_user.username) }}">
-                My Account</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{{ url_for('auth.orders') }}">Orders</a>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li>
-              <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
-            </li>
-            {% else %}
-            <li>
-              <a class="dropdown-item" href="{{ url_for('auth.login') }}">Login</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{{ url_for('auth.register') }}">Register</a>
-            </li>
-
-            {% endif %}
-          </ul>
-        </li>
-      </ul>
+<nav class="navbar navbar-expand-lg bg-primary text-white linkcolor_header">
+  <div class="container-fluid">
+    <div class="col-auto">
+      <a class="navbar-brand" href="{{ url_for('index') }}">Clearnet Market</a>
     </div>
+    <div class="col-7"></div>
+    <div class="col-auto">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.myAccount', username=current_user.username) }}">
+              My Account
+            </a>
+          </li>
+          {% else %}
+          <li class=" w-50"></li>
+          <li class="nav-item ">
+            <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+          </li>
+          {% endif %}
+          <li class="nav-item dropdown">
+            <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+              {% if current_user.is_authenticated %}
+              <li>
+                <a class="dropdown-item" href="{{ url_for('auth.myAccount', username=current_user.username) }}">
+                  My Account</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('auth.orders') }}">Orders</a>
+              </li>
+
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+              </li>
+              {% else %}
+              <li>
+                <a class="dropdown-item" href="{{ url_for('auth.login') }}">Login</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('auth.register') }}">Register</a>
+              </li>
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>

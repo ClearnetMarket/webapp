@@ -1,0 +1,241 @@
+<style>
+    .linkcolor_botb a:link {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .linkcolor_botb a:visited {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .linkcolor_botb a:hover {
+        color: #FF9900;
+        text-decoration: none;
+
+    }
+
+    .linkcolor_botb a:active {
+        color: #FF9900;
+        text-decoration: none;
+    }
+
+
+
+    .linkcolor_bot_dropdown a:link {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .linkcolor_bot_dropdown a:visited {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .linkcolor_bot_dropdown a:hover {
+        background-color: #FF9900;
+        color: #ffffff;
+        text-decoration: none;
+
+    }
+
+    .linkcolor_bot_dropdown a:active {
+        background-color: #FF9900;
+        text-decoration: none;
+        color: #ffffff
+    }
+
+
+    .btn-cat,
+    .btn-cat:active,
+    .btn-ee:visited,
+
+    .btn-cat:focus {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+        color: #818384;
+        text-decoration: none;
+    }
+
+    .btn-cat:hover {
+        background-color: #7d7d7d;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+        color: #818384;
+        text-decoration: none;
+    }
+
+    .btn-ee,
+    .btn-ee:active,
+    .btn-ee:visited,
+
+    .btn-ee:focus {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+        color: #818384;
+        text-decoration: none;
+    }
+
+    .btn-ee:hover {
+        background-color: #7d7d7d;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+        color: #818384;
+        text-decoration: none;
+    }
+
+    .headercolor {
+        background-color: #666666;
+
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    select.minimal {
+        background-image:
+            linear-gradient(45deg, transparent 50%, gray 50%),
+            linear-gradient(135deg, gray 50%, transparent 50%),
+            linear-gradient(to right, #ccc, #ccc);
+        background-position:
+            calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 15px) calc(1em + 2px),
+            calc(100% - 2.5em) 0.5em;
+        background-size:
+            5px 5px,
+            5px 5px,
+            1px 1.5em;
+        background-repeat: no-repeat;
+    }
+
+    select.minimal:hover {
+        text-decoration: none;
+    }
+
+    select.minimal:active {
+        color: #ccc;
+        text-decoration: none;
+    }
+
+    select.minimal:focus {
+        background-image:
+            linear-gradient(45deg, #FF9900 50%, transparent 50%),
+            linear-gradient(135deg, transparent 50%, #FF9900),
+            linear-gradient(to right, #ccc, #ccc);
+        background-position:
+            calc(100% - 15px) 1em,
+            calc(100% - 20px) 1em,
+            calc(100% - 2.5em) 0.5em;
+        background-size:
+            5px 5px,
+            5px 5px,
+            1px 1.5em;
+        background-repeat: no-repeat;
+        border-color: #ccc;
+        outline: 0;
+    }
+
+    select:-moz-focusring {
+        color: transparent;
+        text-shadow: 0 0 0 #000;
+    }
+
+    select {
+        /* styling */
+        background-color: #eeeeee;
+        border: 1px solid #666666;
+        border-radius: 1px;
+        display: inline-block;
+        font: inherit;
+        font-size: 12px;
+        line-height: 1.5em;
+        padding: 0.5em 3.5em 0.5em 1em;
+        margin: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        margin-right: 1px
+    }
+
+    .dropdown-menu {
+        min-width: 250px;
+    }
+
+    .btccash {
+        color: #4cca47;
+        display: inline;
+    }
+</style>
+
+<div class="container-fluid bg-secondary">
+    <div class="container">
+        <div class="row bg-">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 bg-dark">
+                <div class="dropdown ">
+                    <div class="dropdown-toggle text-white" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="row pt-3 pb-3 fw-bold ">
+                            <div class="col-3"><i class="pt-2 bi bi-justify "></i></div>
+                            <div class="col-6">Categories </div>
+                            <div class="col-3 float-end"><i class="pt-1 bi bi-caret-down-square-fill"></i></div>
+                        </div>
+                    </div>
+                    <ul class="dropdown-menu linkcolor_bot_dropdown " aria-labelledby="dropdownMenuButton">
+                        {% for f in get_cats %}
+                            <a class=" dropdown-item font-weight-bold mb-3" href="{{ url_for('index') }}">
+                                <div class="row ">
+                                    <div class="col-3">
+                                      <i class="pt-1 {{ f.cat_icon|safe }}"></i>
+                                    </div>
+                                    <div class="col-9">
+                                        {{ f.name }}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-auto d-none d-lg-block btn-ee linkcolor_botb pt-3 pb-3">
+                <a href="{{ url_for('auth.orders') }}">
+                    Orders
+                </a>
+            </div>
+            <div class="col-auto d-none d-lg-block btn-ee linkcolor_botb pt-3 pb-3">
+                <a href="{{ url_for('profile.user', username=current_user.username) }}">
+                    {{ current_user.username }}
+                </a>
+            </div>
+            <div class="col-auto  d-none d-lg-block btn-ee linkcolor_botb pt-3 pb-3">
+                <a href="{{ url_for('wallet_bch.home') }}">
+                    Wallets
+                </a>
+            </div>
+            <div class="col offset-5 d-none d-lg-block linkcolor_botb pt-3 pb-3  btccash">
+                <img src="{{ url_for('static', filename='/images/currency_logos/bch/bch_small.png'  )  }}">
+
+                {% for btc_cash in btc_cash_price %}
+                {{ btc_cash.currency }}: {{ btc_cash.price }}
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>

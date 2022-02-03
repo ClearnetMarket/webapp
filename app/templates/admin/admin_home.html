@@ -198,7 +198,7 @@
 <table class="table-condensed col-12">
   <tr>
     <th class="bluetable col-3">id</th>
-    <th class="bluetable col-3">Userid</th>
+    <th class="bluetable col-3">user_id</th>
     <th class="bluetable col-3">time</th>
     <th class="bluetable col-4">txtcomment</th>
   </tr>
@@ -208,8 +208,8 @@
     <td class="linkcolor col-3">{{ badbtcissues.id }}</td>
 
     <td class="linkcolor col-3">
-      {% if badbtcissues %} {{ badbtcissues.userid|username }} {{
-      badbtcissues.userid }} {% endif %}
+      {% if badbtcissues %} {{ badbtcissues.user_id|username }} {{
+      badbtcissues.user_id }} {% endif %}
     </td>
 
     <td class="linkcolor col-3">
@@ -241,8 +241,8 @@
   <tr class="graybg">
     <td class="linkcolor col-2">
       <a href="{{ url_for('profile.user', username=comment.username) }}">
-        {{ comment.username }} ({{ comment.userid|userrating }}) ({{
-        comment.userid|avguserrating }}<img
+        {{ comment.username }} ({{ comment.user_id|userrating }}) ({{
+        comment.user_id|avguserrating }}<img
           src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
           width="15px"
           height="15px"

@@ -1,0 +1,168 @@
+<style>
+    .linkcolor_topb a:link {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .linkcolor_topb a:visited {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .linkcolor_topb a:hover {
+        color: #FF9900;
+        text-decoration: none;
+
+    }
+
+    .linkcolor_topb a:active {
+        color: #FF9900;
+        text-decoration: none;
+    }
+
+    .top_row {
+        font-size: 12px;
+
+    }
+
+    .border_gray_left {
+        border-left: 1px solid rgb(197, 195, 195);
+    }
+
+    .border_gray_right {
+        border-right: 1px solid rgb(197, 195, 195);
+    }
+
+    .border_gray_bottom {
+        border-bottom: 1px solid rgb(197, 195, 195);
+    }
+
+    .sidebar_top_right {
+        line-height: normal;
+    }
+
+    .sidebar_top_left {
+        line-height: normal;
+    }
+
+    .bgcolor {
+        background-color: rgb(216, 214, 214);
+    }
+
+    .boximage {
+        max-width: 100%;
+        max-height: 150px;
+    }
+</style>
+<div class="container-fluid bg-light p-0 mb-3">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-xs-12 col-sm-5 col-md-6" style=" font-size: 12px;">
+                <div class="d-none d-sm-block ">
+                    <!--visible large -->
+                    <div class="justify-content-end">
+                        <div class="col-auto float-start border_gray_left border_gray_right p-2 linkcolor_topb ">
+                            <img src="{{ url_for('static', filename='/images/english.png'  )  }}" width="15px"
+                                height="15px" ;>
+                            English
+                        </div>
+                        <div class="col-auto float-start border_gray_right p-2 linkcolor_topb ">
+                            {% if current_user.is_authenticated %}
+                          {{current_user.currency }} 
+                           {% else %}
+                           USD
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="d-sm-none">
+                    <div class="row ">
+                        <!--visible small -->
+                        <div class="col-6 sidebar_top_right border_gray_left p-2 linkcolor_topb  border_gray_bottom">
+                            <a href="{{ url_for('main.about') }}">
+                                <img src="{{ url_for('static', filename='/images/english.png'  )  }}" width="15px"
+                                    height="15px" ;> English </a>
+                        </div>
+                        <div class="col-6 sidebar_top_right border_gray_left  p-2 linkcolor_topb  border_gray_bottom">
+                            <a href="{{ url_for('main.about') }}">USD</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-6" style="font-size: 12px;">
+                <!--visible large -->
+                <div class="d-none d-sm-block">
+                    <div class="justify-content-end">
+                        <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
+                            {% if current_user.is_authenticated %}
+                                {% if current_user.vendor_account == 0 %}
+                                <a href="{{ url_for('auth.becomeVendor') }}">
+                                    <i class="bi bi-upload"></i>
+                                    Become Vendor
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('vendor.createItem') }}">
+                                    <i class="bi bi-upload"></i>
+                                    Post Item
+                                </a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ url_for('auth.register') }}">
+                                    <i class="bi bi-upload"></i>
+                                    Post Item
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
+                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i class="bi bi-person-circle"></i> Account</a>
+                        </div>
+                        <div class="col-auto d-none d-md-block float-end  border_gray_right p-2 linkcolor_topb">
+                            <a href="{{ url_for('main.about') }}"><i class="bi bi-heart"></i> Saved Items</a>
+                        </div>
+                        {% if current_user.is_authenticated %}
+
+                        {% else %}
+                        <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
+                            <a href="{{ url_for('auth.login') }}"><i class="bi bi-file-lock-fill"></i> Login</a>
+                        </div>
+                        {% endif %}
+                        {% if current_user.is_authenticated %}
+                        <div
+                            class="col-auto float-end sidebar_top_right border_gray_right border_gray_left p-2 linkcolor_topb ">
+                            <a href="{{ url_for('auth.logout') }}">Logout</a>
+                        </div>
+                        {% else %}
+                        {% endif %}
+
+                    </div>
+                </div>
+                <!--visible small -->
+                <div class="d-sm-none">
+                    <div class="row">
+                        <div class="col-3 sidebar_top_right border_gray_right p-2 linkcolor_topb border_gray_bottom">
+                            <a href="{{ url_for('main.about') }}"><i class="bi bi-upload"></i> Post Item</a>
+                        </div>
+                        <div class="col-3  sidebar_top_right border_gray_right  p-2 linkcolor_topb border_gray_bottom">
+                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i class="bi bi-person-circle"></i> Account</a>
+                        </div>
+                        {% if current_user.is_authenticated %}
+                        {% else %}
+                        <div class="col-3  sidebar_top_right  border_gray_right p-2 linkcolor_topb border_gray_bottom">
+                            <a href="{{ url_for('auth.login') }}"><i class="bi bi-file-lock-fill"></i> Login</a>
+                        </div>
+                        {% endif %}
+                        {% if current_user.is_authenticated %}
+                        <div class="col-3 p-2 linkcolor_topb border_gray_right border_gray_bottom">
+                            <a href="{{ url_for('auth.logout') }}">Logout</a>
+                        </div>
+                        {% else %}
+                        {% endif %}
+                        <div class="col-3  sidebar_top_right border_gray_right  p-2 linkcolor_topb border_gray_bottom">
+                            <a href="{{ url_for('item.shoppingcart') }}"><i class="bi bi-cart"></i> Checkout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

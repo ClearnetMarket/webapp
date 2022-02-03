@@ -4,12 +4,12 @@ from app.classes.wallet_bch import\
     TransactionsBch
 
 
-def btc_cash_addtransaction(category, amount, userid, comment, shard, orderid, balance):
+def btc_cash_addtransaction(category, amount, user_id, comment, shard, orderid, balance):
     """
     # this function will move the coin from holdings back to vendor.  This is for vendor verification
     :param category:
     :param amount:
-    :param userid:
+    :param user_id:
     :param comment:
     :param shard:
     :param orderid:
@@ -24,7 +24,7 @@ def btc_cash_addtransaction(category, amount, userid, comment, shard, orderid, b
 
         trans = TransactionsBch(
             category=category,
-            userid=userid,
+            user_id=user_id,
             confirmations=0,
             confirmed=1,
             txid='',

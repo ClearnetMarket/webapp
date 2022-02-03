@@ -55,18 +55,18 @@ def customerserviceHome():
         # see if orders need to be returned or are disputed
         # customer only
         orders = db.session\
-        .query(Orders)\
-        .filter(Orders.customer == current_user.username)\
-        .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2)).order_by(Orders.age.desc())\
-        .all()
+            .query(Orders)\
+            .filter(Orders.customer == current_user.username)\
+            .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2)).order_by(Orders.age.desc())\
+            .all()
         myorderscount = orders.count()
 
         # See if user has any active issues for the sidebar
         post = db.session\
-        .query(Issue)\
-        .filter(Issue.author_id == current_user.id)\
-        .order_by(Issue.timestamp.desc())\
-        .limit(10)
+            .query(Issue)\
+            .filter(Issue.author_id == current_user.id)\
+            .order_by(Issue.timestamp.desc())\
+            .limit(10)
         thepostcount = post.count()
     else:
         orders = 0
@@ -87,14 +87,14 @@ def customerserviceHome():
 def feedback():
     form = Feedback(request.form)
     user = db.session\
-    .query(User)\
-    .filter_by(username=current_user.username)\
-    .first()
+        .query(User)\
+        .filter_by(username=current_user.username)\
+        .first()
     try:
         getcount = db.session\
-        .query(websitefeedback)\
-        .filter_by(userid=current_user.id)\
-        .count()
+            .query(websitefeedback)\
+            .filter_by(user_id=current_user.id)\
+            .count()
     except Exception as e:
         print(str(e))
         getcount = 0
@@ -105,7 +105,7 @@ def feedback():
         else:
             thefeedback = websitefeedback(
                 username=user.username,
-                userid=user.id,
+                user_id=user.id,
                 type=form.type.data,
                 comment=form.message2.data,
                 timestamp=datetime.utcnow()
@@ -113,9 +113,10 @@ def feedback():
             db.session.add(thefeedback)
             db.session.commit()
             flash("Feedback submitted.  Exp points given.", category="success")
-            flash("We read all feedback. Thank you for your time.", category="success")
-            exppoint(user=user.id, price=0, type=4, quantity=0,currency=0)
-            Grassisgreeneronmyside(userid=current_user.id)
+            flash("We read all feedback. Thank you for your time.",
+                  category="success")
+            exppoint(user=user.id, price=0, type=4, quantity=0, currency=0)
+            Grassisgreeneronmyside(user_id=current_user.id)
             return redirect(url_for('index', username=current_user.username))
 
     return render_template('/service/feedback.html',
@@ -243,12 +244,12 @@ def helpwithitem(id):
                 db.session.add(getitem)
                 db.session.commit()
                 flash("Message has been sent.  A representative will be with you. "
-                        " Check your notifications.", category="success")
+                      " Check your notifications.", category="success")
                 return redirect(url_for('service.helpwithitem_active', id=getitem.id))
             except Exception as e:
                 print(str(e))
                 db.session.rollback()
-                flash("Form Error",category="danger")
+                flash("Form Error", category="danger")
                 return redirect(url_for('service.helpwithitem_active', id=getitem.id))
 
         return render_template('/service/helpwithitem.html',
@@ -291,10 +292,10 @@ def customerserviceMessage():
 
     # See if user has any active issues for the sidebar
     post = db.session\
-    .query(Issue)\
-    .filter(Issue.author_id == current_user.id)\
-    .order_by(Issue.timestamp.desc())\
-    .limit(10)
+        .query(Issue)\
+        .filter(Issue.author_id == current_user.id)\
+        .order_by(Issue.timestamp.desc())\
+        .limit(10)
     thepostcount = post.count()
 
     if request.method == 'POST':
@@ -322,7 +323,8 @@ def customerserviceMessage():
                 db.session.add(post)
                 db.session.commit()
 
-                flash("Message sent.  A response will be given shortly", category="success")
+                flash("Message sent.  A response will be given shortly",
+                      category="success")
                 return redirect(url_for('service.customerserviceMessage',
                                         username=current_user.username))
             else:
@@ -343,7 +345,6 @@ def customerserviceMessage():
 @service.route('/needhelpwithissue/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-
 def helpwithissue_active(id):
     """
     The active chat message for support tickets
@@ -356,23 +357,23 @@ def helpwithissue_active(id):
     adminform = adminhelpserviceform(request.form)
     # query the issue
     theissue = db.session\
-    .query(Issue)\
-    .filter_by(id=id)\
-    .first()
+        .query(Issue)\
+        .filter_by(id=id)\
+        .first()
     if theissue:
         # get the main chat message
         getchatmsg = db.session\
-        .query(Chat)\
-        .filter(Chat.issueid == theissue.id,
-                Chat.orderid == 0,
-                Chat.type == 0)\
-        .first()
+            .query(Chat)\
+            .filter(Chat.issueid == theissue.id,
+                    Chat.orderid == 0,
+                    Chat.type == 0)\
+            .first()
 
         # set a morderator
         getmod = db.session\
-        .query(User)\
-        .filter(User.id == theissue.admin)\
-        .first()
+            .query(User)\
+            .filter(User.id == theissue.admin)\
+            .first()
         if getmod is not None:
             moderator = getmod.username
         else:
@@ -383,10 +384,10 @@ def helpwithissue_active(id):
 
                 # Get chat messages
                 posts = db.session\
-                .query(Chat)\
-                .filter(Chat.issueid == theissue.id)\
-                .order_by(Chat.timestamp.desc())\
-                .filter(Chat.type == 0)
+                    .query(Chat)\
+                    .filter(Chat.issueid == theissue.id)\
+                    .order_by(Chat.timestamp.desc())\
+                    .filter(Chat.type == 0)
                 comments = posts.limit(50)
                 if request.method == 'POST':
                     # if user is the messanger or an admin
@@ -459,7 +460,7 @@ def helpwithissue_active(id):
                         else:
                             pass
                         return redirect(url_for('service.helpwithissue_active',
-                                                        id=theissue.id))
+                                                id=theissue.id))
                     else:
                         pass
 
@@ -496,60 +497,60 @@ def helpwithitem_active(id):
     postform = Chatform(request.form)
     # get the order
     order = db.session\
-    .query(Orders)\
-    .filter_by(id=id)\
-    .first()
+        .query(Orders)\
+        .filter_by(id=id)\
+        .first()
     if current_user.id == order.customer_id or current_user.admin == 1:
 
         # User
         user = db.session\
-        .query(User)\
-        .filter_by(id=order.customer_id)\
-        .first()
+            .query(User)\
+            .filter_by(id=order.customer_id)\
+            .first()
         usergetlevel = db.session\
-        .query(UserAchievements)\
-        .filter_by(username=user.username)\
-        .first()
+            .query(UserAchievements)\
+            .filter_by(username=user.username)\
+            .first()
         userpictureid = str(usergetlevel.level)
         userstats = db.session\
-        .query(StatisticsUser)\
-        .filter_by(username=user.username)\
-        .first()
+            .query(StatisticsUser)\
+            .filter_by(username=user.username)\
+            .first()
         level = db.session\
-        .query(UserAchievements)\
-        .filter_by(username=user.username)\
-        .first()
+            .query(UserAchievements)\
+            .filter_by(username=user.username)\
+            .first()
         width = int(level.experiencepoints / 10)
         userach = db.session\
-        .query(whichAch)\
-        .filter_by(userid=user.id)\
-        .first()
+            .query(whichAch)\
+            .filter_by(user_id=user.id)\
+            .first()
         # vendor
         if order.modid == 0:
             vendor = 0
             vendorach = 0
-            vendorstats =0
+            vendorstats = 0
             vendorgetlevel = 0
             vendorpictureid = 0
         else:
             vendor = db.session\
-            .query(User)\
-            .filter_by(id=order.modid)\
-            .first()
+                .query(User)\
+                .filter_by(id=order.modid)\
+                .first()
 
             vendorstats = db.session\
-            .query(StatisticsVendor)\
-            .filter_by(vendorid=vendor.id)\
-            .first()
+                .query(StatisticsVendor)\
+                .filter_by(vendorid=vendor.id)\
+                .first()
             vendorgetlevel = db.session\
-            .query(UserAchievements)\
-            .filter_by(username=vendor.username)\
-            .first()
+                .query(UserAchievements)\
+                .filter_by(username=vendor.username)\
+                .first()
             vendorpictureid = str(vendorgetlevel.level)
             vendorach = db.session\
-            .query(whichAch)\
-            .filter_by(userid=vendor.id)\
-            .first()
+                .query(whichAch)\
+                .filter_by(user_id=vendor.id)\
+                .first()
 
         # Page Queries
         # Get 20 buys for btc
@@ -560,28 +561,28 @@ def helpwithitem_active(id):
         comments = posts.limit(50)
 
         btcprice = db.session\
-        .query(btc_cash_Prices)\
-        .filter(or_(btc_cash_Prices.currency_id == 1,
-                                         btc_cash_Prices.currency_id == 30,
-                                         btc_cash_Prices.currency_id == 17,
-                                         btc_cash_Prices.currency_id == 23,
-                                         btc_cash_Prices.currency_id == 30,
-                                         btc_cash_Prices.currency_id == 6,
-                                         btc_cash_Prices.currency_id == 4,
-                                         ))\
-        .order_by(btc_cash_Prices.currency_id.asc())\
-        .all()
+            .query(btc_cash_Prices)\
+            .filter(or_(btc_cash_Prices.currency_id == 1,
+                    btc_cash_Prices.currency_id == 30,
+                    btc_cash_Prices.currency_id == 17,
+                    btc_cash_Prices.currency_id == 23,
+                    btc_cash_Prices.currency_id == 30,
+                    btc_cash_Prices.currency_id == 6,
+                    btc_cash_Prices.currency_id == 4,
+                        ))\
+            .order_by(btc_cash_Prices.currency_id.asc())\
+            .all()
 
         btcprice_cashz = db.session\
-        .query(btc_cash_Prices)\
-        .filter(or_(btc_cash_Prices.currency_id == 1,
-                                                   btc_cash_Prices.currency_id == 30,
-                                                   btc_cash_Prices.currency_id == 17,
-                                                   btc_cash_Prices.currency_id == 23,
-                                                   btc_cash_Prices.currency_id == 30,
-                                                   btc_cash_Prices.currency_id == 6,
-                                                   btc_cash_Prices.currency_id == 4,
-                                                   ))\
+            .query(btc_cash_Prices)\
+            .filter(or_(btc_cash_Prices.currency_id == 1,
+                    btc_cash_Prices.currency_id == 30,
+                    btc_cash_Prices.currency_id == 17,
+                    btc_cash_Prices.currency_id == 23,
+                    btc_cash_Prices.currency_id == 30,
+                    btc_cash_Prices.currency_id == 6,
+                    btc_cash_Prices.currency_id == 4,
+                        ))\
 
         if request.method == 'POST':
             if current_user.id == order.customer_id or current_user.admin == 1:
@@ -609,10 +610,13 @@ def helpwithitem_active(id):
                 elif feedbackform.submitfeedback.data:
                     if feedbackform.validate_on_submit():
                         my_id = request.form.get("my_id", "")
-                        getitemid = db.session.query(Orders).filter_by(id=my_id).first()
+                        getitemid = db.session.query(
+                            Orders).filter_by(id=my_id).first()
                         if getitemid.customer_id == current_user.id:
-                            text_box_value_vendorrating = request.form.get("vendorrating")
-                            text_box_value_itemrating = request.form.get("itemrating")
+                            text_box_value_vendorrating = request.form.get(
+                                "vendorrating")
+                            text_box_value_itemrating = request.form.get(
+                                "itemrating")
                             if text_box_value_vendorrating and text_box_value_itemrating is not None:
                                 try:
                                     feed = Feedback(
@@ -631,7 +635,6 @@ def helpwithitem_active(id):
 
                                     getitemid.feedback = 1
                                     db.session.add(feed)
-
 
                                     # vendorexp based off score results
                                     exppoint(user=getitemid.vendor_id, price=0, type=7,

@@ -64,7 +64,7 @@ class clearnetholdings(db.Model):
                    autoincrement=True, unique=True)
     amount = db.Column(db.DECIMAL(20, 8))
     timestamp = db.Column(db.TIMESTAMP())
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     total = db.Column(db.DECIMAL(20, 8))
 
 
@@ -76,7 +76,7 @@ class clearnetholdings_btccash(db.Model):
                    autoincrement=True, unique=True)
     amount = db.Column(db.DECIMAL(20, 8))
     timestamp = db.Column(db.TIMESTAMP())
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     total = db.Column(db.DECIMAL(20, 8))
 
 
@@ -105,17 +105,17 @@ class flagged(db.Model):
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     vendorname = db.Column(db.TEXT)
     howmany = db.Column(db.INTEGER)
     typeitem = db.Column(db.INTEGER)
     listingid = db.Column(db.INTEGER)
     listingtitle = db.Column(db.INTEGER)
-    flaggeduserid1 = db.Column(db.INTEGER)
-    flaggeduserid2 = db.Column(db.INTEGER)
-    flaggeduserid3 = db.Column(db.INTEGER)
-    flaggeduserid4 = db.Column(db.INTEGER)
-    flaggeduserid5 = db.Column(db.INTEGER)
+    flaggeduser_id1 = db.Column(db.INTEGER)
+    flaggeduser_id2 = db.Column(db.INTEGER)
+    flaggeduser_id3 = db.Column(db.INTEGER)
+    flaggeduser_id4 = db.Column(db.INTEGER)
+    flaggeduser_id5 = db.Column(db.INTEGER)
 
 
 db.configure_mappers()

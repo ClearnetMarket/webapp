@@ -9,7 +9,7 @@ class Categories(db.Model):
                    autoincrement=True, unique=False)
     cat_id = db.Column(db.TEXT)
     name = db.Column(db.TEXT)
-
+    cat_icon = db.Column(db.VARCHAR(30))
 
 db.configure_mappers()
 db.create_all()

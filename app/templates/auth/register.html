@@ -2,8 +2,8 @@
 
 {% block content %}
 
-    <div class="row mt-5">
-        <div class="col-4 offset-4 bg-white  rounded-3">
+<div class="row mt-5 ">
+    <div class="col-4 offset-4 bg-light rounded-2 p-3">
         <form method="post">
             {{ form.csrf_token }}
 
@@ -18,14 +18,13 @@
                 <div class="col-12">
                     {{ render_field(form.username, placeholder="Username", autocomplete="off", class="form-control") }}
                     <div id="form_error">
-					<span class="error">
-					{% if form.username.errors %}
-                        {% for error in form.username.errors %}
+                        <span class="error">
+                            {% if form.username.errors %}
+                            {% for error in form.username.errors %}
                             {{ error }}
-
-                        {% endfor %}
-                    {% endif %}
-					</span>
+                            {% endfor %}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -35,13 +34,13 @@
                 <div class="col-12">
                     {{ render_field(form.country, class="form-control") }}
                     <div id="form_error">
-					<span class="error">
-					{% if form.country.errors %}
-                        {% for error in form.country.errors %}
+                        <span class="error">
+                            {% if form.country.errors %}
+                            {% for error in form.country.errors %}
                             {{ error }}
-                        {% endfor %}
-                    {% endif %}
-					</span>
+                            {% endfor %}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -51,13 +50,13 @@
                 <div class="col-12">
                     {{ render_field(form.currency, class="form-control") }}
                     <div id="form_error">
-					<span class="error">
-					{% if form.currency.errors %}
-                        {% for error in form.currency.errors %}
+                        <span class="error">
+                            {% if form.currency.errors %}
+                            {% for error in form.currency.errors %}
                             {{ error }}
-                        {% endfor %}
-                    {% endif %}
-					</span>
+                            {% endfor %}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -67,13 +66,13 @@
                 <div class="col-12">
                     {{ render_field(form.password, placeholder="Password", autocomplete="off", class="form-control") }}
                     <div id="form_error">
-					<span class="error">
-					{% if form.password.errors %}
-                        {% for error in form.password.errors %}
+                        <span class="error">
+                            {% if form.password.errors %}
+                            {% for error in form.password.errors %}
                             {{ error }}
-                        {% endfor %}
-                    {% endif %}
-					</span>
+                            {% endfor %}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -84,13 +83,13 @@
                     {{ render_field(form.passwordtwo, placeholder="Verify Password", autocomplete="off", class="form-control") }}
 
                     <div id="form_error">
-					<span class="error">
-					{% if form.passwordtwo.errors %}
-                        {% for error in form.passwordtwo.errors %}
+                        <span class="error">
+                            {% if form.passwordtwo.errors %}
+                            {% for error in form.passwordtwo.errors %}
                             {{ error }}
-                        {% endfor %}
-                    {% endif %}
-					</span>
+                            {% endfor %}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -100,13 +99,13 @@
                 <div class="col-12">
                     {{ render_field(form.walletpin, placeholder="Four digit Wallet Pin", autocomplete="off", class="form-control") }}
                     <div id="form_error">
-					<span class="error">
-					{% if form.walletpin.errors %}
-                        {% for error in form.walletpin.errors %}
+                        <span class="error">
+                            {% if form.walletpin.errors %}
+                            {% for error in form.walletpin.errors %}
                             {{ error }}
-                        {% endfor %}
-                    {% endif %}
-					</span>
+                            {% endfor %}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -116,18 +115,16 @@
                 <div class="col-12">
                     {{ render_field(form.walletpintwo, placeholder="Confirm Wallet Pin", autocomplete="off", class="form-control") }}
                     <div id="form_error">
-					<span class="error">
-					{% if form.walletpintwo.errors %}
-                        {% for error in form.walletpintwo.errors %}
+                        <span class="error">
+                            {% if form.walletpintwo.errors %}
+                            {% for error in form.walletpintwo.errors %}
                             {{ error }}
-                        {% endfor %}
-                    {% endif %}
-					</span>
+                            {% endfor %}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
-
- 
 
             <div class="form-group mt-3">
                 <div class="col-12 text-center">
@@ -135,24 +132,22 @@
                 </div>
             </div>
 
-           <div class="text-center linkcolor mt-2">
+            <div class="text-center linkcolor mt-2" style="font-size: 10px">
                 <div class="col-12">
                     By Registering, you agree to the
-                    <a href="{{ url_for('main.termsofservice') }}"><br>Terms of Service</a>
+                    <a href="{{ url_for('main.termsofservice') }}">Terms of Service</a>
                 </div>
             </div>
 
-            <div class="row mt-2" >
+            <div class="row mt-2">
+                <div class="col-12 text-center linkcolor mb-1 mt-1">
+                    <a href="{{ url_for('auth.login') }}">Login Here</a>
+                </div>
                 <div class="col-12 text-center linkcolor">
-                      
-                        <a href="{{ url_for('auth.login') }}">Login Here</a>
-                    </div>
-                    <div class="col-12 text-center linkcolor">
-                        <a href="{{ url_for('auth.retrievepassword') }}">Lost your password?</a>
+                    <a href="{{ url_for('auth.retrievepassword') }}">Lost your password?</a>
                 </div>
             </div>
-
         </form>
-            </div>
     </div>
+</div>
 {% endblock %}

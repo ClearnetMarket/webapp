@@ -99,7 +99,7 @@ class EbaySearchItem(db.Model):
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True, nullable=False)
     dateadded = db.Column(db.TIMESTAMP())
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     itemebayid = db.Column(db.BIGINT)
     itemtitle = db.Column(db.TEXT)
     itemprice = db.Column(db.DECIMAL(20, 4))

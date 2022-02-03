@@ -38,35 +38,35 @@ def messagecenter():
     # Get New messages count
     newmsg = db.session\
         .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
+        .filter(PostUser.user_id == current_user.id)\
         .filter(PostUser.unread == 1)
     allmsgcount = newmsg.count()
 
     # get read msg count
     oldmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.unread == 0)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.unread == 0)
     oldmsgcount = oldmsg.count()
 
     # Get official Count
     officialmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
     disputesmsg = db.session\
         .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
+        .filter(PostUser.user_id == current_user.id)\
         .filter(PostUser.dispute == 1, PostUser.unread == 1)
     disputesmsgcount = disputesmsg.count()
 
     # Get all msgs for current page
     allmsg = db.session\
         .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
+        .filter(PostUser.user_id == current_user.id)\
         .filter(PostUser.unread == 1)\
         .order_by(PostUser.timestamp.desc())
 
@@ -99,10 +99,10 @@ def messagecenter():
         for v in request.form.getlist('checkit'):
             specific_post = db.session.query(PostUser).filter_by(id=v).first()
             if delormarkasread.delete.data:
-                if specific_post.userid == current_user.id:
+                if specific_post.user_id == current_user.id:
                     db.session.delete(specific_post)
             elif delormarkasread.markasread.data:
-                if specific_post.userid == current_user.id:
+                if specific_post.user_id == current_user.id:
                     specific_post.unread = 0
                     db.session.add(specific_post)
             else:
@@ -142,7 +142,7 @@ def messagecenter_disputes():
     # Get New messages count
     newmsg = db.session\
         .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
+        .filter(PostUser.user_id == current_user.id)\
         .filter(PostUser.unread == 1)
 
     allmsgcount = newmsg.count()
@@ -150,20 +150,20 @@ def messagecenter_disputes():
     # Get official Count
     officialmsg = db.session\
         .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
+        .filter(PostUser.user_id == current_user.id)\
         .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # get read msg count
     # get read msg count
     oldmsg = db.session.query(PostUser)
-    oldmsg = oldmsg.filter(PostUser.userid == current_user.id)
+    oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
     oldmsg = oldmsg.filter(PostUser.unread == 0)
 
     oldmsgcount = oldmsg.count()
     # Get Disputes Count
     disputesmsg = db.session.query(PostUser)
-    disputesmsg = disputesmsg.filter(PostUser.userid == current_user.id)
+    disputesmsg = disputesmsg.filter(PostUser.user_id == current_user.id)
     disputesmsg = disputesmsg.filter(PostUser.dispute == 1)
     disputesmsgcount = disputesmsg.count()
 
@@ -200,14 +200,14 @@ def messagecenter_disputes():
                 specific_post = db.session.query(
                     PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
-                        
+
                 elif delormarkasread.markasread.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         specific_post.unread = 0
                         db.session.add(specific_post)
-                        
+
                 else:
                     pass
             db.session.commit()
@@ -243,32 +243,32 @@ def messagecenter_oldmsgs():
     # sidebar stuff
     # Get New messages count
     newmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.unread == 1)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.unread == 1)
 
     allmsgcount = newmsg.count()
 
     # Get official Count
     officialmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
     disputesmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.dispute == 1)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.dispute == 1)
     disputesmsgcount = disputesmsg.count()
 
     # get read msg count
     oldmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.unread == 0)\
-    .order_by(PostUser.timestamp.desc())
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.unread == 0)\
+        .order_by(PostUser.timestamp.desc())
 
     oldmsgcount = oldmsg.count()
     search = False
@@ -304,11 +304,11 @@ def messagecenter_oldmsgs():
                 specific_post = db.session.query(
                     PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
-                        
+
                 elif delormarkasread.markasread.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         specific_post.unread = 0
                         db.session.add(specific_post)
                 else:
@@ -335,51 +335,50 @@ def messagecenter_oldmsgs():
 
 @message.route('/messagecenter-official', methods=['GET', 'POST'])
 @login_required
-
 def messagecenter_official():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
     user = db.session\
-    .query(User)\
-    .filter_by(username=current_user.username)\
-    .first()
+        .query(User)\
+        .filter_by(username=current_user.username)\
+        .first()
     title = 'Official Messages'
 
     # sidebar stuff
     # Get New messages count
     newmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.unread == 1)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.unread == 1)
     allmsgcount = newmsg.count()
 
     # get read msg count
     oldmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.unread == 0)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.unread == 0)
     oldmsgcount = oldmsg.count()
 
     # Get official Count
     officialmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
     disputesmsg = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.dispute == 1, PostUser.unread == 1)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.dispute == 1, PostUser.unread == 1)
     disputesmsgcount = disputesmsg.count()
 
     # Get official Count
     officialmsginbox = db.session\
-    .query(PostUser)\
-    .filter(PostUser.userid == current_user.id)\
-    .filter(PostUser.official == 1, PostUser.dispute == 0)
+        .query(PostUser)\
+        .filter(PostUser.user_id == current_user.id)\
+        .filter(PostUser.official == 1, PostUser.dispute == 0)
 
     # pagination
     search = False
@@ -413,14 +412,14 @@ def messagecenter_official():
                 specific_post = db.session.query(
                     PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
-                        
+
                 elif delormarkasread.markasread.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         specific_post.unread = 0
                         db.session.add(specific_post)
-                      
+
                 else:
                     pass
             db.session.commit()
@@ -445,28 +444,27 @@ def messagecenter_official():
 
 @message.route('/messagecenter-sent', methods=['GET', 'POST'])
 @login_required
-
 def messagecenter_Sent():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
     user = db.session\
-    .query(User)\
-    .filter_by(username=current_user.username)\
-    .first()
+        .query(User)\
+        .filter_by(username=current_user.username)\
+        .first()
     title = 'Sent'
 
     # sidebar stuff
     # Get New messages count
     newmsg = db.session.query(PostUser)
-    newmsg = newmsg.filter(PostUser.userid == current_user.id)
+    newmsg = newmsg.filter(PostUser.user_id == current_user.id)
     newmsg = newmsg.filter(PostUser.unread == 1)
 
     allmsgcount = newmsg.count()
 
     # Get official Count
     officialmsg = db.session.query(PostUser)
-    officialmsg = officialmsg.filter(PostUser.userid == current_user.id)
+    officialmsg = officialmsg.filter(PostUser.user_id == current_user.id)
     officialmsg = officialmsg.filter(
         PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
@@ -479,14 +477,14 @@ def messagecenter_Sent():
     # get read msg count
     # get read msg count
     oldmsg = db.session.query(PostUser)
-    oldmsg = oldmsg.filter(PostUser.userid == current_user.id)
+    oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
     oldmsg = oldmsg.filter(PostUser.unread == 0)
     oldmsgcount = oldmsg.count()
 
     # Get sent msgs
     sentmsg = db.session.query(PostUser)
     sentmsg = sentmsg.filter(PostUser.author_id == current_user.id)
-    sentmsg = sentmsg.filter(PostUser.userid == current_user.id)
+    sentmsg = sentmsg.filter(PostUser.user_id == current_user.id)
     sentmsg = sentmsg.order_by(PostUser.timestamp.desc())
 
     sentmsgcount = sentmsg.count()
@@ -523,14 +521,14 @@ def messagecenter_Sent():
                 specific_post = db.session.query(
                     PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
-                        
+
                 elif delormarkasread.markasread.data:
-                    if specific_post.userid == current_user.id:
+                    if specific_post.user_id == current_user.id:
                         specific_post.unread = 0
                         db.session.add(specific_post)
-                        
+
                 else:
                     pass
             db.session.commit()
@@ -574,26 +572,26 @@ def messagecenter_Compose():
     # sidebar stuff
     # Get New messages count
     newmsg = db.session.query(PostUser)
-    newmsg = newmsg.filter(PostUser.userid == current_user.id)
+    newmsg = newmsg.filter(PostUser.user_id == current_user.id)
     newmsg = newmsg.filter(PostUser.unread == 1)
     allmsgcount = newmsg.count()
 
     # Get official Count
     officialmsg = db.session.query(PostUser)
-    officialmsg = officialmsg.filter(PostUser.userid == current_user.id)
+    officialmsg = officialmsg.filter(PostUser.user_id == current_user.id)
     officialmsg = officialmsg.filter(
         PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
     disputesmsg = db.session.query(PostUser)
-    disputesmsg = disputesmsg.filter(PostUser.userid == current_user.id)
+    disputesmsg = disputesmsg.filter(PostUser.user_id == current_user.id)
     disputesmsg = disputesmsg.filter(
         PostUser.dispute == 1, PostUser.unread == 1)
     disputesmsgcount = disputesmsg.count()
     # get read msg count
     oldmsg = db.session.query(PostUser)
-    oldmsg = oldmsg.filter(PostUser.userid == current_user.id)
+    oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
     oldmsg = oldmsg.filter(PostUser.unread == 1)
 
     oldmsgcount = oldmsg.count()
@@ -631,7 +629,7 @@ def messagecenter_Compose():
                 unread=1,
                 modid=0,
                 postid=newpost.id,
-                userid=usersearch.id,
+                user_id=usersearch.id,
                 username=usersearch.username
 
             )
@@ -652,14 +650,14 @@ def messagecenter_Compose():
                 unread=0,
                 modid=0,
                 postid=newpost.id,
-                userid=current_user.id,
+                user_id=current_user.id,
                 username=current_user.username
             )
             db.session.add(userpost2)
             db.session.commit()
             flash("Message sent to " + form.username.data, category="success")
             notification(type=2, username=current_user.username,
-                         userid=current_user.id, salenumber=0, bitcoin=0)
+                         user_id=current_user.id, salenumber=0, bitcoin=0)
 
             return redirect(url_for('message.messagecenter', username=current_user.username))
 
@@ -690,7 +688,7 @@ def messagecenter_Compose_specificperson(person):
             # sidebar stuff
             # Get New messages count
             newmsg = db.session.query(PostUser)
-            newmsg = newmsg.filter(PostUser.userid == current_user.id)
+            newmsg = newmsg.filter(PostUser.user_id == current_user.id)
             newmsg = newmsg.filter(PostUser.unread == 1)
 
             allmsgcount = newmsg.count()
@@ -698,7 +696,7 @@ def messagecenter_Compose_specificperson(person):
             # Get official Count
             officialmsg = db.session.query(PostUser)
             officialmsg = officialmsg.filter(
-                PostUser.userid == current_user.id)
+                PostUser.user_id == current_user.id)
             officialmsg = officialmsg.filter(
                 PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
             officialmsgcount = officialmsg.count()
@@ -706,14 +704,14 @@ def messagecenter_Compose_specificperson(person):
             # Get Disputes Count
             disputesmsg = db.session.query(PostUser)
             disputesmsg = disputesmsg.filter(
-                PostUser.userid == current_user.id)
+                PostUser.user_id == current_user.id)
             disputesmsg = disputesmsg.filter(
                 PostUser.dispute == 1, PostUser.unread == 1)
             disputesmsgcount = disputesmsg.count()
 
             # get read msg count
             oldmsg = db.session.query(PostUser)
-            oldmsg = oldmsg.filter(PostUser.userid == current_user.id)
+            oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
             oldmsg = oldmsg.filter(PostUser.unread == 1)
 
             oldmsgcount = oldmsg.count()
@@ -742,7 +740,7 @@ def messagecenter_Compose_specificperson(person):
                         unread=0,
                         modid=0,
                         postid=post.id,
-                        userid=current_user.id,
+                        user_id=current_user.id,
                         username=current_user.username
                     )
                     db.session.add(userpost2)
@@ -762,12 +760,13 @@ def messagecenter_Compose_specificperson(person):
                         itemid=0,
                         unread=1,
                         postid=post.id,
-                        userid=user.id,
+                        user_id=user.id,
                         username=user.username
                     )
                     db.session.add(userpost)
                     db.session.commit()
-                    notification(type=2, username=user.username, userid=user.id, salenumber=0, bitcoin=0)
+                    notification(type=2, username=user.username,
+                                 user_id=user.id, salenumber=0, bitcoin=0)
                     flash("Message sent to " + user.username, category="success")
                     return redirect(url_for('message.messagecenter', username=current_user.username))
 
@@ -803,7 +802,7 @@ def messagecenter_Compose_specificperson_admin(person):
             # sidebar stuff
             # Get New messages count
             newmsg = db.session.query(PostUser)
-            newmsg = newmsg.filter(PostUser.userid == current_user.id)
+            newmsg = newmsg.filter(PostUser.user_id == current_user.id)
             newmsg = newmsg.filter(PostUser.unread == 1)
 
             allmsgcount = newmsg.count()
@@ -811,7 +810,7 @@ def messagecenter_Compose_specificperson_admin(person):
             # Get official Count
             officialmsg = db.session.query(PostUser)
             officialmsg = officialmsg.filter(
-                PostUser.userid == current_user.id)
+                PostUser.user_id == current_user.id)
             officialmsg = officialmsg.filter(
                 PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
             officialmsgcount = officialmsg.count()
@@ -819,14 +818,14 @@ def messagecenter_Compose_specificperson_admin(person):
             # Get Disputes Count
             disputesmsg = db.session.query(PostUser)
             disputesmsg = disputesmsg.filter(
-                PostUser.userid == current_user.id)
+                PostUser.user_id == current_user.id)
             disputesmsg = disputesmsg.filter(
                 PostUser.dispute == 1, PostUser.unread == 1)
             disputesmsgcount = disputesmsg.count()
 
             # get read msg count
             oldmsg = db.session.query(PostUser)
-            oldmsg = oldmsg.filter(PostUser.userid == current_user.id)
+            oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
             oldmsg = oldmsg.filter(PostUser.unread == 0)
 
             oldmsgcount = oldmsg.count()
@@ -854,7 +853,7 @@ def messagecenter_Compose_specificperson_admin(person):
                         unread=0,
                         modid=0,
                         postid=newpost.id,
-                        userid=current_user.id,
+                        user_id=current_user.id,
                         username=current_user.username
 
                     )
@@ -875,18 +874,18 @@ def messagecenter_Compose_specificperson_admin(person):
                         itemid=0,
                         unread=1,
                         postid=post.id,
-                        userid=user.id,
+                        user_id=user.id,
                         username=user.username
 
                     )
                     db.session.add(userpost)
                     db.session.commit()
-                    notification(type=2, 
-                                username=user.username, 
-                                userid=user.id, 
-                                salenumber=0, 
-                                bitcoin=0
-                                )
+                    notification(type=2,
+                                 username=user.username,
+                                 user_id=user.id,
+                                 salenumber=0,
+                                 bitcoin=0
+                                 )
                     flash("Message sent to " + user.username, category="success")
                     return redirect(url_for('message.messagecenter'))
                 except:
@@ -910,125 +909,123 @@ def messagecenter_Compose_specificperson_admin(person):
 
 @message.route('/post/<int:id>', methods=['GET', 'POST'])
 @login_required
-
 def post(id):
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     form1 = CommentForm(request.form)
     form2 = addusertoconvoForm(request.form)
     post = db.session\
-    .query(Post)\
-    .filter_by(id=id)\
-    .first()
+        .query(Post)\
+        .filter_by(id=id)\
+        .first()
     if post:
         getpost = db.session\
-        .query(PostUser)\
-        .filter(PostUser.postid == post.id)\
-        .filter(PostUser.userid == current_user.id)\
-        .first()
+            .query(PostUser)\
+            .filter(PostUser.postid == post.id)\
+            .filter(PostUser.user_id == current_user.id)\
+            .first()
 
         # getpost.unread = 0
         # db.session.add(getpost)
-       
+
         howmanyusers = db.session\
-        .query(PostUser)\
-        .filter_by(postid=post.id)\
-        .count()
+            .query(PostUser)\
+            .filter_by(postid=post.id)\
+            .count()
 
         if howmanyusers == 1:
             user1 = db.session\
-            .query(PostUser)\
-            .filter_by(postid=post.id)\
-            .order_by(PostUser.timestamp.desc())\
-            .limit(1)\
-            .first()
+                .query(PostUser)\
+                .filter_by(postid=post.id)\
+                .order_by(PostUser.timestamp.desc())\
+                .limit(1)\
+                .first()
             user2 = 0
             user3 = 0
         elif howmanyusers == 2:
             user1 = db.session\
-            .query(PostUser)\
-            .filter_by(postid=post.id)\
-            .order_by(PostUser.timestamp.desc())\
-            .limit(1)\
-            .first()
+                .query(PostUser)\
+                .filter_by(postid=post.id)\
+                .order_by(PostUser.timestamp.desc())\
+                .limit(1)\
+                .first()
             user2 = db.session\
-            .query(PostUser)\
-            .filter_by(postid=post.id)\
-            .order_by(PostUser.timestamp.desc())\
-            .limit(1)\
-            .offset(1)\
-            .first()
+                .query(PostUser)\
+                .filter_by(postid=post.id)\
+                .order_by(PostUser.timestamp.desc())\
+                .limit(1)\
+                .offset(1)\
+                .first()
             user3 = 0
         elif howmanyusers == 3:
             user1 = db.session\
-            .query(PostUser)\
-            .filter_by(postid=post.id)\
-            .order_by(PostUser.timestamp.desc())\
-            .limit(1)\
-            .offset(0)\
-            .first()
+                .query(PostUser)\
+                .filter_by(postid=post.id)\
+                .order_by(PostUser.timestamp.desc())\
+                .limit(1)\
+                .offset(0)\
+                .first()
             user2 = db.session\
-            .query(PostUser)\
-            .filter_by(postid=post.id)\
-            .order_by(PostUser.timestamp.desc())\
-            .limit(1)\
-            .offset(1)\
-            .first()
+                .query(PostUser)\
+                .filter_by(postid=post.id)\
+                .order_by(PostUser.timestamp.desc())\
+                .limit(1)\
+                .offset(1)\
+                .first()
             user3 = db.session\
-            .query(PostUser)\
-            .filter_by(postid=post.id)\
-            .order_by(PostUser.timestamp.desc())\
-            .limit(1)\
-            .offset(2)\
-            .first()
+                .query(PostUser)\
+                .filter_by(postid=post.id)\
+                .order_by(PostUser.timestamp.desc())\
+                .limit(1)\
+                .offset(2)\
+                .first()
         else:
             user1 = 0
             user2 = 0
             user3 = 0
             if howmanyusers > 3:
                 user4 = db.session\
-                .query(PostUser)\
-                .filter_by(postid=post.id)\
-                .order_by(PostUser.timestamp.asc())\
-                .first()
+                    .query(PostUser)\
+                    .filter_by(postid=post.id)\
+                    .order_by(PostUser.timestamp.asc())\
+                    .first()
                 db.session.delete(user4)
                 db.session.commit()
         comments = db.session\
-        .query(Comment)\
-        .filter_by(post_id=post.id)\
-        .order_by(Comment.timestamp.desc())\
-        .all()
+            .query(Comment)\
+            .filter_by(post_id=post.id)\
+            .order_by(Comment.timestamp.desc())\
+            .all()
 
         # sidebar stuff
         # Get New messages count
         allmsgcount = db.session\
-        .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
-        .filter(PostUser.unread == 1)\
-        .count()
+            .query(PostUser)\
+            .filter(PostUser.user_id == current_user.id)\
+            .filter(PostUser.unread == 1)\
+            .count()
 
         # Get official Count
         officialmsgcount = db.session\
-        .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
-        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)\
-        .count()
+            .query(PostUser)\
+            .filter(PostUser.user_id == current_user.id)\
+            .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)\
+            .count()
 
         # Get Disputes Count
         disputesmsgcount = db.session\
-        .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
-        .filter(PostUser.dispute == 1)\
-        .filter(PostUser.unread == 1)\
-        .count()
+            .query(PostUser)\
+            .filter(PostUser.user_id == current_user.id)\
+            .filter(PostUser.dispute == 1)\
+            .filter(PostUser.unread == 1)\
+            .count()
 
         # get read msg count
         oldmsgcount = db.session\
-        .query(PostUser)\
-        .filter(PostUser.userid == current_user.id)\
-        .filter(PostUser.unread == 0)\
-        .count()
-
+            .query(PostUser)\
+            .filter(PostUser.user_id == current_user.id)\
+            .filter(PostUser.unread == 0)\
+            .count()
 
         if request.method == 'POST':
             try:
@@ -1044,10 +1041,10 @@ def post(id):
                     db.session.flush()
 
                     getallposts = db.session\
-                    .query(PostUser)\
-                    .filter(PostUser.postid == post.id)\
-                    .filter( PostUser.userid != current_user.id)\
-                    .all()
+                        .query(PostUser)\
+                        .filter(PostUser.postid == post.id)\
+                        .filter(PostUser.user_id != current_user.id)\
+                        .all()
                     for f in getallposts:
                         f.unread = 1
                         db.session.add(post)
@@ -1072,13 +1069,14 @@ def post(id):
                                 unread=1,
 
                                 postid=post.id,
-                                userid=1,
+                                user_id=1,
                                 username='Support'
 
                             )
                             db.session.add(newpost)
                             db.session.commit()
-                            flash("support added to conversation.  Please wait for support to message. ", category="success")
+                            flash(
+                                "support added to conversation.  Please wait for support to message. ", category="success")
                             return redirect(url_for('message.post', id=post.id))
 
                         elif form2.adduserbody.data == "Admin":
@@ -1094,20 +1092,22 @@ def post(id):
                                 unread=1,
                                 modid=0,
                                 postid=post.id,
-                                userid=1,
+                                user_id=1,
                                 username='Support'
                             )
                             db.session.add(newpost2)
                             db.session.commit()
-                            flash("support added to conversation.  Please wait for support to message. ", category="success")
+                            flash(
+                                "support added to conversation.  Please wait for support to message. ", category="success")
                             return redirect(url_for('message.post', id=post.id))
                         else:
                             Usersearch = db.session\
-                            .query(User)\
-                            .filter_by(username=form2.adduserbody.data)\
-                            .first()
+                                .query(User)\
+                                .filter_by(username=form2.adduserbody.data)\
+                                .first()
                             if Usersearch is None:
-                                flash("There is no user with the username " + form2.adduserbody.data, category="success")
+                                flash("There is no user with the username " +
+                                      form2.adduserbody.data, category="success")
                                 return redirect(url_for('message.post', id=post.id))
                             else:
                                 if howmanyusers <= 3:
@@ -1124,18 +1124,19 @@ def post(id):
                                             unread=1,
                                             modid=0,
                                             postid=post.id,
-                                            userid=Usersearch.id,
+                                            user_id=Usersearch.id,
                                             username=Usersearch.username
                                         )
                                         notification(type=2,
                                                      username=Usersearch.username,
-                                                     userid=Usersearch.id,
+                                                     user_id=Usersearch.id,
                                                      salenumber=0,
                                                      bitcoin=0)
-                                        flash("User added to conversation", category="success")
+                                        flash("User added to conversation",
+                                              category="success")
                                         db.session.add(newpost3)
                                         db.session.commit()
-                                        return redirect(url_for('message.post',id=post.id))
+                                        return redirect(url_for('message.post', id=post.id))
                                     elif user3 == 0:
                                         newpost = PostUser(
                                             # type of message
@@ -1150,23 +1151,26 @@ def post(id):
                                             itemid=user1.itemid,
                                             unread=1,
                                             postid=post.id,
-                                            userid=Usersearch.id,
+                                            user_id=Usersearch.id,
                                             username=Usersearch.username
                                         )
                                         notification(type=2,
                                                      username=Usersearch.username,
-                                                     userid=Usersearch.id,
+                                                     user_id=Usersearch.id,
                                                      salenumber=0,
                                                      bitcoin=0)
                                         db.session.add(newpost)
                                         db.session.commit()
-                                        flash("User added to conversation",category="success")
+                                        flash("User added to conversation",
+                                              category="success")
                                         return redirect(url_for('message.post', id=post.id))
                                     else:
-                                        flash( "3 maximum users per conversation", category="success")
+                                        flash(
+                                            "3 maximum users per conversation", category="success")
                                         return redirect(url_for('message.post', id=post.id))
                                 else:
-                                    flash("3 users max on a conversation",category="danger")
+                                    flash("3 users max on a conversation",
+                                          category="danger")
                                     return redirect(url_for('message.post', id=post.id))
                     else:
                         flash("3 users maximum", category="danger")
@@ -1215,9 +1219,9 @@ def messagecenter_delete_comment(id):
 def messagecenter_WEBSITEcompose(personid, message, subject):
     now = datetime.utcnow()
     user = db.session\
-    .query(User)\
-    .filter_by(id=personid)\
-    .first()
+        .query(User)\
+        .filter_by(id=personid)\
+        .first()
     if request.method == 'POST':
         # create postuser for author
         userpost2 = PostUser(
@@ -1232,13 +1236,13 @@ def messagecenter_WEBSITEcompose(personid, message, subject):
             unread=1,
             modid=0,
             postid=0,
-            userid=user.id,
+            user_id=user.id,
             username=user.username
         )
 
         notification(type=2,
                      username=user.username,
-                     userid=user.id,
+                     user_id=user.id,
                      salenumber=0,
                      bitcoin=0)
         db.session.add(userpost2)

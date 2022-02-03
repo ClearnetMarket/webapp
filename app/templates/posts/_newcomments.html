@@ -6,8 +6,8 @@
             <div id="comment_topbar_name" class="linkcolor">
             <a href="{{ url_for('main.user', username=comment.username) }}">
             {{ comment.username }}
-            ({{ comment.userid|userrating }})
-            ({{ comment.userid|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
+            ({{ comment.user_id|userrating }})
+            ({{ comment.user_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
             </a>
             </div>
 

@@ -6,9 +6,9 @@ from flask import \
     request
 from app import db
 
-from app.wallet_btccash import\
-    wallet_btccash
-from app.wallet_btccash.wallet_btccash_work import\
+from app.wallet_bch import\
+    wallet_bch
+from app.wallet_bch.wallet_btccash_work import\
     btc_cash_sendCoin
 
 # models
@@ -21,7 +21,7 @@ from app.classes.wallet_bch import \
     BchWalletFee
 
 # end models
-from app.wallet_btccash.forms import\
+from app.wallet_bch.forms import\
     walletSendcoin
 from datetime import \
     datetime
@@ -47,11 +47,10 @@ from app.profile.profilebar import\
     profilebar
 
 
-
-@wallet_btccash.route('/', methods=['GET', 'POST'])
+@wallet_bch.route('/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def wallet_btccash_overview():
+def home():
     now = datetime.utcnow()
     title = "Overview"
 
@@ -71,7 +70,7 @@ def wallet_btccash_overview():
         user2width, \
         user2ach, \
         user2vendorstats, \
-        user2 = profilebar(userid1=current_user.id, userid2=0)
+        user2 = profilebar(user_id1=current_user.id, user_id2=0)
 
     # pagination
     search = False
@@ -87,7 +86,7 @@ def wallet_btccash_overview():
     # Get Transaction history
     transactfull = db.session\
         .query(TransactionsBch)\
-        .filter(TransactionsBch.userid == current_user.id)\
+        .filter(TransactionsBch.user_id == current_user.id)\
         .order_by(TransactionsBch.id.desc())
     transactcount = transactfull.count()
     transact = transactfull.limit(per_page).offset(offset)
@@ -104,11 +103,11 @@ def wallet_btccash_overview():
 
     try:
         wallet = db.session\
-        .query(BchWallet)\
-        .filter_by(userid=current_user.id)\
-        .first()
+            .query(BchWallet)\
+            .filter_by(user_id=current_user.id)\
+            .first()
         if wallet.currentbalance > 0:
-            likemoneyinthebank(userid=current_user.id)
+            likemoneyinthebank(user_id=current_user.id)
             db.session.commit()
     except Exception as e:
         print(str(e))
@@ -141,7 +140,7 @@ def wallet_btccash_overview():
                            )
 
 
-@wallet_btccash.route('/bch-send', methods=['POST'])
+@wallet_bch.route('/bch-send', methods=['POST'])
 @website_offline
 @login_required
 def wallet_btccash_send():
@@ -165,12 +164,12 @@ def wallet_btccash_send():
         user2width, \
         user2ach, \
         user2vendorstats, \
-        user2 = profilebar(userid1=current_user.id, userid2=0)
+        user2 = profilebar(user_id1=current_user.id, user_id2=0)
 
     # Get wallet_btc
     wallet = db.session\
         .query(BchWallet)\
-        .filter_by(userid=current_user.id)\
+        .filter_by(user_id=current_user.id)\
         .first()
     # get walletfee
     walletthefee = db.session\
@@ -196,25 +195,28 @@ def wallet_btccash_send():
                     if Decimal(amount) > Decimal(wfee):
                         # add to wallet_btc work
                         btc_cash_sendCoin(
-                            userid=current_user.id,
+                            user_id=current_user.id,
                             sendto=sendto,
                             amount=amount,
                             comment=comment
                         )
                         # achievement
-                        withdrawl(userid=current_user.id)
+                        withdrawl(user_id=current_user.id)
                         db.session.commit()
                         flash("Bitcoin Sent: " + str(sendto), category="success")
                         return redirect(url_for('wallet_btccash.wallet_btccash_send'))
                     else:
-                        flash("Cannot withdraw amount less than wallet_btc fee: " + str(wfee), category="danger")
+                        flash("Cannot withdraw amount less than wallet_btc fee: " +
+                              str(wfee), category="danger")
                         return redirect(url_for('wallet_btccash.wallet_btccash_send'))
 
                 else:
-                    flash("Cannot withdraw more than your balance including fee", category="danger")
+                    flash(
+                        "Cannot withdraw more than your balance including fee", category="danger")
                     return redirect(url_for('wallet_btccash.wallet_btccash_send'))
             else:
-                flash("Invalid Pin. Account will be locked with 5 failed attempts.", category="danger")
+                flash(
+                    "Invalid Pin. Account will be locked with 5 failed attempts.", category="danger")
                 x = int(current_user.fails)
                 y = x + 1
                 current_user.fails = y
@@ -259,7 +261,7 @@ def wallet_btccash_send():
                            )
 
 
-@wallet_btccash.route('/btccash-receive', methods=['GET', 'POST'])
+@wallet_bch.route('/btccash-receive', methods=['GET', 'POST'])
 @website_offline
 @login_required
 def wallet_btc_cash_receive():
@@ -282,13 +284,13 @@ def wallet_btc_cash_receive():
         user2width, \
         user2ach, \
         user2vendorstats, \
-        user2 = profilebar(userid1=current_user.id, userid2=0)
+        user2 = profilebar(user_id1=current_user.id, user_id2=0)
 
     wallet = db.session\
         .query(BchWallet)\
-        .filter_by(userid=current_user.id)\
+        .filter_by(user_id=current_user.id)\
         .first()
- 
+
     return render_template('/wallet/wallet_btccash/receive.html',
                            now=now,
                            title=title,
@@ -311,6 +313,3 @@ def wallet_btc_cash_receive():
                            user2vendorstats=user2vendorstats,
                            user2=user2,
                            )
-
-
-

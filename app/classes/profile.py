@@ -32,7 +32,7 @@ class exptable(db.Model):
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
     amount = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
@@ -69,7 +69,7 @@ class StatisticsUser(db.Model):
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
     username = db.Column(db.VARCHAR(50))
-    usernameid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     totalitemsbought = db.Column(db.INTEGER)
     totaltrades = db.Column(db.INTEGER)
     totalreviews = db.Column(db.INTEGER)

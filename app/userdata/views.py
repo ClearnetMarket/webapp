@@ -22,6 +22,7 @@ from decimal import Decimal
 
 now = datetime.utcnow()
 
+
 @userdata.route('/item/<path:filename>')
 def media_file(filename):
 
@@ -34,15 +35,15 @@ def profile_image(filename):
     return send_from_directory(UPLOADED_FILES_DEST, filename, as_attachment=False)
 
 
-def addtotalItemsSold(userid, howmany):
+def addtotalItemsSold(user_id, howmany):
     """
     how many items a customer sold
     """""
 
     itemssold = db.session\
-    .query(StatisticsVendor)\
-    .filter(userid == StatisticsVendor.vendorid)\
-    .first()
+        .query(StatisticsVendor)\
+        .filter(user_id == StatisticsVendor.vendorid)\
+        .first()
 
     a = itemssold.totalsales
     x = int(a) + int(howmany)
@@ -51,28 +52,27 @@ def addtotalItemsSold(userid, howmany):
 
     db.session.add(itemssold)
 
-    howmanyitemssold_vendor(userid=userid, number=x)
+    howmanyitemssold_vendor(user_id=user_id, number=x)
 
 
-
-def addtotalItemsBought(userid, howmany):
+def addtotalItemsBought(user_id, howmany):
     # how many items a customer bought
-    itemsbought = db.session.query(StatisticsUser).filter(userid == StatisticsUser.usernameid).first()
+    itemsbought = db.session.query(StatisticsUser).filter(
+        user_id == StatisticsUser.user_id).first()
 
     a = itemsbought.totalitemsbought
     x = a + howmany
     itemsbought.totalitemsbought = x
 
     db.session.add(itemsbought)
-  
 
-    howmanyitemsbought_customer(userid=userid, number=x)
-
+    howmanyitemsbought_customer(user_id=user_id, number=x)
 
 
-def addtotaltradesuser(userid):
+def addtotaltradesuser(user_id):
     # how many trades a customer did
-    userstats = db.session.query(StatisticsUser).filter(userid == StatisticsUser.usernameid).first()
+    userstats = db.session.query(StatisticsUser).filter(
+        user_id == StatisticsUser.user_id).first()
     useramount = userstats.totaltrades
     usernewamount = useramount + 1
     userstats.totaltrades = usernewamount
@@ -81,15 +81,15 @@ def addtotaltradesuser(userid):
     db.session.commit()
 
     # achievement
-    howmanytrades_customer(userid=userid, number=usernewamount)
+    howmanytrades_customer(user_id=user_id, number=usernewamount)
 
 
-def addtotaltradesVendor(userid):
+def addtotaltradesVendor(user_id):
     # how many trades a customer did
     vendorstats = db.session\
-    .query(StatisticsVendor)\
-    .filter(userid == StatisticsVendor.vendorid)\
-    .first()
+        .query(StatisticsVendor)\
+        .filter(user_id == StatisticsVendor.vendorid)\
+        .first()
     # add total trades to vendor
     amount = vendorstats.totaltrades
     newamount = amount + 1
@@ -97,29 +97,28 @@ def addtotaltradesVendor(userid):
 
     db.session.add(vendorstats)
 
-
-    howmanytrades_vendor(userid=userid, number=newamount)
-
+    howmanytrades_vendor(user_id=user_id, number=newamount)
 
 
-def differenttradingpartners_user(userid, otherid):
+def differenttradingpartners_user(user_id, otherid):
     # adds diff partners to user file
     # get customer txt and write vendor id
     ##
     user = db.session\
-    .query(User)\
-    .filter(userid == User.id)\
-    .first()
-    getuserlocation = userimagelocation(userid=userid)
+        .query(User)\
+        .filter(user_id == User.id)\
+        .first()
+    getuserlocation = userimagelocation(user_id=user_id)
     itemsbought = db.session\
-    .query(StatisticsUser)\
-    .filter(userid == StatisticsUser.usernameid)\
-    .first()
+        .query(StatisticsUser)\
+        .filter(user_id == StatisticsUser.user_id)\
+        .first()
     # find path of the user
-    thepath = os.path.join(UPLOADED_FILES_DEST, "user", getuserlocation, str(userid))
+    thepath = os.path.join(UPLOADED_FILES_DEST, "user",
+                           getuserlocation, str(user_id))
     # make a directory if doesnt have it..should tho
     mkdir_p(path=thepath)
-    # text file is userid
+    # text file is user_id
     usertextfile = str(user.id) + ".txt"
     # text file location
     userfile = os.path.join(thepath, usertextfile)
@@ -137,35 +136,35 @@ def differenttradingpartners_user(userid, otherid):
         y = (len(x))
         itemsbought.diffpartners = y
 
-    db.session.add(itemsbought) 
+    db.session.add(itemsbought)
 
 
-
-def differenttradingpartners_vendor(userid, otherid):
+def differenttradingpartners_vendor(user_id, otherid):
     """
     # adds diff partners to user file
     # get vendor txt and write customer id
-    :param userid:
+    :param user_id:
     :param otherid:
     :return:
     """
     # get the user
     user = db.session\
-    .query(User)\
-    .filter(userid == User.id)\
-    .first()
-    getuserlocation = userimagelocation(userid=userid)
+        .query(User)\
+        .filter(user_id == User.id)\
+        .first()
+    getuserlocation = userimagelocation(user_id=user_id)
     # get stats if vendor
     itemsbought = db.session\
-    .query(StatisticsVendor)\
-    .filter(userid == StatisticsVendor.vendorid)\
-    .first()
+        .query(StatisticsVendor)\
+        .filter(user_id == StatisticsVendor.vendorid)\
+        .first()
     # find path of the user
 
-    thepath = os.path.join(UPLOADED_FILES_DEST, "user", getuserlocation, str(userid))
+    thepath = os.path.join(UPLOADED_FILES_DEST, "user",
+                           getuserlocation, str(user_id))
     # make a directory if doesnt have it..should tho
     mkdir_p(path=thepath)
-    # text file is userid
+    # text file is user_id
     usertextfile = str(user.id) + ".txt"
     # text file location
     userfile = os.path.join(thepath, usertextfile)
@@ -186,35 +185,35 @@ def differenttradingpartners_vendor(userid, otherid):
     db.session.add(itemsbought)
 
 
-
-def reviewsgiven(userid):
+def reviewsgiven(user_id):
     """
     # adds a review given by user
-    :param userid:
+    :param user_id:
     :return:
     """
 
     reviewsstats = db.session\
-    .query(StatisticsUser)\
-    .filter(userid == StatisticsUser.usernameid)\
-    .first()
+        .query(StatisticsUser)\
+        .filter(user_id == StatisticsUser.user_id)\
+        .first()
     y = reviewsstats.totalreviews
     x = y + 1
     reviewsstats.totalreviews = x
 
     db.session.add(reviewsstats)
 
-def reviewsrecieved(userid):
+
+def reviewsrecieved(user_id):
     """
     # adds a review recieved as a vendor
-    :param userid:
+    :param user_id:
     :return:
     """
 
     reviewsstats = db.session\
-    .query(StatisticsVendor)\
-    .filter(userid == StatisticsVendor.vendorid)\
-    .first()
+        .query(StatisticsVendor)\
+        .filter(user_id == StatisticsVendor.vendorid)\
+        .first()
     y = reviewsstats.totalreviews
     x = y + 1
     reviewsstats.totalreviews = x
@@ -222,12 +221,12 @@ def reviewsrecieved(userid):
     db.session.add(reviewsstats)
 
 
-def addflag(userid):
+def addflag(user_id):
     # adds a flag to user stats
     reviewsstats = db.session\
-    .query(StatisticsUser)\
-    .filter(userid == StatisticsUser.usernameid)\
-    .first()
+        .query(StatisticsUser)\
+        .filter(user_id == StatisticsUser.user_id)\
+        .first()
     y = reviewsstats.itemsflagged
     x = y + 1
     reviewsstats.itemsflagged = x
@@ -235,13 +234,12 @@ def addflag(userid):
     db.session.add(reviewsstats)
 
 
-
-def vendorflag(userid):
+def vendorflag(user_id):
     # adds a flag to vendor stats
     vendorstats = db.session\
-    .query(StatisticsVendor)\
-    .filter(userid == StatisticsVendor.vendorid)\
-    .first()
+        .query(StatisticsVendor)\
+        .filter(user_id == StatisticsVendor.vendorid)\
+        .first()
     # add total trades to vendor
     amount = vendorstats.beenflagged
     newamount = amount + 1
@@ -250,15 +248,14 @@ def vendorflag(userid):
     db.session.add(vendorstats)
 
 
-
-def totalspentonitems_btccash(userid, amount, howmany):
+def totalspentonitems_btccash(user_id, amount, howmany):
     # USER
     # how much money a user has spent of physical items
     # bitcoin cash
     itemsbought = db.session\
-    .query(StatisticsUser)\
-    .filter(userid == StatisticsUser.usernameid)\
-    .first()
+        .query(StatisticsUser)\
+        .filter(user_id == StatisticsUser.user_id)\
+        .first()
     a = itemsbought.totalbtccashspent
     totalamt = (Decimal(amount) * int(howmany))
     x = (Decimal(a + totalamt))
@@ -272,14 +269,14 @@ def totalspentonitems_btccash(userid, amount, howmany):
     db.session.add(itemsbought)
 
 
-def vendortotalmade_btccash(userid, amount):
+def vendortotalmade_btccash(user_id, amount):
     # vendor
     # how much money a user has spent of physical items
     # bitcoin cash
     vendorstats = db.session\
-    .query(StatisticsVendor)\
-    .filter(userid == StatisticsVendor.vendorid)\
-    .first()
+        .query(StatisticsVendor)\
+        .filter(user_id == StatisticsVendor.vendorid)\
+        .first()
     a = vendorstats.totalbtccashrecieved
     x = (Decimal(a + amount))
     vendorstats.totalbtccashrecieved = x
@@ -292,13 +289,10 @@ def vendortotalmade_btccash(userid, amount):
     db.session.add(vendorstats)
 
 
-
-
-
-# def totalrecbyusers(userid, amount, howmany):
+# def totalrecbyusers(user_id, amount, howmany):
 #     # how much money a user has spent of physical items
 #     # bitcoin
-#     itemsbought = db.session.query(StatisticsUser).filter(userid == StatisticsUser.usernameid).first()
+#     itemsbought = db.session.query(StatisticsUser).filter(user_id == StatisticsUser.user_id).first()
 #     a = itemsbought.totalbtcrecieved
 #     totalamt = (Decimal(amount) * int(howmany))
 #     x = (Decimal(a + totalamt))
@@ -307,10 +301,10 @@ def vendortotalmade_btccash(userid, amount):
 #     db.session.commit()
 
 
-# def vendortotalsent_btc(userid, amount):
+# def vendortotalsent_btc(user_id, amount):
 #     # how much money a user has spent of physical items
 #     # bitcoin
-#     vendorstats = db.session.query(StatisticsVendor).filter(userid == StatisticsVendor.vendorid).first()
+#     vendorstats = db.session.query(StatisticsVendor).filter(user_id == StatisticsVendor.vendorid).first()
 #     a = vendorstats.totalbtcspent
 #     x = (Decimal(a + amount))
 #     vendorstats.totalbtcspent = x
@@ -318,12 +312,11 @@ def vendortotalmade_btccash(userid, amount):
 #     db.session.commit()
 
 
-
-# def totalrecbyusers_btccash(userid, amount, howmany):
+# def totalrecbyusers_btccash(user_id, amount, howmany):
 #     # USER
 #     # how much money a user has recieved
 #     # bitcoin cash
-#     itemsbought = db.session.query(StatisticsUser).filter(userid == StatisticsUser.usernameid).first()
+#     itemsbought = db.session.query(StatisticsUser).filter(user_id == StatisticsUser.user_id).first()
 #     a = itemsbought.totalbtccashrecieved
 #     totalamt = (Decimal(amount) * int(howmany))
 #     x = (Decimal(a + totalamt))
@@ -332,11 +325,11 @@ def vendortotalmade_btccash(userid, amount):
 #     db.session.commit()
 
 
-# def vendortotalsent_btccash(userid, amount):
+# def vendortotalsent_btccash(user_id, amount):
 #     # vendor
 #     # how much money a user has spent of physical items
 #     # bitcoin cash
-#     vendorstats = db.session.query(StatisticsVendor).filter(userid == StatisticsVendor.vendorid).first()
+#     vendorstats = db.session.query(StatisticsVendor).filter(user_id == StatisticsVendor.vendorid).first()
 #     a = vendorstats.totalbtccashspent
 #     x = (Decimal(a + amount))
 #     vendorstats.totalbtccashspent = x
@@ -345,12 +338,12 @@ def vendortotalmade_btccash(userid, amount):
 
 
 # AFFILIATE Stats
-def affstats(userid, amount, currency):
+def affstats(user_id, amount, currency):
 
     aff_stats = db.session\
-    .query(AffiliateStats)\
-    .filter(userid == AffiliateStats.userid)\
-    .first()
+        .query(AffiliateStats)\
+        .filter(user_id == AffiliateStats.user_id)\
+        .first()
 
     totalorders = aff_stats.totalitemsordered + 1
 

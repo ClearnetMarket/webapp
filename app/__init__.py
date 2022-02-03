@@ -160,6 +160,7 @@ def csrf_error():
 from app import filters_btc_cash, filters_filtersstuff
 
 # regular filters
+
 app.jinja_env.filters['maincatname'] = filters_filtersstuff.maincatname
 app.jinja_env.filters['orderpicture'] = filters_filtersstuff.orderpicture
 app.jinja_env.filters['cancelwhy'] = filters_filtersstuff.cancelwhy
@@ -193,7 +194,7 @@ app.jinja_env.filters['btcprice_btccash'] = filters_btc_cash.btcprice_btccash
 app.jinja_env.filters['currencytocurrency_btccash'] = filters_btc_cash.currencytocurrency_btccash
 app.jinja_env.filters['usdtocurrency_btccash'] = filters_btc_cash.usdtocurrency_btccash
 
-
+app.jinja_env.filters['currencyformat'] = filters_btc_cash.usdtocurrency_btccash
 # configuration
 app.url_map.converters['regex'] = RegexConverter
 app.config['UPLOADED_FILES_DEST'] = UPLOADED_FILES_DEST
@@ -269,8 +270,8 @@ app.register_blueprint(promote_blueprint, url_prefix='/promote')
 
 
 # btc cash wallet
-from app.wallet_btccash import wallet_btccash as wallet_btccash_blueprint
-app.register_blueprint(wallet_btccash_blueprint, url_prefix='/bch')
+from app.wallet_bch import wallet_bch as wallet_bch_blueprint
+app.register_blueprint(wallet_bch_blueprint, url_prefix='/bch')
 
 
 db.configure_mappers()

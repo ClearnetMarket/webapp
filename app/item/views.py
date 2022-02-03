@@ -71,7 +71,7 @@ from app.common.functions import \
     floating_decimals, \
     btc_cash_convertlocaltobtc
 
-from app.wallet_btccash.wallet_btccash_work import btc_cash_sendCointoEscrow
+from app.wallet_bch.wallet_btccash_work import btc_cash_sendCointoEscrow
 
 from app.common.decorators import \
     ping_user, \
@@ -154,7 +154,7 @@ def Itemforsale(id):
     vendorfeedbackcount = db.session.query(Feedback).filter_by(
         vendorid=vendoritem.vendor_id).count()
     vendorach = db.session.query(whichAch).filter_by(
-        userid=vendoritem.vendor_id).first()
+        user_id=vendoritem.vendor_id).first()
 
     # Relatedqueries
     # gets other vendor items he has for sale
@@ -339,8 +339,8 @@ def Itemforsale(id):
                     return redirect(url_for('item.Itemforsale', id=vendoritem.id))
                 else:
                     # add stats to user/vendor
-                    addflag(userid=current_user.id)
-                    vendorflag(userid=vendoritem.vendor_id)
+                    addflag(user_id=current_user.id)
+                    vendorflag(user_id=vendoritem.vendor_id)
 
                     if finditem:
                         if current_user.admin_role >= 2:
@@ -353,37 +353,37 @@ def Itemforsale(id):
                                 return redirect(url_for('admin.deleteItem', id=vendoritem.id))
                             else:
 
-                                if finditem.userid2 == 0:
+                                if finditem.user_id2 == 0:
                                     newhowmany = howmanyalready + 1
                                     finditem.howmany = newhowmany
-                                    finditem.userid2 = current_user.id
+                                    finditem.user_id2 = current_user.id
                                     db.session.add(finditem)
                                     db.session.commit()
                                     flash("Item flagged for review",
                                           category="danger")
                                     return redirect(url_for('item.Itemforsale', id=vendoritem.id))
-                                elif finditem.userid3 == 0:
+                                elif finditem.user_id3 == 0:
                                     newhowmany = howmanyalready + 1
                                     finditem.howmany = newhowmany
-                                    finditem.userid3 = current_user.id
+                                    finditem.user_id3 = current_user.id
                                     db.session.add(finditem)
                                     db.session.commit()
                                     flash("Item flagged for review",
                                           category="danger")
                                     return redirect(url_for('item.Itemforsale', id=vendoritem.id))
-                                elif finditem.userid4 == 0:
+                                elif finditem.user_id4 == 0:
                                     newhowmany = howmanyalready + 1
                                     finditem.howmany = newhowmany
-                                    finditem.userid4 = current_user.id
+                                    finditem.user_id4 = current_user.id
                                     db.session.add(finditem)
                                     db.session.commit()
                                     flash("Item flagged for review",
                                           category="danger")
                                     return redirect(url_for('item.Itemforsale', id=vendoritem.id))
-                                elif finditem.userid5 == 0:
+                                elif finditem.user_id5 == 0:
                                     newhowmany = howmanyalready + 1
                                     finditem.howmany = newhowmany
-                                    finditem.userid5 = current_user.id
+                                    finditem.user_id5 = current_user.id
                                     db.session.add(finditem)
                                     db.session.commit()
                                     flash("Item flagged for review",
@@ -393,17 +393,17 @@ def Itemforsale(id):
                                     return redirect(url_for('item.Itemforsale', id=vendoritem.id))
                     else:
                         newflagged = flagged(
-                            userid=vendoritem.vendor_id,
+                            user_id=vendoritem.vendor_id,
                             vendorname=vendoritem.vendor_name,
                             listingtitle=vendoritem.itemtitlee,
                             howmany=1,
                             typeitem=1,
                             listingid=vendoritem.id,
-                            flaggeduserid1=current_user.id,
-                            flaggeduserid2=0,
-                            flaggeduserid3=0,
-                            flaggeduserid4=0,
-                            flaggeduserid5=0,
+                            flaggeduser_id1=current_user.id,
+                            flaggeduser_id2=0,
+                            flaggeduser_id3=0,
+                            flaggeduser_id4=0,
+                            flaggeduser_id5=0,
                         )
                         db.session.add(newflagged)
                         db.session.commit()
@@ -638,17 +638,24 @@ def previewItem(id):
         .query(User)\
         .filter_by(id=vendoritem.vendor_id)\
         .first()
-    vendorstats = db.session.query(StatisticsVendor).filter_by(vendorid=vendor.id).first()
-    vendorgetlevel = db.session.query(UserAchievements).filter_by(username=vendor.username).first()
+    vendorstats = db.session.query(
+        StatisticsVendor).filter_by(vendorid=vendor.id).first()
+    vendorgetlevel = db.session.query(UserAchievements).filter_by(
+        username=vendor.username).first()
     vendorpictureid = str(vendorgetlevel.level)
 
     # Item Feedback
-    itemfeedback = db.session.query(Feedback).filter_by(item_id=id).order_by(Feedback.timestamp.desc()).limit(25)
-    feedbackofitemcount = db.session.query(Feedback).filter_by(item_id=id).order_by(Feedback.timestamp.desc()).count()
+    itemfeedback = db.session.query(Feedback).filter_by(
+        item_id=id).order_by(Feedback.timestamp.desc()).limit(25)
+    feedbackofitemcount = db.session.query(Feedback).filter_by(
+        item_id=id).order_by(Feedback.timestamp.desc()).count()
     # Vendor Feedback
-    vendorfeedback = db.session.query(Feedback).filter_by(vendorid=vendoritem.vendor_id).order_by(Feedback.timestamp.desc()).limit(25)
-    vendorfeedbackcount = db.session.query(Feedback).filter_by(vendorid=vendoritem.vendor_id).count()
-    vendorach = db.session.query(whichAch).filter_by(userid=vendoritem.vendor_id).first()
+    vendorfeedback = db.session.query(Feedback).filter_by(
+        vendorid=vendoritem.vendor_id).order_by(Feedback.timestamp.desc()).limit(25)
+    vendorfeedbackcount = db.session.query(Feedback).filter_by(
+        vendorid=vendoritem.vendor_id).count()
+    vendorach = db.session.query(whichAch).filter_by(
+        user_id=vendoritem.vendor_id).first()
 
     # Relatedqueries
     # gets queries of related subcategory..if not enough will do main category
@@ -723,7 +730,8 @@ def buyitagain(id):
                         for f in generalcart:
                             already_in_cart.append(f.item_id)
                         if vendoritem.id in already_in_cart:
-                            flash("Item is in your cart already", category="danger")
+                            flash("Item is in your cart already",
+                                  category="danger")
                             return redirect(url_for('index', username=current_user.username))
                         if cartamount < 5:
                             additem = ShoppingCart(
@@ -839,44 +847,44 @@ def shoppingcart():
 
     # Total cart
     user = db.session\
-    .query(User)\
-    .filter_by(username=current_user.username)\
-    .first()
+        .query(User)\
+        .filter_by(username=current_user.username)\
+        .first()
     cart = db.session\
-    .query(ShoppingCart)\
-    .filter(ShoppingCart.customer == current_user.username,
-            ShoppingCart.savedforlater == 0)\
-    .all()
+        .query(ShoppingCart)\
+        .filter(ShoppingCart.customer == current_user.username,
+                ShoppingCart.savedforlater == 0)\
+        .all()
     gettotalcart = db.session\
-    .query(ShoppingCartTotal)\
-    .filter_by(customer=user.id)\
-    .first()
+        .query(ShoppingCartTotal)\
+        .filter_by(customer=user.id)\
+        .first()
 
     # see if orders previous..delete them
     user_orders = db.session\
-    .query(Orders)\
-    .filter(Orders.customer_id == user.id)\
-    .filter(Orders.type == 1)\
-    .filter(Orders.incart == 1)\
-    .all()
+        .query(Orders)\
+        .filter(Orders.customer_id == user.id)\
+        .filter(Orders.type == 1)\
+        .filter(Orders.incart == 1)\
+        .all()
 
     # see if msg
     msg = db.session\
-    .query(shippingSecret)\
-    .filter_by(userid=user.id, orderid=0)\
-    .first()
+        .query(shippingSecret)\
+        .filter_by(user_id=user.id, orderid=0)\
+        .first()
     if msg:
         db.session.delete(msg)
-  
+
     for i in user_orders:
         db.session.delete(i)
 
     # Saved for later cart
     try:
         cartsaved = db.session\
-        .query(ShoppingCart)\
-        .filter(ShoppingCart.customer == user.username,ShoppingCart.savedforlater == 1)\
-        .all()
+            .query(ShoppingCart)\
+            .filter(ShoppingCart.customer == user.username, ShoppingCart.savedforlater == 1)\
+            .all()
     except Exception:
         cartsaved = 0
     # timer
@@ -887,19 +895,18 @@ def shoppingcart():
     BTC_CASH_pricelist = []
     BTC_CASH_shipping_pricelist = []
     btc_cash_wallet = db.session\
-    .query(BchWallet)\
-    .filter_by(userid=user.id)\
-    .first()
- 
+        .query(BchWallet)\
+        .filter_by(user_id=user.id)\
+        .first()
 
     # First query item get latest price/info/etc
     for i in cart:
         # see if still exists
         try:
             getitem = db.session\
-            .query(marketItem)\
-            .filter(marketItem.id == i.item_id)\
-            .first()
+                .query(marketItem)\
+                .filter(marketItem.id == i.item_id)\
+                .first()
         except Exception as e:
             flash(i.title_of_item +
                   " is not available.It has been removed from your cart", category="success")
@@ -911,7 +918,8 @@ def shoppingcart():
         try:
             i.stringauctionid = '/' + str(i.item_id) + '/'
         except Exception as e:
-            flash(i.title_of_item + " is not available.  It has been removed from your cart", category="success")
+            flash(i.title_of_item +
+                  " is not available.  It has been removed from your cart", category="success")
             db.session.delete(i)
             db.session.commit()
             return redirect(url_for('item.shoppingcart', username=current_user.username))
@@ -1002,9 +1010,9 @@ def shoppingcart():
 
         # get price
         getcurrentprice = db.session\
-        .query(btc_cash_Prices)\
-        .filter(btc_cash_Prices.currency_id == i.currency)\
-        .first()
+            .query(btc_cash_Prices)\
+            .filter(btc_cash_Prices.currency_id == i.currency)\
+            .first()
 
         btc_cash_bt = getcurrentprice.price
         btc_cash_z = Decimal(i.price_of_item) / Decimal(btc_cash_bt)
@@ -1135,9 +1143,9 @@ def shoppingcart():
     # gets queries of related subcategory..if not enough will do main category
     # related to first item only currently
     cart1 = db.session\
-    .query(ShoppingCart)\
-    .filter(ShoppingCart.customer_id == user.id,ShoppingCart.savedforlater == 0)\
-    .first()
+        .query(ShoppingCart)\
+        .filter(ShoppingCart.customer_id == user.id, ShoppingCart.savedforlater == 0)\
+        .first()
     if cart1 is not None:
         itemsinrelated = relatedtoItem(id=cart1.item_id)
         relatedcount = itemsinrelated.count()
@@ -1149,9 +1157,9 @@ def shoppingcart():
 
     # get price
     getcurrentprice = db.session\
-    .query(btc_cash_Prices) \
-    .filter(btc_cash_Prices.currency_id == current_user.currency) \
-    .first()
+        .query(btc_cash_Prices) \
+        .filter(btc_cash_Prices.currency_id == current_user.currency) \
+        .first()
 
     db.session.commit()
 
@@ -1297,7 +1305,7 @@ def shoppingcart():
                         # #get the vendor match to userfees
                         getvendor = k.vendor_id
                         sellerfee = db.session.query(UserFees).filter(
-                            UserFees.userid == getvendor).first()
+                            UserFees.user_id == getvendor).first()
                         physicalitemfee = sellerfee.vendorfee
                         dbfeetopercent = (floating_decimals(
                             (physicalitemfee/100), 8))
@@ -1419,7 +1427,7 @@ def checkout():
     # see if user has the Coin
     btc_cash_wallet = db.session\
         .query(BchWallet)\
-        .filter_by(userid=user.id)\
+        .filter_by(user_id=user.id)\
         .first()
     gettotalcart = db.session\
         .query(ShoppingCartTotal)\
@@ -1434,16 +1442,16 @@ def checkout():
     # queries
     cart = db.session\
         .query(ShoppingCart)\
-        .filter(ShoppingCart.customer == current_user.username,ShoppingCart.savedforlater == 0)\
+        .filter(ShoppingCart.customer == current_user.username, ShoppingCart.savedforlater == 0)\
         .all()
 
     # get the orders
     orders = db.session\
-    .query(Orders)\
-    .filter(Orders.customer_id == user.id)\
-    .filter(Orders.type == 1).filter(Orders.incart == 1)\
-    .group_by(Orders.id.asc())\
-    .all()
+        .query(Orders)\
+        .filter(Orders.customer_id == user.id)\
+        .filter(Orders.type == 1).filter(Orders.incart == 1)\
+        .group_by(Orders.id.asc())\
+        .all()
 
     # see if promo code was added
     for promo in orders:
@@ -1456,7 +1464,7 @@ def checkout():
 
     # get the message
     msg = db.session.query(shippingSecret).filter_by(
-        userid=user.id, orderid=0).first()
+        user_id=user.id, orderid=0).first()
     if msg:
         secretmsg = 0
     else:
@@ -1490,7 +1498,7 @@ def checkout():
                         try:
                             z = secretinfo.privatemsg.data
                             addmsg = shippingSecret(
-                                userid=current_user.id,
+                                user_id=current_user.id,
                                 txtmsg=str(z),
                                 timestamp=datetime.utcnow(),
                                 orderid=0
@@ -1536,9 +1544,9 @@ def checkout():
                     if thepromo is not None:
                         thepromostats = db.session\
                             .query(AffiliateStats)\
-                            .filter(AffiliateStats.userid == thepromo.userid)\
+                            .filter(AffiliateStats.user_id == thepromo.user_id)\
                             .first()
-                        if thepromo.userid != current_user.id:
+                        if thepromo.user_id != current_user.id:
                             if thepromostats is not None:
                                 # new lists for the prices
                                 newtotalforshopping_btc = []
@@ -1565,11 +1573,14 @@ def checkout():
                                             # change order
                                             itemordered.affiliate_discount_btc_cash = 0
                                             # price of order
-                                            totalorderprice = Decimal(itemordered.price)
+                                            totalorderprice = Decimal(
+                                                itemordered.price)
                                             # percent off
-                                            thepromodiscountamount = (Decimal(thepromo.buyerdiscount) / 100)
+                                            thepromodiscountamount = (
+                                                Decimal(thepromo.buyerdiscount) / 100)
                                             # amount saved
-                                            amountsavings = (totalorderprice * thepromodiscountamount)
+                                            amountsavings = (
+                                                totalorderprice * thepromodiscountamount)
                                             itemordered.affiliate_discount_btc = amountsavings
                                             # adjust price per order and take off the money
                                             newpriceoforder = totalorderprice - amountsavings
@@ -1583,8 +1594,10 @@ def checkout():
                                             db.session.add(itemordered)
 
                                             # add new items to list
-                                            newtotalforshopping_btc.append((newpriceoforder, itemordered.quantity))
-                                            newtotalforshopping_btc_shipping.append((itemordered.shipping_price, itemordered.quantity))
+                                            newtotalforshopping_btc.append(
+                                                (newpriceoforder, itemordered.quantity))
+                                            newtotalforshopping_btc_shipping.append(
+                                                (itemordered.shipping_price, itemordered.quantity))
 
                                             db.session.flush()
                                         # if item ordered was bitcoin cash
@@ -1593,13 +1606,16 @@ def checkout():
                                             itemordered.affiliate_discount_btc = 0
 
                                             # price of order
-                                            totalorderprice = Decimal(itemordered.price)
+                                            totalorderprice = Decimal(
+                                                itemordered.price)
 
                                             # percent off
-                                            thepromodiscountamount = (Decimal(thepromo.buyerdiscount) / 100)
+                                            thepromodiscountamount = (
+                                                Decimal(thepromo.buyerdiscount) / 100)
 
                                             # amount saved
-                                            amountsavings = (totalorderprice * thepromodiscountamount)
+                                            amountsavings = (
+                                                totalorderprice * thepromodiscountamount)
                                             itemordered.affiliate_discount_btc_cash = amountsavings
 
                                             # adjust price per order and take off the money
@@ -1614,26 +1630,32 @@ def checkout():
                                             db.session.add(itemordered)
 
                                             # add new items to list
-                                            newtotalforshopping_btc_cash.append((newpriceoforder, itemordered.quantity))
-                                            newtotalforshopping_btc_cash_shipping.append((itemordered.shipping_price, itemordered.quantity))
+                                            newtotalforshopping_btc_cash.append(
+                                                (newpriceoforder, itemordered.quantity))
+                                            newtotalforshopping_btc_cash_shipping.append(
+                                                (itemordered.shipping_price, itemordered.quantity))
 
                                             db.session.flush()
                                     else:
-                                        flash("Promo Code was already added...", category="danger")
+                                        flash(
+                                            "Promo Code was already added...", category="danger")
                                         return redirect(url_for('item.checkout'))
 
                                 # BTC CASH
                                 # multiply items in list together
-                                xx = tuple(a * b for a, b in newtotalforshopping_btc_cash)
+                                xx = tuple(
+                                    a * b for a, b in newtotalforshopping_btc_cash)
                                 # add to get total
                                 bb = ("{0:.8f}".format(sum(xx)))
-                                btc_cash_sum = sum(j for i, j in newtotalforshopping_btc_cash)
+                                btc_cash_sum = sum(
+                                    j for i, j in newtotalforshopping_btc_cash)
 
                                 gettotalcart.btc_cash_sumofitem = btc_cash_sum
                                 gettotalcart.btc_cash_price = bb
 
                                 # shipping loop
-                                dd = tuple(t * h for t, h in newtotalforshopping_btc_cash_shipping)
+                                dd = tuple(
+                                    t * h for t, h in newtotalforshopping_btc_cash_shipping)
                                 # add to get total
                                 ee = ("{0:.8f}".format(sum(dd)))
                                 gettotalcart.shipping_btc_cashprice = ee
@@ -1673,11 +1695,12 @@ def checkout():
                 else:
                     # add security here before proceeding
                     userwallet_btc_cash = db.session\
-                    .query(BchWallet)\
-                    .filter_by(userid=user.id)\
-                    .first()
+                        .query(BchWallet)\
+                        .filter_by(user_id=user.id)\
+                        .first()
 
-                    thecurrentcarttotal_btc_cash = Decimal(gettotalcart.total_btc_cash_price)
+                    thecurrentcarttotal_btc_cash = Decimal(
+                        gettotalcart.total_btc_cash_price)
 
                     if thecurrentcarttotal_btc_cash > 0:
                         if Decimal(userwallet_btc_cash.currentbalance) <= thecurrentcarttotal_btc_cash:
@@ -1703,7 +1726,8 @@ def checkout():
                         except Exception:
                             db.session.delete(specificitemincart)
                             db.session.commit()
-                            flash("Could Not find Item. Perhaps the vendor removed it.", category="danger")
+                            flash(
+                                "Could Not find Item. Perhaps the vendor removed it.", category="danger")
                             return redirect(url_for('wallet_btc.walletReceive', username=current_user.username))
 
                         # update the order to notify vendor
@@ -1713,29 +1737,31 @@ def checkout():
                         # k.shipto_secretmsg = msg.txtmsg
 
                         # add total sold to item
-                        newsold = int(getitem.totalsold) + int(specificitemincart.quantity)
-                        newquantleft = int(getitem.itemcount) - int(specificitemincart.quantity)
+                        newsold = int(getitem.totalsold) + \
+                            int(specificitemincart.quantity)
+                        newquantleft = int(getitem.itemcount) - \
+                            int(specificitemincart.quantity)
                         getitem.totalsold = newsold
                         getitem.itemcount = newquantleft
 
                         # add diff trading partners
-                        differenttradingpartners_user(userid=specificitemincart.customer_id,
+                        differenttradingpartners_user(user_id=specificitemincart.customer_id,
                                                       otherid=specificitemincart.vendor_id)
 
                         # add diff trading partners
-                        differenttradingpartners_vendor(userid=specificitemincart.vendor_id,
+                        differenttradingpartners_vendor(user_id=specificitemincart.vendor_id,
                                                         otherid=specificitemincart.customer_id)
 
                         # notify vendor
                         notification(type=1,
                                      username=specificitemincart.vendor,
-                                     userid=specificitemincart.vendor_id,
+                                     user_id=specificitemincart.vendor_id,
                                      salenumber=specificitemincart.id,
                                      bitcoin=0)
 
                         notification(type=112,
                                      username=specificitemincart.customer,
-                                     userid=specificitemincart.customer_id,
+                                     user_id=specificitemincart.customer_id,
                                      salenumber=specificitemincart.id,
                                      bitcoin=0)
 
@@ -1751,16 +1777,16 @@ def checkout():
                         btc_cash_sendCointoEscrow(
                             amount=priceofitemorder,
                             comment=specificitemincart.id,
-                            userid=specificitemincart.customer_id
+                            user_id=specificitemincart.customer_id
                         )
 
                         # achievement for first purchase
                         # in a loop since could be ten items
-                        firstsale(userid=specificitemincart.vendor_id)
+                        firstsale(user_id=specificitemincart.vendor_id)
 
                         # add a message for each order
                         addmsg = shippingSecret(
-                            userid=current_user.id,
+                            user_id=current_user.id,
                             txtmsg=msg.txtmsg,
                             timestamp=datetime.utcnow(),
                             orderid=specificitemincart.id
@@ -1780,7 +1806,7 @@ def checkout():
                             # send notification to vendor saying its all sold out
                             notification(type=9,
                                          username=specificitemincart.vendor,
-                                         userid=getitem.vendor_id,
+                                         user_id=getitem.vendor_id,
                                          salenumber=getitem.id,
                                          bitcoin=0)
 
@@ -1789,7 +1815,7 @@ def checkout():
                 # query for users message
                 oldmsg = db.session\
                     .query(shippingSecret)\
-                    .filter_by(userid=user.id, orderid=0)\
+                    .filter_by(user_id=user.id, orderid=0)\
                     .first()
                 db.session.delete(oldmsg)
 
@@ -1808,13 +1834,12 @@ def checkout():
                 gettotalcart.btc_off = 0
                 db.session.add(gettotalcart)
 
-
                 # delete items in cart
                 for f in cart:
                     db.session.delete(f)
 
                 # achievement
-                firstpurchase(userid=current_user.id)
+                firstpurchase(user_id=current_user.id)
 
                 db.session.commit()
                 flash("Successful Order.", category="success")

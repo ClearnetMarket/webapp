@@ -14,7 +14,7 @@ class UserFees(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True,
                    primary_key=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     buyerfee = db.Column(db.DECIMAL(6, 4))
     buyerfee_time = db.Column(db.TIMESTAMP())
     vendorfee = db.Column(db.DECIMAL(6, 4))
@@ -28,7 +28,7 @@ class AccountSeedWords(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True,
                    primary_key=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     word00 = db.Column(db.VARCHAR(30))
     word01 = db.Column(db.VARCHAR(30))
     word02 = db.Column(db.VARCHAR(30))

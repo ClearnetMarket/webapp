@@ -1,0 +1,80 @@
+
+.linkcolor_red a:link {
+    color: #FF0000;
+    text-decoration: none;
+}
+
+.linkcolor_red a:visited {
+    color: #FF0000;
+    text-decoration: none;
+}
+
+.linkcolor_red a:hover {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolor_red a:active {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolor_topbar a:link {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.linkcolor_topbar a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.linkcolor_topbar a:hover {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolor_topbar a:active {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolororange a:link {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolororange a:visited {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolororange a:hover {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolororange a:active {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolor a:link {
+    color: #0d579b;
+    text-decoration: none;
+}
+
+.linkcolor a:visited {
+    color: #0d579b;
+    text-decoration: none;
+}
+
+.linkcolor a:hover {
+    color: #FF9900;
+    text-decoration: none;
+}
+
+.linkcolor a:active {
+    color: #FF9900;
+    text-decoration: none;
+}

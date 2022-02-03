@@ -9,7 +9,7 @@ class Notifications(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     type = db.Column(db.INTEGER)
     username = db.Column(db.TEXT)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
     salenumber = db.Column(db.INTEGER)
     bitcoin = db.Column(db.DECIMAL(20, 8))
@@ -64,7 +64,7 @@ class PostUser(db.Model):
     modid = db.Column(db.Integer)
     postid = db.Column(db.Integer)
 
-    userid = db.Column(db.Integer)
+    user_id = db.Column(db.Integer)
     username = db.Column(db.TEXT)
 
 

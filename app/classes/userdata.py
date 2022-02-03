@@ -6,7 +6,7 @@ class userHistory(db.Model):
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     recentcat1 = db.Column(db.INTEGER)
     recentcat1date = db.Column(db.TIMESTAMP())
     recentcat2 = db.Column(db.INTEGER)

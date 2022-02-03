@@ -25,7 +25,7 @@ from app.classes.affiliate import \
     AffiliateStats
 from app.classes.item import \
     marketItem
-
+from app.classes.category import Categories
 from app.classes.message import \
     Notifications
 
@@ -102,8 +102,14 @@ def index():
         customerdisputes = headerfunctions()
 
     btc_cash_price = db.session\
-    .query(btc_cash_Prices)\
-    .all()
+        .query(btc_cash_Prices)\
+        .all()
+
+    get_cats = db.session\
+        .query(Categories)\
+        .filter(Categories.id != 1000, Categories.id != 0)\
+        .order_by(Categories.name.asc())\
+        .all()
 
     if current_user.is_authenticated:
 
@@ -123,11 +129,11 @@ def index():
             user2width, \
             user2ach, \
             user2vendorstats, \
-            user2 = profilebar(userid1=user.id, userid2=0)
+            user2 = profilebar(user_id1=user.id, user_id2=0)
 
         user_recent_ach = db.session\
-        .query(UserAchievements_recent) \
-            .filter_by(userid=user.id) \
+            .query(UserAchievements_recent) \
+            .filter_by(user_id=user.id) \
             .order_by(UserAchievements_recent.achievement_date.desc()) \
             .limit(10)
 
@@ -135,14 +141,14 @@ def index():
             try:
                 # users promo overview
                 userpromooverview = db.session\
-                .query(AffiliateOverview)\
-                .filter_by(userid=current_user.id)\
-                .first()
+                    .query(AffiliateOverview)\
+                    .filter_by(user_id=current_user.id)\
+                    .first()
                 # users promo stats
                 userpromostats = db.session\
-                .query(AffiliateStats)\
-                .filter_by(userid=current_user.id)\
-                .first()
+                    .query(AffiliateStats)\
+                    .filter_by(user_id=current_user.id)\
+                    .first()
             except Exception:
                 userpromooverview = None
                 userpromostats = None
@@ -153,9 +159,9 @@ def index():
         try:
             # Get Vendor needs return address
             ordersifreturnvendor = db.session\
-            .query(Orders)\
-            .filter(Orders.vendor_id == current_user.id)\
-            .filter(Orders.request_return == 1)
+                .query(Orders)\
+                .filter(Orders.vendor_id == current_user.id)\
+                .filter(Orders.request_return == 1)
             returnneededvendoraddress = ordersifreturnvendor.count()
         except Exception:
             returnneededvendoraddress = None
@@ -163,10 +169,10 @@ def index():
         try:
             # Get Vendor needs mark as returned
             ordersifreturnvendor = db.session\
-            .query(Orders)\
-            .filter(Orders.vendor_id == current_user.id)\
-            .filter(Orders.request_return == 3)\
-            .count()
+                .query(Orders)\
+                .filter(Orders.vendor_id == current_user.id)\
+                .filter(Orders.request_return == 3)\
+                .count()
         except Exception:
             ordersifreturnvendor = None
 
@@ -174,7 +180,7 @@ def index():
         try:
             user_recent_achievements = db.session\
                 .query(UserAchievements_recent)\
-                .filter_by(userid=current_user.id,viewed=0)\
+                .filter_by(user_id=current_user.id, viewed=0)\
                 .limit(10)
             if user_recent_achievements:
                 for f in user_recent_achievements:
@@ -191,7 +197,7 @@ def index():
             .query(marketItem)\
             .filter(marketItem.online == 1)\
             .filter(marketItem.imageone != '')\
-            .order_by( marketItem.created.desc())
+            .order_by(marketItem.created.desc())
         todayfeatured = todayfeaturedfull.limit(5)
         tfcount = todayfeaturedfull.count()
         # best sellers
@@ -271,8 +277,8 @@ def index():
         user_recent_ach = 0
         returnneededvendoraddress = None
         ordersifreturnvendor = None
-    if request.method == 'POST':
 
+    if request.method == 'POST':
         if formsearch.search.data and formsearch.validate_on_submit():
             # cats
             categoryfull = formsearch.category.data
@@ -285,7 +291,6 @@ def index():
                                     searchterm=formsearch.searchString.data,
                                     function=cat,
                                     ))
-
     return render_template('index.html',
                            UPLOADED_FILES_DEST=UPLOADED_FILES_DEST,
                            # forms
@@ -303,6 +308,7 @@ def index():
                            # btc prices
                            btc_cash_price=btc_cash_price,
                            # page queries
+                           get_cats=get_cats,
                            todayfeatured=todayfeatured,
                            bestsellers=bestsellers,
                            Electronics=Electronics,
@@ -365,7 +371,7 @@ def notifications():
 
     getnotes = db.session\
         .query(Notifications)\
-        .filter(Notifications.userid == user.id)\
+        .filter(Notifications.user_id == user.id)\
         .order_by(Notifications.timestamp.desc())
 
     notifications = getnotes.limit(per_page).offset(offset)
@@ -385,7 +391,7 @@ def notifications():
                 specific_note = db.session.query(
                     Notifications).filter_by(id=v).first()
                 if specific_note:
-                    if specific_note.userid == current_user.id:
+                    if specific_note.user_id == current_user.id:
                         db.session.delete(specific_note)
                     else:
                         flash("Error", category="danger")
@@ -393,11 +399,11 @@ def notifications():
             elif delormarkasread.markasread.data:
                 specific_note = db.session.query(
                     Notifications).filter_by(id=v).first()
-                if specific_note.userid == current_user.id:
+                if specific_note.user_id == current_user.id:
                     if specific_note.read == 1:
                         specific_note.read = 0
                         db.session.add(specific_note)
-                        
+
                 else:
                     flash("Error", category="danger")
         db.session.commit()
@@ -437,9 +443,9 @@ def privacy():
 def allachievements_main():
     title = "All Achievements"
     achievements = db.session\
-    .query(Achievements)\
-    .order_by(Achievements.dateadded.desc())\
-    .all()
+        .query(Achievements)\
+        .order_by(Achievements.dateadded.desc())\
+        .all()
     return render_template('/achievements/achievementsall.html',
                            title=title,
                            achievements=achievements,
@@ -450,9 +456,9 @@ def allachievements_main():
 def achievements_common():
     title = "Common Achievements"
     achievements = db.session\
-    .query(Achievements)\
-    .filter_by(category=1)\
-    .all()
+        .query(Achievements)\
+        .filter_by(category=1)\
+        .all()
     return render_template('/achievements/achievementscommon.html',
                            title=title,
                            achievements=achievements,
@@ -463,9 +469,9 @@ def achievements_common():
 def achievements_experience():
     title = "Experience Achievements"
     achievements = db.session\
-    .query(Achievements)\
-    .filter_by(category=2)\
-    .all()
+        .query(Achievements)\
+        .filter_by(category=2)\
+        .all()
     return render_template('/achievements/achievementsExperience.html',
                            title=title,
                            achievements=achievements,
@@ -476,9 +482,9 @@ def achievements_experience():
 def achievements_customer():
     title = "Customer Achievements"
     achievements = db.session\
-    .query(Achievements)\
-    .filter_by(category=3)\
-    .all()
+        .query(Achievements)\
+        .filter_by(category=3)\
+        .all()
     return render_template('/achievements/achievementscustomer.html',
                            title=title,
                            achievements=achievements,
@@ -489,22 +495,22 @@ def achievements_customer():
 def achievements_vendor():
     title = "Vendor Achievements"
     achievements = db.session\
-    .query(Achievements)\
-    .filter_by(category=4)\
-    .all()
+        .query(Achievements)\
+        .filter_by(category=4)\
+        .all()
     return render_template('/achievements/achievementsvendor.html',
                            title=title,
                            achievements=achievements,
                            )
 
 
-@main.route('/allachievementsCoin')
+@main.route('/allachievements/coin')
 def achievements_coin():
     title = "Coin Achievements"
     achievements = db.session\
-    .query(Achievements)\
-    .filter_by(category=5)\
-    .all()
+        .query(Achievements)\
+        .filter_by(category=5)\
+        .all()
     return render_template('/achievements/achievementscoin.html',
                            title=title,
                            achievements=achievements,
@@ -515,9 +521,9 @@ def achievements_coin():
 def achievements_unique():
     title = "Unique Achievements"
     achievements = db.session\
-    .query(Achievements)\
-    .filter_by(category=6)\
-    .all()
+        .query(Achievements)\
+        .filter_by(category=6)\
+        .all()
     return render_template('/achievements/achievementsunique.html',
                            title=title,
                            achievements=achievements,
@@ -612,11 +618,11 @@ def frontpage(username):
                 user2width, \
                 user2ach, \
                 user2vendorstats, \
-                user2 = profilebar(userid1=user.id, userid2=0)
+                user2 = profilebar(user_id1=user.id, user_id2=0)
 
             user_recent_ach = db.session\
                 .query(UserAchievements_recent)\
-                .filter_by(userid=user.id)\
+                .filter_by(user_id=user.id)\
                 .order_by(UserAchievements_recent.achievement_date.desc())\
                 .limit(10)
 

@@ -22,7 +22,7 @@ from app.promote.forms import \
     PromoHomeForm
 # end forms
 
-from app.wallet_btccash.wallet_btccash_work import sendcoinforad
+from app.wallet_bch.wallet_btccash_work import sendcoinforad
 
 # general imports
 from datetime import datetime
@@ -37,17 +37,17 @@ def promotehome():
     form = PromoHomeForm()
 
     items = db.session\
-    .query(marketItem)\
-    .filter(marketItem.vendor_id == current_user.id, marketItem.aditem == 1)\
-    .all()
+        .query(marketItem)\
+        .filter(marketItem.vendor_id == current_user.id, marketItem.aditem == 1)\
+        .all()
     if request.method == 'POST':
         if form.submitcheckbox.data and form.validate_on_submit():
             for v in request.form.getlist('checkit'):
                 intv = int(v)
                 specific_item = db.session\
-                .query(marketItem)\
-                .filter_by(id=intv)\
-                .first()
+                    .query(marketItem)\
+                    .filter_by(id=intv)\
+                    .first()
                 if specific_item.aditem == 1:
                     specific_item.aditem = 0
                     specific_item.aditem_level = 0
@@ -68,9 +68,9 @@ def promotehome():
 def promoteitem(itemid):
     now = datetime.utcnow()
     item = db.session\
-    .query(marketItem)\
-    .filter(marketItem.id == itemid)\
-    .first()
+        .query(marketItem)\
+        .filter(marketItem.id == itemid)\
+        .first()
 
     catcost = btc_cash_convertlocaltobtc(amount=1, currency=1)
     frontpagecost = btc_cash_convertlocaltobtc(amount=10, currency=1)
@@ -80,9 +80,9 @@ def promoteitem(itemid):
 
     if item.vendor_id == current_user.id:
         userwallet = db.session\
-        .query(BchWallet)\
-        .filter_by(userid=current_user.id)\
-        .first()
+            .query(BchWallet)\
+            .filter_by(user_id=current_user.id)\
+            .first()
         useramount = userwallet.currentbalance
 
         myaccountform = add_promo_form_factory(item=itemid)
@@ -104,7 +104,7 @@ def promoteitem(itemid):
                         if useramount > decimaldollar:
                             sendcoinforad(amount=decimaldollar,
                                           comment=item.id,
-                                          userid=current_user.id
+                                          user_id=current_user.id
                                           )
                             item.aditem = 1
                             item.aditem_level = 1
@@ -116,14 +116,15 @@ def promoteitem(itemid):
                             flash("Item Promoted", category="success")
                             return redirect(url_for('vendor.itemsforSale'))
                         else:
-                            flash("Not enough coin in your wallet", category="danger")
+                            flash("Not enough coin in your wallet",
+                                  category="danger")
                             return redirect(url_for('promote.promoteitem', itemid=itemid))
                     elif promoselection == 2:
                         # Font page promo
                         if useramount > decimaltendollar:
                             sendcoinforad(amount=decimaltendollar,
                                           comment=item.id,
-                                          userid=current_user.id
+                                          user_id=current_user.id
                                           )
                             item.aditem = 1
                             item.aditem_level = 2
@@ -135,7 +136,8 @@ def promoteitem(itemid):
                             flash("Item Promoted", category="success")
                             return redirect(url_for('vendor.itemsforSale'))
                         else:
-                            flash("Not enough coin in your wallet", category="danger")
+                            flash("Not enough coin in your wallet",
+                                  category="danger")
                             return redirect(url_for('promote.promoteitem', itemid=itemid))
                     else:
                         flash("Unknown Selection", category="danger")
@@ -153,4 +155,3 @@ def promoteitem(itemid):
                            catcost=catcost,
                            frontpagecost=frontpagecost
                            )
-

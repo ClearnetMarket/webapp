@@ -15,7 +15,7 @@ from app.admin.forms import \
     changeitemForm, \
     changeUserForm
 
-from app.wallet_btccash.wallet_btccash_work import\
+from app.wallet_bch.wallet_btccash_work import\
     btc_cash_send_coin_to_user_as_admin, \
     btc_cash_takeCointoUser_asAdmin
 # models
@@ -58,7 +58,7 @@ from app.classes.vendor import \
 # end models
 from app.notification import notification
 
-from app.wallet_btccash.wallet_btccash_work import \
+from app.wallet_bch.wallet_btccash_work import \
     btc_cash_sendCointoUser
 
 from app.common.query import achievementcategory
@@ -106,7 +106,7 @@ def adminHome():
     level = db.session.query(UserAchievements).filter_by(
         username=user.username).first()
     width = int(level.experiencepoints / 10)
-    userach = db.session.query(whichAch).filter_by(userid=user.id).first()
+    userach = db.session.query(whichAch).filter_by(user_id=user.id).first()
 
     # get orders mods are currently working on
     modsorders = db.session.query(Orders)
@@ -140,7 +140,7 @@ def adminHome():
     # get msgs mods are currently working on
     my_mod = db.session.query(PostUser)
     my_mod = my_mod.filter(PostUser.official == 1)
-    my_mod = my_mod.filter(PostUser.userid == 0)
+    my_mod = my_mod.filter(PostUser.user_id == 0)
     my_mod = my_mod.filter(PostUser.modid == current_user.id)
     currentmod_mod = my_mod.limit(10)
     currentmod_count = my_mod.count()
@@ -484,7 +484,7 @@ def dispute(id):
     width = int(level.experiencepoints / 10)
     userreviews = db.session.query(Userreviews).filter(
         user.id == Userreviews.customer_id).limit(25)
-    userach = db.session.query(whichAch).filter_by(userid=user.id).first()
+    userach = db.session.query(whichAch).filter_by(user_id=user.id).first()
 
     # vendor
     vendor = db.session.query(User).filter_by(id=order.vendor_id).first()
@@ -493,7 +493,7 @@ def dispute(id):
     vendorgetlevel = db.session.query(UserAchievements).filter_by(
         username=vendor.username).first()
     vendorpictureid = str(vendorgetlevel.level)
-    vendorach = db.session.query(whichAch).filter_by(userid=vendor.id).first()
+    vendorach = db.session.query(whichAch).filter_by(user_id=vendor.id).first()
     # vendorreviews
     vendorreviews = db.session.query(Feedback).filter(
         vendor.id == Feedback.vendorid).limit(25)
@@ -517,13 +517,13 @@ def dispute(id):
 
                     notification(type=19,
                                  username=order.customer,
-                                 userid=order.customer_id,
+                                 user_id=order.customer_id,
                                  salenumber=order.id,
                                  bitcoin=0)
 
                     notification(type=19,
                                  username=order.vendor,
-                                 userid=order.vendor_id,
+                                 user_id=order.vendor_id,
                                  salenumber=order.id,
                                  bitcoin=0)
 
@@ -571,7 +571,7 @@ def dispute(id):
 
                 btc_cash_sendCointoUser(amount=whole_price,
                                         comment=order.id,
-                                        userid=order.customer_id
+                                        user_id=order.customer_id
                                         )
 
                 flash("Trade has been decided. 100/0 split", category="danger")
@@ -620,12 +620,12 @@ def dispute(id):
                 if order.digital_currency == 3:
                     btc_cash_sendCointoUser(amount=customer_withshipping,
                                             comment=order.id,
-                                            userid=order.customer_id,
+                                            user_id=order.customer_id,
                                             )
 
                     btc_cash_sendCointoUser(amount=vendor_withshipping,
                                             comment=order.id,
-                                            userid=order.vendor_id,
+                                            user_id=order.vendor_id,
                                             )
             else:
                 pass
@@ -671,12 +671,12 @@ def dispute(id):
 
                 btc_cash_sendCointoUser(amount=customer_withshipping,
                                         comment=order.id,
-                                        userid=order.customer_id,
+                                        user_id=order.customer_id,
                                         )
 
                 btc_cash_sendCointoUser(amount=vendor_withshipping,
                                         comment=order.id,
-                                        userid=order.vendor_id,
+                                        user_id=order.vendor_id,
                                         )
 
             else:
@@ -723,12 +723,12 @@ def dispute(id):
 
                 btc_cash_sendCointoUser(amount=customer_withshipping,
                                         comment=order.id,
-                                        userid=order.customer_id,
+                                        user_id=order.customer_id,
                                         )
 
                 btc_cash_sendCointoUser(amount=vendor_withshipping,
                                         comment=order.id,
-                                        userid=order.vendor_id,
+                                        user_id=order.vendor_id,
                                         )
 
             flash("Trade has been decided. 25/75 split", category="danger")
@@ -765,7 +765,7 @@ def dispute(id):
 
                 btc_cash_sendCointoUser(amount=whole_price,
                                         comment=order.id,
-                                        userid=order.vendor_id,
+                                        user_id=order.vendor_id,
                                         )
 
             flash("Trade has been decided. 0/100 split", category="danger")
@@ -866,7 +866,7 @@ def dispute(id):
 
                     btc_cash_sendCointoUser(amount=refund,
                                             comment=item.id,
-                                            userid=item.customer_id,
+                                            user_id=item.customer_id,
                                             )
 
                     if msg:
@@ -883,7 +883,7 @@ def dispute(id):
 
                     notification(type=7,
                                  username=item.customer,
-                                 userid=item.customer_id,
+                                 user_id=item.customer_id,
                                  salenumber=item.id,
                                  bitcoin=0)
 
@@ -960,7 +960,7 @@ def messenger(id):
     level = db.session.query(UserAchievements).filter_by(
         username=user.username).first()
     width = int(level.experiencepoints / 10)
-    userach = db.session.query(whichAch).filter_by(userid=user.id).first()
+    userach = db.session.query(whichAch).filter_by(user_id=user.id).first()
 
     # vendor
     vendor = db.session.query(User).filter_by(id=msg.author_id).first()
@@ -969,7 +969,7 @@ def messenger(id):
     vendorgetlevel = db.session.query(UserAchievements).filter_by(
         username=vendor.username).first()
     vendorpictureid = str(vendorgetlevel.level)
-    vendorach = db.session.query(whichAch).filter_by(userid=vendor.id).first()
+    vendorach = db.session.query(whichAch).filter_by(user_id=vendor.id).first()
 
     if request.method == 'POST':
         if user.admin == 1:
@@ -1461,11 +1461,11 @@ def admin_viewuser(username):
 
     user = db.session.query(User).filter_by(username=username).first()
     if user is not None:
-        userwallet = db.session.query().filter_by(userid=user.id).first()
+        userwallet = db.session.query().filter_by(user_id=user.id).first()
 
         # Get Transaction history
         transactfull = db.session.query(TransactionsBch)
-        transactfull = transactfull.filter(TransactionsBch.userid == user.id)
+        transactfull = transactfull.filter(TransactionsBch.user_id == user.id)
         transactfull = transactfull.order_by(TransactionsBch.id.desc())
         transactcount = transactfull.count()
         transact = transactfull.limit(per_page).offset(offset)
@@ -1539,7 +1539,7 @@ def admin_movemoney():
     now = datetime.utcnow()
 
     user = db.session.query(User).filter_by(id=current_user.id).first()
-    userwallet = db.session.query(BchWallet).filter_by(userid=user.id).first()
+    userwallet = db.session.query(BchWallet).filter_by(user_id=user.id).first()
 
     if request.method == 'POST':
         if user.admin == 1:
@@ -1552,12 +1552,13 @@ def admin_movemoney():
             if finduser:
                 theuser = finduser.id
                 theusername = str(finduser.username)
-                theuserid = str(finduser.id)
+                theuser_id = str(finduser.id)
 
                 if form.submit.data:
                     if current_user.admin_role == 10:
-                        btc_cash_send_coin_to_user_as_admin(amount=amount, comment=description, userid=theuser)
-                        flash("Money sent to: " + theusername + " with user id: " + theuserid,
+                        btc_cash_send_coin_to_user_as_admin(
+                            amount=amount, comment=description, user_id=theuser)
+                        flash("Money sent to: " + theusername + " with user id: " + theuser_id,
                               category="success")
                         return redirect(url_for('admin.admin_movemoney'))
                     else:
@@ -1593,7 +1594,7 @@ def admin_movemoney_fromuser():
     now = datetime.utcnow()
 
     user = db.session.query(User).filter_by(id=current_user.id).first()
-    userwallet = db.session.query(BchWallet).filter_by(userid=user.id).first()
+    userwallet = db.session.query(BchWallet).filter_by(user_id=user.id).first()
 
     if request.method == 'POST':
         if user.admin == 1:
@@ -1606,15 +1607,15 @@ def admin_movemoney_fromuser():
             if finduser:
                 theuser = finduser.id
                 theusername = str(finduser.username)
-                theuserid = str(finduser.id)
+                theuser_id = str(finduser.id)
 
                 if form.submit.data:
                     if current_user.admin_role == 10:
                         btc_cash_send_coin_to_user_as_admin(amount=amount,
-                                                        comment=description,
-                                                        userid=theuser)
+                                                            comment=description,
+                                                            user_id=theuser)
 
-                        flash("Money taken from : " + theusername + " with user id: " + theuserid,
+                        flash("Money taken from : " + theusername + " with user id: " + theuser_id,
                               category="success")
                         return redirect(url_for('admin.admin_movemoney_fromuser'))
                     else:
@@ -1701,7 +1702,6 @@ def admin_viewallorders():
     inner_window = 5  # search bar at bottom used for .. lots of pages
     outer_window = 5  # search bar at bottom used for .. lots of pages
     per_page = 10
-
 
     ordernew1 = db.session.query(Orders).filter(Orders.new_order == 1,
                                                 Orders.completed == 0,

@@ -75,7 +75,7 @@ class AffiliateOverview(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True,
                    primary_key=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
 
     # the discount the buyer gets
     buyerdiscount = db.Column(db.DECIMAL(6, 2))
@@ -98,7 +98,7 @@ class AffiliateStats(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True,
                    primary_key=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     # how many items ordered
     totalitemsordered = db.Column(db.INTEGER)
 
@@ -121,7 +121,7 @@ class AffiliateId(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True,
                    primary_key=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     promocode = db.Column(db.TEXT)
 
 

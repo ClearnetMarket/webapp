@@ -6,7 +6,7 @@ class shippingSecret(db.Model):
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
     txtmsg = db.Column(db.TEXT)
     orderid = db.Column(db.INTEGER)
@@ -40,7 +40,7 @@ class DefaultReturns(db.Model):
     zip = db.Column(db.TEXT)
     message = db.Column(db.TEXT)
     username = db.Column(db.TEXT)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
 
 
 class ReturnsTracking(db.Model):
@@ -100,7 +100,7 @@ class websitefeedback(db.Model):
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.TEXT)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
     comment = db.Column(db.TEXT)
     email = db.Column(db.TEXT)

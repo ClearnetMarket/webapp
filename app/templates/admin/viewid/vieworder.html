@@ -22,7 +22,7 @@
 
                 <div id="admin_latesttrade_holder" class="border">
                     <div id="latesttrade_toppart_holder">
-                        <div id="admin_lasttraded"> {{ trade.userid|adminusername }}</div>
+                        <div id="admin_lasttraded"> {{ trade.user_id|adminusername }}</div>
                         <div id="admin_lasttraded" class="text-center green"> <span class="fa fa- arrow-right" aria-hidden="true"></span></div>
                         <div id="admin_lasttraded"> {{ trade.otheraccount|adminusername }}</div>
                         <div id="admin_lasttraded">{{ moment(timestamp=trade.created, local=False).fromNow(refresh=True)  }}</div>

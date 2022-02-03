@@ -31,7 +31,7 @@ from app.userdata.views import \
     affstats
 
 # btc cash work
-from app.wallet_btccash.wallet_btccash_work import \
+from app.wallet_bch.wallet_btccash_work import \
     btc_cash_sendCointoclearnet, \
     btc_cash_sendcointoaffiliate, \
     btc_cash_sendCointoUser, \
@@ -115,7 +115,8 @@ def login():
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            user = db.session.query(User).filter_by(username=form.username.data).first()
+            user = db.session.query(User).filter_by(
+                username=form.username.data).first()
             if user:
                 if user.confirmed == 1:
                     if user is not None:
@@ -227,7 +228,7 @@ def register():
             startedbuying=now,
             diffpartners=0,
             totalachievements=0,
-            usernameid=new_user.id,
+            user_id=new_user.id,
             userrating=0,
             totaltrades=0,
             disputecount=0,
@@ -237,7 +238,7 @@ def register():
 
         # create which achs they pick
         achselect = whichAch(
-            userid=new_user.id,
+            user_id=new_user.id,
             ach1='0',
             ach2='0',
             ach3='0',
@@ -252,7 +253,7 @@ def register():
 
         # create users achs
         ach = UserAchievements(
-            userid=new_user.id,
+            user_id=new_user.id,
             username=new_user.username,
             experiencepoints=0,
             level=1,
@@ -260,7 +261,7 @@ def register():
 
         # create browser history
         browserhistory = userHistory(
-            userid=new_user.id,
+            user_id=new_user.id,
             recentcat1=1,
             recentcat1date=now,
             recentcat2=2,
@@ -284,14 +285,13 @@ def register():
             btc_cash_off=0,
         )
 
-  
-
-        setfees = UserFees(userid=new_user.id,
-                            buyerfee=0,
-                            buyerfee_time=now,
-                            vendorfee=2,
-                            vendorfee_time=now,
-                            )
+        setfees = UserFees(user_id=new_user.id,
+                           buyerfee=0,
+                           buyerfee_time=now,
+                           vendorfee=2,
+                           vendorfee_time=now,
+                           )
+                           
         db.session.add(setfees)
         strid = str(new_user.id)
         new_user.stringuserdir = strid + '/'
@@ -304,12 +304,12 @@ def register():
         db.session.add(newcart)
 
         # creates bitcoin cash wallet in db
-        btc_cash_create_wallet(userid=new_user.id)
+        btc_cash_create_wallet(user_id=new_user.id)
 
-        newbie(userid=new_user.id)
+        newbie(user_id=new_user.id)
 
         # make a user a directory
-        getuserlocation = userimagelocation(userid=new_user.id)
+        getuserlocation = userimagelocation(user_id=new_user.id)
         userfolderlocation = os.path.join(UPLOADED_FILES_DEST,
                                           "user",
                                           getuserlocation,
@@ -321,9 +321,9 @@ def register():
         current_user.is_authenticated()
         current_user.is_active()
 
-         # Commit all to database
+        # Commit all to database
         db.session.commit()
-       
+
         flash("Successfully Registered", category="success")
         return redirect(url_for('auth.createaccountseed'))
 
@@ -339,9 +339,9 @@ def createaccountseed():
 
     # see if user seed created..
     userseed = db.session \
-                .query(AccountSeedWords) \
-                .filter(user.id == AccountSeedWords.userid) \
-                .first()
+        .query(AccountSeedWords) \
+        .filter(user.id == AccountSeedWords.user_id) \
+        .first()
     if userseed is None:
         # created the wallet seed
 
@@ -365,7 +365,7 @@ def createaccountseed():
             word04filtered = word04.lower()
             word05filtered = word05.lower()
 
-            addseedtodb = AccountSeedWords(userid=user.id,
+            addseedtodb = AccountSeedWords(user_id=user.id,
                                            word00=word00filtered,
                                            word01=word01filtered,
                                            word02=word02filtered,
@@ -402,14 +402,14 @@ def confirmseed():
     form = ConfirmSeed()
     # get the user
     user = db.session\
-    .query(User)\
-    .filter(current_user.id == User.id)\
-    .first()
+        .query(User)\
+        .filter(current_user.id == User.id)\
+        .first()
 
     if user.confirmed == 0:
         # get the users seed
         userseed = db.session.query(AccountSeedWords) \
-            .filter(user.id == AccountSeedWords.userid)\
+            .filter(user.id == AccountSeedWords.user_id)\
             .first()
 
         if request.method == 'POST':
@@ -438,6 +438,7 @@ def confirmseed():
                 return redirect(url_for('index'))
     else:
         flash("You have already been confirmed", category="danger")
+
         return redirect(url_for('index'))
     return render_template('/auth/confirmseed.html', form=form)
 
@@ -445,17 +446,17 @@ def confirmseed():
 def deleteprofileimage(id, img, type):
     if current_user.id == id:
         user = db.session \
-                .query(User)\
-                .filter(User.id == id)\
-                .first()
-        userid = str(id)
+            .query(User)\
+            .filter(User.id == id)\
+            .first()
+        user_id = str(id)
         userimg1 = str(img)
         userimg2 = str(img)[:-9] + '.jpg'
         usernodelocation = str(user.usernode)
         file0 = os.path.join(UPLOADED_FILES_DEST, "user",
-                             usernodelocation, userid, userimg1)
+                             usernodelocation, user_id, userimg1)
         file1 = os.path.join(UPLOADED_FILES_DEST, "user",
-                             usernodelocation, userid, userimg2)
+                             usernodelocation, user_id, userimg2)
         try:
             os.remove(file0)
             os.remove(file1)
@@ -484,9 +485,9 @@ def myAccount():
     title = 'My Account'
 
     user = db.session\
-            .query(User)\
-            .filter_by(username=current_user.username)\
-            .first()
+        .query(User)\
+        .filter_by(username=current_user.username)\
+        .first()
 
     id_pic1 = id_generator_picture1()
     vacform = VacationForm()
@@ -515,26 +516,32 @@ def myAccount():
                 if form.imageprofile.data:
                     try:
                         mkdir_p(path=userlocation)
-                        deleteprofileimage(id=current_user.id, img=current_user.profileimage, type=0)
-                        filename = secure_filename(form.imageprofile.data.filename)
+                        deleteprofileimage(
+                            id=current_user.id, img=current_user.profileimage, type=0)
+                        filename = secure_filename(
+                            form.imageprofile.data.filename)
                         # saves it to location
-                        profileimagefilepath = os.path.join(userlocation, filename)
+                        profileimagefilepath = os.path.join(
+                            userlocation, filename)
                         form.imageprofile.data.save(profileimagefilepath)
                         # RENAMING FILE
                         # split file name and ending
-                        filenamenew, file_extension = os.path.splitext(profileimagefilepath)
+                        filenamenew, file_extension = os.path.splitext(
+                            profileimagefilepath)
                         # gets new 64 digit filename
                         newfileName = id_pic1 + file_extension
                         # puts new name with ending
                         filenamenewfull = filenamenew + file_extension
                         # gets aboslute path of new file
-                        newfileNameDestination = os.path.join(userlocation, newfileName)
+                        newfileNameDestination = os.path.join(
+                            userlocation, newfileName)
                         # renames file
                         os.rename(filenamenewfull, newfileNameDestination)
 
                         dbname = id_pic1 + "_125x.jpg"
                     except Exception as e:
-                        flash("Error WIth Picture Submission", category="success")
+                        flash("Error WIth Picture Submission",
+                              category="success")
                         return redirect(url_for('auth.myAccount', username=current_user.username))
                     if form.imageprofile.data.filename:
                         x1 = dbname
@@ -599,9 +606,9 @@ def setupAccount():
     now = datetime.utcnow()
     form = vendorSignup(request.form)
     user = db.session \
-            .query(User) \
-            .filter(User.id == current_user.id) \
-            .first()
+        .query(User) \
+        .filter(User.id == current_user.id) \
+        .first()
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -640,10 +647,9 @@ def setupAccount():
                     db.session.add(stats)
                     db.session.add(user)
                     db.session.add(addverify)
-                    
 
                     # add achievemenets
-                    becamevendor(userid=user.id)
+                    becamevendor(user_id=user.id)
                     db.session.commit()
                     flash("Welcome fellow crypto lover.  Here you can get vendor verification.  Its optional!",
                           category="success")
@@ -669,22 +675,22 @@ def orders_viewtracking(id):
     now = datetime.utcnow()
     form = searchForm()
     user = db.session\
-            .query(User)\
-            .filter_by(username=current_user.username)\
-            .first()
+        .query(User)\
+        .filter_by(username=current_user.username)\
+        .first()
     order = db.session\
-    .query(Orders)\
-    .filter_by(id=id)\
-    .first()
+        .query(Orders)\
+        .filter_by(id=id)\
+        .first()
     if order:
         msg = db.session\
-        .query(shippingSecret)\
-        .filter_by(orderid=id)\
-        .first()
+            .query(shippingSecret)\
+            .filter_by(orderid=id)\
+            .first()
         tracking = db.session\
-        .query(Tracking)\
-        .filter_by(sale_id=id)\
-        .first()
+            .query(Tracking)\
+            .filter_by(sale_id=id)\
+            .first()
 
         if order.customer_id == current_user.id:
             return render_template('/auth/orders/tracking.html',
@@ -717,51 +723,51 @@ def customerOrders_returninstructions(id):
     trackingform = markasSent(request.form)
 
     order = db.session\
-    .query(Orders)\
-    .filter_by(id=id)\
-    .first()
+        .query(Orders)\
+        .filter_by(id=id)\
+        .first()
     if order:
         if order.customer_id == current_user.id or order.vendor_id == current_user.id:
             # item
             getitem = db.session\
-            .query(marketItem)\
-            .filter( marketItem.id == order.item_id)\
-            .first()
+                .query(marketItem)\
+                .filter(marketItem.id == order.item_id)\
+                .first()
             vendortracking = db.session\
-            .query(Tracking)\
-            .filter_by(sale_id=id)\
-            .first()
+                .query(Tracking)\
+                .filter_by(sale_id=id)\
+                .first()
             # delete return address
             returninfo = db.session\
-            .query(Returns)\
-            .filter_by(ordernumber=id)\
-            .first()
+                .query(Returns)\
+                .filter_by(ordernumber=id)\
+                .first()
             # delete return tracking
             returntracking = db.session\
-            .query(ReturnsTracking)\
-            .filter_by(ordernumber=id)\
-            .first()
+                .query(ReturnsTracking)\
+                .filter_by(ordernumber=id)\
+                .first()
             # customer tracking address
             msg = db.session\
-            .query(shippingSecret)\
-            .filter_by(orderid=id)\
-            .first()
+                .query(shippingSecret)\
+                .filter_by(orderid=id)\
+                .first()
             gettracking = db.session\
-            .query(Tracking)\
-            .filter_by(sale_id=id)\
-            .first()
+                .query(Tracking)\
+                .filter_by(sale_id=id)\
+                .first()
             # Customer Return address check if added
             # if 0 no address added
             # if 1 address added
 
             returns = db.session\
-            .query(Returns)\
-            .filter_by(ordernumber=order.id)\
-            .first()
+                .query(Returns)\
+                .filter_by(ordernumber=order.id)\
+                .first()
             returnscount = db.session\
-            .query(Returns)\
-            .filter_by(ordernumber=order.id)\
-            .count()
+                .query(Returns)\
+                .filter_by(ordernumber=order.id)\
+                .count()
             # get default address or a temporary one
             # if 0 no address at all either default or temp
             # Customer Return tracking ..initated return and 14 days
@@ -789,7 +795,7 @@ def customerOrders_returninstructions(id):
                         db.session.add(addnewreturn)
                         notification(type=555,
                                      username=order.vendor,
-                                     userid=order.vendor_id,
+                                     user_id=order.vendor_id,
                                      salenumber=order.id,
                                      bitcoin=0)
 
@@ -830,7 +836,7 @@ def achievements_all():
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -842,17 +848,17 @@ def achievements_all():
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session\
-    .query(UserAchievements)\
-    .filter_by(userid=current_user.id)\
-    .first())
+    x, size = row2dict(row=db.session
+                       .query(UserAchievements)
+                       .filter_by(user_id=current_user.id)
+                       .first())
     return render_template('/auth/userachievements/achievementsall.html',
                            x=x,
                            size=size,
@@ -872,7 +878,7 @@ def achievements_coin():
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -884,16 +890,16 @@ def achievements_coin():
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
-    x, size = row2dict(row=db.session\
-    .query(UserAchievements)\
-    .filter_by(userid=current_user.id)\
-    .first())
+    x, size = row2dict(row=db.session
+                       .query(UserAchievements)
+                       .filter_by(user_id=current_user.id)
+                       .first())
 
     return render_template('/auth/userachievements/achievementscoin.html',
                            x=x,
@@ -914,7 +920,7 @@ def achievements_common():
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -926,7 +932,7 @@ def achievements_common():
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
@@ -934,7 +940,7 @@ def achievements_common():
         return x, size
     x, size = row2dict(row=db.session
                        .query(UserAchievements)
-                       .filter_by(userid=current_user.id)
+                       .filter_by(user_id=current_user.id)
                        .first())
     return render_template('/auth/userachievements/achievementscommon.html',
                            x=x,
@@ -955,7 +961,7 @@ def achievements_experience():
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -967,7 +973,7 @@ def achievements_experience():
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
@@ -975,7 +981,7 @@ def achievements_experience():
         return x, size
     x, size = row2dict(row=db.session
                        .query(UserAchievements)
-                       .filter_by(userid=current_user.id)
+                       .filter_by(user_id=current_user.id)
                        .first())
     return render_template('/auth/userachievements/achievementsExperience.html',
                            x=x,
@@ -996,7 +1002,7 @@ def achievements_unique():
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -1008,7 +1014,7 @@ def achievements_unique():
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
@@ -1016,7 +1022,7 @@ def achievements_unique():
         return x, size
     x, size = row2dict(row=db.session
                        .query(UserAchievements)
-                       .filter_by(userid=current_user.id)
+                       .filter_by(user_id=current_user.id)
                        .first())
     return render_template('/auth/userachievements/achievementsunique.html',
                            x=x,
@@ -1037,7 +1043,7 @@ def achievements_customer():
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -1049,17 +1055,17 @@ def achievements_customer():
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session\
-    .query(UserAchievements)\
-    .filter_by(userid=current_user.id)\
-    .first())
+    x, size = row2dict(row=db.session
+                       .query(UserAchievements)
+                       .filter_by(user_id=current_user.id)
+                       .first())
     return render_template('/auth/userachievements/achievementscustomer.html',
                            x=x,
                            size=size,
@@ -1079,7 +1085,7 @@ def achievements_vendor():
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -1091,17 +1097,17 @@ def achievements_vendor():
                     if nousername in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session\
-    .query(UserAchievements)\
-    .filter_by(userid=current_user.id)\
-    .first())
+    x, size = row2dict(row=db.session
+                       .query(UserAchievements)
+                       .filter_by(user_id=current_user.id)
+                       .first())
     return render_template('/auth/userachievements/achievementsvendor.html',
                            x=x,
                            size=size,
@@ -1116,7 +1122,7 @@ def selectuserAchs():
     form = achselectForm()
     now = datetime.utcnow()
     specificach = db.session.query(whichAch).filter_by(
-        userid=current_user.id).first()
+        user_id=current_user.id).first()
     if current_user.vendor_account == 0:
         user = db.session.query(User).filter_by(
             username=current_user.username).first()
@@ -1124,7 +1130,7 @@ def selectuserAchs():
             username=user.username).first()
         userpictureid = str(usergetlevel.level)
         userwallet = db.session.query(
-            BchWallet).filter_by(userid=user.id).first()
+            BchWallet).filter_by(user_id=user.id).first()
         userstats = db.session.query(StatisticsUser).filter_by(
             username=user.username).first()
 
@@ -1132,7 +1138,7 @@ def selectuserAchs():
             username=user.username).first()
         width = int(level.experiencepoints / 10)
         userach = db.session.query(whichAch).filter_by(
-            userid=current_user.id).first()
+            user_id=current_user.id).first()
         vendor = 0
         vendorwallet = 0
         vendorstats = 0
@@ -1142,26 +1148,26 @@ def selectuserAchs():
     else:
         # vendor
         vendor = db.session\
-        .query(User)\
-        .filter_by(id=current_user.id)\
-        .first()
+            .query(User)\
+            .filter_by(id=current_user.id)\
+            .first()
         vendorwallet = db.session\
-        .query(BchWallet)\
-        .filter_by(userid=vendor.id)\
-        .first()
+            .query(BchWallet)\
+            .filter_by(user_id=vendor.id)\
+            .first()
         vendorstats = db.session\
-        .query(StatisticsVendor)\
-        .filter_by(vendorid=vendor.id)\
-        .first()
+            .query(StatisticsVendor)\
+            .filter_by(vendorid=vendor.id)\
+            .first()
         vendorgetlevel = db.session\
-        .query(UserAchievements)\
-        .filter_by(username=vendor.username)\
-        .first()
+            .query(UserAchievements)\
+            .filter_by(username=vendor.username)\
+            .first()
         vendorpictureid = str(vendorgetlevel.level)
         vendorach = db.session\
-        .query(whichAch)\
-        .filter_by(userid=current_user.id)\
-        .first()
+            .query(whichAch)\
+            .filter_by(user_id=current_user.id)\
+            .first()
 
         user = 0
         usergetlevel = 0
@@ -1181,7 +1187,7 @@ def selectuserAchs():
         nodate = 'date'
         noid = 'id'
         nolevel = 'level'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         noexp = 'experiencepoints'
         solutions = []
         for key, value in d.items():
@@ -1191,7 +1197,7 @@ def selectuserAchs():
 
                     if nolevel not in key:
                         if noid not in key:
-                            if nouserid not in key:
+                            if nouser_id not in key:
                                 if noexp not in key:
                                     solutions.append(key)
         x = solutions
@@ -1199,7 +1205,7 @@ def selectuserAchs():
         return x, size
 
     x, size = row2dict(row=db.session.query(
-        UserAchievements).filter_by(userid=current_user.id).first())
+        UserAchievements).filter_by(user_id=current_user.id).first())
 
     if request.method == "POST":
         if form.selectone.data:
@@ -1397,7 +1403,7 @@ def orders_cancelorder(id):
 
                     btc_cash_sendCointoUser(amount=totalprice,
                                             comment=getorder.id,
-                                            userid=getorder.customer_id,
+                                            user_id=getorder.customer_id,
                                             )
 
                     if gettracking:
@@ -1416,8 +1422,6 @@ def orders_cancelorder(id):
 
                         db.session.add(getitem)
 
-
-
                     # Give user neg exp
                     flash("Order #" + str(id) +
                           " Cancelled.  Shipping info deleted", category="success")
@@ -1427,15 +1431,15 @@ def orders_cancelorder(id):
                              quantity=0,
                              currency=0)
                     notification(type=7,
-                                username=getorder.customer, 
-                                userid=getorder.customer_id,
-                                salenumber=getorder.id,
+                                 username=getorder.customer,
+                                 user_id=getorder.customer_id,
+                                 salenumber=getorder.id,
                                  bitcoin=0)
                     notification(type=7,
-                            username=getorder.vendor,
-                            userid=getorder.vendor_id,
-                            salenumber=getorder.id,
-                            bitcoin=0)
+                                 username=getorder.vendor,
+                                 user_id=getorder.vendor_id,
+                                 salenumber=getorder.id,
+                                 bitcoin=0)
                     db.session.commit()
                     return redirect(url_for('auth.orders'))
                 else:
@@ -1491,13 +1495,13 @@ def orders_markasrecieved(id):
 
                         notification(type=111,
                                      username=getorder.customer,
-                                     userid=getorder.customer_id,
+                                     user_id=getorder.customer_id,
                                      salenumber=getorder.id,
                                      bitcoin=0
                                      )
                         notification(type=111,
                                      username=getorder.vendor,
-                                     userid=getorder.vendor_id,
+                                     user_id=getorder.vendor_id,
                                      salenumber=getorder.id,
                                      bitcoin=0
                                      )
@@ -1512,11 +1516,13 @@ def orders_markasrecieved(id):
                             # variables
                             promopercent = (Decimal(getpromo.aff_fee / 100))
 
-                            amounttomodify = (Decimal(getorder.price_beforediscount))
+                            amounttomodify = (
+                                Decimal(getorder.price_beforediscount))
 
                             # percent for affiliate
                             # multiply amount before fee off *  promo percent
-                            amount_to_affiliate = (amounttomodify * promopercent)
+                            amount_to_affiliate = (
+                                amounttomodify * promopercent)
 
                             # percent to protos
                             # physicalfeefor item - feeforaffiliate == feeforprotos
@@ -1532,7 +1538,7 @@ def orders_markasrecieved(id):
                             # order the amount sent
                             btc_cash_sendcointoaffiliate(amount=amount_to_affiliate,
                                                          comment=getorder.id,
-                                                         userid=getpromo.userid
+                                                         user_id=getpromo.user_id
                                                          )
 
                             btc_cash_sendCointoclearnet(amount=amount_to_protos,
@@ -1540,13 +1546,13 @@ def orders_markasrecieved(id):
                                                         shard=current_user.shard
                                                         )
                             # add affiliate stats
-                            affstats(userid=getpromo.userid,
+                            affstats(user_id=getpromo.user_id,
                                      amount=amount_to_affiliate, currency=3)
 
                             # send amount to user
                             btc_cash_sendCointoUser(amount=shiprice,
                                                     comment=getorder.id,
-                                                    userid=getorder.vendor_id,
+                                                    user_id=getorder.vendor_id,
                                                     )
                             db.session.flush()
                         # delete shipping
@@ -1560,30 +1566,30 @@ def orders_markasrecieved(id):
 
                         # STATS
                         # BTC CASH Spent by user
-                        totalspentonitems_btccash(userid=getorder.customer_id,
+                        totalspentonitems_btccash(user_id=getorder.customer_id,
                                                   howmany=1,
                                                   amount=getorder.price
                                                   )
 
                         # BTC CASH recieved by vendor
-                        vendortotalmade_btccash(userid=getorder.vendor_id,
+                        vendortotalmade_btccash(user_id=getorder.vendor_id,
                                                 amount=shiprice
                                                 )
 
                         # Add total items bought
                         addtotalItemsBought(
-                            userid=getorder.customer_id, howmany=getorder.quantity)
+                            user_id=getorder.customer_id, howmany=getorder.quantity)
 
                         # add total sold to vendor
                         addtotalItemsSold(
-                            userid=getorder.vendor_id, howmany=getorder.quantity)
+                            user_id=getorder.vendor_id, howmany=getorder.quantity)
 
                         # add diff trading partners
                         differenttradingpartners_user(
-                            userid=getorder.customer_id, otherid=getorder.vendor_id)
+                            user_id=getorder.customer_id, otherid=getorder.vendor_id)
 
                         differenttradingpartners_vendor(
-                            userid=getorder.vendor_id, otherid=getorder.customer_id)
+                            user_id=getorder.vendor_id, otherid=getorder.customer_id)
 
                         # customer exp for finishing early
                         exppoint(user=getorder.customer_id, price=0,
@@ -1710,7 +1716,7 @@ def customerOrders_return(id):
 
                             db.session.add(order)
 
-                            notification(type=5, username=order.vendor, userid=order.vendor_id, salenumber=order.id,
+                            notification(type=5, username=order.vendor, user_id=order.vendor_id, salenumber=order.id,
                                          bitcoin=0)
                             db.session.commit()
                             flash("Item Return initiated", category="success")
@@ -1851,8 +1857,8 @@ def orders():
                                 db.session.add(getitemid)
 
                                 # add a review
-                                reviewsgiven(userid=user.id)
-                                reviewsrecieved(userid=getitemid.vendor_id)
+                                reviewsgiven(user_id=user.id)
+                                reviewsrecieved(user_id=getitemid.vendor_id)
 
                                 # vendorexp based off score results
                                 exppoint(user=getitemid.vendor_id,
@@ -1932,7 +1938,7 @@ def retrievepassword():
                 username=form.username.data).first()
             # match the seed to the user
             userseed = db.session.query(AccountSeedWords) \
-                .filter(user.id == AccountSeedWords.userid).first()
+                .filter(user.id == AccountSeedWords.user_id).first()
 
             w00 = form.seedanswer0.data
             w01 = form.seedanswer1.data
@@ -2004,7 +2010,7 @@ def retrievepin():
                 username=form.username.data).first()
             # match the seed to the user
             userseed = db.session.query(AccountSeedWords) \
-                .filter(user.id == AccountSeedWords.userid).first()
+                .filter(user.id == AccountSeedWords.user_id).first()
 
             w00 = form.seedanswer0.data
             w01 = form.seedanswer1.data
@@ -2070,7 +2076,7 @@ def deleteaccount():
     # get btc wallet
     # get btccash wallet
     userbtccash = db.session.query(BchWallet) \
-        .filter(user.id == BchWallet.userid).first()
+        .filter(user.id == BchWallet.user_id).first()
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -2083,19 +2089,19 @@ def deleteaccount():
 
                 # get the seed
                 userseed = db.session.query(AccountSeedWords) \
-                    .filter(user.id == AccountSeedWords.userid).first()
+                    .filter(user.id == AccountSeedWords.user_id).first()
                 # get user stats
                 userstats = db.session.query(StatisticsUser) \
-                    .filter(user.id == StatisticsUser.usernameid).first()
+                    .filter(user.id == StatisticsUser.user_id).first()
                 # get achievements
                 userachs = db.session.query(whichAch) \
-                    .filter(user.id == whichAch.userid).first()
+                    .filter(user.id == whichAch.user_id).first()
                 # get exp
                 userexp = db.session.query(UserAchievements) \
-                    .filter(user.id == UserAchievements.userid).first()
+                    .filter(user.id == UserAchievements.user_id).first()
                 # get browser history
                 userbrowser = db.session.query(userHistory) \
-                    .filter(user.id == userHistory.userid).first()
+                    .filter(user.id == userHistory.user_id).first()
                 # get shopping cart total
                 usercarttotal = db.session.query(ShoppingCartTotal) \
                     .filter(user.id == ShoppingCartTotal.customer).first()
@@ -2109,10 +2115,10 @@ def deleteaccount():
 
                 # get btccash wallet
                 userbtccash = db.session.query(BchWallet) \
-                    .filter(user.id == BchWallet.userid).first()
+                    .filter(user.id == BchWallet.user_id).first()
                 # get user fees
                 userfees = db.session.query(UserFees) \
-                    .filter(user.id == AccountSeedWords.userid).first()
+                    .filter(user.id == AccountSeedWords.user_id).first()
 
                 # see if seed matches the account
                 w00 = form.seedanswer0.data

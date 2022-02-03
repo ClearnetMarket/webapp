@@ -40,7 +40,8 @@ def aff_overview():
 def aff_becomeaff():
     now = datetime.utcnow()
     vendorsignupForm = AffiliateSignup()
-    user = db.session.query(User).filter_by(username=current_user.username).first()
+    user = db.session.query(User).filter_by(
+        username=current_user.username).first()
 
     if request.method == 'POST':
 
@@ -49,7 +50,7 @@ def aff_becomeaff():
                 if vendorsignupForm.agreement.data is True:
 
                     affaccount_overview = AffiliateOverview(
-                        userid=user.id,
+                        user_id=user.id,
                         buyerdiscount=2.5,
                         buyerdiscount_time=now,
                         aff_fee=2.5,
@@ -59,7 +60,7 @@ def aff_becomeaff():
                     )
 
                     affaccount_stats = AffiliateStats(
-                        userid=user.id,
+                        user_id=user.id,
                         promocode='',
                         totalitemsordered=0,
                         promoenteredcount=0,
@@ -71,7 +72,7 @@ def aff_becomeaff():
                     db.session.add(affaccount_overview)
                     db.session.commit()
 
-                    user.affiliate_account = affaccount_overview.userid
+                    user.affiliate_account = affaccount_overview.user_id
                     db.session.add(user)
                     db.session.commit()
 
@@ -100,15 +101,19 @@ def aff_home():
     promocodeform = AffiliateCode()
 
     # users promo overview
-    userpromooverview = db.session.query(AffiliateOverview).filter_by(userid=current_user.id).first()
+    userpromooverview = db.session.query(
+        AffiliateOverview).filter_by(user_id=current_user.id).first()
     # users promo stats
-    userpromostats = db.session.query(AffiliateStats).filter_by(userid=current_user.id).first()
+    userpromostats = db.session.query(AffiliateStats).filter_by(
+        user_id=current_user.id).first()
     # users promo code
 
-    userpromocode = db.session.query(AffiliateId).filter_by(userid=current_user.id).first()
+    userpromocode = db.session.query(AffiliateId).filter_by(
+        user_id=current_user.id).first()
     if userpromocode is not None:
         # get last 20 affiliates orders..
-        latest_affiliates = db.session.query(Orders).filter(Orders.affiliate_code == userpromocode.promocode).order_by(Orders.id.desc()).limit(20)
+        latest_affiliates = db.session.query(Orders).filter(
+            Orders.affiliate_code == userpromocode.promocode).order_by(Orders.id.desc()).limit(20)
     else:
         latest_affiliates = None
 
@@ -116,10 +121,11 @@ def aff_home():
         if promocodeform.submit.data:
             if promocodeform.validate_on_submit():
                 if userpromocode is None:
-                    seeifpromoexists = db.session.query(AffiliateId).filter_by(promocode=promocodeform.thecode.data).first()
+                    seeifpromoexists = db.session.query(AffiliateId).filter_by(
+                        promocode=promocodeform.thecode.data).first()
                     if seeifpromoexists is None:
                         newpromocode = AffiliateId(
-                            userid=current_user.id,
+                            user_id=current_user.id,
                             promocode=promocodeform.thecode.data)
 
                         userpromooverview.promocode = promocodeform.thecode.data
@@ -134,10 +140,12 @@ def aff_home():
                         flash("Code exists, try another..", category="danger")
                         return redirect(url_for('affiliate.aff_home'))
                 else:
-                    flash("Cant create code, you already have one", category="danger")
+                    flash("Cant create code, you already have one",
+                          category="danger")
                     return redirect(url_for('affiliate.aff_home'))
             else:
-                flash("Form error.  5-15 characters.  No special characters.", category="danger")
+                flash(
+                    "Form error.  5-15 characters.  No special characters.", category="danger")
                 return redirect(url_for('affiliate.aff_home'))
 
     return render_template('/affiliate/home.html',

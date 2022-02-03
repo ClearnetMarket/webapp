@@ -51,7 +51,7 @@ from app.userdata.views import \
 from app.notification import notification
 
 from app.search.searchfunction import headerfunctions_vendor
-from app.wallet_btccash.wallet_btccash_work import \
+from app.wallet_bch.wallet_btccash_work import \
     btc_cash_sendCointoclearnet, \
     btc_cash_sendCointoUser, \
     btc_cash_sendCoinfromHoldings,\
@@ -155,9 +155,9 @@ def itemsforSale():
             for v in request.form.getlist('checkit'):
                 intv = int(v)
                 specific_item = db.session\
-                .query(marketItem)\
-                .filter_by(id=intv)\
-                .first()
+                    .query(marketItem)\
+                    .filter_by(id=intv)\
+                    .first()
                 try:
                     if specific_item.vendor_id == current_user.id:
 
@@ -267,7 +267,8 @@ def itemsforSale():
             if len(see_if_changes) > 0:
                 db.session.commit()
         else:
-            flash("You are currently on vacation mode.  Cannot put items online", category="danger")
+            flash(
+                "You are currently on vacation mode.  Cannot put items online", category="danger")
 
     return render_template('/vendor/itemsforsale/vendorItemsforsale.html',
                            form=form,
@@ -300,9 +301,9 @@ def createItem():
             form = vendorcreateItem(CombinedMultiDict(
                 (request.files, request.form)))
             user = db.session\
-            .query(User)\
-            .filter_by(username=current_user.username)\
-            .first()
+                .query(User)\
+                .filter_by(username=current_user.username)\
+                .first()
 
             id_pic1 = id_generator_picture1()
             id_pic2 = id_generator_picture2()
@@ -431,9 +432,9 @@ def createItem():
 
                     # node location
                     getlastitem = db.session\
-                    .query(marketItem)\
-                    .order_by(marketItem.id.desc())\
-                    .first()
+                        .query(marketItem)\
+                        .order_by(marketItem.id.desc())\
+                        .first()
                     lastitemid = getlastitem.id + 1
                     getitemlocation = itemlocation(x=lastitemid)
 
@@ -524,10 +525,12 @@ def createItem():
                     mkdir_p(path=directoryifitemlisting)
                     # UPLOADING FILE
                     # gets filename from form
+
                     def image1():
                         if form.imageone1.data:
                             try:
-                                filename = secure_filename(form.imageone1.data.filename)
+                                filename = secure_filename(
+                                    form.imageone1.data.filename)
                                 # makes directory (generic location + auction number id as folder)
                                 # saves it to location
                                 imagepath = os.path.join(
@@ -857,16 +860,19 @@ def editItem(id):
                                 form.imageone1.data.filename)
                             # makes directory (generic location + auction number id as folder)
                             # saves it to location
-                            imagepath = os.path.join(directoryifitemlisting, filename)
+                            imagepath = os.path.join(
+                                directoryifitemlisting, filename)
                             form.imageone1.data.save(imagepath)
                             # split file name and ending
-                            filenamenew, file_extension = os.path.splitext(imagepath)
+                            filenamenew, file_extension = os.path.splitext(
+                                imagepath)
                             # gets new 64 digit filenam
                             newfileName = id_pic1 + file_extension
                             # puts new name with ending
                             filenamenewfull = filenamenew + file_extension
                             # gets aboslute path of new file
-                            newfileNameDestination = os.path.join(directoryifitemlisting, newfileName)
+                            newfileNameDestination = os.path.join(
+                                directoryifitemlisting, newfileName)
                             # renames file
                             os.rename(filenamenewfull, newfileNameDestination)
 
@@ -1251,29 +1257,38 @@ def deleteItem(id):
                 getitemlocation = itemlocation(x=item.id)
                 link = 'item'
                 spacer = '/'
-                pathtofile1 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imageone)
-                pathtofile2 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagetwo)
-                pathtofile3 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagethree)
-                pathtofile4 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagefour)
-                pathtofile5 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagefive)
+                pathtofile1 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
+                                  getitemlocation + spacer + specific_folder + spacer + item.imageone)
+                pathtofile2 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
+                                  getitemlocation + spacer + specific_folder + spacer + item.imagetwo)
+                pathtofile3 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
+                                  getitemlocation + spacer + specific_folder + spacer + item.imagethree)
+                pathtofile4 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
+                                  getitemlocation + spacer + specific_folder + spacer + item.imagefour)
+                pathtofile5 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
+                                  getitemlocation + spacer + specific_folder + spacer + item.imagefive)
 
                 try:
-                    pathtofile1, file_extension1 = os.path.splitext(pathtofile1)
+                    pathtofile1, file_extension1 = os.path.splitext(
+                        pathtofile1)
                 except:
                     pass
 
                 try:
-                    pathtofile2, file_extension2 = os.path.splitext(pathtofile2)
+                    pathtofile2, file_extension2 = os.path.splitext(
+                        pathtofile2)
                 except:
                     pass
 
                 try:
-                    pathtofile3, file_extension3 = os.path.splitext(pathtofile3)
+                    pathtofile3, file_extension3 = os.path.splitext(
+                        pathtofile3)
                 except:
                     pass
 
                 try:
-                    pathtofile4, file_extension4 = os.path.splitext(pathtofile4)
+                    pathtofile4, file_extension4 = os.path.splitext(
+                        pathtofile4)
                 except:
                     pass
 
@@ -1285,31 +1300,36 @@ def deleteItem(id):
 
                 try:
                     delete_file_one = str(pathtofile1 + file_extension1)
-                    delete_file_one_ext = str(pathtofile1 + ext1 + file_extension1)
+                    delete_file_one_ext = str(
+                        pathtofile1 + ext1 + file_extension1)
                 except:
                     pass
 
                 try:
                     delete_file_two = str(pathtofile2 + file_extension2)
-                    delete_file_two_ext = str(pathtofile2 + ext1 + file_extension2)
+                    delete_file_two_ext = str(
+                        pathtofile2 + ext1 + file_extension2)
                 except:
                     pass
 
                 try:
                     delete_file_three = str(pathtofile3 + file_extension3)
-                    delete_file_three_ext = str(pathtofile3 + ext1 + file_extension3)
+                    delete_file_three_ext = str(
+                        pathtofile3 + ext1 + file_extension3)
                 except:
                     pass
 
                 try:
                     delete_file_four = str(pathtofile4 + file_extension4)
-                    delete_file_four_ext = str(pathtofile4 + ext1 + file_extension4)
+                    delete_file_four_ext = str(
+                        pathtofile4 + ext1 + file_extension4)
                 except:
                     pass
 
                 try:
                     delete_file_five = str(pathtofile5 + file_extension5)
-                    delete_file_five_ext = str(pathtofile5 + ext1 + file_extension5)
+                    delete_file_five_ext = str(
+                        pathtofile5 + ext1 + file_extension5)
 
                 except:
                     pass
@@ -1511,10 +1531,12 @@ def cloneItem(id):
                     # IMAGES
                     # Make New image folder
                     getitemlocation = itemlocation(x=lastitemid)
-                    listingdir = 'item/' + getitemlocation + '/' + str(Item.id) + '/'
+                    listingdir = 'item/' + getitemlocation + \
+                        '/' + str(Item.id) + '/'
                     mkdir_p(path=UPLOADED_FILES_DEST + listingdir)
                     # get old directory path
-                    oldirectory = UPLOADED_FILES_DEST + "item/" + getitemlocation + '/' + str(vendoritem.id) + '/'
+                    oldirectory = UPLOADED_FILES_DEST + "item/" + \
+                        getitemlocation + '/' + str(vendoritem.id) + '/'
                     # new directory path
                     newdirectory = UPLOADED_FILES_DEST + listingdir
                     # lopp over the files and copy them
@@ -1613,7 +1635,8 @@ def deleteimg(id, img):
 
                     link = 'item'
                     spacer = '/'
-                    pathtofile = str(UPLOADED_FILES_DEST + link + spacer + specific_folder + spacer + img)
+                    pathtofile = str(UPLOADED_FILES_DEST + link +
+                                     spacer + specific_folder + spacer + img)
                     pathtofile, file_extension = os.path.splitext(
                         pathtofile)
 
@@ -1658,7 +1681,7 @@ def deleteimg(id, img):
                         elif x3 == img:
                             vendoritem.imagethree = '0'
                             db.session.add(vendoritem)
-  
+
                             try:
                                 os.remove(file0)
                             except Exception:
@@ -1671,7 +1694,7 @@ def deleteimg(id, img):
                         elif x4 == img:
                             vendoritem.imagefour = '0'
                             db.session.add(vendoritem)
-     
+
                             try:
                                 os.remove(file0)
                             except Exception:
@@ -1684,7 +1707,7 @@ def deleteimg(id, img):
                         elif x5 == img:
                             vendoritem.imagefive = '0'
                             db.session.add(vendoritem)
-                            
+
                             try:
                                 os.remove(file0)
                             except Exception:
@@ -1693,7 +1716,7 @@ def deleteimg(id, img):
                                 os.remove(file1)
                             except Exception:
                                 pass
-                        
+
                         else:
                             return redirect(url_for('vendor.editItem', id=id))
                         db.session.commit()
@@ -1721,7 +1744,8 @@ def deleteimg_noredirect(id, img):
 
                     link = 'listing'
                     spacer = '/'
-                    pathtofile = str(UPLOADED_FILES_DEST + link + spacer + specific_folder + spacer + img)
+                    pathtofile = str(UPLOADED_FILES_DEST + link +
+                                     spacer + specific_folder + spacer + img)
                     pathtofile, file_extension = os.path.splitext(pathtofile)
 
                     ext1 = '_250x'
@@ -1803,7 +1827,7 @@ def deleteimg_noredirect(id, img):
 
                         else:
                             pass
-                        
+
                 except Exception:
                     flash("Error", category="danger")
                     return redirect(url_for('index'))
@@ -1935,13 +1959,13 @@ def vendorOrders_reject(id):
     if item:
         try:
             msg = db.session\
-            .query(shippingSecret)\
-            .filter_by(orderid=id)\
-            .first()
+                .query(shippingSecret)\
+                .filter_by(orderid=id)\
+                .first()
             gettracking = db.session\
-            .query(Tracking)\
-            .filter_by(sale_id=id)\
-            .first()
+                .query(Tracking)\
+                .filter_by(sale_id=id)\
+                .first()
             if item.vendor_id == current_user.id and item.released == 0 and item.vendor_id != 0:
                 if item.completed == 0:
                     try:
@@ -1965,11 +1989,12 @@ def vendorOrders_reject(id):
                             the_item_shipping_price = the_item_shipping_price
                         else:
                             the_item_shipping_price = 0
-                        refund = Decimal(the_item_price) + Decimal(the_item_shipping_price)
+                        refund = Decimal(the_item_price) + \
+                            Decimal(the_item_shipping_price)
 
                         btc_cash_sendCointoUser(amount=refund,
                                                 comment=item.id,
-                                                userid=item.vendor_id,
+                                                user_id=item.vendor_id,
                                                 )
                         # delete shipping message
                         if msg:
@@ -1979,14 +2004,16 @@ def vendorOrders_reject(id):
                             db.session.delete(gettracking)
                         # change the quantity
                         if item.type == 1:
-                            getitem = db.session.query(marketItem).filter(item.item_id == marketItem.id).first()
+                            getitem = db.session.query(marketItem).filter(
+                                item.item_id == marketItem.id).first()
                             x = getitem.itemcount
                             y = item.quantity
                             z = x + y
                             getitem.itemcount = z
                             db.session.add(getitem)
 
-                        notification(type=7, username=item.customer, userid=item.customer_id, salenumber=item.id, bitcoin=0)
+                        notification(type=7, username=item.customer,
+                                     user_id=item.customer_id, salenumber=item.id, bitcoin=0)
                         flash("Order Cancelled", category="danger")
                         db.session.commit()
                         return redirect(url_for('vendor.vendorOrders', username=current_user.username))
@@ -2015,13 +2042,13 @@ def vendorOrders_cancelandrefund(id):
     if item:
 
         msg = db.session\
-        .query(shippingSecret)\
-        .filter_by(orderid=id)\
-        .first()
+            .query(shippingSecret)\
+            .filter_by(orderid=id)\
+            .first()
         gettracking = db.session\
-        .query(Tracking)\
-        .filter_by(sale_id=id)\
-        .first()
+            .query(Tracking)\
+            .filter_by(sale_id=id)\
+            .first()
 
         if item.vendor_id == current_user.id:
             if item.released == 0 and item.cancelled == 0 and item.vendor_id != 0:
@@ -2044,13 +2071,13 @@ def vendorOrders_cancelandrefund(id):
 
                     notification(type=7,
                                  username=item.customer,
-                                 userid=item.customer_id,
+                                 user_id=item.customer_id,
                                  salenumber=item.id,
                                  bitcoin=0)
 
                     btc_cash_sendCointoUser(amount=refund,
                                             comment=item.id,
-                                            userid=item.vendor_id,
+                                            user_id=item.vendor_id,
                                             )
 
                     # Give user neg exp
@@ -2103,8 +2130,10 @@ def vendorOrders_leavereviewforuser(id):
             if request.method == "POST" and form.validate_on_submit():
                 if order.cancelled == 0:
                     try:
-                        text_box_value_userrating = request.form.get( "itemrating")
-                        text_box_value_comment = request.form.get("reviewcomment")
+                        text_box_value_userrating = request.form.get(
+                            "itemrating")
+                        text_box_value_comment = request.form.get(
+                            "reviewcomment")
 
                         add_feedback = Userreviews(
                             order_id=order.id,
@@ -2118,7 +2147,7 @@ def vendorOrders_leavereviewforuser(id):
                         order.userfeedback = 1
 
                         db.session.add(order)
-           
+
                         exppoint(user=order.vendor_id,
                                  price=0,
                                  type=2,
@@ -2183,9 +2212,9 @@ def vendorOrders_deleteorderhistory(id):
 @vendoraccount_required
 def vendorOrders_addtracking(id):
     itemcustomer = db.session\
-    .query(Orders)\
-    .filter_by(id=id)\
-    .first()
+        .query(Orders)\
+        .filter_by(id=id)\
+        .first()
     if itemcustomer.vendor_id == current_user.id:
         tracking = db.session.query(Tracking).filter_by(sale_id=id).first()
         if tracking:
@@ -2291,12 +2320,14 @@ def vendorRatings():
         customerdisputes \
         = headerfunctions_vendor()
 
-    getavgitem = db.session.query(func.avg(Feedback.itemrating).label("avgitem"))
+    getavgitem = db.session.query(
+        func.avg(Feedback.itemrating).label("avgitem"))
     getavgitem = getavgitem.filter(Feedback.vendorid == user.id)
     gitem = getavgitem.all()
     itemscore = str((gitem[0][0]))[:4]
 
-    getavgvendor = db.session.query(func.avg(Feedback.vendorrating).label("avgvendor"))
+    getavgvendor = db.session.query(
+        func.avg(Feedback.vendorrating).label("avgvendor"))
     getavgvendor = getavgvendor.filter(Feedback.vendorid == user.id)
     gvendor = getavgvendor.all()
     vendorscore = str((gvendor[0][0]))[:4]
@@ -2464,9 +2495,9 @@ def viewOrder(id):
                     .filter_by(ordernumber=id)\
                     .first()
                 vendortracking = db.session\
-                .query(Tracking)\
-                .filter_by(sale_id=id)\
-                .first()
+                    .query(Tracking)\
+                    .filter_by(sale_id=id)\
+                    .first()
 
                 # get the message and tracking for order
                 msg = db.session\
@@ -2518,9 +2549,9 @@ def vendorRefunds():
     # See if user has default return address
     try:
         getdefaultreturn = db.session\
-        .query(DefaultReturns)\
-        .filter_by(username=user.username)\
-        .first()
+            .query(DefaultReturns)\
+            .filter_by(username=user.username)\
+            .first()
         if getdefaultreturn:
             getdefaultreturn = 1
         else:
@@ -2530,12 +2561,12 @@ def vendorRefunds():
 
     disputed = db.session\
         .query(Orders)\
-        .filter(Orders.vendor == current_user.username,Orders.disputed_order == 1)\
+        .filter(Orders.vendor == current_user.username, Orders.disputed_order == 1)\
         .all()
 
     returnorder = db.session\
         .query(Orders)\
-        .filter(Orders.vendor == current_user.username,Orders.request_return.between(1, 3))\
+        .filter(Orders.vendor == current_user.username, Orders.request_return.between(1, 3))\
         .all()
 
     return render_template('/vendor/vendorRefunds.html',
@@ -2560,25 +2591,25 @@ def addtempaddress(id):
     now = datetime.utcnow()
     form = addtempreturn()
     order = db.session\
-    .query(Orders)\
-    .filter_by(id=id)\
-    .first()
+        .query(Orders)\
+        .filter_by(id=id)\
+        .first()
 
     # figure out price
     getitem = db.session\
-    .query(marketItem)\
-    .filter(marketItem.id == order.item_id)\
-    .first()
+        .query(marketItem)\
+        .filter(marketItem.id == order.item_id)\
+        .first()
     totalprice = (Decimal(order.shipping_price) + Decimal(order.price))
 
     msg = db.session\
-    .query(shippingSecret)\
-    .filter_by(orderid=id)\
-    .first()
+        .query(shippingSecret)\
+        .filter_by(orderid=id)\
+        .first()
     gettracking = db.session\
-    .query(Tracking)\
-    .filter_by(sale_id=id)\
-    .first()
+        .query(Tracking)\
+        .filter_by(sale_id=id)\
+        .first()
     if request.method == 'POST' and form.validate_on_submit():
         if current_user.id == order.vendor_id:
             if order.released == 0 and order.completed == 0:
@@ -2623,15 +2654,14 @@ def addtempaddress(id):
                     order.completed_time = now
 
                     db.session.add(order)
- 
 
                     notification(type=111,
                                  username=order.customer,
-                                 userid=order.customer_id,
+                                 user_id=order.customer_id,
                                  salenumber=order.id,
                                  bitcoin=0)
                     notification(type=111, username=order.vendor,
-                                 userid=order.vendor_id,
+                                 user_id=order.vendor_id,
                                  salenumber=order.id,
                                  bitcoin=0)
 
@@ -2641,14 +2671,16 @@ def addtempaddress(id):
                                                 )
                     btc_cash_sendCointoUser(amount=totalprice,
                                             comment=order.id,
-                                            userid=order.vendor_id,
+                                            user_id=order.vendor_id,
                                             )
 
                     # BTC CASH Spent by user
-                    totalspentonitems_btccash(userid=order.customer_id, howmany=1, amount=order.price)
+                    totalspentonitems_btccash(
+                        user_id=order.customer_id, howmany=1, amount=order.price)
 
                     # BTC CASH recieved by vendor
-                    vendortotalmade_btccash(userid=order.vendor_id, amount=order.price)
+                    vendortotalmade_btccash(
+                        user_id=order.vendor_id, amount=order.price)
 
                     # Delete temp message vendor gave
                     if msg:
@@ -2657,26 +2689,34 @@ def addtempaddress(id):
                         db.session.delete(gettracking)
 
                     # Add total items bought
-                    addtotalItemsBought(userid=order.customer_id, howmany=order.quantity)
+                    addtotalItemsBought(
+                        user_id=order.customer_id, howmany=order.quantity)
 
                     # add total sold to vendor
-                    addtotalItemsSold(userid=order.vendor_id,howmany=order.quantity)
+                    addtotalItemsSold(user_id=order.vendor_id,
+                                      howmany=order.quantity)
 
                     # add diff trading partners
-                    differenttradingpartners_user(userid=order.customer_id, otherid=order.vendor_id)
-                    differenttradingpartners_vendor(userid=order.vendor_id, otherid=order.customer_id)
+                    differenttradingpartners_user(
+                        user_id=order.customer_id, otherid=order.vendor_id)
+                    differenttradingpartners_vendor(
+                        user_id=order.vendor_id, otherid=order.customer_id)
 
                     # customer exp for finishing early
-                    exppoint(user=order.customer_id, price=0, type=5, quantity=0, currency=0)
+                    exppoint(user=order.customer_id, price=0,
+                             type=5, quantity=0, currency=0)
 
                     # Give Vendor experience points for sale
-                    exppoint(user=order.vendor_id, price=order.price, type=10, quantity=order.quantity, currency=order.currency)
+                    exppoint(user=order.vendor_id, price=order.price, type=10,
+                             quantity=order.quantity, currency=order.currency)
 
                     # Give user experience points for sale
-                    exppoint(user=order.customer_id, price=order.price, type=1, quantity=order.quantity,currency=order.currency)
+                    exppoint(user=order.customer_id, price=order.price, type=1,
+                             quantity=order.quantity, currency=order.currency)
 
                     db.session.commit()
-                    flash("Cancelled and refunded. Order#" + str(order.id), category="success")
+                    flash("Cancelled and refunded. Order#" +
+                          str(order.id), category="success")
                     return redirect(url_for('vendor.vendorRefunds', username=current_user.username))
                 else:
                     flash("Error", category="danger")
@@ -2703,17 +2743,17 @@ def addtempaddress(id):
 @vendoraccount_required
 def edittempaddress(id):
     returnaddress = db.session\
-    .query(Returns)\
-    .filter_by(ordernumber=id)\
-    .first()
+        .query(Returns)\
+        .filter_by(ordernumber=id)\
+        .first()
     order = db.session\
-    .query(Orders)\
-    .filter_by(id=id)\
-    .first()
+        .query(Orders)\
+        .filter_by(id=id)\
+        .first()
     getitem = db.session\
-    .query(marketItem)\
-    .filter(marketItem.id == order.item_id)\
-    .first()
+        .query(marketItem)\
+        .filter(marketItem.id == order.item_id)\
+        .first()
     # vendor is True
 
     try:
@@ -2816,7 +2856,8 @@ def vendorOrders_recievereturn(id):
             db.session.rollback()
         # give user bad exp
 
-        exppoint(user=vendororder.customer_id, price=0, type=10, quantity=0, currency=0)
+        exppoint(user=vendororder.customer_id, price=0,
+                 type=10, quantity=0, currency=0)
 
         # calculate vendor amount
         pricewithoutshipping = Decimal(vendororder.price)
@@ -2830,35 +2871,35 @@ def vendorOrders_recievereturn(id):
         # notify customer
         notification(type=8,
                      username=vendororder.customer,
-                     userid=vendororder.customer_id,
+                     user_id=vendororder.customer_id,
                      salenumber=vendororder.id,
                      bitcoin=vendororder.return_amount)
         # transfer money back to user from clearnet account
         # notify vendor
         notification(type=6,
                      username=vendororder.customer,
-                     userid=vendororder.customer_id,
+                     user_id=vendororder.customer_id,
                      salenumber=vendororder.id,
                      bitcoin=vendororder.return_amount
                      )
         # notify vendor
         notification(type=8,
                      username=vendororder.vendor,
-                     userid=vendororder.vendor_id,
+                     user_id=vendororder.vendor_id,
                      salenumber=vendororder.id,
                      bitcoin=0
                      )
 
         btc_cash_sendCointoUser(amount=vendororder.return_amount,
                                 comment=comment,
-                                userid=vendororder.vendor_id,
+                                user_id=vendororder.vendor_id,
                                 )
 
         if vendorgets > 0:
 
             btc_cash_sendCointoUser(amount=vendorgets,
                                     comment=comment,
-                                    userid=vendororder.vendor_id,
+                                    user_id=vendororder.vendor_id,
                                     )
 
         try:
@@ -2874,9 +2915,9 @@ def vendorOrders_recievereturn(id):
         try:
             # delete return tracking
             returntracking = db.session\
-            .query(ReturnsTracking)\
-            .filter_by(ordernumber=id)\
-            .first()
+                .query(ReturnsTracking)\
+                .filter_by(ordernumber=id)\
+                .first()
             if returntracking:
                 db.session.delete(returntracking)
         except Exception:
@@ -2910,14 +2951,14 @@ def vendorOrders():
     outer_window = 5  # search bar at bottom used for .. lots of pages
     per_page = 10
 
-    ordernew_overall= db.session\
+    ordernew_overall = db.session\
         .query(Orders)\
         .filter(Orders.vendor_id == user.id,
                 Orders.new_order == 1,
                 Orders.completed == 0,
                 Orders.type == 1
                 )\
-    .order_by(Orders.id.desc())
+        .order_by(Orders.id.desc())
     ordernew = ordernew_overall.limit(per_page).offset(offset)
     ordernewcount = ordernew_overall.count()
     paginationordernew = Pagination(page=page,
@@ -2931,12 +2972,12 @@ def vendorOrders():
                                     outer_window=outer_window)
 
     orderaccepted1 = db.session\
-    .query(Orders)\
-    .filter(Orders.vendor_id == user.id,
-            Orders.accepted_order == 1,
-            Orders.completed == 0,
-            Orders.type == 1
-            )
+        .query(Orders)\
+        .filter(Orders.vendor_id == user.id,
+                Orders.accepted_order == 1,
+                Orders.completed == 0,
+                Orders.type == 1
+                )
 
     orderaccepted1 = orderaccepted1.order_by(Orders.id.desc())
     orderaccepted = orderaccepted1.limit(per_page).offset(offset)
@@ -2954,10 +2995,10 @@ def vendorOrders():
     orderwaiting1 = db.session\
         .query(Orders)\
         .filter(Orders.vendor_id == user.id,
-        Orders.waiting_order == 1,
-        Orders.completed == 0,
-        Orders.type == 1
-        )
+                Orders.waiting_order == 1,
+                Orders.completed == 0,
+                Orders.type == 1
+                )
     orderwaiting1 = orderwaiting1.order_by(Orders.id.desc())
     orderwaiting = orderwaiting1.limit(per_page).offset(offset)
     orderwaitingcount = orderwaiting1.count()
@@ -2972,11 +3013,11 @@ def vendorOrders():
                                         outer_window=outer_window)
 
     completed1 = db.session\
-    .query(Orders)\
-    .filter(Orders.vendor_id == user.id,
-            Orders.completed == 1,
-            Orders.type == 1
-            )
+        .query(Orders)\
+        .filter(Orders.vendor_id == user.id,
+                Orders.completed == 1,
+                Orders.type == 1
+                )
     completed1 = completed1.order_by(Orders.id.desc())
     completed = completed1.limit(per_page).offset(offset)
     completedcount = completed1.count()
@@ -3052,7 +3093,8 @@ def vendorverification():
                 flash("Cannot Cancel yur verification", category="danger")
         if getverify.vendor_level == 0:
             if form.levelzero.data:
-                flash( "You can become verified at a later time. Its optional..", category="success")
+                flash(
+                    "You can become verified at a later time. Its optional..", category="success")
                 return redirect(url_for('vendor.tradeOptions'))
             elif form.levelone.data:
                 return redirect(url_for('vendor.vendorverification_confirm_level1'))
@@ -3122,7 +3164,7 @@ def vendorverificationcancel():
             if form.confirmcancel.data:
                 if allow == 1:
                     btc_cash_sendCoinfromHoldings(amount=getverify.amount,
-                                                  userid=getverify.vendor_id,
+                                                  user_id=getverify.vendor_id,
                                                   comment=getverify.vendor_level
                                                   )
                     getverify.vendor_level = 0
@@ -3131,7 +3173,8 @@ def vendorverificationcancel():
                     db.session.add(getverify)
                     db.session.commit()
 
-                    flash("Trust level removed, account refunded",category="success")
+                    flash("Trust level removed, account refunded",
+                          category="success")
                     return redirect(url_for('vendor.tradeOptions'))
                 else:
                     flash("Cannot Cancel yur verification", category="danger")
@@ -3175,9 +3218,9 @@ def vendorverification_confirm_level1():
 
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
-        .query(BchWallet)\
-        .filter_by(userid=current_user.id)\
-        .first()
+            .query(BchWallet)\
+            .filter_by(user_id=current_user.id)\
+            .first()
         useramount = userwallet.currentbalance
 
         hundred = btc_cash_convertlocaltobtc(amount=100, currency=1)
@@ -3187,13 +3230,14 @@ def vendorverification_confirm_level1():
             if form.levelone.data:
                 # 100 dollars
                 if useramount > Decimalhundred:
-                    btc_cash_sendCointoHoldings(amount=hundred, userid=current_user.id, comment=1)
+                    btc_cash_sendCointoHoldings(
+                        amount=hundred, user_id=current_user.id, comment=1)
                     getverify.vendor_level = 1
                     getverify.timestamp = now
                     getverify.amount = Decimalhundred
                     db.session.add(getverify)
-                   
-                    obtainedtrustlevel(userid=user.id)
+
+                    obtainedtrustlevel(user_id=user.id)
 
                     db.session.commit()
                     flash("You are now a trust level 1 vendor. "
@@ -3201,7 +3245,8 @@ def vendorverification_confirm_level1():
                     return redirect(url_for('vendor.tradeOptions'))
                 else:
                     # user doesnt have 100$
-                    flash("You do not have enough bitcoin in your wallet_btc.", category="danger")
+                    flash(
+                        "You do not have enough bitcoin in your wallet_btc.", category="danger")
                     return redirect(url_for('vendor.vendorverification'))
             else:
                 flash(
@@ -3229,18 +3274,18 @@ def vendorverification_confirm_level2():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-    .query(vendorVerification)\
-    .filter_by(vendor_id=current_user.id)\
-    .first()
+        .query(vendorVerification)\
+        .filter_by(vendor_id=current_user.id)\
+        .first()
     user = db.session\
         .query(User)\
         .filter_by(id=current_user.id)\
         .first()
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
-        .query(BchWallet)\
-        .filter_by(userid=current_user.id)\
-        .first()
+            .query(BchWallet)\
+            .filter_by(user_id=current_user.id)\
+            .first()
 
         useramount = userwallet.currentbalance
 
@@ -3251,13 +3296,14 @@ def vendorverification_confirm_level2():
             if form.leveltwo.data:
                 if useramount > Decimaltwofity:
                     # 250 dollars
-                    btc_cash_sendCointoHoldings(amount=twofity, userid=current_user.id, comment=2)
+                    btc_cash_sendCointoHoldings(
+                        amount=twofity, user_id=current_user.id, comment=2)
                     getverify.vendor_level = 2
                     getverify.timestamp = now
                     getverify.amount = Decimaltwofity
                     db.session.add(getverify)
-                    
-                    obtainedtrustlevel(userid=user.id)
+
+                    obtainedtrustlevel(user_id=user.id)
 
                     db.session.commit()
                     flash("You are now a trust level 2 vendor. "
@@ -3304,7 +3350,7 @@ def vendorverification_confirm_level3():
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
             .query(BchWallet)\
-            .filter_by(userid=current_user.id)\
+            .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
 
@@ -3315,13 +3361,13 @@ def vendorverification_confirm_level3():
             if form.levelthree.data:
                 if useramount > Decimalfivehundred:
                     btc_cash_sendCointoHoldings(
-                        amount=fivehundred, userid=current_user.id, comment=3)
+                        amount=fivehundred, user_id=current_user.id, comment=3)
                     getverify.vendor_level = 3
                     getverify.timestamp = now
                     getverify.amount = Decimalfivehundred
                     db.session.add(getverify)
 
-                    obtainedtrustlevel(userid=user.id)
+                    obtainedtrustlevel(user_id=user.id)
 
                     db.session.commit()
                     flash("You are now a trust level 3 vendor. "
@@ -3330,7 +3376,8 @@ def vendorverification_confirm_level3():
                     return redirect(url_for('vendor.tradeOptions'))
                 else:
                     # user doesnt have 500$
-                    flash("You do not have enough bitcoin in your wallet_btc.", category="danger")
+                    flash(
+                        "You do not have enough bitcoin in your wallet_btc.", category="danger")
                     return redirect(url_for('vendor.vendorverification'))
             else:
                 flash(
@@ -3357,9 +3404,9 @@ def vendorverification_confirm_level4():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-    .query(vendorVerification)\
-    .filter_by(vendor_id=current_user.id)\
-    .first()
+        .query(vendorVerification)\
+        .filter_by(vendor_id=current_user.id)\
+        .first()
     user = db.session\
         .query(User)\
         .filter_by(id=current_user.id)\
@@ -3367,7 +3414,7 @@ def vendorverification_confirm_level4():
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
             .query(BchWallet)\
-            .filter_by(userid=current_user.id)\
+            .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
 
@@ -3376,13 +3423,14 @@ def vendorverification_confirm_level4():
 
         if request.method == 'POST':
             if useramount > Decimalthousand:
-                btc_cash_sendCointoHoldings(amount=thousand, userid=current_user.id, comment=4)
+                btc_cash_sendCointoHoldings(
+                    amount=thousand, user_id=current_user.id, comment=4)
                 getverify.vendor_level = 4
                 getverify.timestamp = now
                 getverify.amount = Decimalthousand
                 db.session.add(getverify)
 
-                obtainedtrustlevel(userid=user.id)
+                obtainedtrustlevel(user_id=user.id)
 
                 db.session.commit()
                 flash("You are now a trust level 4 vendor."
@@ -3425,7 +3473,7 @@ def vendorverification_confirm_level5():
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
             .query(BchWallet)\
-            .filter_by(userid=current_user.id)\
+            .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
 
@@ -3435,14 +3483,14 @@ def vendorverification_confirm_level5():
         if request.method == 'POST':
             if form.levelfive.data:
                 if useramount > Decimaltwentyfivehundred:
-                    btc_cash_sendCointoHoldings(amount=twentyfivehundred, userid=current_user.id, comment=5)
+                    btc_cash_sendCointoHoldings(
+                        amount=twentyfivehundred, user_id=current_user.id, comment=5)
                     getverify.vendor_level = 5
                     getverify.timestamp = now
                     getverify.amount = Decimaltwentyfivehundred
                     db.session.add(getverify)
-                    
 
-                    obtainedtrustlevel(userid=user.id)
+                    obtainedtrustlevel(user_id=user.id)
 
                     db.session.commit()
                     flash("You are now a trust level 5 vendor. "
@@ -3455,7 +3503,8 @@ def vendorverification_confirm_level5():
                         "You do not have enough bitcoin in your wallet_btc.", category="danger")
                     return redirect(url_for('vendor.vendorverification'))
             else:
-                flash("You can become verified at a later time. Its optional..", category="success")
+                flash(
+                    "You can become verified at a later time. Its optional..", category="success")
                 return redirect(url_for('vendor.tradeOptions'))
 
         return render_template('/vendor/verification/confirmverification_level5.html',
@@ -3489,7 +3538,7 @@ def upgradevendorverification():
 
     userwallet = db.session\
         .query(BchWallet)\
-        .filter_by(userid=current_user.id)\
+        .filter_by(user_id=current_user.id)\
         .first()
     useramount = userwallet.currentbalance
 
@@ -3510,8 +3559,10 @@ def upgradevendorverification():
             if form.leveltwo.data:
                 if getverify.vendor_level == 1:
                     if useramount > Decimaltwofity:
-                        btc_cash_sendCoinfromHoldings(amount=getverify.amount, userid=getverify.vendor_id, comment=getverify.vendor_level)
-                        btc_cash_sendCointoHoldings(amount=twofity, userid=current_user.id, comment=2)
+                        btc_cash_sendCoinfromHoldings(
+                            amount=getverify.amount, user_id=getverify.vendor_id, comment=getverify.vendor_level)
+                        btc_cash_sendCointoHoldings(
+                            amount=twofity, user_id=current_user.id, comment=2)
                         getverify.vendor_level = 2
                         getverify.timestamp = now
                         getverify.amount = Decimaltwofity
@@ -3525,17 +3576,18 @@ def upgradevendorverification():
                         return redirect(url_for('vendor.tradeOptions'))
                     else:
                         # user doesnt have 250$
-                        flash("You do not have enough bitcoin in your wallet_btc.", category="danger")
+                        flash(
+                            "You do not have enough bitcoin in your wallet_btc.", category="danger")
                         return redirect(url_for('vendor.vendorverification'))
 
             elif form.levelthree.data:
                 if getverify.vendor_level == 1 \
                         or getverify.vendor_level == 2:
                     if useramount > Decimalfivehundred:
-                        btc_cash_sendCoinfromHoldings(amount=getverify.amount, userid=getverify.vendor_id,
+                        btc_cash_sendCoinfromHoldings(amount=getverify.amount, user_id=getverify.vendor_id,
                                                       comment=getverify.vendor_level)
                         btc_cash_sendCointoHoldings(
-                            amount=fivehundred, userid=current_user.id, comment=3)
+                            amount=fivehundred, user_id=current_user.id, comment=3)
                         getverify.vendor_level = 3
                         getverify.timestamp = now
                         getverify.amount = Decimalfivehundred
@@ -3549,7 +3601,8 @@ def upgradevendorverification():
                         return redirect(url_for('vendor.tradeOptions'))
                     else:
                         # user doesnt have 500$
-                        flash("You do not have enough bitcoin in your wallet_btc.", category="danger")
+                        flash(
+                            "You do not have enough bitcoin in your wallet_btc.", category="danger")
                         return redirect(url_for('vendor.vendorverification'))
 
             elif form.levelfour.data:
@@ -3557,8 +3610,10 @@ def upgradevendorverification():
                         or getverify.vendor_level == 2 \
                         or getverify.vendor_level == 3:
                     if useramount > Decimalthousand:
-                        btc_cash_sendCoinfromHoldings(amount=getverify.amount, userid=getverify.vendor_id, comment=getverify.vendor_level)
-                        btc_cash_sendCointoHoldings(amount=thousand, userid=current_user.id, comment=4)
+                        btc_cash_sendCoinfromHoldings(
+                            amount=getverify.amount, user_id=getverify.vendor_id, comment=getverify.vendor_level)
+                        btc_cash_sendCointoHoldings(
+                            amount=thousand, user_id=current_user.id, comment=4)
 
                         getverify.vendor_level = 4
                         getverify.timestamp = now
@@ -3581,8 +3636,10 @@ def upgradevendorverification():
                         or getverify.vendor_level == 3 \
                         or getverify.vendor_level == 4:
                     if useramount > Decimaltwentyfivehundred:
-                        btc_cash_sendCoinfromHoldings(amount=getverify.amount, userid=getverify.vendor_id, comment=getverify.vendor_level)
-                        btc_cash_sendCointoHoldings(amount=twentyfivehundred, userid=current_user.id, comment=5)
+                        btc_cash_sendCoinfromHoldings(
+                            amount=getverify.amount, user_id=getverify.vendor_id, comment=getverify.vendor_level)
+                        btc_cash_sendCointoHoldings(
+                            amount=twentyfivehundred, user_id=current_user.id, comment=5)
 
                         getverify.vendor_level = 5
                         getverify.timestamp = now
@@ -3596,7 +3653,8 @@ def upgradevendorverification():
                         return redirect(url_for('vendor.tradeOptions'))
                     else:
                         # user doesnt have $
-                        flash("You do not have enough bitcoin in your wallet_btc.", category="danger")
+                        flash(
+                            "You do not have enough bitcoin in your wallet_btc.", category="danger")
                         return redirect(url_for('vendor.vendorverification'))
             else:
                 flash("Form Error", category="danger")
@@ -3619,7 +3677,6 @@ def upgradevendorverification():
 @vendor.route('/itemimporter', methods=['GET', 'POST'])
 @website_offline
 @login_required
-
 @vendoraccount_required
 def ebayimporter():
     # variables
@@ -3636,19 +3693,20 @@ def ebayimporter():
         .first()
     getalluploads = db.session\
         .query(EbaySearchItem)\
-        .filter_by(userid=current_user.id)\
+        .filter_by(user_id=current_user.id)\
         .order_by(EbaySearchItem.dateadded.desc())\
         .limit(100)
     getalluploadscount = db.session\
         .query(EbaySearchItem)\
-        .filter_by(userid=current_user.id)\
+        .filter_by(user_id=current_user.id)\
         .count()
 
     if request.method == 'POST':
         if form.submit.data:
             if form.validate():
                 if form.ebaydata.data:
-                    directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST, "ebaywork", (str(user.id)))
+                    directoryifitemlisting = os.path.join(
+                        UPLOADED_FILES_DEST, "ebaywork", (str(user.id)))
                     mkdir_p(path=directoryifitemlisting)
                     filename = secure_filename(form.ebaydata.data.filename)
                     # makes directory (generic location + auction number id as folder)
@@ -3662,7 +3720,8 @@ def ebayimporter():
                     # puts new name with ending
                     filenamenewfull = filenamenew + file_extension
                     # gets aboslute path of new file
-                    newfileNameDestination = os.path.join(directoryifitemlisting, newfileName)
+                    newfileNameDestination = os.path.join(
+                        directoryifitemlisting, newfileName)
                     # renames file
                     os.rename(filenamenewfull, newfileNameDestination)
                     if form.ebaydata.data.filename:
@@ -3701,7 +3760,7 @@ def ebayimporter():
 
                                 newitem = EbaySearchItem(
                                     dateadded=now,
-                                    userid=current_user.id,
+                                    user_id=current_user.id,
                                     itemebayid=ebayitemid,
                                     itemtitle=ebaytitle,
                                     itemprice=dollars_dec,
@@ -3718,7 +3777,8 @@ def ebayimporter():
                                   "please report them to customer feedback.", category="success")
                             return redirect(url_for('vendor.ebayimporter'))
                     else:
-                        flash("Form Error. Only CSV's allowed.", category="danger")
+                        flash("Form Error. Only CSV's allowed.",
+                              category="danger")
                         return redirect(url_for('vendor.ebayimporter'))
                 else:
                     flash("Form Error. Only CSV's allowed.", category="danger")
@@ -3728,7 +3788,7 @@ def ebayimporter():
                 return redirect(url_for('vendor.ebayimporter'))
         elif form.delete.data:
             for f in getalluploads:
-                if f.userid == current_user.id:
+                if f.user_id == current_user.id:
                     db.session.delete(f)
             db.session.commit()
             flash("Items deleted ", category="danger")

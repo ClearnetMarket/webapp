@@ -7,7 +7,7 @@ from app.classes.models import Categories, Country
 
 
 def searchside():
-    return Categories.query.filter(Categories.id != 16, Categories.id != 1).order_by(Categories.name.asc()).all()
+    return Categories.query.filter(Categories.id != 1000, Categories.id != 100).order_by(Categories.id.asc()).all()
 
 def searchside_default():
     return Categories.query.filter(Categories.id == 1).first()

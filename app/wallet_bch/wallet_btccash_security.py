@@ -5,11 +5,11 @@ from decimal import \
     Decimal
 
 
-def checkbalance_btccash(userid, amount):
+def checkbalance_btccash(user_id, amount):
     # The money requested during the trade
     userwallet = db.session\
         .query(BchWallet)\
-        .filter_by(userid=userid)\
+        .filter_by(user_id=user_id)\
         .first()
     theusersbalance = userwallet.currentbalance
     theamountrequested = Decimal(amount)

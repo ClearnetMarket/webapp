@@ -27,8 +27,8 @@
                         <td class="linkcolor col-4">
                             <a href="{{ url_for('profile.user',username=i.vendorname) }}" >
                                 {{ i.vendorname }}
-                                ({{ i.userid|vendorratingcount }})
-                                ({{ i.userid|avgvendorrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px">)
+                                ({{ i.user_id|vendorratingcount }})
+                                ({{ i.user_id|avgvendorrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px">)
                             </a>
                         </td>
 

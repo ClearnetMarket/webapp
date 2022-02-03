@@ -3,11 +3,11 @@ from app import db
 
 class whichAch(db.Model):
     __tablename__ = 'whichAch'
-    __bind_key__ = 'clearnet_Market_Users'
+    __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     ach1 = db.Column(db.TEXT)
     ach2 = db.Column(db.TEXT)
     ach3 = db.Column(db.TEXT)
@@ -23,11 +23,11 @@ class whichAch(db.Model):
 
 class UserAchievements_recent(db.Model):
     __tablename__ = 'userachievements_recent'
-    __bind_key__ = 'clearnet_Market_Users'
+    __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     username = db.Column(db.Text)
 
     ach_id = db.Column(db.INTEGER)
@@ -37,11 +37,11 @@ class UserAchievements_recent(db.Model):
 
 class UserAchievements(db.Model):
     __tablename__ = 'userachievements'
-    __bind_key__ = 'clearnet_Market_Users'
+    __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True,  unique=True)
-    userid = db.Column(db.INTEGER)
+    user_id = db.Column(db.INTEGER)
     username = db.Column(db.Text)
     experiencepoints = db.Column(db.INTEGER)
     level = db.Column(db.INTEGER)
@@ -172,7 +172,7 @@ class UserAchievements(db.Model):
 
 class Achievements(db.Model):
     __tablename__ = 'achievements'
-    __bind_key__ = 'clearnet_Market_Users'
+    __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)

@@ -43,15 +43,15 @@
                     {% if current_user.is_authenticated %}
                         {% if current_user.admin_role >=1 %}
                             <form method="post">
-                                {% if finditem.flaggeduserid1 == current_user.id %}
+                                {% if finditem.flaggeduser_id1 == current_user.id %}
                                     <div class="redstatus"> Item Flagged</div>
-                                {% elif finditem.flaggeduserid2 == current_user.id %}
+                                {% elif finditem.flaggeduser_id2 == current_user.id %}
                                     <div class="redstatus">Item Flagged</div>
-                                {% elif finditem.flaggeduserid3 == current_user.id %}
+                                {% elif finditem.flaggeduser_id3 == current_user.id %}
                                     <div class="redstatus">Item Flagged</div>
-                                {% elif finditem.flaggeduserid4 == current_user.id %}
+                                {% elif finditem.flaggeduser_id4 == current_user.id %}
                                     <div class="redstatus">Item Flagged</div>
-                                {% elif finditem.flaggeduserid5 == current_user.id %}
+                                {% elif finditem.flaggeduser_id5 == current_user.id %}
                                     <div class="redstatus">Item Flagged</div>
                                 {% else %}
                                     {{ flag.csrf_token }}

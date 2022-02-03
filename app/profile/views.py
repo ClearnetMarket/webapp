@@ -26,7 +26,7 @@ from app.classes.wallet_bch import \
     BchWallet
 
 from datetime import \
- datetime
+    datetime
 from app.common.functions import \
     floating_decimals
 
@@ -60,11 +60,11 @@ def frontpage(username):
                 user2width, \
                 user2ach, \
                 user2vendorstats, \
-                user2 = profilebar(userid1=user.id, userid2=0)
+                user2 = profilebar(user_id1=user.id, user_id2=0)
 
             user_recent_ach = db.session\
                 .query(UserAchievements_recent) \
-                .filter_by(userid=user.id) \
+                .filter_by(user_id=user.id) \
                 .order_by(UserAchievements_recent.achievement_date.desc()) \
                 .limit(10)
 
@@ -117,27 +117,27 @@ def user(username):
                 user2width, \
                 user2ach, \
                 user2vendorstats, \
-                user2 = profilebar(userid1=user.id, userid2=0)
+                user2 = profilebar(user_id1=user.id, user_id2=0)
 
             user_recent_ach = db.session\
                 .query(UserAchievements_recent) \
-                .filter_by(userid=user.id) \
+                .filter_by(user_id=user.id) \
                 .order_by(UserAchievements_recent.achievement_date.desc()) \
                 .limit(10)
 
             # stats
             stats = db.session\
-            .query(StatisticsUser)\
-            .filter_by(username=user.username)\
-            .first()
+                .query(StatisticsUser)\
+                .filter_by(username=user.username)\
+                .first()
 
             started = stats.startedbuying.strftime("%m/%d/%y")
 
             # User reviews
             getratings = db.session\
-            .query(Userreviews)\
-            .filter(Userreviews.customer == user.username)\
-            .order_by(Userreviews.dateofreview.desc())
+                .query(Userreviews)\
+                .filter(Userreviews.customer == user.username)\
+                .order_by(Userreviews.dateofreview.desc())
 
             usercount = getratings.count()
             userreview = getratings.limit(per_page).offset(offset)
@@ -196,11 +196,11 @@ def vendorprofile(username):
             outer_window = 5  # search bar at bottom used for .. lots of pages
             per_page = 20
 
-            # vendorwallet = db.session.query(BtcWallet).filter_by(userid=vendor.id).first()
+            # vendorwallet = db.session.query(BtcWallet).filter_by(user_id=vendor.id).first()
             vendorstats = db.session\
-            .query(StatisticsVendor)\
-            .filter_by(vendorid=user.id)\
-            .first()
+                .query(StatisticsVendor)\
+                .filter_by(vendorid=user.id)\
+                .first()
 
             user1, \
                 user1pictureid, \
@@ -218,11 +218,11 @@ def vendorprofile(username):
                 user2width, \
                 user2ach, \
                 user2vendorstats, \
-                user2 = profilebar(userid1=user.id, userid2=0)
+                user2 = profilebar(user_id1=user.id, user_id2=0)
 
             user_recent_ach = db.session\
                 .query(UserAchievements_recent) \
-                .filter_by(userid=user.id) \
+                .filter_by(user_id=user.id) \
                 .order_by(UserAchievements_recent.achievement_date.desc()) \
                 .limit(10)
 
@@ -231,9 +231,9 @@ def vendorprofile(username):
             started = vendorstats.startedselling.strftime("%m/%d/%y")
 
             ratingsall = db.session\
-            .query(Feedback)\
-            .filter_by(vendorid=user.id)\
-            .order_by(Feedback.timestamp.desc())
+                .query(Feedback)\
+                .filter_by(vendorid=user.id)\
+                .order_by(Feedback.timestamp.desc())
             ratingscount = ratingsall.count()
             ratings = ratingsall.limit(per_page).offset(offset)
 
@@ -247,13 +247,15 @@ def vendorprofile(username):
                                                 inner_window=inner_window,
                                                 outer_window=outer_window)
 
-            getavgitem = db.session.query(func.avg(Feedback.itemrating).label("avgitem"))
+            getavgitem = db.session.query(
+                func.avg(Feedback.itemrating).label("avgitem"))
             getavgitem = getavgitem.filter(Feedback.vendorid == user.id)
             gitem = getavgitem.all()
             itemscore = str((gitem[0][0]))[:4]
             if itemscore == 'None':
                 itemscore = 0
-            getavgvendor = db.session.query(func.avg(Feedback.vendorrating).label("avgvendor"))
+            getavgvendor = db.session.query(
+                func.avg(Feedback.vendorrating).label("avgvendor"))
             getavgvendor = getavgvendor.filter(Feedback.vendorid == user.id)
             gvendor = getavgvendor.all()
             vendorscore = str((gvendor[0][0]))[:4]
@@ -294,37 +296,37 @@ def achs(username):
     if username != 'Guest':
 
         user = db.session\
-        .query(User)\
-        .filter_by(username=username)\
-        .first()
+            .query(User)\
+            .filter_by(username=username)\
+            .first()
         title = user.username + "'s Achievements"
         usergetlevel = db.session\
-        .query(UserAchievements)\
-        .filter_by(username=user.username)\
-        .first()
+            .query(UserAchievements)\
+            .filter_by(username=user.username)\
+            .first()
         userpictureid = str(usergetlevel.level)
         userwallet = db.session\
-        .query(BchWallet)\
-        .filter_by(userid=user.id)\
-        .first()
+            .query(BchWallet)\
+            .filter_by(user_id=user.id)\
+            .first()
         userstats = db.session\
-        .query(StatisticsUser)\
-        .filter_by(username=user.username)\
-        .first()
+            .query(StatisticsUser)\
+            .filter_by(username=user.username)\
+            .first()
         level = db.session\
-        .query(UserAchievements)\
-        .filter_by(username=user.username)\
-        .first()
+            .query(UserAchievements)\
+            .filter_by(username=user.username)\
+            .first()
         nextlevel = level.level + 1
         userach = db.session\
-        .query(whichAch)\
-        .filter_by(userid=user.id)\
-        .first()
+            .query(whichAch)\
+            .filter_by(user_id=user.id)\
+            .first()
         user_recent_ach = db.session\
-        .query(UserAchievements_recent)\
-        .filter_by(userid=user.id)\
-        .order_by(UserAchievements_recent.achievement_date.desc())\
-        .limit(10)
+            .query(UserAchievements_recent)\
+            .filter_by(user_id=user.id)\
+            .order_by(UserAchievements_recent.achievement_date.desc())\
+            .limit(10)
 
         if 1 <= level.level <= 3:
             user1widthh = (level.experiencepoints / 300) * 100
@@ -365,9 +367,9 @@ def achs(username):
 
         # getuser exp table
         userexp = db.session\
-        .query(exptable)\
-        .filter(user.id == exptable.userid)\
-        .order_by(exptable.timestamp.desc())
+            .query(exptable)\
+            .filter(user.id == exptable.user_id)\
+            .order_by(exptable.timestamp.desc())
         exp = userexp.limit(10)
         expcount = userexp.count()
         return render_template('/profile/userachievements/achievementsall.html',
@@ -402,7 +404,7 @@ def achievements_coin(username):
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -414,7 +416,7 @@ def achievements_coin(username):
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
 
@@ -422,7 +424,8 @@ def achievements_coin(username):
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session.query(UserAchievements).filter_by(userid=user.id).first())
+    x, size = row2dict(row=db.session.query(
+        UserAchievements).filter_by(user_id=user.id).first())
 
     return render_template('/profile/userachievements/achievementscoin.html',
                            x=x,
@@ -430,6 +433,7 @@ def achievements_coin(username):
                            title=title,
                            user=user
                            )
+
 
 @profile.route('/achievements-common/<username>', methods=['GET', 'POST'])
 @website_offline
@@ -444,7 +448,7 @@ def achievements_common(username):
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -456,16 +460,17 @@ def achievements_common(username):
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session.query(UserAchievements).filter_by(userid=user.id).first())
+    x, size = row2dict(row=db.session.query(
+        UserAchievements).filter_by(user_id=user.id).first())
     return render_template('/profile/userachievements/achievementscommon.html',
-                           x =x,
+                           x=x,
                            size=size,
                            title=title,
                            user=user
@@ -477,6 +482,7 @@ def achievements_common(username):
 def achievements_experience(username):
     user = db.session.query(User).filter_by(username=username).first()
     title = user.username + "'s Achievements"
+
     def row2dict(row):
         d = {}
         for column in row.__table__.columns:
@@ -484,7 +490,7 @@ def achievements_experience(username):
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -495,15 +501,16 @@ def achievements_experience(username):
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
-    x, size = row2dict(row=db.session.query(UserAchievements).filter_by(userid=user.id).first())
+    x, size = row2dict(row=db.session.query(
+        UserAchievements).filter_by(user_id=user.id).first())
     return render_template('/profile/userachievements/achievementsExperience.html',
-                           x =x,
+                           x=x,
                            size=size,
                            title=title,
                            user=user
@@ -515,6 +522,7 @@ def achievements_experience(username):
 def achievements_unique(username):
     user = db.session.query(User).filter_by(username=username).first()
     title = user.username + "'s Achievements"
+
     def row2dict(row):
         d = {}
         for column in row.__table__.columns:
@@ -522,7 +530,7 @@ def achievements_unique(username):
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -533,16 +541,17 @@ def achievements_unique(username):
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session.query(UserAchievements).filter_by(userid=user.id).first())
+    x, size = row2dict(row=db.session.query(
+        UserAchievements).filter_by(user_id=user.id).first())
     return render_template('/profile/userachievements/achievementsunique.html',
-                           x =x,
+                           x=x,
                            size=size,
                            title=title,
                            user=user
@@ -562,7 +571,7 @@ def achievements_customer(username):
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -573,16 +582,17 @@ def achievements_customer(username):
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session.query(UserAchievements).filter_by(userid=user.id).first())
+    x, size = row2dict(row=db.session.query(
+        UserAchievements).filter_by(user_id=user.id).first())
     return render_template('/profile/userachievements/achievementscustomer.html',
-                           x =x,
+                           x=x,
                            size=size,
                            title=title,
                            user=user
@@ -602,7 +612,7 @@ def achievements_vendor(username):
         my_none = '1'
         nodate = 'date'
         noid = 'id'
-        nouserid = 'userid'
+        nouser_id = 'user_id'
         nolevel = 'level'
         noexp = 'experiencepoints'
         nousername = 'username'
@@ -613,16 +623,17 @@ def achievements_vendor(username):
                     if nodate not in key:
                         if nolevel not in key:
                             if noid not in key:
-                                if nouserid not in key:
+                                if nouser_id not in key:
                                     if noexp not in key:
                                         solutions.append(key)
         x = solutions
         size = len(x)
         return x, size
 
-    x, size = row2dict(row=db.session.query(UserAchievements).filter_by(userid=user.id).first())
+    x, size = row2dict(row=db.session.query(
+        UserAchievements).filter_by(user_id=user.id).first())
     return render_template('/profile/userachievements/achievementsvendor.html',
-                           x =x,
+                           x=x,
                            size=size,
                            title=title,
                            user=user
@@ -653,7 +664,7 @@ def vendorStore(username):
                 user2width, \
                 user2ach, \
                 user2vendorstats, \
-                user2 = profilebar(userid1=user.id, userid2=0)
+                user2 = profilebar(user_id1=user.id, user_id2=0)
 
             # get users top market items
             getitems = db.session\
@@ -669,9 +680,9 @@ def vendorStore(username):
                 .order_by(marketItem.created.desc()) \
                 .limit(3)
             getitemscount = db.session\
-            .query(marketItem)\
-            .filter(marketItem.vendor_id == user.id)\
-            .count()
+                .query(marketItem)\
+                .filter(marketItem.vendor_id == user.id)\
+                .count()
 
             # # Get user Store
             # # market item queries
@@ -708,5 +719,3 @@ def vendorStore(username):
     else:
         flash("This user doesnt exist", category="danger")
         return redirect(url_for('index'))
-
-
