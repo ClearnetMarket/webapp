@@ -100,11 +100,10 @@ def currencyformat(id):
     from app import db
 
     try:
-        getcountry = db.session.query(
-            Currency).filter_by(numericcode=id).first()
-        return getcountry.name
+        getcurrency = db.session.query(Currency).filter_by(code=id).first()
+        return getcurrency.symbol
     except Exception:
-        name = "World Wide"
+        name = ""
         return name
 # get not shipping too name
 
@@ -184,17 +183,12 @@ def profilepicture(id):
     from app.classes.auth import User
     from app import db
 
-    user = db.session.query(User)
-    user = user.filter_by(id=id).first()
-    import platform
-    x = (platform.system())
-    if x == 'Windows':
-        user_idlocation = str(user.id) + '/'
-        filenameofprofile = os.path.join(
-            'user/', '1/', str(user_idlocation), user.profileimage)
-    else:
-        filenameofprofile = os.path.join(
-            'user', '1', str(user.id), user.profileimage)
+    user = db.session\
+        .query(User)\
+        .filter_by(id=id)\
+        .first()
+
+    filenameofprofile = os.path.join('user', '1', str(user.id), user.profileimage)
 
     if user.profileimage == 'user-unknown.png':
         return url_for('userdata.profile_image', filename=('user/' + 'user-unknown.png'))

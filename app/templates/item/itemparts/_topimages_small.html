@@ -16,7 +16,7 @@
 
 {% if item.imageone != '0' %}
 <img id="large-image-id" src="{{ url_for('userdata.media_file',
- filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_250x.jpg"))  }}"
+ filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg"))  }}"
     alt="large image">
 {% else %}
  <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" width="250px" height="250px">

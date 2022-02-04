@@ -10,7 +10,7 @@
             {% if item.imageone != '0' %}
                 <img src="{{ url_for('userdata.media_file',
             filename=('item/' +
-            item.stringnodeid +item.stringauctionid + item.imageone + "_250x.jpg")) }}" class="searchresultimage">
+            item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}" class="searchresultimage">
             {% else %}
                 <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" class="imagefrontpage">
             {% endif %}
@@ -112,9 +112,7 @@
         {% else %}
             {{ item.price }} {{ item.currency|currencyformat }}<br>
             {%  if item.digital_currency2 == 1  %}
-                <div class="btcorange">
-                    BTC Accepted
-                </div><br>
+ 
             {% endif %}
             {%  if item.digital_currency3 == 1  %}
                 <div class="btccash">

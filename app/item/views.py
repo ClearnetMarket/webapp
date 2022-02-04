@@ -195,7 +195,7 @@ def Itemforsale(id):
 
     # If they add the item to cart or do a search
     if request.method == 'POST':
-        if formsearch.search.data and formsearch.validate_on_submit():
+        if formsearch.validate_on_submit():
             # cats
             categoryfull = formsearch.category.data
             cat = categoryfull.id
@@ -503,8 +503,10 @@ def deletecartitem(id):
 @ping_user
 def savecartitem(id):
     try:
-        user = db.session.query(User).filter_by(
-            username=current_user.username).first()
+        user = db.session\
+        .query(User)\
+        .filter_by(username=current_user.username)\
+        .first()
         try:
             item = ShoppingCart.query.get(id)
             if item.customer_id == user.id:

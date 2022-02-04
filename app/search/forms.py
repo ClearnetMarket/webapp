@@ -33,7 +33,7 @@ class searchForm(FlaskForm):
     # Shipping
     freeshipping = BooleanField(validators=[Optional()])
 
-    search = SubmitField()
+ 
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)

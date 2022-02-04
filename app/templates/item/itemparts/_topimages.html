@@ -12,7 +12,7 @@
         {% if item.imageone != '0' %}
 
             <img id="large-image-id" src="{{ url_for('userdata.media_file',
-             filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_250x.jpg"))  }}"
+             filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg"))  }}"
                  alt="large image" class="itempage_image_full">
 
         {% else %}
@@ -30,7 +30,7 @@
                         onclick="document.getElementById('large-image-id').src=this.src"
                         onmouseover="document.getElementById('large-image-id').src=this.src"
                         src="{{ url_for('userdata.media_file',
-                 filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_250x.jpg"))  }}"
+                 filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg"))  }}"
                         style="width:100px; height:80px; margin-top: 10px;"
                         alt="thumb image">
             {% endif %}
@@ -39,7 +39,7 @@
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file',filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagetwo + "_250x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file',filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagetwo + "_225x.jpg"))  }}"
                     style="width:100px; height:80px; margin-top: 10px;"
 
                     alt="thumb image">
@@ -48,7 +48,7 @@
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file',  filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagethree + "_250x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file',  filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagethree + "_225x.jpg"))  }}"
                     style="width:100px; height:80px; margin-top: 10px;"
                     alt="thumb image">
         {% endif %}
@@ -58,7 +58,7 @@
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file', filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagefour + "_250x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file', filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagefour + "_225x.jpg"))  }}"
                     style="width:106px; height:80px;margin-top: 10px;"
 
                     alt="thumb image">
@@ -67,7 +67,7 @@
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file',filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagefive + "_250x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file',filename=('item/' + item.stringnodeid + item.stringauctionid + item.imagefive + "_225x.jpg"))  }}"
                     style="width:106px; height:80px;margin-top: 10px;"
 
                     alt="thumb image">

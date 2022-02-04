@@ -4,7 +4,7 @@
     <img class="card-img-top" style="max-width: 200px; height: 200px;"
             {% if item.imageone != '0' %}
                 src="{{ url_for('userdata.media_file',
-                    filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_250x.jpg")) }}">
+                    filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
             {% else %}
                 src="{{ url_for('static', filename=('images/no-product-image.png')) }}">
             {% endif %}

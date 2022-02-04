@@ -24,12 +24,7 @@
                         <div class="form-group">
                             <label for="exampleInputName2">Sort Results:</label>
                             {{ render_field(sortresults.sortCategory) }}
-
-
-                            {{ render_field(sortresults.sort,
-                             class="btn btn-primary",
-                              type="submit",
-                              value="Sort") }}
+                            {{ render_field(sortresults.sort,class="btn btn-primary", type="submit",  value="Sort") }}
                         </div>
                     </div>
                 </div>
@@ -42,10 +37,12 @@
             {% endfor %}
             <!--END The promotions -->
             <!--The items -->
+            {% if itemquery %}
             {% for item in itemquery %}
                 {% include 'search/searchresults/_item.html' %}
                 <hr>
             {% endfor %}
+            {% endif %}
             <!--END The items -->
             <div  style="clear:both"></div>
 

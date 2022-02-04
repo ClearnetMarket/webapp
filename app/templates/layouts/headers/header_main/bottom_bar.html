@@ -12,15 +12,12 @@
     .linkcolor_botb a:hover {
         color: #FF9900;
         text-decoration: none;
-
     }
 
     .linkcolor_botb a:active {
         color: #FF9900;
         text-decoration: none;
     }
-
-
 
     .linkcolor_bot_dropdown a:link {
         color: #000000;
@@ -36,7 +33,6 @@
         background-color: #FF9900;
         color: #ffffff;
         text-decoration: none;
-
     }
 
     .linkcolor_bot_dropdown a:active {
@@ -44,7 +40,6 @@
         text-decoration: none;
         color: #ffffff
     }
-
 
     .btn-cat,
     .btn-cat:active,
@@ -199,7 +194,8 @@
                     </div>
                     <ul class="dropdown-menu linkcolor_bot_dropdown " aria-labelledby="dropdownMenuButton">
                         {% for f in get_cats %}
-                            <a class=" dropdown-item font-weight-bold mb-3" href="{{ url_for('index') }}">
+                            <a class=" dropdown-item font-weight-bold mb-3"
+                                href="{{ url_for('category.viewcategory', maincatid=f.cat_id) }}">
                                 <div class="row ">
                                     <div class="col-3">
                                       <i class="pt-1 {{ f.cat_icon|safe }}"></i>

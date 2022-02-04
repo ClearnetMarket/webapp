@@ -51,23 +51,14 @@ def viewcategory(maincatid):
         userbalance, \
         unconfirmed, \
         customerdisputes = headerfunctions()
-
+    get_cats = db.session\
+        .query(Categories)\
+        .filter(Categories.id != 1000, Categories.id != 0)\
+        .order_by(Categories.name.asc())\
+        .all()
     # Currency Prices
     try:
-        btcpricez = db.session\
-                    .query(btc_cash_Prices)\
-                    .filter(or_(btc_cash_Prices.currency_id == 1,
-                        btc_cash_Prices.currency_id == 30,
-                        btc_cash_Prices.currency_id == 17,
-                        btc_cash_Prices.currency_id == 23,
-                        btc_cash_Prices.currency_id == 30,
-                        btc_cash_Prices.currency_id == 6,
-                        btc_cash_Prices.currency_id == 4,
-                        ))\
-                        .order_by(btc_cash_Prices.currency_id.asc())\
-                        .all()
-
-        btcprice_cashz = db.session\
+        btc_cash_price = db.session\
                         .query(btc_cash_Prices)\
                         .filter(or_(btc_cash_Prices.currency_id == 1,
                                     btc_cash_Prices.currency_id == 30,
@@ -80,7 +71,6 @@ def viewcategory(maincatid):
                         .order_by(btc_cash_Prices.currency_id.asc())\
                         .all()
     except Exception as e:
-        btcprice = 0
         btc_cash_price = 0
     # Currency Prices
 
@@ -144,7 +134,7 @@ def viewcategory(maincatid):
 
     # Forms
     if request.method == 'POST':
-        if formsearch.search.data and formsearch.validate_on_submit():
+        if formsearch.validate_on_submit():
             # cats
             categoryfull = formsearch.category.data
             cat = categoryfull.id
@@ -279,6 +269,7 @@ def viewcategory(maincatid):
                                form=formsearch,
 
                                # header stuff
+                               get_cats=get_cats,
                                user=user,
                                now=now,
                                order=order,
@@ -308,7 +299,7 @@ def viewcategory(maincatid):
                                promoteditems=promoteditems,
 
                                # coin prices
-                               btcprice=btcprice,
+            
                                btc_cash_price=btc_cash_price,
 
                                )
@@ -318,6 +309,7 @@ def viewcategory(maincatid):
                            form=formsearch,
                            # header stuff
                            user=user,
+                           get_cats=get_cats,
                            now=now,
                            order=order,
                            tot=tot,
@@ -327,23 +319,18 @@ def viewcategory(maincatid):
                            userbalance=userbalance,
                            unconfirmed=unconfirmed,
                            customerdisputes=customerdisputes,
-
                            # page specific
                            maincatid=maincatid,
                            itemquery=itemquery,
                            sortresults=sortresults,
                            pagination=pagination,
                            getcategory=getcategory,
-
                            # side
                            highprice=highprice,
                            lowprice=lowprice,
-
                            # promotions
                            promoteditems=promoteditems,
-
                            # coin prices
-                           btcprice=btcprice,
                            btc_cash_price=btc_cash_price
                            )
 

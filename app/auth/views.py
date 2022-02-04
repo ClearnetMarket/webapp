@@ -83,6 +83,7 @@ from app.classes.service import \
     ReturnsTracking, \
     Tracking
 from app.classes.models import WordSeeds 
+from app.classes.category import Categories
 from app.classes.userdata import \
     userHistory, \
     Feedback
@@ -90,7 +91,6 @@ from app.classes.vendor import \
     Orders, \
     vendorVerification
 from app.classes.wallet_bch import \
-    BchUnconfirmed, \
     BchWallet
 
 from app.classes.models import \
@@ -574,7 +574,7 @@ def myAccount():
             flash("Form Error", category="danger")
             return redirect(url_for('auth.myAccount',
                                     username=current_user.username))
-    return render_template('auth/account/myAccount.html',
+    return render_template('auth/account/myaccount.html',
                            title=title,
                            form=form,
                            now=now,
@@ -1754,9 +1754,15 @@ def orders():
         unconfirmed, \
         customerdisputes = headerfunctions()
     feedbackform = feedbackonorderForm(request.form)
-
-    # forms
     formsearch = searchForm()
+
+    get_cats = db.session\
+        .query(Categories)\
+        .filter(Categories.id != 1000, Categories.id != 0)\
+        .order_by(Categories.name.asc())\
+        .all()
+    # forms
+ 
 
     search = False
     q = request.args.get('q')
@@ -1796,7 +1802,7 @@ def orders():
                             outer_window=outer_window)
 
     if request.method == 'POST':
-        if formsearch.search.data and formsearch.validate_on_submit():
+        if formsearch.validate_on_submit():
             # cats
             categoryfull = formsearch.category.data
             cat = categoryfull.id
@@ -1908,6 +1914,7 @@ def orders():
                            form=formsearch,
                            # header stuff
                            btc_cash_price=btc_cash_price,
+                           get_cats=get_cats,
                            order=order,
                            tot=tot,
                            issues=issues,

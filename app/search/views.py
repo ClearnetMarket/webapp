@@ -652,7 +652,7 @@ def searchMaster(searchterm, function):
                                    btc_sort=btc_sort,
                                    shipping_sort=shipping_sort,
                                    )
-        if formsearch.search.data and formsearch.validate_on_submit():
+        if formsearch.validate_on_submit():
 
             # cats
             categoryfull = formsearch.category.data

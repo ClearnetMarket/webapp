@@ -38,10 +38,8 @@ from app.classes.models import \
 # End Models
 from app.profile.profilebar import profilebar
 
-from app.search.forms import searchForm
-from app.search.searchfunction import headerfunctions_vendor
-from app.search.searchfunction import headerfunctions
-
+from app.auth.forms import searchForm
+from app.search.searchfunction import headerfunctions_vendor,headerfunctions
 from datetime import timedelta, datetime
 from app.common.functions import btc_cash_convertlocaltobtc
 import os
@@ -188,7 +186,7 @@ def index():
                     flash(x, 1)
                     f.viewed = 1
                     db.session.add(f)
-
+                db.session.commit()
         except Exception:
             pass
 
@@ -279,10 +277,13 @@ def index():
         ordersifreturnvendor = None
 
     if request.method == 'POST':
-        if formsearch.search.data and formsearch.validate_on_submit():
-            # cats
+        print(formsearch.data)
+
+        if formsearch.data and formsearch.validate_on_submit():
+
             categoryfull = formsearch.category.data
             cat = categoryfull.id
+            print(cat)
             if formsearch.searchString.data == '' and cat == 0:
                 return redirect(url_for('index'))
             if formsearch.searchString.data == '':

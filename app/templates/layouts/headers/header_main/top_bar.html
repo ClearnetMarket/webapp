@@ -68,9 +68,9 @@
                         </div>
                         <div class="col-auto float-start border_gray_right p-2 linkcolor_topb ">
                             {% if current_user.is_authenticated %}
-                          {{current_user.currency }} 
-                           {% else %}
-                           USD
+                            {{current_user.currency|currencyformat }}
+                            {% else %}
+                            USD
                             {% endif %}
                         </div>
                     </div>
@@ -95,35 +95,38 @@
                     <div class="justify-content-end">
                         <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
                             {% if current_user.is_authenticated %}
-                                {% if current_user.vendor_account == 0 %}
-                                <a href="{{ url_for('auth.becomeVendor') }}">
-                                    <i class="bi bi-upload"></i>
-                                    Become Vendor
-                                </a>
-                                {% else %}
-                                <a href="{{ url_for('vendor.createItem') }}">
-                                    <i class="bi bi-upload"></i>
-                                    Post Item
-                                </a>
-                                {% endif %}
+                            {% if current_user.vendor_account == 0 %}
+                            <a href="{{ url_for('auth.becomeVendor') }}">
+                                <i class="bi bi-upload"></i>
+                                Become Vendor
+                            </a>
                             {% else %}
-                                <a href="{{ url_for('auth.register') }}">
-                                    <i class="bi bi-upload"></i>
-                                    Post Item
-                                </a>
+                            <a href="{{ url_for('vendor.createItem') }}">
+                                <i class="bi bi-upload"></i>
+                                Post Item
+                            </a>
+                            {% endif %}
+                            {% else %}
+                            <a href="{{ url_for('auth.register') }}">
+                                <i class="bi bi-upload"></i>
+                                Post Item
+                            </a>
                             {% endif %}
                         </div>
                         <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
-                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i class="bi bi-person-circle"></i> Account</a>
+                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i
+                                    class="bi bi-person-circle"></i> Account</a>
                         </div>
-                        <div class="col-auto d-none d-md-block float-end  border_gray_right p-2 linkcolor_topb">
-                            <a href="{{ url_for('main.about') }}"><i class="bi bi-heart"></i> Saved Items</a>
-                        </div>
+
                         {% if current_user.is_authenticated %}
 
                         {% else %}
                         <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
                             <a href="{{ url_for('auth.login') }}"><i class="bi bi-file-lock-fill"></i> Login</a>
+                        </div>
+                        <div class="col-auto d-none d-md-block float-end  border_gray_right p-2 linkcolor_topb">
+                            <a href="{{ url_for('auth.register') }}"><i
+                                    class="bi bi-person-check-fill"></i></i>Register</a>
                         </div>
                         {% endif %}
                         {% if current_user.is_authenticated %}
@@ -143,7 +146,8 @@
                             <a href="{{ url_for('main.about') }}"><i class="bi bi-upload"></i> Post Item</a>
                         </div>
                         <div class="col-3  sidebar_top_right border_gray_right  p-2 linkcolor_topb border_gray_bottom">
-                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i class="bi bi-person-circle"></i> Account</a>
+                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i
+                                    class="bi bi-person-circle"></i> Account</a>
                         </div>
                         {% if current_user.is_authenticated %}
                         {% else %}

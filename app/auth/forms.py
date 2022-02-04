@@ -25,7 +25,7 @@ from app.auth.validation import general,\
     usernames
 import re
 from app.auth.validation import allowspace
-
+from app.classes.models import Categories, Country
 
 class ConfirmSeed(FlaskForm):
     seedanswer0 = StringField('Word 1', validators=[
@@ -129,10 +129,19 @@ class shipselectForm(FlaskForm):
     delete = SubmitField()
 
 
+def searchside():
+    return Categories.query.filter(Categories.id != 1000, Categories.id != 100).order_by(Categories.id.asc()).all()
+
+
+def searchside_default():
+    return Categories.query.filter(Categories.id == 1).first()
+
 class searchForm(FlaskForm):
 
     searchString = StringField('searchString', validators=[DataRequired()])
-    category = QuerySelectField(query_factory=lambda: Query_mainsearch.query.all(), get_label='text')
+    category = QuerySelectField(query_factory=searchside,
+                                get_label='name',
+                                default=searchside_default)
     search = SubmitField()
 
     def __init__(self, *args, **kwargs):

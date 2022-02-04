@@ -17,14 +17,10 @@ from app.common.decorators import \
     login_required, \
     ping_user, \
     vendoraccount_required
-from app.vendor.item_image_resizer import imagespider
+from app.vendor.images.item_image_resizer import imagespider
 from app.common.functions import \
     mkdir_p, \
     id_generator_picture1, \
-    id_generator_picture2, \
-    id_generator_picture3, \
-    id_generator_picture4, \
-    id_generator_picture5, \
     btc_cash_convertlocaltobtc, \
     itemlocation
 # forms
@@ -86,7 +82,7 @@ from app.classes.vendor import \
 
 from app.classes.wallet_bch import \
     *
-
+from app.vendor.images.image_forms import image1, image2, image3, image4, image5
 # End Models
 
 
@@ -267,8 +263,7 @@ def itemsforSale():
             if len(see_if_changes) > 0:
                 db.session.commit()
         else:
-            flash(
-                "You are currently on vacation mode.  Cannot put items online", category="danger")
+            flash("You are currently on vacation mode.  Cannot put items online", category="danger")
 
     return render_template('/vendor/itemsforsale/vendorItemsforsale.html',
                            form=form,
@@ -291,463 +286,263 @@ def createItem():
     Vendor creates an item to be listed
     :return:
     """
-    # first see if they arnt spamming the site.  In future set to balance or level
     now = datetime.utcnow()
-    gettotalitems = db.session.query(marketItem).filter_by(
-        vendor_id=current_user.id).count()
-    if gettotalitems < 1000:
-        try:
-            vendorcreateItem = add_product_form_factory(item=0)
-            form = vendorcreateItem(CombinedMultiDict(
-                (request.files, request.form)))
-            user = db.session\
-                .query(User)\
-                .filter_by(username=current_user.username)\
-                .first()
+    # first see if they arnt spamming the site.  In future set to balance or level
+    # current total items to prevent scripters
+    gettotalitems = db.session.query(marketItem).filter_by(vendor_id=current_user.id).count()
+    if gettotalitems < 100:
+        # item = 0 creating item       item = 1 editing item
+        vendorcreateItem = add_product_form_factory(item=0)
+        form = vendorcreateItem(CombinedMultiDict((request.files, request.form)))
 
-            id_pic1 = id_generator_picture1()
-            id_pic2 = id_generator_picture2()
-            id_pic3 = id_generator_picture3()
-            id_pic4 = id_generator_picture4()
-            id_pic5 = id_generator_picture5()
+        user = db.session\
+            .query(User)\
+            .filter_by(username=current_user.username)\
+            .first()
 
-            if request.method == 'POST' and user.vendor_account == 1:
-                if form.validate_on_submit():
+        if request.method == 'POST' and user.vendor_account == 1:
+            if form.validate_on_submit():
 
-                    # Boolean fields
-                    if form.shippingtwo.data is True:
-                        shippingtwo = 1
-                    else:
-                        shippingtwo = 0
+                # Boolean fields
+                if form.shippingtwo.data is True:
+                    shippingtwo = 1
+                else:
+                    shippingtwo = 0
 
-                    if form.shippingthree.data is True:
-                        shippingthree = 1
-                    else:
-                        shippingthree = 0
+                if form.shippingthree.data is True:
+                    shippingthree = 1
+                else:
+                    shippingthree = 0
 
-                    if form.return_this_item.data is True:
-                        return_allowed = 1
-                    else:
-                        return_allowed = 0
+                if form.return_this_item.data is True:
+                    return_allowed = 1
+                else:
+                    return_allowed = 0
 
-                    if form.btc_accepted.data is True:
-                        digital_currency2 = 1
-                    else:
-                        digital_currency2 = 0
+                if form.btc_accepted.data is True:
+                    digital_currency2 = 1
+                else:
+                    digital_currency2 = 0
 
-                    if form.btc_cash_accepted.data is True:
-                        digital_currency3 = 1
-                    else:
-                        digital_currency3 = 0
+                if form.btc_cash_accepted.data is True:
+                    digital_currency3 = 1
+                else:
+                    digital_currency3 = 0
 
-                    # Selectfield entries
-                    # Get currency from query
-                    currencyfull = form.currency.data
-                    cur = currencyfull.code
+                # Selectfield entries
+                # Get currency from query
+                currencyfull = form.currency.data
+                cur = currencyfull.code
 
-                    # get item condition query
-                    itemconditionfull = form.itemcondition.data
-                    itemcondition = itemconditionfull.value
+                # get item condition query
+                itemconditionfull = form.itemcondition.data
+                itemcondition = itemconditionfull.value
 
-                    # get itemcount query
-                    itemcountfull = form.itemcount.data
-                    itemcount = itemcountfull.value
+                # get itemcount query
+                itemcountfull = form.itemcount.data
+                itemcount = itemcountfull.value
 
-                    # get origin country query
-                    origincountryfull = form.origincountry.data
-                    origincountry = origincountryfull.numericcode
+                # get origin country query
+                origincountryfull = form.origincountry.data
+                origincountry = origincountryfull.numericcode
 
-                    # get destination 1
-                    getdest1full = form.destination1.data
-                    getdest1 = getdest1full.numericcode
+                # get destination 1
+                getdest1full = form.destination1.data
+                getdest1 = getdest1full.numericcode
 
-                    # get destination2
-                    getdest2full = form.destination2.data
-                    getdest2 = getdest2full.numericcode
+                # get destination2
+                getdest2full = form.destination2.data
+                getdest2 = getdest2full.numericcode
 
-                    # getdestination 3
-                    getdest3full = form.destination3.data
-                    getdest3 = getdest3full.numericcode
+                # getdestination 3
+                getdest3full = form.destination3.data
+                getdest3 = getdest3full.numericcode
 
-                    # getdestination 4
-                    getdest4full = form.destination4.data
-                    getdest4 = getdest4full.numericcode
+                # getdestination 4
+                getdest4full = form.destination4.data
+                getdest4 = getdest4full.numericcode
 
-                    # getdestination 5
-                    getdest5full = form.destination5.data
-                    getdest5 = getdest5full.numericcode
+                # getdestination 5
+                getdest5full = form.destination5.data
+                getdest5 = getdest5full.numericcode
 
-                    # get get not shipping 1
-                    getnotship1full = form.notshipping1.data
-                    getnotship1 = getnotship1full.value
+                # get get not shipping 1
+                getnotship1full = form.notshipping1.data
+                getnotship1 = getnotship1full.value
 
-                    # get get not shipping 2
-                    getnotship2full = form.notshipping2.data
-                    getnotship2 = getnotship2full.value
+                # get get not shipping 2
+                getnotship2full = form.notshipping2.data
+                getnotship2 = getnotship2full.value
 
-                    # get get not shipping 3
-                    getnotship3full = form.notshipping3.data
-                    getnotship3 = getnotship3full.value
+                # get get not shipping 3
+                getnotship3full = form.notshipping3.data
+                getnotship3 = getnotship3full.value
 
-                    # get get not shipping 4
-                    getnotship4full = form.notshipping1.data
-                    getnotship4 = getnotship4full.value
+                # get get not shipping 4
+                getnotship4full = form.notshipping1.data
+                getnotship4 = getnotship4full.value
 
-                    # get get not shipping 5
-                    getnotship5full = form.notshipping5.data
-                    getnotship5 = getnotship5full.value
+                # get get not shipping 5
+                getnotship5full = form.notshipping5.data
+                getnotship5 = getnotship5full.value
 
-                    # get get not shipping 6
-                    getnotship6full = form.notshipping6.data
-                    getnotship6 = getnotship6full.value
+                # get get not shipping 6
+                getnotship6full = form.notshipping6.data
+                getnotship6 = getnotship6full.value
 
-                    # get shippindayleast 0
-                    getshipdayleastfull0 = form.shippingdayleast0.data
-                    getshipdayleast0 = getshipdayleastfull0.value
+                # get shippindayleast 0
+                getshipdayleastfull0 = form.shippingdayleast0.data
+                getshipdayleast0 = getshipdayleastfull0.value
 
-                    # get shipping day most 0
-                    getshippingdaymostfull0 = form.shippingdaymost0.data
-                    getshippingdaymost0 = getshippingdaymostfull0.value
+                # get shipping day most 0
+                getshippingdaymostfull0 = form.shippingdaymost0.data
+                getshippingdaymost0 = getshippingdaymostfull0.value
 
-                    # get shippindayleast 2
-                    getshipdayleastfull2 = form.shippingdayleast2.data
-                    getshipdayleast2 = getshipdayleastfull2.value
+                # get shippindayleast 2
+                getshipdayleastfull2 = form.shippingdayleast2.data
+                getshipdayleast2 = getshipdayleastfull2.value
 
-                    # get shipping day most 2
-                    getshippingdaymostfull2 = form.shippingdaymost2.data
-                    getshippingdaymost2 = getshippingdaymostfull2.value
+                # get shipping day most 2
+                getshippingdaymostfull2 = form.shippingdaymost2.data
+                getshippingdaymost2 = getshippingdaymostfull2.value
 
-                    # get shippindayleast 3
-                    getshipdayleastfull3 = form.shippingdayleast3.data
-                    getshipdayleast3 = getshipdayleastfull3.value
+                # get shippindayleast 3
+                getshipdayleastfull3 = form.shippingdayleast3.data
+                getshipdayleast3 = getshipdayleastfull3.value
 
-                    # get shipping day most 3
-                    getshippingdaymostfull3 = form.shippingdaymost3.data
-                    getshippingdaymost3 = getshippingdaymostfull3.value
+                # get shipping day most 3
+                getshippingdaymostfull3 = form.shippingdaymost3.data
+                getshippingdaymost3 = getshippingdaymostfull3.value
 
-                    # category query
-                    categoryfull = form.category.data
-                    cat0 = categoryfull.id
-                    categoryname0 = categoryfull.name
+                # category query
+                categoryfull = form.category.data
+                cat0 = categoryfull.id
+                categoryname0 = categoryfull.name
 
-                    # node location
-                    getlastitem = db.session\
-                        .query(marketItem)\
-                        .order_by(marketItem.id.desc())\
-                        .first()
-                    lastitemid = getlastitem.id + 1
-                    getitemlocation = itemlocation(x=lastitemid)
+                # create image of item in database
+                item = marketItem(
+                    stringnodeid=1,
+                    categoryname0=categoryname0,
+                    categoryid0=cat0,
+                    digital_currency1=0,
+                    digital_currency2=digital_currency2,
+                    digital_currency3=digital_currency3,
+                    created=datetime.utcnow(),
+                    vendor_name=current_user.username,
+                    vendor_id=current_user.id,
+                    origincountry=origincountry,
+                    destinationcountry=getdest1,
+                    destinationcountrytwo=getdest2,
+                    destinationcountrythree=getdest3,
+                    destinationcountryfour=getdest4,
+                    destinationcountryfive=getdest5,
+                    itemtitlee=form.itemtitlee.data,
+                    itemcount=itemcount,
+                    itemdescription=form.itemdescription.data,
+                    itemrefundpolicy=form.itemrefundpolicy.data,
+                    price=form.pricee.data,
+                    currency=cur,
+                    itemcondition=itemcondition,
+                    totalsold=0,
+                    keywords=form.keywords.data,
+                    return_allowed=return_allowed,
+                    shippingfree=form.shippingfree.data,
+                    shippinginfo0=form.shippinginfo0.data,
+                    shippingdayleast0=getshipdayleast0,
+                    shippingdaymost0=getshippingdaymost0,
+                    shippinginfo2=form.shippinginfo2.data,
+                    shippingprice2=form.shippingprice2.data,
+                    shippingdayleast2=getshipdayleast2,
+                    shippingdaymost2=getshippingdaymost2,
+                    shippinginfo3=form.shippinginfo3.data,
+                    shippingprice3=form.shippingprice3.data,
+                    shippingdayleast3=getshipdayleast3,
+                    shippingdaymost3=getshippingdaymost3,
+                    notshipping1=getnotship1,
+                    notshipping2=getnotship2,
+                    notshipping3=getnotship3,
+                    notshipping4=getnotship4,
+                    notshipping5=getnotship5,
+                    notshipping6=getnotship6,
+                    details=form.details.data,
+                    details1=form.details1.data,
+                    details1answer=form.details1answer.data,
+                    details2=form.details2.data,
+                    details2answer=form.details2answer.data,
+                    details3=form.details3.data,
+                    details3answer=form.details3answer.data,
+                    details4=form.details4.data,
+                    details4answer=form.details4answer.data,
+                    details5=form.details5.data,
+                    details5answer=form.details5answer.data,
+                    details6=form.details6.data,
+                    details6answer=form.details6answer.data,
+                    details7=form.details7.data,
+                    details7answer=form.details7answer.data,
+                    details8=form.details8.data,
+                    details8answer=form.details8answer.data,
+                    details9=form.details9.data,
+                    details9answer=form.details9answer.data,
+                    details10=form.details10.data,
+                    details10answer=form.details10answer.data,
+                    shippingtwo=shippingtwo,
+                    shippingthree=shippingthree,
+                    viewcount=0,
+                    itemrating=0,
+                    reviewcount=0,
+                    online=0,
+                    aditem=0,
+                    aditem_level=0,
+                    aditem_timer=datetime.utcnow(),
+                    amazonid=0,
+                    amazon_last_checked=now,
+                )
+                # add image to database
+                db.session.add(item)
+                db.session.flush()
 
-                    Item = marketItem(
-                        stringnodeid=getitemlocation,
-                        categoryname0=categoryname0,
-                        categoryid0=cat0,
-                        digital_currency1=0,
-                        digital_currency2=digital_currency2,
-                        digital_currency3=digital_currency3,
-                        created=datetime.utcnow(),
-                        vendor_name=current_user.username,
-                        vendor_id=current_user.id,
-                        origincountry=origincountry,
-                        destinationcountry=getdest1,
-                        destinationcountrytwo=getdest2,
-                        destinationcountrythree=getdest3,
-                        destinationcountryfour=getdest4,
-                        destinationcountryfive=getdest5,
-                        itemtitlee=form.itemtitlee.data,
-                        itemcount=itemcount,
-                        itemdescription=form.itemdescription.data,
-                        itemrefundpolicy=form.itemrefundpolicy.data,
-                        price=form.pricee.data,
-                        currency=cur,
-                        itemcondition=itemcondition,
-                        totalsold=0,
-                        keywords=form.keywords.data,
-                        return_allowed=return_allowed,
-                        shippingfree=form.shippingfree.data,
-                        shippinginfo0=form.shippinginfo0.data,
-                        shippingdayleast0=getshipdayleast0,
-                        shippingdaymost0=getshippingdaymost0,
-                        shippinginfo2=form.shippinginfo2.data,
-                        shippingprice2=form.shippingprice2.data,
-                        shippingdayleast2=getshipdayleast2,
-                        shippingdaymost2=getshippingdaymost2,
-                        shippinginfo3=form.shippinginfo3.data,
-                        shippingprice3=form.shippingprice3.data,
-                        shippingdayleast3=getshipdayleast3,
-                        shippingdaymost3=getshippingdaymost3,
-                        notshipping1=getnotship1,
-                        notshipping2=getnotship2,
-                        notshipping3=getnotship3,
-                        notshipping4=getnotship4,
-                        notshipping5=getnotship5,
-                        notshipping6=getnotship6,
-                        details=form.details.data,
-                        details1=form.details1.data,
-                        details1answer=form.details1answer.data,
-                        details2=form.details2.data,
-                        details2answer=form.details2answer.data,
-                        details3=form.details3.data,
-                        details3answer=form.details3answer.data,
-                        details4=form.details4.data,
-                        details4answer=form.details4answer.data,
-                        details5=form.details5.data,
-                        details5answer=form.details5answer.data,
-                        details6=form.details6.data,
-                        details6answer=form.details6answer.data,
-                        details7=form.details7.data,
-                        details7answer=form.details7answer.data,
-                        details8=form.details8.data,
-                        details8answer=form.details8answer.data,
-                        details9=form.details9.data,
-                        details9answer=form.details9answer.data,
-                        details10=form.details10.data,
-                        details10answer=form.details10answer.data,
-                        shippingtwo=shippingtwo,
-                        shippingthree=shippingthree,
-                        viewcount=0,
-                        itemrating=0,
-                        reviewcount=0,
-                        online=0,
-                        aditem=0,
-                        aditem_level=0,
-                        aditem_timer=datetime.utcnow(),
-                        amazonid=0,
-                        amazon_last_checked=now,
-                    )
-                    db.session.add(Item)
-                    db.session.flush()
+                # node location
+                getitemlocation = itemlocation(x=item.id)
+                item.stringnodeid = getitemlocation
 
-                    # Images
-                    getimagesubfolder = itemlocation(x=Item.id)
-                    directoryifitemlisting = os.path.join(
-                        UPLOADED_FILES_DEST, "item", getimagesubfolder, (str(Item.id)))
-                    mkdir_p(path=directoryifitemlisting)
-                    # UPLOADING FILE
-                    # gets filename from form
+                # Images
+                getimagesubfolder = itemlocation(x=item.id)
+                directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST, "item", getimagesubfolder, (str(item.id)))
+                mkdir_p(path=directoryifitemlisting)
 
-                    def image1():
-                        if form.imageone1.data:
-                            try:
-                                filename = secure_filename(
-                                    form.imageone1.data.filename)
-                                # makes directory (generic location + auction number id as folder)
-                                # saves it to location
-                                imagepath = os.path.join(
-                                    directoryifitemlisting, filename)
-                                form.imageone1.data.save(imagepath)
-                                # split file name and ending
-                                filenamenew, file_extension = os.path.splitext(
-                                    imagepath)
-                                # gets new 64 digit filenam
-                                newfileName = id_pic1 + file_extension
-                                # puts new name with ending
-                                filenamenewfull = filenamenew + file_extension
-                                # gets aboslute path of new file
-                                newfileNameDestination = os.path.join(
-                                    directoryifitemlisting, newfileName)
-                                # renames file
-                                os.rename(filenamenewfull,
-                                          newfileNameDestination)
-                                if len(form.imageone1.data.filename) > 2:
-                                    x1 = id_pic1
-                                else:
-                                    x1 = "0"
-                                imagespider(base_path=newfileNameDestination)
-                                return x1
-                            except Exception as e:
-                                x1 = "0"
-                                return x1
-                        else:
-                            x1 = "0"
-                            return x1
+                image1(formdata=form.imageone1.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                image2(formdata=form.imagetwo.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                image3(formdata=form.imagethree.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                image4(formdata=form.imagefour.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                image5(formdata=form.imagefive.data, item=item, directoryifitemlisting=directoryifitemlisting)
 
-                    def image2():
-                        if form.imagetwo.data:
-                            try:
-                                filename = secure_filename(
-                                    form.imagetwo.data.filename)
-                                # makes directory (generic location + auction number id as folder)
-                                # saves it to location
-                                imagepath = os.path.join(
-                                    directoryifitemlisting, filename)
-                                form.imagetwo.data.save(imagepath)
-                                # split file name and ending
-                                filenamenew, file_extension = os.path.splitext(
-                                    imagepath)
-                                # gets new 64 digit filenam
-                                newfileName = id_pic2 + file_extension
-                                # puts new name with ending
-                                filenamenewfull = filenamenew + file_extension
-                                # gets aboslute path of new file
-                                newfileNameDestination = os.path.join(
-                                    directoryifitemlisting, newfileName)
-                                # renames file
-                                os.rename(filenamenewfull,
-                                          newfileNameDestination)
-                                if len(form.imagetwo.data.filename) > 2:
-                                    x2 = id_pic2
-                                else:
-                                    x2 = "0"
-                                imagespider(base_path=newfileNameDestination)
-                                return x2
-                            except Exception as e:
-                                x2 = "0"
-                                return x2
-                        else:
-                            x2 = "0"
-                            return x2
+                if item.shippingprice2 is None:
+                    item.shippingprice2 = 0
 
-                    def image3():
-                        if form.imagethree.data:
-                            try:
-                                filename = secure_filename(
-                                    form.imagethree.data.filename)
-                                # makes directory (generic location + auction number id as folder)
-                                # saves it to location
-                                imagepath = os.path.join(
-                                    directoryifitemlisting, filename)
-                                form.imagethree.data.save(imagepath)
-                                # split file name and ending
-                                filenamenew, file_extension = os.path.splitext(
-                                    imagepath)
-                                # gets new 64 digit filenam
-                                newfileName = id_pic3 + file_extension
-                                # puts new name with ending
-                                filenamenewfull = filenamenew + file_extension
-                                # gets aboslute path of new file
-                                newfileNameDestination = os.path.join(
-                                    directoryifitemlisting, newfileName)
-                                # renames file
-                                os.rename(filenamenewfull,
-                                          newfileNameDestination)
-                                if len(form.imagethree.data.filename) > 2:
-                                    x3 = id_pic3
-                                else:
-                                    x3 = "0"
-                                imagespider(base_path=directoryifitemlisting)
-                                return x3
-                            except Exception as e:
-                                x3 = "0"
-                                return x3
-                        else:
-                            x3 = "0"
-                            return x3
+                if item.shippingprice3 is None:
+                    item.shippingprice3 = 0
 
-                    def image4():
-                        if form.imagefour.data:
-                            try:
-                                filename = secure_filename(
-                                    form.imagefour.data.filename)
-                                # makes directory (generic location + auction number id as folder)
-                                # saves it to location
-                                imagepath = os.path.join(
-                                    directoryifitemlisting, filename)
-                                form.imagefour.data.save(imagepath)
-                                # split file name and ending
-                                filenamenew, file_extension = os.path.splitext(
-                                    imagepath)
-                                # gets new 64 digit filenam
-                                newfileName = id_pic4 + file_extension
-                                # puts new name with ending
-                                filenamenewfull = filenamenew + file_extension
-                                # gets aboslute path of new file
-                                newfileNameDestination = os.path.join(
-                                    directoryifitemlisting, newfileName)
-                                # renames file
-                                os.rename(filenamenewfull,
-                                          newfileNameDestination)
-                                if len(form.imagefour.data.filename) > 2:
-                                    x4 = id_pic4
-                                else:
-                                    x4 = "0"
-                                imagespider(base_path=directoryifitemlisting)
-                                return x4
-                            except Exception as e:
-                                print(str(e))
-                        else:
-                            x4 = "0"
-                            return x4
+                if item.price is None:
+                    item.price = 0
 
-                    def image5():
-                        if form.imagefive.data:
-                            try:
-                                filename = secure_filename(
-                                    form.imagefive.data.filename)
-                                # makes directory (generic location + auction number id as folder)
-                                # saves it to location
-                                imagepath = os.path.join(
-                                    directoryifitemlisting, filename)
-                                form.imagefive.data.save(imagepath)
-                                # split file name and ending
-                                filenamenew, file_extension = os.path.splitext(
-                                    imagepath)
-                                # gets new 64 digit filenam
-                                newfileName = id_pic5 + file_extension
-                                # puts new name with ending
-                                filenamenewfull = filenamenew + file_extension
-                                # gets aboslute path of new file
-                                newfileNameDestination = os.path.join(
-                                    directoryifitemlisting, newfileName)
-                                # renames file
-                                os.rename(filenamenewfull,
-                                          newfileNameDestination)
-                                if len(form.imagefive.data.filename) > 2:
-                                    x5 = id_pic5
-                                else:
-                                    x5 = "0"
-                                imagespider(base_path=directoryifitemlisting)
-                                return x5
-                            except Exception as e:
-                                x5 = "0"
-                                return x5
-                        else:
-                            x5 = "0"
-                            return x5
+                # update item id location for pathing
+                item.auctionid = item.id
+                item.stringauctionid = '/' + str(item.id) + '/'
 
-                    pic1name = image1()
-                    pic2name = image2()
-                    pic3name = image3()
-                    pic4name = image4()
-                    pic5name = image5()
+                # convert image sizes
+                db.session.add(item)
+                db.session.commit()
 
-                    Item.imageone = pic1name
-                    Item.imagetwo = pic2name
-                    Item.imagethree = pic3name
-                    Item.imagefour = pic4name
-                    Item.imagefive = pic5name
+                flash("Created New Item ", category="success")
+                return redirect(url_for('vendor.itemsforSale', username=current_user.username))
 
-                    if Item.shippingprice2 is None:
-                        Item.shippingprice2 = 0
-
-                    if Item.shippingprice3 is None:
-                        Item.shippingprice3 = 0
-
-                    if Item.price is None:
-                        Item.price = 0
-
-                    Item.auctionid = Item.id
-                    Item.stringauctionid = '/' + str(Item.id) + '/'
-                    db.session.add(Item)
-                    db.session.commit()
-
-                    flash("Created New Item ", category="success")
-                    return redirect(url_for('vendor.itemsforSale', username=current_user.username))
-        except Exception as e:
-            print(str(e))
-            db.session.rollback()
-            flash("Item creation failed", category="danger")
-
-            flash(str(e), category="danger")
             return redirect(url_for('vendor.createItem', username=current_user.username))
 
         return render_template('/vendor/itemsforsale/createItem.html',
                                form=form,
                                user=user)
     else:
-        flash("1000 items max.  This will change when the"
-              " leveling system is implemented with total items. ",
-              category="danger")
+        flash("100 items max", category="danger")
         return redirect(url_for('vendor.itemsforSale', username=current_user.username))
 
 
@@ -772,12 +567,6 @@ def editItem(id):
             .filter_by(id=current_user.id)\
             .first()
         if item.vendor_id == user.id:
-
-            id_pic1 = id_generator_picture1()
-            id_pic2 = id_generator_picture2()
-            id_pic3 = id_generator_picture3()
-            id_pic4 = id_generator_picture4()
-            id_pic5 = id_generator_picture5()
 
             vendorcreateItem = add_product_form_factory(item=item)
             form = vendorcreateItem(
@@ -841,7 +630,6 @@ def editItem(id):
                 shippingtwo=item.shippingtwo,
                 amazonid=0,
                 amazon_last_checked=now,
-
             )
 
             if request.method == 'POST' and user.vendor_account == 1 and form.validate_on_submit():
@@ -849,192 +637,18 @@ def editItem(id):
                 if item.vendor_id == user.id:
                     # Image location
                     getimagesubfolder = itemlocation(x=item.id)
-                    directoryifitemlisting = os.path.join(
-                        UPLOADED_FILES_DEST, "item", getimagesubfolder, (str(item.id)))
+                    directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST, "item", getimagesubfolder, (str(item.id)))
                     mkdir_p(path=directoryifitemlisting)
 
-                    def image1():
-                        if form.imageone1.data:
-                            deleteimg_noredirect(id=item.id, img=item.imageone)
-                            filename = secure_filename(
-                                form.imageone1.data.filename)
-                            # makes directory (generic location + auction number id as folder)
-                            # saves it to location
-                            imagepath = os.path.join(
-                                directoryifitemlisting, filename)
-                            form.imageone1.data.save(imagepath)
-                            # split file name and ending
-                            filenamenew, file_extension = os.path.splitext(
-                                imagepath)
-                            # gets new 64 digit filenam
-                            newfileName = id_pic1 + file_extension
-                            # puts new name with ending
-                            filenamenewfull = filenamenew + file_extension
-                            # gets aboslute path of new file
-                            newfileNameDestination = os.path.join(
-                                directoryifitemlisting, newfileName)
-                            # renames file
-                            os.rename(filenamenewfull, newfileNameDestination)
-
-                            if form.imageone1.data.filename:
-                                x1 = newfileName
-                                item.imageone = id_pic1
-                                db.session.add(item)
-                            else:
-                                x1 = "0"
-                            imagespider(base_path=directoryifitemlisting)
-                            return x1
-
-                        else:
-                            pass
-
-                    def image2():
-                        if form.imagetwo.data:
-                            deleteimg_noredirect(id=item.id, img=item.imagetwo)
-
-                            filename = secure_filename(
-                                form.imagetwo.data.filename)
-                            # makes directory (generic location + auction number id as folder)
-                            # saves it to location
-                            imagepath = os.path.join(
-                                directoryifitemlisting, filename)
-                            form.imagetwo.data.save(imagepath)
-                            # split file name and ending
-                            filenamenew, file_extension = os.path.splitext(
-                                imagepath)
-                            # gets new 64 digit filenam
-                            newfileName = id_pic2 + file_extension
-                            # puts new name with ending
-                            filenamenewfull = filenamenew + file_extension
-                            # gets aboslute path of new file
-                            newfileNameDestination2 = os.path.join(
-                                directoryifitemlisting, newfileName)
-                            # renames file
-                            os.rename(filenamenewfull, newfileNameDestination2)
-                            if form.imagetwo.data.filename:
-                                x2 = newfileName
-                                item.imagetwo = id_pic2
-                                db.session.add(item)
-                            else:
-                                x2 = "0"
-                            imagespider(base_path=directoryifitemlisting)
-                            return x2
-                        else:
-                            pass
-
-                    def image3():
-                        if form.imagethree.data:
-                            deleteimg_noredirect(
-                                id=item.id, img=item.imagethree)
-                            filename = secure_filename(
-                                form.imagethree.data.filename)
-                            # makes directory (generic location + auction number id as folder)
-                            # saves it to location
-                            imagepath = os.path.join(
-                                directoryifitemlisting, filename)
-                            form.imagethree.data.save(imagepath)
-                            # split file name and ending
-                            filenamenew, file_extension = os.path.splitext(
-                                imagepath)
-                            # gets new 64 digit filenam
-                            newfileName = id_pic3 + file_extension
-                            # puts new name with ending
-                            filenamenewfull = filenamenew + file_extension
-                            # gets aboslute path of new file
-                            newfileNameDestination = os.path.join(
-                                directoryifitemlisting, newfileName)
-                            # renames file
-                            os.rename(filenamenewfull, newfileNameDestination)
-                            if form.imagethree.data.filename:
-                                x3 = newfileName
-                                # add profile to db
-                                item.imagethree = id_pic3
-                                db.session.add(item)
-                            else:
-                                x3 = "0"
-                            imagespider(base_path=directoryifitemlisting)
-                            return x3
-                        else:
-                            pass
-
-                    def image4():
-                        if form.imagefour.data:
-                            deleteimg_noredirect(
-                                id=item.id, img=item.imagefour)
-                            filename = secure_filename(
-                                form.imagefour.data.filename)
-                            # makes directory (generic location + auction number id as folder)
-                            # saves it to location
-                            imagepath = os.path.join(
-                                directoryifitemlisting, filename)
-                            form.imagefour.data.save(imagepath)
-                            # split file name and ending
-                            filenamenew, file_extension = os.path.splitext(
-                                imagepath)
-                            # gets new 64 digit filenam
-                            newfileName = id_pic4 + file_extension
-                            # puts new name with ending
-                            filenamenewfull = filenamenew + file_extension
-                            # gets aboslute path of new file
-                            newfileNameDestination = os.path.join(
-                                directoryifitemlisting, newfileName)
-                            # renames file
-                            os.rename(filenamenewfull, newfileNameDestination)
-                            if form.imagefour.data.filename:
-                                x4 = newfileName
-                                # add profile to db
-                                item.imagefour = id_pic4
-                                db.session.add(item)
-                            else:
-                                x4 = "0"
-                            imagespider(base_path=directoryifitemlisting)
-                            return x4
-                        else:
-                            pass
-
-                    def image5():
-                        if form.imagefive.data:
-                            deleteimg_noredirect(
-                                id=item.id, img=item.imagefive)
-                            filename = secure_filename(
-                                form.imagefive.data.filename)
-                            # makes directory (generic location + auction number id as folder)
-                            # saves it to location
-                            imagepath = os.path.join(
-                                directoryifitemlisting, filename)
-                            form.imagefive.data.save(imagepath)
-                            # split file name and ending
-                            filenamenew, file_extension = os.path.splitext(
-                                imagepath)
-                            # gets new 64 digit filenam
-                            newfileName = id_pic5 + file_extension
-                            # puts new name with ending
-                            filenamenewfull = filenamenew + file_extension
-                            # gets aboslute path of new file
-                            newfileNameDestination = os.path.join(
-                                directoryifitemlisting, newfileName)
-                            # renames file
-                            os.rename(filenamenewfull, newfileNameDestination)
-                            if form.imagefive.data.filename:
-                                x5 = newfileName
-                                # add profile to db
-                                item.imagefive = id_pic5
-                                db.session.add(item)
-                            else:
-                                x5 = "0"
-                            imagespider(base_path=directoryifitemlisting)
-                            return x5
-                        else:
-                            pass
-
-                    image1()
-                    image2()
-                    image3()
-                    image4()
-                    image5()
+                    image1(formdata=form.imageone1.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                    image2(formdata=form.imagetwo.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                    image3(formdata=form.imagethree.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                    image4(formdata=form.imagefour.data, item=item, directoryifitemlisting=directoryifitemlisting)
+                    image5(formdata=form.imagefive.data, item=item, directoryifitemlisting=directoryifitemlisting)
 
                     if form.shippingtwo.data is True:
                         shippingtwo = 1
+
                     else:
                         shippingtwo = 0
 
@@ -1043,18 +657,12 @@ def editItem(id):
                     else:
                         shippingthree = 0
 
-                    if form.btc_accepted.data is True:
-                        digital_currency2 = 1
-                    else:
-                        digital_currency2 = 0
-
                     if form.btc_cash_accepted.data is True:
                         digital_currency3 = 1
                     else:
                         digital_currency3 = 0
 
                     # get category and subcategory
-
                     categoryfull = form.category_edit.data
                     cat0 = categoryfull.id
                     categoryname0 = categoryfull.name
@@ -1149,7 +757,7 @@ def editItem(id):
                     item.shippingtwo = shippingtwo,
                     item.shippingthree = shippingthree,
                     item.digital_currency1 = 0,
-                    item.digital_currency2 = digital_currency2,
+                    item.digital_currency2 = 0,
                     item.digital_currency3 = digital_currency3,
                     item.origincountry = origincountry,
                     item.destinationcountry = getdest1,
@@ -1222,7 +830,8 @@ def editItem(id):
 
                     db.session.add(item)
                     db.session.commit()
-                    flash("Updated: Item#" + str(item.id), category="success")
+
+                    flash(f"Updated: Item #{str(item.id)}",  category="success")
                     return redirect(url_for('vendor.itemsforSale'))
 
             return render_template('/vendor/itemsforsale/editItem.html',
@@ -1247,7 +856,7 @@ def deleteItem(id):
     :param id:
     :return:
     """
-    ext1 = '_250x'
+    ext1 = '_225x'
 
     item = marketItem.query.get(id)
     if item:
@@ -1257,16 +866,11 @@ def deleteItem(id):
                 getitemlocation = itemlocation(x=item.id)
                 link = 'item'
                 spacer = '/'
-                pathtofile1 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                                  getitemlocation + spacer + specific_folder + spacer + item.imageone)
-                pathtofile2 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                                  getitemlocation + spacer + specific_folder + spacer + item.imagetwo)
-                pathtofile3 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                                  getitemlocation + spacer + specific_folder + spacer + item.imagethree)
-                pathtofile4 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                                  getitemlocation + spacer + specific_folder + spacer + item.imagefour)
-                pathtofile5 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                                  getitemlocation + spacer + specific_folder + spacer + item.imagefive)
+                pathtofile1 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imageone)
+                pathtofile2 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagetwo)
+                pathtofile3 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagethree)
+                pathtofile4 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagefour)
+                pathtofile5 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagefive)
 
                 try:
                     pathtofile1, file_extension1 = os.path.splitext(
@@ -1285,10 +889,8 @@ def deleteItem(id):
                         pathtofile3)
                 except:
                     pass
-
                 try:
-                    pathtofile4, file_extension4 = os.path.splitext(
-                        pathtofile4)
+                    pathtofile4, file_extension4 = os.path.splitext( pathtofile4)
                 except:
                     pass
 
@@ -1436,15 +1038,8 @@ def cloneItem(id):
                     p2 = Decimal(vendoritem.shippingprice2)
                     p3 = Decimal(vendoritem.shippingprice3)
 
-                    getlastitem = db.session\
-                        .query(marketItem)\
-                        .order_by(marketItem.id.desc())\
-                        .first()
-                    lastitemid = getlastitem.id + 1
-                    getitemlocation = itemlocation(x=lastitemid)
-
                     Item = marketItem(
-                        stringnodeid=getitemlocation,
+                        stringnodeid=vendoritem.stringnodeid,
                         created=datetime.utcnow(),
                         vendor_name=current_user.username,
                         vendor_id=current_user.id,
@@ -1547,6 +1142,8 @@ def cloneItem(id):
                     # query the newly added item, and change the id's accordingly
                     Item.stringauctionid = '/' + str(Item.id) + '/'
 
+                    getitemlocation = itemlocation(x=Item.id)
+                    Item.stringnodeid = getitemlocation
                     db.session.add(Item)
                     db.session.commit()
 
@@ -1635,12 +1232,11 @@ def deleteimg(id, img):
 
                     link = 'item'
                     spacer = '/'
-                    pathtofile = str(UPLOADED_FILES_DEST + link +
-                                     spacer + specific_folder + spacer + img)
-                    pathtofile, file_extension = os.path.splitext(
-                        pathtofile)
+                    pathtofile = str(UPLOADED_FILES_DEST + link +  spacer + specific_folder + spacer + img)
+                    pathtofile, file_extension = os.path.splitext(pathtofile)
 
-                    ext1 = '_250x'
+                    ext1 = '_225x'
+                    ext_2 = '_500x'
 
                     file0 = str(pathtofile + file_extension)
                     file1 = str(pathtofile + ext1 + file_extension)
@@ -1732,8 +1328,7 @@ def deleteimg(id, img):
         return redirect(url_for('index', username=current_user.username))
 
 
-@vendoraccount_required
-@website_offline
+
 def deleteimg_noredirect(id, img):
     try:
         vendoritem = marketItem.query.get(id)
@@ -1748,7 +1343,7 @@ def deleteimg_noredirect(id, img):
                                      spacer + specific_folder + spacer + img)
                     pathtofile, file_extension = os.path.splitext(pathtofile)
 
-                    ext1 = '_250x'
+                    ext1 = '_225x'
 
                     file0 = str(pathtofile + file_extension)
                     file1 = str(pathtofile + ext1 + file_extension)
