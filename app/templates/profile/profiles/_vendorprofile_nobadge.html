@@ -1,12 +1,10 @@
 <!--Holder-->
 
-<div class="row linkcolor_topbar clearnetblue" style="color: #ffffff">
+<div class="row linkcolor_topbar bg-light" style="color: #ffffff">
   <!--username-->
   <div class="col-12 text-center">
     <div class="linkcolor_topbar">
-      <a href="{{ url_for('profile.vendorprofile',username=vendor.username) }}"
-        >{{ vendor.username }}</a
-      >
+      <a href="{{ url_for('profile.vendorprofile',username=vendor.username) }}">{{ vendor.username }}</a>
     </div>
   </div>
 
@@ -18,50 +16,27 @@
   <div class="col-12 text-center">{{ vendor.country|countryformat }}</div>
   <!--Badge-->
   <div class="col-12 text-center">
-    <img
-      src="{{ url_for('static', filename='/images/rank-badge/' + vendorpictureid + '.png')  }}"
-      width="40px"
-      height="40px"
-    />
+    <img src="{{ url_for('static', filename='/images/rank-badge/' + vendorpictureid + '.png')  }}" width="40px"
+      height="40px" />
   </div>
   <!--Level-->
   <div class="col-12 text-center">
     Lvl {{ vendorgetlevel.level }}<br />
-    {% if vendor.id|trustlevel == '0' %} {% else %}
+    {% if vendor.id|trustlevel == '0' %}
+    {% else %}
     <a href="{{ url_for('main.levels') }}">
-      <img
-        src="{{ url_for('static', filename='/images/trustlevel/' + vendor.id|trustlevel + '.png')  }}"
-        width="125px"
-        height="30px"
-      />
+      <img src="{{ url_for('static', filename='/images/trustlevel/' + vendor.id|trustlevel + '.png')  }}" width="125px"
+        height="30px" />
     </a>
     {% endif %}
   </div>
-  {% if vendorwidth %}
-  <div class="col-12 text-center">
-    Level({{ vendorwidth }}%)
-    <div class="progress">
-      <div
-        class="progress-bar progress-bar-warning"
-        role="progressbar"
-        aria-valuenow="{{"
-        level.experiencepoints
-        }}
-        aria-valuemin="0"
-        aria-valuemax="100"
-        style="width:{{ vendorwidth }}%"
-      ></div>
-    </div>
-  </div>
-  {% endif %}
+ 
+ 
   <!--msg-->
   {% if current_user.id == vendor.id%} {% else %}
   <div class="col-12 text-center mt-3 mb-3">
     <b>
-      <a
-        href="{{ url_for('message.messagecenter_Compose_specificperson',
-                person=vendor.username) }}"
-      >
+      <a href="{{ url_for('message.messagecenter_Compose_specificperson', person=vendor.username) }}">
         Send Message
       </a>
     </b>
@@ -69,13 +44,13 @@
   {% endif %}
   <!--Stats-->
   <div class="col-12 text-center">
-    Vendor Rating: {% if vendorstats.vendorrating == 0 %} 0 {% else %} {{
-    vendorstats.vendorrating }} {% endif %}
-    <img
-      src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
-      width="15px"
-      height="15px"
-    />
+    Vendor Rating:
+    {% if vendorstats.vendorrating == 0 %}
+    0
+    {% else %}
+    {{ vendorstats.vendorrating }}
+    {% endif %}
+    <img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px" />
   </div>
 
   <div class="col-12 text-center">Items Sold: {{ vendorstats.totalsales }}</div>

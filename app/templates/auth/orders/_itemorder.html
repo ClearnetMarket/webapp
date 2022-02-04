@@ -36,7 +36,7 @@
 <div class="row">
     <!-- small title -->
     <div class="col-12 d-sm-none linkcolor" style="font-size: 17px;">
-        <a href="{{ url_for('item.Itemforsale',id=order.item_id) }}" >
+        <a href="{{ url_for('item.itemforsale',id=order.item_id) }}" >
             {{ order.title|truncate(50) }}
         </a>
         <br>
@@ -55,7 +55,7 @@
     <div class="col-12 col-sm-4 col-md-6 linkcolor ">
 
         <div class="d-none d-sm-block" style="font-size: 17px;">
-            <a href="{{ url_for('item.Itemforsale',id=order.item_id) }}" >
+            <a href="{{ url_for('item.itemforsale',id=order.item_id) }}" >
                 {{ order.title|truncate(50) }}
             </a><br>
         </div>

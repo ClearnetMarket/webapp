@@ -1,6 +1,6 @@
 
 <div class="card mr-1 mb-5" >
-    <a href="{{ url_for('item.Itemforsale',id=item.id) }}">
+    <a href="{{ url_for('item.itemforsale',id=item.id) }}">
     <img class="card-img-top" style="max-width: 200px; height: 200px;"
             {% if item.imageone != '0' %}
                 src="{{ url_for('userdata.media_file',

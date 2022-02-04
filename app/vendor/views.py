@@ -133,6 +133,7 @@ def itemsforSale():
     # Query all the items related to the vendor
     sale = db.session.query(marketItem)
     sale = sale.filter(marketItem.vendor_id == user.id)
+  
     forsale = sale.limit(per_page).offset(offset)
 
     pagination = Pagination(page=page,
@@ -149,6 +150,7 @@ def itemsforSale():
         if current_user.vacation == 0:
             see_if_changes = []
             for v in request.form.getlist('checkit'):
+
                 intv = int(v)
                 specific_item = db.session\
                     .query(marketItem)\
@@ -170,53 +172,44 @@ def itemsforSale():
 
                         # Warnings
                         if len(specific_item.keywords) < 20:
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Doesnt have very good keywords",
-                                  category="warning")
+                            flash(f"Item #{str(specific_item.id)} Doesnt have very good keywords",category="warning")
                             see_if_changes.append(1)
                         # Turn off
                         if len(specific_item.imageone) < 10:
                             specific_item.online = 0
                             db.session.add(specific_item)
-
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Doesnt have a main image", category="danger")
+                            flash(f"Item# {str(specific_item.id)} Doesnt have a main image. Cannot put item online.", category="danger")
                             see_if_changes.append(1)
+
                         if specific_item.destinationcountry == '0':
                             specific_item.online = 0
                             db.session.add(specific_item)
-
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Doesnt have a destination country",
-                                  category="danger")
+                            flash(f"Item #{str(specific_item.id)} Doesnt have a destination country. Cannot put item online.", category="danger")
                             see_if_changes.append(1)
+
                         if specific_item.origincountry == '0':
                             specific_item.online = 0
                             db.session.add(specific_item)
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Doesnt have an origin ", category="danger")
+                            flash(f"Item #{str(specific_item.id)} Doesnt have an origin. Cannot put item online.", category="danger")
                             see_if_changes.append(1)
 
                         if specific_item.itemcount <= 0:
                             specific_item.online = 0
                             db.session.add(specific_item)
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Has been Sold out.  Update quantity to re-list it.",
-                                  category="danger")
+                            flash(f"Item #{str(specific_item.id)} Has been Sold out.  Update quantity to re-list it. Cannot put item online.",  category="danger")
                             see_if_changes.append(1)
 
                         # needs price
                         if Decimal(specific_item.price) < .000001:
                             specific_item.online = 0
                             db.session.add(specific_item)
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Doesnt have a proper price", category="danger")
+                            flash(f"Item #{str(specific_item.id)} Doesnt have a proper price. Cannot put item online.", category="danger")
                             see_if_changes.append(1)
+                            
                         if len(specific_item.itemtitlee) < 10:
                             specific_item.online = 0
                             db.session.add(specific_item)
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Doesnt have a proper title", category="danger")
+                            flash(f"Item# {str(specific_item.id)} Doesnt have a proper title. Cannot put item online.", category="danger")
                             see_if_changes.append(1)
 
                         if specific_item.shippingtwo == 1:
@@ -226,9 +219,8 @@ def itemsforSale():
                             else:
                                 specific_item.shippingtwo = 0
                                 db.session.add(specific_item)
-                                flash("Item#" + str(specific_item.id) +
-                                      ": Doesnt have a proper shipping price 2",
-                                      category="danger")
+                                flash(
+                                    f"Item# + {str(specific_item.id)} Doesnt have a proper shipping price 2.", category="danger")
                                 see_if_changes.append(1)
 
                         if specific_item.shippingthree == 1:
@@ -238,9 +230,7 @@ def itemsforSale():
                             else:
                                 specific_item.shippingthree = 0
                                 db.session.add(specific_item)
-                                flash("Item#" + str(specific_item.id) +
-                                      ": Doesnt have a proper shipping info 3 or price",
-                                      category="danger")
+                                flash(f"Item #{str(specific_item.id)} Doesnt have a proper shipping info 3 or price.", category="danger")
                                 see_if_changes.append(1)
 
                         if specific_item.shippingfree == 0 \
@@ -248,14 +238,12 @@ def itemsforSale():
                                 and specific_item.shippingthree == 0:
                             specific_item.online = 0
                             db.session.add(specific_item)
-                            flash("Item#" + str(specific_item.id) +
-                                  ": Doesnt have a shipping method selected/checked",
-                                  category="danger")
+                            flash(f"Item #{str(specific_item.id)} Doesnt have a shipping method selected/checked. Cannot put item online.", category="danger")
                             see_if_changes.append(1)
 
                 except Exception as e:
                     print(str(e))
-                    flash("Form Error", category="danger")
+                    flash("Error!  There was an error putting the listings on/offline", category="danger")
                     specific_item.online = 0
                     db.session.add(specific_item)
                     db.session.commit()
@@ -550,7 +538,7 @@ def createItem():
 @website_offline
 @login_required
 @vendoraccount_required
-def editItem(id):
+def edititem(id):
     """
     Edits a specific item given an id
     :param id:
@@ -751,7 +739,7 @@ def editItem(id):
                     getshippingdaymostfull3 = form.shippingdaymost31.data
                     getshippingdaymost3 = getshippingdaymostfull3.value
 
-                    # FORM DATA
+                    # Form data
                     item.categoryname0 = categoryname0,
                     item.categoryid0 = cat0,
                     item.shippingtwo = shippingtwo,
@@ -834,7 +822,7 @@ def editItem(id):
                     flash(f"Updated: Item #{str(item.id)}",  category="success")
                     return redirect(url_for('vendor.itemsforSale'))
 
-            return render_template('/vendor/itemsforsale/editItem.html',
+            return render_template('/vendor/itemsforsale/edititem.html',
                                    form=form,
                                    item=item,
                                    user=user
@@ -1016,7 +1004,7 @@ def deleteItem(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def cloneItem(id):
+def cloneitem(id):
     """
     given an item id, this will create a new folder on storage, and recopy the data with a new id
     :param id:
@@ -1024,7 +1012,9 @@ def cloneItem(id):
     """
     # get the vendor item to be copied
     now = datetime.utcnow()
+    # get item we are cloning
     vendoritem = marketItem.query.filter_by(id=id).first()
+
     if vendoritem:
         if vendoritem.vendor_id == current_user.id:
             # make sure user doesnt have to many auctions
@@ -1038,7 +1028,7 @@ def cloneItem(id):
                     p2 = Decimal(vendoritem.shippingprice2)
                     p3 = Decimal(vendoritem.shippingprice3)
 
-                    Item = marketItem(
+                    item = marketItem(
                         stringnodeid=vendoritem.stringnodeid,
                         created=datetime.utcnow(),
                         vendor_name=current_user.username,
@@ -1120,18 +1110,16 @@ def cloneItem(id):
                         digital_currency2=1,
                         digital_currency3=0,
                     )
-                    db.session.add(Item)
+                    db.session.add(item)
                     db.session.flush()
 
                     # IMAGES
                     # Make New image folder
-                    getitemlocation = itemlocation(x=lastitemid)
-                    listingdir = 'item/' + getitemlocation + \
-                        '/' + str(Item.id) + '/'
+                    getitemlocation = itemlocation(x=item.id)
+                    listingdir = 'item/' + getitemlocation + '/' + str(item.id) + '/'
                     mkdir_p(path=UPLOADED_FILES_DEST + listingdir)
                     # get old directory path
-                    oldirectory = UPLOADED_FILES_DEST + "item/" + \
-                        getitemlocation + '/' + str(vendoritem.id) + '/'
+                    oldirectory = UPLOADED_FILES_DEST + "item/" + getitemlocation + '/' + str(vendoritem.id) + '/'
                     # new directory path
                     newdirectory = UPLOADED_FILES_DEST + listingdir
                     # lopp over the files and copy them
@@ -1140,11 +1128,11 @@ def cloneItem(id):
                         if os.path.isfile(full_file_name):
                             shutil.copy(full_file_name, newdirectory)
                     # query the newly added item, and change the id's accordingly
-                    Item.stringauctionid = '/' + str(Item.id) + '/'
+                    item.stringauctionid = '/' + str(item.id) + '/'
 
-                    getitemlocation = itemlocation(x=Item.id)
-                    Item.stringnodeid = getitemlocation
-                    db.session.add(Item)
+                    getitemlocation = itemlocation(x=item.id)
+                    item.stringnodeid = getitemlocation
+                    db.session.add(item)
                     db.session.commit()
 
                     flash("Cloned New Item ", category="success")
@@ -1153,12 +1141,10 @@ def cloneItem(id):
                 except Exception as e:
                     flash(str(e), category="danger")
                     db.session.rollback()
-                    flash("Error.  Could not clone", category="danger")
+                    flash("Error.  Could not clone item.", category="danger")
                     return redirect(url_for('index'))
             else:
-                flash("Maximum 1000 items allowed per user. "
-                      " This will change when leveling process is update."
-                      "  Higher the level, more listings", category="success")
+                flash("Maximum 100 items allowed per user. ", category="success")
         else:
             flash("Error", category="danger")
             return redirect(url_for('index'))
@@ -1167,7 +1153,7 @@ def cloneItem(id):
         return redirect(url_for('index'))
 
 
-@vendor.route('/needavacation/', methods=['GET', 'POST'])
+@vendor.route('/need-a-vacation/', methods=['GET', 'POST'])
 @website_offline
 @login_required
 @ping_user
@@ -1314,13 +1300,13 @@ def deleteimg(id, img):
                                 pass
 
                         else:
-                            return redirect(url_for('vendor.editItem', id=id))
+                            return redirect(url_for('vendor.edititem', id=id))
                         db.session.commit()
-                    return redirect(url_for('vendor.editItem', id=id))
+                    return redirect(url_for('vendor.edititem', id=id))
                 except Exception:
-                    return redirect(url_for('vendor.editItem', id=id))
+                    return redirect(url_for('vendor.edititem', id=id))
             else:
-                return redirect(url_for('vendor.editItem', id=id))
+                return redirect(url_for('vendor.edititem', id=id))
         else:
             flash("Error", category="danger")
             return redirect(url_for('index'))

@@ -111,11 +111,11 @@ class flagged(db.Model):
     typeitem = db.Column(db.INTEGER)
     listingid = db.Column(db.INTEGER)
     listingtitle = db.Column(db.INTEGER)
-    flaggeduser_id1 = db.Column(db.INTEGER)
-    flaggeduser_id2 = db.Column(db.INTEGER)
-    flaggeduser_id3 = db.Column(db.INTEGER)
-    flaggeduser_id4 = db.Column(db.INTEGER)
-    flaggeduser_id5 = db.Column(db.INTEGER)
+    flagged_user_id_1 = db.Column(db.INTEGER)
+    flagged_user_id_2 = db.Column(db.INTEGER)
+    flagged_user_id_3 = db.Column(db.INTEGER)
+    flagged_user_id_4 = db.Column(db.INTEGER)
+    flagged_user_id_5 = - db.Column(db.INTEGER)
 
 
 db.configure_mappers()

@@ -84,7 +84,7 @@ from app import UPLOADED_FILES_DEST
 @item.route('/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @ping_user
-def Itemforsale(id):
+def itemforsale(id):
     now = datetime.utcnow()
     preview = 0
     # forms
@@ -131,37 +131,59 @@ def Itemforsale(id):
         + "\n\n" + str(converprice) + 'BTC'
 
     # get flagged status for current user
-    finditem = db.session.query(flagged).filter_by(
-        listingid=vendoritem.id).first()
+    finditem = db.session\
+        .query(flagged)\
+        .filter_by(listingid=vendoritem.id)\
+        .first()
 
     # vendor info
-    vendor = db.session.query(User).filter_by(id=vendoritem.vendor_id).first()
-    vendorstats = db.session.query(
-        StatisticsVendor).filter_by(vendorid=vendor.id).first()
-    vendorgetlevel = db.session.query(UserAchievements).filter_by(
-        username=vendor.username).first()
+    vendor = db.session\
+        .query(User)\
+        .filter_by(id=vendoritem.vendor_id)\
+        .first()
+    vendorstats = db.session\
+        .query(StatisticsVendor)\
+        .filter_by(vendorid=vendor.id)\
+        .first()
+    vendorgetlevel = db.session\
+        .query(UserAchievements)\
+        .filter_by(username=vendor.username)\
+        .first()
     vendorpictureid = str(vendorgetlevel.level)
 
     # Item Feedback
-    itemfeedback = db.session.query(Feedback).filter_by(
-        item_id=id).order_by(Feedback.timestamp.desc()).limit(25)
-    feedbackofitemcount = db.session.query(Feedback).filter_by(
-        item_id=id).order_by(Feedback.timestamp.desc()).count()
+    itemfeedback = db.session\
+        .query(Feedback)\
+        .filter_by(item_id=id)\
+        .order_by(Feedback.timestamp.desc())\
+        .limit(25)
+    feedbackofitemcount = db.session\
+        .query(Feedback)\
+        .filter_by(item_id=id)\
+        .order_by(Feedback.timestamp.desc())\
+        .count()
 
     # Vendor Feedback
-    vendorfeedback = db.session.query(Feedback).filter_by(
-        vendorid=vendoritem.vendor_id).order_by(Feedback.timestamp.desc()).limit(25)
-    vendorfeedbackcount = db.session.query(Feedback).filter_by(
-        vendorid=vendoritem.vendor_id).count()
+    vendorfeedback = db.session\
+        .query(Feedback)\
+        .filter_by(vendorid=vendoritem.vendor_id)\
+        .order_by(Feedback.timestamp.desc())\
+        .limit(25)
+
+    vendorfeedbackcount = db.session\
+        .query(Feedback)\
+        .filter_by(vendorid=vendoritem.vendor_id)\
+        .count()
+
     vendorach = db.session.query(whichAch).filter_by(
         user_id=vendoritem.vendor_id).first()
 
-    # Relatedqueries
+    # Related queries
     # gets other vendor items he has for sale
     otheritemsvendorsellsfull = db.session\
         .query(marketItem)\
         .filter(marketItem.online == 1)\
-        .filter(marketItem.imageone != '')\
+        .filter(marketItem.imageone != '0')\
         .filter(marketItem.vendor_id == vendor.id)\
         .order_by(marketItem.totalsold.desc())
     otheritemsvendorsells = otheritemsvendorsellsfull.limit(6)
@@ -182,7 +204,7 @@ def Itemforsale(id):
         .filter(marketItem.online == 1)\
         .filter(marketItem.imageone != '')\
         .filter(marketItem.categoryid0 == vendoritem.categoryid0)\
-        .order_by(func.rand())
+        .order_by(func.random())
     topsellingcat = topsellingcatfull.limit(6)
     topsellingcatcount = topsellingcatfull.count()
     # End related Queries
@@ -199,14 +221,11 @@ def Itemforsale(id):
             # cats
             categoryfull = formsearch.category.data
             cat = categoryfull.id
-
             # catch dynamic variables
             if formsearch.searchString.data == '' and cat == 0:
                 return redirect(url_for('index'))
-
             if formsearch.searchString.data == '':
                 formsearch.searchString.data = cat
-
             return redirect(url_for('search.searchMaster',
                                     searchterm=formsearch.searchString.data,
                                     function=cat,
@@ -216,12 +235,15 @@ def Itemforsale(id):
             if current_user.is_authenticated:
                 if current_user.id == vendoritem.vendor_id:
                     flash("You cannot buy your own item", category="danger")
-                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                 else:
-                    vendoritem = db.session.query(
-                        marketItem).filter_by(id=id).first()
+                    vendoritem = db.session\
+                        .query(marketItem)\
+                        .filter_by(id=id)\
+                        .first()
                     if vendoritem.online == 1:
-                        getcart = db.session.query(ShoppingCart)\
+                        getcart = db.session\
+                            .query(ShoppingCart)\
                             .filter(current_user.id == ShoppingCart.customer_id)\
                             .filter(ShoppingCart.savedforlater == 0)
                         generalcart = getcart.all()
@@ -233,7 +255,7 @@ def Itemforsale(id):
                         if vendoritem.id in in_cart_already:
                             flash("Item is in your cart already",
                                   category="danger")
-                            return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                            return redirect(url_for('item.itemforsale', id=vendoritem.id))
                         if cartamount < 5:
                             item = ShoppingCart(
                                 customer=current_user.username,
@@ -278,8 +300,7 @@ def Itemforsale(id):
                             db.session.add(item)
                             db.session.commit()
                             flash("Item Added to Cart", category="success")
-                            return redirect(url_for('item.Itemforsale', id=vendoritem.id))
-
+                            return redirect(url_for('item.itemforsale', id=vendoritem.id))
                         else:
                             # cart full..save for later
                             item = ShoppingCart(
@@ -326,17 +347,17 @@ def Itemforsale(id):
                             db.session.commit()
                             flash("Item Saved for later. Cart full",
                                   category="success")
-                            return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                            return redirect(url_for('item.itemforsale', id=vendoritem.id))
             else:
                 flash("You need to be logged in to do that", category="danger")
-                return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                return redirect(url_for('item.itemforsale', id=vendoritem.id))
         elif flag.flagit.data:
             # if user/admin wants to flag an item
             if current_user.is_authenticated:
                 if current_user.admin_role == 0:
                     flash("You cannot mark as flagged till level 2",
                           category="danger")
-                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                 else:
                     # add stats to user/vendor
                     addflag(user_id=current_user.id)
@@ -361,7 +382,7 @@ def Itemforsale(id):
                                     db.session.commit()
                                     flash("Item flagged for review",
                                           category="danger")
-                                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                                 elif finditem.user_id3 == 0:
                                     newhowmany = howmanyalready + 1
                                     finditem.howmany = newhowmany
@@ -370,7 +391,7 @@ def Itemforsale(id):
                                     db.session.commit()
                                     flash("Item flagged for review",
                                           category="danger")
-                                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                                 elif finditem.user_id4 == 0:
                                     newhowmany = howmanyalready + 1
                                     finditem.howmany = newhowmany
@@ -379,7 +400,7 @@ def Itemforsale(id):
                                     db.session.commit()
                                     flash("Item flagged for review",
                                           category="danger")
-                                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                                 elif finditem.user_id5 == 0:
                                     newhowmany = howmanyalready + 1
                                     finditem.howmany = newhowmany
@@ -388,9 +409,9 @@ def Itemforsale(id):
                                     db.session.commit()
                                     flash("Item flagged for review",
                                           category="danger")
-                                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                                 else:
-                                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                     else:
                         newflagged = flagged(
                             user_id=vendoritem.vendor_id,
@@ -399,20 +420,20 @@ def Itemforsale(id):
                             howmany=1,
                             typeitem=1,
                             listingid=vendoritem.id,
-                            flaggeduser_id1=current_user.id,
-                            flaggeduser_id2=0,
-                            flaggeduser_id3=0,
-                            flaggeduser_id4=0,
-                            flaggeduser_id5=0,
+                            flagged_user_id_1=current_user.id,
+                            flagged_user_id_2=0,
+                            flagged_user_id_3=0,
+                            flagged_user_id_4=0,
+                            flagged_user_id_5=0,
                         )
                         db.session.add(newflagged)
                         db.session.commit()
                         flash("Item flagged for review", category="warning")
-                        return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                        return redirect(url_for('item.itemforsale', id=vendoritem.id))
 
             else:
                 flash("You must be logged in", category="warning")
-                return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                return redirect(url_for('item.itemforsale', id=vendoritem.id))
         elif flag.banit.data:
             # if an admin wants to delete an item and ban its amazon id
             if current_user.is_authenticated:
@@ -423,14 +444,14 @@ def Itemforsale(id):
                     db.session.add(banthisitem)
                     db.session.commit()
                     flash("Deleting this item.  Added to db", category="warning")
-                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
                 else:
-                    return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                    return redirect(url_for('item.itemforsale', id=vendoritem.id))
             else:
-                return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+                return redirect(url_for('item.itemforsale', id=vendoritem.id))
 
         else:
-            return redirect(url_for('item.Itemforsale', id=vendoritem.id))
+            return redirect(url_for('item.itemforsale', id=vendoritem.id))
 
     # end forum post
     return render_template('/item/Item.html',
@@ -504,9 +525,9 @@ def deletecartitem(id):
 def savecartitem(id):
     try:
         user = db.session\
-        .query(User)\
-        .filter_by(username=current_user.username)\
-        .first()
+            .query(User)\
+            .filter_by(username=current_user.username)\
+            .first()
         try:
             item = ShoppingCart.query.get(id)
             if item.customer_id == user.id:

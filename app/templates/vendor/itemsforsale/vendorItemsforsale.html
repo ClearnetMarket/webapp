@@ -8,19 +8,19 @@
 </nav>
 
 {% if current_user.is_authenticated %}
-    {% if current_user.vendor_account ==1 %}
-    <div class="row clearnetblue" style="margin-bottom: 25px">
-        <div class="hidden-xs hidden-sm col-md-12">
-            {% include '/layouts/subindex/_vendorbar.html' %}
-        </div>
+{% if current_user.vendor_account ==1 %}
+<div class="row clearnetblue" style="margin-bottom: 25px">
+    <div class="hidden-xs hidden-sm col-md-12">
+        {% include '/layouts/subindex/_vendorbar.html' %}
     </div>
+</div>
 
-    {% else %}
-    {% endif %}
+{% else %}
+{% endif %}
 {% endif %}
 <div class="row">
     <div class="col-12 text-center">
-        <h3>My Items for Sale</h3>
+        <h3>My Items for item</h3>
     </div>
 </div>
 
@@ -59,103 +59,106 @@
             <th class="col-1 bluetable">Price</th>
             <th class="col-3 bluetable">Buttons</th>
         </tr>
-        {% for sale in forsale %}
-            {% if sale.online == 0 %}
-                <tr class="danger">
-            {% else %}
-                <tr class="success">
-            {% endif %}
+        {% for item in forsale %}
+
+        <tr class="bg-light">
+          
             <td class="col-1 linkcolor">
                 <label>
-                    <input type="checkbox" name="checkit" value="{{" sale.id "}}" />
+                    <input type="checkbox" name="checkit" value="{{ item.id }}" />
                 </label>
             </td>
 
             <td class=" hidden-xs col-sm-2 linkcolor">
-                {% if sale.imageone == '0' %}
+                {% if item.imageone == '0' %}
                 <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" width="125px"
                     height="125px" />
-                {% elif sale.imageone == 0 %}
+                {% elif item.imageone == 0 %}
                 <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" width="125px"
                     height="125px" />
 
                 {% else %}
                 <img
-                    src="{{ url_for('userdata.media_file', filename=('item/' + sale.stringnodeid + sale.stringauctionid + sale.imageone + "_225x.jpg"))}}">
+                    src="{{ url_for('userdata.media_file', filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg"))}}">
                 {% endif %}
             </td>
             <td class="col-3 linkcolor">
-                <a href="{{ url_for('item.Itemforsale',id=sale.id) }}">
-                    <div style="font-size: 20px">{{ sale.itemtitlee }}</div>
+                <a href="{{ url_for('item.itemforsale',id=item.id) }}">
+                    <div style="font-size: 20px">{{ item.itemtitlee }}</div>
                 </a>
-                <b>Item #:</b> {{ sale.id }}<br />
-                {% if sale.aditem == 0 %}
+                {% if item.online == 0 %}
+                <p class="text-danger">Offline</p>
+                {% else %}
+                <p class="text-success">Online</p>
+                {% endif %}
+                <b>Item #:</b> {{ item.id }}<br />
+                {% if item.aditem == 0 %}
                 {% else %}
                 <div style="color: #ffd700"><b>Promoted</b></div>
                 <br />
                 {% endif %}
-                <b>Quantity Left:</b>{{ sale.itemcount }}<br />
-                <b>Total Sold:</b> {{ sale.totalsold }}<br />
-                <b>Item Views:</b> {{ sale.viewcount }}<br />
+                <b>Quantity Left:</b> {{ item.itemcount }}<br />
+                <b>Total Sold:</b> {{ item.totalsold }}<br />
+                <b>Item Views:</b> {{ item.viewcount }}<br />
                 <b>Item Rating:</b>
 
-                {% if sale.itemrating == 0 %}
+                {% if item.itemrating == 0 %}
                 No ratings
                 {% endif %}
-                {% if 0.499 >= sale.itemrating >= 0.0001 %}
+                {% if 0.499 >= item.itemrating >= 0.0001 %}
                 <img src="{{ url_for('static', filename='/images/stars/05stars.png') }}" />
                 {% endif %}
-                {% if 0.999 >= sale.itemrating >= 0.5 %}
+                {% if 0.999 >= item.itemrating >= 0.5 %}
                 <img src="{{ url_for('static', filename='/images/stars/05stars.png') }}" />
                 {% endif %}
-                {% if 1.4999 >= sale.itemrating >= 1 %}
+                {% if 1.4999 >= item.itemrating >= 1 %}
                 <img src="{{ url_for('static', filename='/images/stars/10stars.png') }}" />
                 {% endif %}
-                {% if 1.99999 >= sale.itemrating >= 1.5 %}
+                {% if 1.99999 >= item.itemrating >= 1.5 %}
                 <img src="{{ url_for('static', filename='/images/stars/15stars.png') }}" />
                 {% endif %}
-                {% if 2.4999 >= sale.itemrating >= 2 %}
+                {% if 2.4999 >= item.itemrating >= 2 %}
                 <img src="{{ url_for('static', filename='/images/stars/20stars.png') }}" />
                 {% endif %}
-                {% if 2.99999 >= sale.itemrating >= 2.5 %}
+                {% if 2.99999 >= item.itemrating >= 2.5 %}
                 <img src="{{ url_for('static', filename='/images/stars/25stars.png') }}" />
                 {% endif %}
-                {% if 3.499 >= sale.itemrating >= 3 %}
+                {% if 3.499 >= item.itemrating >= 3 %}
                 <img src="{{ url_for('static', filename='/images/stars/30stars.png') }}" />
                 {% endif %}
-                {% if 3.99999 >= sale.itemrating >= 3.5 %}
+                {% if 3.99999 >= item.itemrating >= 3.5 %}
                 <img src="{{ url_for('static', filename='/images/stars/35stars.png') }}" />
                 {% endif %}
-                {% if 4.499 >= sale.itemrating >= 4 %}
+                {% if 4.499 >= item.itemrating >= 4 %}
                 <img src="{{ url_for('static', filename='/images/stars/40stars.png') }}" />
                 {% endif %}
-                {% if 4.99999 >= sale.itemrating >= 4.5 %}
+                {% if 4.99999 >= item.itemrating >= 4.5 %}
                 <img src="{{ url_for('static', filename='/images/stars/45stars.png') }}" />
                 {% endif %}
-                {% if sale.itemrating == 5 %}
+                {% if item.itemrating == 5 %}
                 <img src="{{ url_for('static', filename='/images/stars/50stars.png') }}" />
                 {% endif %}
             </td>
 
             <td class="col-1 linkcolor">
-                {{sale.price }} {{ sale.currency|currencyformat }}
+                {{item.price }} {{ item.currency|currencyformat }}
             </td>
 
             <td class="col-3 btnwhite">
                 <!-- edit -->
-                <a class="btn btn-primary btn-sm" href="{{ url_for('vendor.editItem', id=sale.id) }}"
+                <a class="btn btn-primary btn-sm" href="{{ url_for('vendor.edititem', id=item.id) }}"
                     role="button">Edit</a>
                 <!-- clone -->
-                <a class="btn btn-primary btn-sm" href="{{ url_for('vendor.cloneItem', id=sale.id) }}"
+                <a class="btn btn-primary btn-sm" href="{{ url_for('vendor.cloneitem', id=item.id) }}"
                     role="button">Clone</a>
                 <br />
                 <!-- delete -->
-                <a class="btn btn-danger btn-sm" href="{{ url_for('vendor.deleteItem',id=sale.id) }}"
+                <a class="btn btn-danger btn-sm" href="{{ url_for('vendor.deleteItem',id=item.id) }}"
                     role="button">Delete</a>
                 <br />
                 <!-- Promote an Item -->
-                {% if sale.aditem == 0 %}
-                <a class="btn btn-success btn-sm" href="{{ url_for('promote.promoteitem',itemid=sale.id) }}"
+                {% if item.aditem == 0 %}
+                <a class="btn btn-success btn-sm" href="{{ url_for('promote.promoteitem',itemid=item.id) }}"
                     role="button">
                     Promote
                 </a>
@@ -169,7 +172,7 @@
 {% else %}
 <div class="row">
     <div class="col-12">
-        Looks like you have no items or services for sale ..
+        Looks like you have no items or services for item ..
         <br />
         <br />
         Creating items is free and easy!

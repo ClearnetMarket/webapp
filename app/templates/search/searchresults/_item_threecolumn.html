@@ -2,7 +2,7 @@
 
 
 <div class="text-center">
-    <a href="{{ url_for('item.Itemforsale', id=item.id) }}">
+    <a href="{{ url_for('item.itemforsale', id=item.id) }}">
         <img src="{{ url_for('userdata.media_file',
             filename=('item/' +
             item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}" class="boximage">
@@ -106,5 +106,5 @@
 </div>
 
 <div class="text-center">
-    <a class="btn btn-primary" href="{{ url_for('item.Itemforsale', id=item.id) }}" role="button">View</a>
+    <a class="btn btn-primary" href="{{ url_for('item.itemforsale', id=item.id) }}" role="button">View</a>
 </div>
