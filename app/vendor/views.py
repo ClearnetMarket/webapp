@@ -4,7 +4,7 @@ import shutil
 import os
 import csv
 from app.vendor import vendor
-from app import UPLOADED_FILES_DEST
+from app import UPLOADED_FILES_DEST, UPLOADED_FILES_DEST_ITEM
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
 from decimal import Decimal
@@ -131,9 +131,8 @@ def itemsforSale():
     per_page = 10
     # End Pagination
     # Query all the items related to the vendor
-    sale = db.session.query(marketItem)
-    sale = sale.filter(marketItem.vendor_id == user.id)
-  
+    sale = db.session.query(marketItem).filter(marketItem.vendor_id == user.id).order_by(marketItem.totalsold.desc(), marketItem.online.desc(), marketItem.id.desc())
+    
     forsale = sale.limit(per_page).offset(offset)
 
     pagination = Pagination(page=page,
@@ -169,7 +168,6 @@ def itemsforSale():
                             see_if_changes.append(1)
                         else:
                             pass
-
                         # Warnings
                         if len(specific_item.keywords) < 20:
                             flash(f"Item #{str(specific_item.id)} Doesnt have very good keywords",category="warning")
@@ -463,16 +461,6 @@ def createItem():
                     details4answer=form.details4answer.data,
                     details5=form.details5.data,
                     details5answer=form.details5answer.data,
-                    details6=form.details6.data,
-                    details6answer=form.details6answer.data,
-                    details7=form.details7.data,
-                    details7answer=form.details7answer.data,
-                    details8=form.details8.data,
-                    details8answer=form.details8answer.data,
-                    details9=form.details9.data,
-                    details9answer=form.details9answer.data,
-                    details10=form.details10.data,
-                    details10answer=form.details10answer.data,
                     shippingtwo=shippingtwo,
                     shippingthree=shippingthree,
                     viewcount=0,
@@ -495,7 +483,7 @@ def createItem():
 
                 # Images
                 getimagesubfolder = itemlocation(x=item.id)
-                directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST, "item", getimagesubfolder, (str(item.id)))
+                directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST_ITEM, getimagesubfolder, (str(item.id)))
                 mkdir_p(path=directoryifitemlisting)
 
                 image1(formdata=form.imageone1.data, item=item, directoryifitemlisting=directoryifitemlisting)
@@ -604,16 +592,6 @@ def edititem(id):
                 details4answer=item.details4answer,
                 details5=item.details5,
                 details5answer=item.details5answer,
-                details6=item.details6,
-                details6answer=item.details6answer,
-                details7=item.details7,
-                details7answer=item.details7answer,
-                details8=item.details8,
-                details8answer=item.details8answer,
-                details9=item.details9,
-                details9answer=item.details9answer,
-                details10=item.details10,
-                details10answer=item.details10answer,
                 shippingthree=item.shippingthree,
                 shippingtwo=item.shippingtwo,
                 amazonid=0,
@@ -625,7 +603,7 @@ def edititem(id):
                 if item.vendor_id == user.id:
                     # Image location
                     getimagesubfolder = itemlocation(x=item.id)
-                    directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST, "item", getimagesubfolder, (str(item.id)))
+                    directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST_ITEM, getimagesubfolder, (str(item.id)))
                     mkdir_p(path=directoryifitemlisting)
 
                     image1(formdata=form.imageone1.data, item=item, directoryifitemlisting=directoryifitemlisting)
@@ -652,7 +630,7 @@ def edititem(id):
 
                     # get category and subcategory
                     categoryfull = form.category_edit.data
-                    cat0 = categoryfull.id
+                    cat0 = categoryfull.cat_id
                     categoryname0 = categoryfull.name
 
                     # Get currency from query
@@ -704,7 +682,7 @@ def edititem(id):
                     getnotship3 = getnotship3full.value
 
                     # get get not shipping 4
-                    getnotship4full = form.notshipping11.data
+                    getnotship4full = form.notshipping41.data
                     getnotship4 = getnotship4full.value
 
                     # get get not shipping 5
@@ -790,17 +768,7 @@ def edititem(id):
                     item.details4answer = form.details4answer.data,
                     item.details5 = form.details5.data,
                     item.details5answer = form.details5answer.data,
-                    item.details6 = form.details6.data,
-                    item.details6answer = form.details6answer.data,
-                    item.details7 = form.details7.data,
-                    item.details7answer = form.details7answer.data,
-                    item.details8 = form.details8.data,
-                    item.details8answer = form.details8answer.data,
-                    item.details9 = form.details9.data,
-                    item.details9answer = form.details9answer.data,
-                    item.details10 = form.details10.data,
-                    item.details10answer = form.details10answer.data,
-
+                 
                     if form.details.data is False:
                         item.details = 0
                     else:
@@ -844,8 +812,8 @@ def deleteItem(id):
     :param id:
     :return:
     """
-    ext1 = '_225x'
-
+    ext_1 = '_225x'
+    ext_2 = '_500x'
     item = marketItem.query.get(id)
     if item:
         if item.vendor_id == current_user.id:
@@ -853,28 +821,25 @@ def deleteItem(id):
                 specific_folder = str(item.id)
                 getitemlocation = itemlocation(x=item.id)
                 link = 'item'
-                spacer = '/'
-                pathtofile1 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imageone)
-                pathtofile2 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagetwo)
-                pathtofile3 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagethree)
-                pathtofile4 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagefour)
-                pathtofile5 = str(UPLOADED_FILES_DEST + spacer + link + spacer + getitemlocation + spacer + specific_folder + spacer + item.imagefive)
+                
+                pathtofile1 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imageone)
+                pathtofile2 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagetwo)
+                pathtofile3 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagethree)
+                pathtofile4 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagefour)
+                pathtofile5 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagefive)
 
                 try:
-                    pathtofile1, file_extension1 = os.path.splitext(
-                        pathtofile1)
+                    pathtofile1, file_extension1 = os.path.splitext(pathtofile1)
                 except:
                     pass
 
                 try:
-                    pathtofile2, file_extension2 = os.path.splitext(
-                        pathtofile2)
+                    pathtofile2, file_extension2 = os.path.splitext(pathtofile2)
                 except:
                     pass
 
                 try:
-                    pathtofile3, file_extension3 = os.path.splitext(
-                        pathtofile3)
+                    pathtofile3, file_extension3 = os.path.splitext(pathtofile3)
                 except:
                     pass
                 try:
@@ -883,44 +848,42 @@ def deleteItem(id):
                     pass
 
                 try:
-                    pathtofile5, file_extension5 = os.path.splitext(
-                        pathtofile5)
+                    pathtofile5, file_extension5 = os.path.splitext(pathtofile5)
                 except:
                     pass
 
                 try:
                     delete_file_one = str(pathtofile1 + file_extension1)
-                    delete_file_one_ext = str(
-                        pathtofile1 + ext1 + file_extension1)
+                    delete_file_one_ext1 = str(pathtofile1 + ext_1 + file_extension1)
+                    delete_file_one_ext2 = str(pathtofile1 + ext_2 + file_extension1)
                 except:
                     pass
 
                 try:
                     delete_file_two = str(pathtofile2 + file_extension2)
-                    delete_file_two_ext = str(
-                        pathtofile2 + ext1 + file_extension2)
+                    delete_file_two_ext1 = str(pathtofile2 + ext_1 + file_extension2)
+                    delete_file_two_ext2 = str(pathtofile2 + ext_2 + file_extension2)
                 except:
                     pass
 
                 try:
                     delete_file_three = str(pathtofile3 + file_extension3)
-                    delete_file_three_ext = str(
-                        pathtofile3 + ext1 + file_extension3)
+                    delete_file_three_ext1 = str(pathtofile3 + ext_1 + file_extension3)
+                    delete_file_three_ext2 = str(pathtofile3 + ext_2 + file_extension3)
                 except:
                     pass
 
                 try:
                     delete_file_four = str(pathtofile4 + file_extension4)
-                    delete_file_four_ext = str(
-                        pathtofile4 + ext1 + file_extension4)
+                    delete_file_four_ext1 = str(pathtofile4 + ext_1 + file_extension4)
+                    delete_file_four_ext2 = str(pathtofile4 + ext_2 + file_extension4)
                 except:
                     pass
 
                 try:
                     delete_file_five = str(pathtofile5 + file_extension5)
-                    delete_file_five_ext = str(
-                        pathtofile5 + ext1 + file_extension5)
-
+                    delete_file_five_ext1 = str(pathtofile5 + ext_1 + file_extension5)
+                    delete_file_five_ext2 = str(pathtofile5 + ext_2 + file_extension5)
                 except:
                     pass
 
@@ -931,7 +894,8 @@ def deleteItem(id):
                     except:
                         pass
                     try:
-                        os.remove(delete_file_one_ext)
+                        os.remove(delete_file_one_ext1)
+                        os.remove(delete_file_one_ext2)
                     except:
                         pass
 
@@ -944,7 +908,8 @@ def deleteItem(id):
                     except:
                         pass
                     try:
-                        os.remove(delete_file_two_ext)
+                        os.remove(delete_file_two_ext1)
+                        os.remove(delete_file_two_ext2)
                     except:
                         pass
 
@@ -957,7 +922,8 @@ def deleteItem(id):
                     except:
                         pass
                     try:
-                        os.remove(delete_file_three_ext)
+                        os.remove(delete_file_three_ext1)
+                        os.remove(delete_file_three_ext2)
                     except:
                         pass
 
@@ -970,7 +936,8 @@ def deleteItem(id):
                     except:
                         pass
                     try:
-                        os.remove(delete_file_four_ext)
+                        os.remove(delete_file_four_ext1)
+                        os.remove(delete_file_four_ext2)
                     except:
                         pass
                 else:
@@ -982,7 +949,8 @@ def deleteItem(id):
                     except:
                         pass
                     try:
-                        os.remove(delete_file_five_ext)
+                        os.remove(delete_file_five_ext1)
+                        os.remove(delete_file_five_ext2)
                     except:
                         pass
                 else:
@@ -1013,11 +981,11 @@ def cloneitem(id):
     # get the vendor item to be copied
     now = datetime.utcnow()
     # get item we are cloning
-    vendoritem = marketItem.query.filter_by(id=id).first()
+    vendoritem = marketItem.query.get(id)
 
     if vendoritem:
         if vendoritem.vendor_id == current_user.id:
-            # make sure user doesnt have to many auctions
+            # make sure user doesnt have to many listings
             vendoritemcount = db.session\
                 .query(marketItem)\
                 .filter_by(vendor_id=current_user.id)\
@@ -1083,16 +1051,6 @@ def cloneitem(id):
                         details4answer=vendoritem.details4answer,
                         details5=vendoritem.details5,
                         details5answer=vendoritem.details5answer,
-                        details6=vendoritem.details6,
-                        details6answer=vendoritem.details6answer,
-                        details7=vendoritem.details7,
-                        details7answer=vendoritem.details7answer,
-                        details8=vendoritem.details8,
-                        details8answer=vendoritem.details8answer,
-                        details9=vendoritem.details9,
-                        details9answer=vendoritem.details9answer,
-                        details10=vendoritem.details10,
-                        details10answer=vendoritem.details10answer,
                         shippingtwo=vendoritem.shippingtwo,
                         shippingthree=vendoritem.shippingthree,
                         viewcount=0,
@@ -1116,10 +1074,10 @@ def cloneitem(id):
                     # IMAGES
                     # Make New image folder
                     getitemlocation = itemlocation(x=item.id)
-                    listingdir = 'item/' + getitemlocation + '/' + str(item.id) + '/'
-                    mkdir_p(path=UPLOADED_FILES_DEST + listingdir)
+                    listingdir = '/' + getitemlocation + '/' + str(item.id) + '/'
+                    mkdir_p(path=UPLOADED_FILES_DEST_ITEM + listingdir)
                     # get old directory path
-                    oldirectory = UPLOADED_FILES_DEST + "item/" + getitemlocation + '/' + str(vendoritem.id) + '/'
+                    oldirectory = UPLOADED_FILES_DEST_ITEM + "/" + getitemlocation + '/' + str(vendoritem.id) + '/'
                     # new directory path
                     newdirectory = UPLOADED_FILES_DEST + listingdir
                     # lopp over the files and copy them
@@ -1139,18 +1097,17 @@ def cloneitem(id):
                     return redirect(url_for('vendor.itemsforSale'))
 
                 except Exception as e:
-                    flash(str(e), category="danger")
                     db.session.rollback()
                     flash("Error.  Could not clone item.", category="danger")
-                    return redirect(url_for('index'))
+                    redirect((request.args.get('next', request.referrer)))
             else:
                 flash("Maximum 100 items allowed per user. ", category="success")
         else:
             flash("Error", category="danger")
-            return redirect(url_for('index'))
+            redirect((request.args.get('next', request.referrer)))
     else:
         flash("Error", category="danger")
-        return redirect(url_for('index'))
+        redirect((request.args.get('next', request.referrer)))
 
 
 @vendor.route('/need-a-vacation/', methods=['GET', 'POST'])
@@ -1217,16 +1174,15 @@ def deleteimg(id, img):
                     specific_folder = str(vendoritem.id)
 
                     link = 'item'
-                    spacer = '/'
-                    pathtofile = str(UPLOADED_FILES_DEST + link +  spacer + specific_folder + spacer + img)
+                    pathtofile = os.path.join(UPLOADED_FILES_DEST,link, specific_folder, img)
                     pathtofile, file_extension = os.path.splitext(pathtofile)
 
-                    ext1 = '_225x'
+                    ext_1 = '_225x'
                     ext_2 = '_500x'
 
-                    file0 = str(pathtofile + file_extension)
-                    file1 = str(pathtofile + ext1 + file_extension)
-
+                    file0 = os.path.join(pathtofile,".", file_extension)
+                    file1 = os.path.join(pathtofile, ext_1, ".", file_extension)
+                    file2 = os.path.join(pathtofile, ext_2, ".", file_extension)
                     if len(img) > 20:
                         x1 = vendoritem.imageone
                         x2 = vendoritem.imagetwo
@@ -1237,81 +1193,81 @@ def deleteimg(id, img):
                         if x1 == img:
                             vendoritem.imageone = '0'
                             db.session.add(vendoritem)
-
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
 
                         elif x2 == img:
                             vendoritem.imagetwo = '0'
                             db.session.add(vendoritem)
-
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
 
                         elif x3 == img:
                             vendoritem.imagethree = '0'
                             db.session.add(vendoritem)
-
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
 
                         elif x4 == img:
                             vendoritem.imagefour = '0'
                             db.session.add(vendoritem)
-
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
 
                         elif x5 == img:
                             vendoritem.imagefive = '0'
                             db.session.add(vendoritem)
-
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
-
+                            
                         else:
-                            return redirect(url_for('vendor.edititem', id=id))
+                            redirect((request.args.get('next', request.referrer)))
                         db.session.commit()
-                    return redirect(url_for('vendor.edititem', id=id))
+                    redirect((request.args.get('next', request.referrer)))
                 except Exception:
-                    return redirect(url_for('vendor.edititem', id=id))
+                    redirect((request.args.get('next', request.referrer)))
             else:
-                return redirect(url_for('vendor.edititem', id=id))
+                redirect((request.args.get('next', request.referrer)))
         else:
             flash("Error", category="danger")
             return redirect(url_for('index'))
     except:
-        return redirect(url_for('index', username=current_user.username))
+        redirect((request.args.get('next', request.referrer)))
 
 
 
@@ -1322,18 +1278,15 @@ def deleteimg_noredirect(id, img):
             if vendoritem.vendor_id == current_user.id:
                 try:
                     specific_folder = str(vendoritem.id)
-
                     link = 'listing'
-                    spacer = '/'
-                    pathtofile = str(UPLOADED_FILES_DEST + link +
-                                     spacer + specific_folder + spacer + img)
+                    pathtofile = os.path.join(UPLOADED_FILES_DEST, link, specific_folder, img)
                     pathtofile, file_extension = os.path.splitext(pathtofile)
-
-                    ext1 = '_225x'
-
-                    file0 = str(pathtofile + file_extension)
-                    file1 = str(pathtofile + ext1 + file_extension)
-
+                    ext_1 = '_225x'
+                    ext_2 = '_500x'
+                    file0 = os.path.join(pathtofile,".", file_extension)
+                    file1 = os.path.join(pathtofile + ext_1, ".", file_extension)
+                    file2 = os.path.join(pathtofile + ext_2, ".", file_extension)
+                    
                     if len(img) > 20:
                         x1 = vendoritem.imageone
                         x2 = vendoritem.imagetwo
@@ -1344,7 +1297,6 @@ def deleteimg_noredirect(id, img):
                         if x1 == img:
                             vendoritem.imageone = '0'
                             db.session.add(vendoritem)
-                            db.session.commit()
                             try:
                                 os.remove(file0)
                             except Exception:
@@ -1357,7 +1309,6 @@ def deleteimg_noredirect(id, img):
                         elif x2 == img:
                             vendoritem.imagetwo = '0'
                             db.session.add(vendoritem)
-                            db.session.commit()
                             try:
                                 os.remove(file0)
                             except Exception:
@@ -1370,45 +1321,45 @@ def deleteimg_noredirect(id, img):
                         elif x3 == img:
                             vendoritem.imagethree = '0'
                             db.session.add(vendoritem)
-                            db.session.commit()
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
 
                         elif x4 == img:
                             vendoritem.imagefour = '0'
                             db.session.add(vendoritem)
-                            db.session.commit()
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
 
                         elif x5 == img:
                             vendoritem.imagefive = '0'
                             db.session.add(vendoritem)
-                            db.session.commit()
                             try:
                                 os.remove(file0)
                             except Exception:
                                 pass
                             try:
                                 os.remove(file1)
+                                os.remove(file2)
                             except Exception:
                                 pass
 
                         else:
                             pass
-
+                        db.session.commit()
                 except Exception:
                     flash("Error", category="danger")
                     return redirect(url_for('index'))
@@ -1694,7 +1645,7 @@ def vendorOrders_cancelandrefund(id):
 def vendorOrders_leavereviewforuser(id):
     now = datetime.utcnow()
     form = vendorleavereview()
-    order = db.session.query(Orders).filter_by(id=id).first()
+    order = Orders.query.get(id)
     if order:
         if order.vendor_id == current_user.id:
             userreviews = db.session\
@@ -1711,10 +1662,8 @@ def vendorOrders_leavereviewforuser(id):
             if request.method == "POST" and form.validate_on_submit():
                 if order.cancelled == 0:
                     try:
-                        text_box_value_userrating = request.form.get(
-                            "itemrating")
-                        text_box_value_comment = request.form.get(
-                            "reviewcomment")
+                        text_box_value_userrating = request.form.get("itemrating")
+                        text_box_value_comment = request.form.get("reviewcomment")
 
                         add_feedback = Userreviews(
                             order_id=order.id,
@@ -1740,13 +1689,13 @@ def vendorOrders_leavereviewforuser(id):
                                  quantity=int(text_box_value_userrating),
                                  currency=0)
                         db.session.commit()
-                        flash('Feedback submitted.  Exp Points Given..', 'success ')
+                        flash('Feedback submitted.  Exp Points Given..', category='success')
                         return redirect(url_for('vendor.vendorOrders_leavereviewforuser', id=id))
 
                     except Exception as e:
                         return redirect(url_for('vendor.vendorOrders_leavereviewforuser', id=id))
                 else:
-                    flash('Cant leave Feedback.  Order was cancelled', 'danger ')
+                    flash('Cant leave Feedback.  Order was cancelled', category='danger')
                     return redirect(url_for('vendor.vendorOrders_leavereviewforuser', id=id))
 
             return render_template('/vendor/leavecustomerreview.html',

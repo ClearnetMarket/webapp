@@ -87,7 +87,8 @@ class addShipping(FlaskForm):
         Length(5, 250),
         Regexp(general)])
 
-    selectcarrier3 = QuerySelectField(query_factory=lambda: Query_Carriers.query.all(), get_label='text')
+    selectcarrier3 = QuerySelectField(
+        query_factory=lambda: Query_Carriers.query.all(), get_label='text')
 
     submit = SubmitField()
 
@@ -225,9 +226,9 @@ def add_product_form_factory(item):
         details2 = StringField(validators=[Optional(),
                                            Length(1, 50),
                                            Regexp(general)])
-        details2answer = StringField(validators=[ Optional(),
-                                                  Length(1, 50),
-                                                  Regexp(general)])
+        details2answer = StringField(validators=[Optional(),
+                                                 Length(1, 50),
+                                                 Regexp(general)])
 
         details3 = StringField(validators=[Optional(),
                                            Length(1, 50),
@@ -252,47 +253,6 @@ def add_product_form_factory(item):
         details5answer = StringField(validators=[Optional(),
                                                  Length(1, 50),
                                                  Regexp(general)])
-
-        details6 = StringField(validators=[Optional(),
-                                           Length(1, 50),
-                                           Regexp(general)])
-
-        details6answer = StringField(validators=[Optional(),
-                                                 Length(1, 50),
-                                                 Regexp(general)])
-
-        details7 = StringField(validators=[Optional(),
-                                           Length(1, 50),
-                                           Regexp(general)])
-
-        details7answer = StringField(validators=[Optional(),
-                                                 Length(1, 50),
-                                                 Regexp(general)])
-
-        details8 = StringField(validators=[Optional(),
-                                           Length(1, 50),
-                                           Regexp(general)])
-
-        details8answer = StringField(validators=[Optional(),
-                                                 Length(1, 50),
-                                                 Regexp(general)])
-
-        details9 = StringField(validators=[Optional(),
-                                           Length(1, 50),
-                                           Regexp(general)])
-
-        details9answer = StringField(validators=[Optional(),
-                                                 Length(1, 50),
-                                                 Regexp(general)])
-
-        details10 = StringField(validators=[Optional(),
-                                            Length(1, 50),
-                                            Regexp(general)])
-
-        details10answer = StringField(validators=[Optional(),
-                                                  Length(1, 50),
-                                                  Regexp(general)])
-
 
 
         imageone1 = FileField('Primary Image', validators=[FileAllowed(['jpg', 'png', 'gif', 'png', 'jpeg'],
@@ -350,82 +310,123 @@ def add_product_form_factory(item):
         if item == 0:
             category = QuerySelectField(query_factory=lambda: Categories.query.order_by(Categories.name.asc()).all(),
                                         get_label='name',
+                                        allow_blank=True,
+                                        blank_text=u'-- Select Category --',
                                         validators=[DataRequired(message='Category is required')])
 
             currency = QuerySelectField(query_factory=lambda: Currency.query.all(),
                                         get_label='symbol',
+                                        allow_blank=True,
+                                            blank_text=u'-- Select Fiat Currency --',
                                         validators=[DataRequired(message='Currency is required')])
 
             itemcondition = QuerySelectField(query_factory=lambda: Query_Itemcondition.query.all(),
                                              get_label='text',
+                                             allow_blank=True,
+                                             blank_text=u'-- Select Item Condition --',
                                              validators=[DataRequired(message='Item condition is required')])
 
             itemcount = QuerySelectField(query_factory=lambda: Query_Itemcount.query.all(),
                                          get_label='text',
+                                         allow_blank=False,
                                          validators=[DataRequired(message='An item count is required')])
 
-            origincountry = QuerySelectField(query_factory=lambda: Country.query.all(),
+            origincountry = QuerySelectField(query_factory=lambda: Country.query.order_by(Country.id.asc()).all(),
                                              get_label='name',
+                                             allow_blank=True,
+                                             blank_text=u'-- Select Origin Country --',
                                              validators=[DataRequired(message="Item Origin is required")])
 
-            destination1 = QuerySelectField(query_factory=lambda: Country.query.all(),
+            destination1 = QuerySelectField(query_factory=lambda: Country.query.order_by(Country.id.asc()).all(),
                                             get_label='name',
+                                            allow_blank=True,
+                                            blank_text=u'-- please choose --',
                                             validators=[DataRequired(message='One Destination is required')])
 
-            destination2 = QuerySelectField(query_factory=lambda: Country.query.all(),
+            destination2 = QuerySelectField(query_factory=lambda: Country.query.order_by(Country.id.asc()).all(),
+                                            default=lambda: Country.query.filter_by(numericcode=0).first(),
                                             get_label='name',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
-            destination3 = QuerySelectField(query_factory=lambda: Country.query.all(),
+            destination3 = QuerySelectField(query_factory=lambda: Country.query.order_by(Country.id.asc()).all(),
+                                            default=lambda: Country.query.filter_by(
+                                                numericcode=0).first(),
                                             get_label='name',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
-            destination4 = QuerySelectField(query_factory=lambda: Country.query.all(),
+            destination4 = QuerySelectField(query_factory=lambda: Country.query.order_by(Country.id.asc()).all(),
+                                            default=lambda: Country.query.filter_by(numericcode=0).first(),
                                             get_label='name',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
-            destination5 = QuerySelectField(query_factory=lambda: Country.query.all(),
+            destination5 = QuerySelectField(query_factory=lambda: Country.query.order_by(Country.id.asc()).all(),
+                                            default=lambda: Country.query.filter_by(numericcode=0).first(),
                                             get_label='name',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
             notshipping1 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
                                             get_label='text',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
             notshipping2 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
                                             get_label='text',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
             notshipping3 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
                                             get_label='text',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
             notshipping4 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
                                             get_label='text',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
             notshipping5 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
                                             get_label='text',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
             notshipping6 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
                                             get_label='text',
+                                            allow_blank=True,
+                                            blank_text=u'-- Optional --',
                                             validators=[Optional()])
 
             shippingdayleast0 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
                                                  get_label='text',
+                                                 allow_blank=True,
                                                  validators=[Optional()])
 
             shippingdaymost0 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
                                                 get_label='text',
+                                                allow_blank=True,
+
                                                 validators=[Optional()])
 
             shippingdayleast2 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
                                                  get_label='text',
+                                                 allow_blank=True,
                                                  validators=[Optional()])
 
             shippingdaymost2 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
                                                 get_label='text',
+                                                allow_blank=True,
                                                 validators=[Optional()])
 
             shippingdayleast3 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
@@ -439,15 +440,18 @@ def add_product_form_factory(item):
         else:
 
             category_edit = QuerySelectField(
-                query_factory=lambda: Categories.query.order_by(Categories.name.asc()).all(),
-
-                default=lambda: Categories.query.order_by(Categories.name.asc()).all(),
+                query_factory=lambda: Categories.query.order_by(
+                    Categories.name.asc()).all(),
+                default=lambda: Categories.query.filter_by(
+                    cat_id=item.categoryid0).first(),
                 get_label='name',
+
                 validators=[DataRequired(message='Category is required')]
             )
 
             currency1 = QuerySelectField(query_factory=lambda: Currency.query.all(),
-                                         default=lambda: Currency.query.filter_by(code=item.currency).first(),
+                                         default=lambda: Currency.query.filter_by(
+                                             code=item.currency).first(),
                                          get_label='symbol',
                                          validators=[DataRequired(message='Currency is required')])
 
@@ -459,96 +463,115 @@ def add_product_form_factory(item):
 
             itemcount_edit = QuerySelectField(query_factory=lambda: Query_Itemcount.query.all(),
                                               get_label='text',
-                                              default=lambda: Query_Itemcount.query.filter_by(value=item.itemcount).first(),
+                                              default=lambda: Query_Itemcount.query.filter_by(
+                                                  value=item.itemcount).first(),
                                               validators=[DataRequired(message='An item count is required')])
 
             origincountry1 = QuerySelectField(query_factory=lambda: Country.query.all(),
                                               get_label='name',
-                                              default=lambda: Country.query.filter_by(numericcode=item.origincountry).first(),
+                                              default=lambda: Country.query.filter_by(
+                                                  numericcode=item.origincountry).first(),
                                               validators=[DataRequired(message='Origin Country is Required')])
 
             destination11 = QuerySelectField(query_factory=lambda: Country.query.all(),
                                              get_label='name',
-                                             default=lambda: Country.query.filter_by(numericcode=item.destinationcountry).first(),
+                                             default=lambda: Country.query.filter_by(
+                                                 numericcode=item.destinationcountry).first(),
                                              validators=[DataRequired(message='A destination Country is required')])
 
             destination21 = QuerySelectField(query_factory=lambda: Country.query.all(),
                                              get_label='name',
-                                             default=lambda: Country.query.filter_by(numericcode=item.destinationcountrytwo).first(),
+                                             default=lambda: Country.query.filter_by(
+                                                 numericcode=item.destinationcountrytwo).first(),
                                              validators=[Optional()])
 
             destination31 = QuerySelectField(query_factory=lambda: Country.query.all(),
                                              get_label='name',
-                                             default=lambda: Country.query.filter_by(numericcode=item.destinationcountrythree).first(),
+                                             default=lambda: Country.query.filter_by(
+                                                 numericcode=item.destinationcountrythree).first(),
                                              validators=[Optional()])
 
             destination41 = QuerySelectField(query_factory=lambda: Country.query.all(),
                                              get_label='name',
-                                             default=lambda: Country.query.filter_by(numericcode=item.destinationcountryfour).first(),
+                                             default=lambda: Country.query.filter_by(
+                                                 numericcode=item.destinationcountryfour).first(),
                                              validators=[Optional()])
 
             destination51 = QuerySelectField(query_factory=lambda: Country.query.all(),
                                              get_label='name',
-                                             default=lambda: Country.query.filter_by(numericcode=item.destinationcountryfive).first(),
+                                             default=lambda: Country.query.filter_by(
+                                                 numericcode=item.destinationcountryfive).first(),
                                              validators=[Optional()])
 
             notshipping11 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
-                                             default=lambda: Query_Continents.query.filter_by(value=item.notshipping1).first(),
+                                             default=lambda: Query_Continents.query.filter_by(
+                                                 value=item.notshipping1).first(),
                                              get_label='text',
                                              validators=[Optional()])
 
             notshipping21 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
-                                             default=lambda: Query_Continents.query.filter_by(value=item.notshipping2).first(),
+                                             default=lambda: Query_Continents.query.filter_by(
+                                                 value=item.notshipping2).first(),
                                              get_label='text',
                                              validators=[Optional()])
 
             notshipping31 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
-                                             default=lambda: Query_Continents.query.filter_by(value=item.notshipping3).first(),
+                                             default=lambda: Query_Continents.query.filter_by(
+                                                 value=item.notshipping3).first(),
                                              get_label='text',
                                              validators=[Optional()])
 
             notshipping41 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
-                                             default=lambda: Query_Continents.query.filter_by(value=item.notshipping4).first(),
+                                             default=lambda: Query_Continents.query.filter_by(
+                                                 value=item.notshipping4).first(),
                                              get_label='text',
                                              validators=[Optional()])
 
             notshipping51 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
-                                             default=lambda: Query_Continents.query.filter_by(value=item.notshipping5).first(),
+                                             default=lambda: Query_Continents.query.filter_by(
+                                                 value=item.notshipping5).first(),
                                              get_label='text',
                                              validators=[Optional()])
 
             notshipping61 = QuerySelectField(query_factory=lambda: Query_Continents.query.all(),
-                                             default=lambda: Query_Continents.query.filter_by(value=item.notshipping6).first(),
+                                             default=lambda: Query_Continents.query.filter_by(
+                                                 value=item.notshipping6).first(),
                                              get_label='text',
                                              validators=[Optional()])
 
             shippingdayleast01 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
-                                                  default=lambda: Query_Count_low.query.filter_by(value=item.shippingdayleast0).first(),
+                                                  default=lambda: Query_Count_low.query.filter_by(
+                                                      value=item.shippingdayleast0).first(),
                                                   get_label='text',
                                                   validators=[Optional()])
 
             shippingdaymost01 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
-                                                 default=lambda: Query_Count_low.query.filter_by(value=item.shippingdaymost0).first(),
+                                                 default=lambda: Query_Count_low.query.filter_by(
+                                                     value=item.shippingdaymost0).first(),
                                                  get_label='text',
                                                  validators=[Optional()])
 
             shippingdayleast21 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
-                                                  default=lambda: Query_Count_low.query.filter_by(value=item.shippingdayleast2).first(),
+                                                  default=lambda: Query_Count_low.query.filter_by(
+                                                      value=item.shippingdayleast2).first(),
                                                   get_label='text',
                                                   validators=[Optional()])
 
             shippingdaymost21 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
-                                                 default=lambda: Query_Count_low.query.filter_by(value=item.shippingdaymost2).first(),
+                                                 default=lambda: Query_Count_low.query.filter_by(
+                                                     value=item.shippingdaymost2).first(),
                                                  get_label='text',
                                                  validators=[Optional()])
 
             shippingdayleast31 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
-                                                  default=lambda: Query_Count_low.query.filter_by(value=item.shippingdayleast3).first(),
+                                                  default=lambda: Query_Count_low.query.filter_by(
+                                                      value=item.shippingdayleast3).first(),
                                                   get_label='text',
                                                   validators=[Optional()])
 
             shippingdaymost31 = QuerySelectField(query_factory=lambda: Query_Count_low.query.all(),
-                                                 default=lambda: Query_Count_low.query.filter_by(value=item.shippingdaymost3).first(),
+                                                 default=lambda: Query_Count_low.query.filter_by(
+                                                     value=item.shippingdaymost3).first(),
                                                  get_label='text',
                                                  validators=[Optional()])
 

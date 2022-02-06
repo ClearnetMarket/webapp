@@ -62,7 +62,7 @@
         {% for item in forsale %}
 
         <tr class="bg-light">
-          
+
             <td class="col-1 linkcolor">
                 <label>
                     <input type="checkbox" name="checkit" value="{{ item.id }}" />
@@ -100,10 +100,12 @@
                 <b>Quantity Left:</b> {{ item.itemcount }}<br />
                 <b>Total Sold:</b> {{ item.totalsold }}<br />
                 <b>Item Views:</b> {{ item.viewcount }}<br />
+
                 <b>Item Rating:</b>
 
                 {% if item.itemrating == 0 %}
                 No ratings
+
                 {% endif %}
                 {% if 0.499 >= item.itemrating >= 0.0001 %}
                 <img src="{{ url_for('static', filename='/images/stars/05stars.png') }}" />

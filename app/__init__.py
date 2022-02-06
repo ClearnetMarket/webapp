@@ -17,6 +17,8 @@ from time import strftime
 import traceback
 from config import \
     UPLOADED_FILES_DEST, \
+    UPLOADED_FILES_DEST_ITEM, \
+    UPLOADED_FILES_DEST_USER, \
     UPLOADED_FILES_ALLOW, \
     MAX_CONTENT_LENGTH, \
     SQLALCHEMY_DATABASE_URI_0, \
@@ -197,6 +199,8 @@ app.jinja_env.filters['usdtocurrency_btccash'] = filters_btc_cash.usdtocurrency_
 
 # configuration
 app.url_map.converters['regex'] = RegexConverter
+app.config['UPLOADED_FILES_DEST_USER'] = UPLOADED_FILES_DEST_USER
+app.config['UPLOADED_FILES_DEST_ITEM'] = UPLOADED_FILES_DEST_ITEM
 app.config['UPLOADED_FILES_DEST'] = UPLOADED_FILES_DEST
 app.config['UPLOADED_FILES_ALLOW'] = UPLOADED_FILES_ALLOW
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
