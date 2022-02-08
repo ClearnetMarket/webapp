@@ -35,7 +35,7 @@ def exppoint(user, price, type, quantity, currency):
     from app.common.functions import btc_cash_convertlocaltobtc, btc_cash_converttolocal
     from decimal import Decimal
     from datetime import datetime
-    from app.achievements.e import levelawards
+    from app.achs.e import levelawards
 
     now = datetime.utcnow()
     # get current user stats

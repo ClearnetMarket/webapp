@@ -1,12 +1,12 @@
 # coding=utf-8
 
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, g
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_qrcode import QRcode
 from flask_sqlalchemy import SQLAlchemy
-
+from datetime import timedelta, datetime
 from sqlalchemy.orm import sessionmaker
 from werkzeug.routing import BaseConverter
 from flask_wtf import \
@@ -25,7 +25,7 @@ from config import \
     SECRET_KEY, \
     WTF_CSRF_ENABLED,\
     DEBUG
-
+from flask_login import current_user
 app = Flask(__name__,
             static_url_path='',
             static_folder='static',
@@ -187,7 +187,6 @@ app.jinja_env.filters['currencyformat'] = filters_filtersstuff.currencyformat
 app.jinja_env.filters['usdtocurrency'] = filters_filtersstuff.usdtocurrency
 
 # BTC_Cash FILTERS
-
 app.jinja_env.filters['btccashtocurrency'] = filters_btc_cash.btccashtocurrency
 app.jinja_env.filters['formatbtctostring_btccash'] = filters_btc_cash.formatbtctostring_btccash
 app.jinja_env.filters['otherformatbtctostring_btccash'] = filters_btc_cash.otherformatbtctostring_btccash
@@ -222,7 +221,17 @@ login_manager.session_protection = None
 
 login_manager.anonymous_user = "Guest"
 paranoid.redirect_view = 'auth.login'
+Session.permanent = True
+app.permanent_session_lifetime = timedelta(hours=24)
 
+# bind a function after each request, even if an exception is encountered.
+@app.teardown_request
+def teardown_request(response_or_exc):
+    db.session.remove()
+    
+@app.teardown_appcontext
+def teardown_appcontext(response_or_exc):
+    db.session.remove()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -235,14 +244,17 @@ def load_user(user_id):
 from .main import main as main_blueprint
 app.register_blueprint(main_blueprint, url_prefix='/main')
 
+from .achievements import achievements as achievements_blueprint
+app.register_blueprint(achievements_blueprint, url_prefix='/achievements')
+
 from .admin import admin as admin_blueprint
 app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
 from .auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
-from .vendor import vendor as vendor_blueprint
-app.register_blueprint(vendor_blueprint, url_prefix='/vendor')
+from .orders import orders as orders_blueprint
+app.register_blueprint(orders_blueprint, url_prefix='/orders')
 
 from .search import search as search_blueprint
 app.register_blueprint(search_blueprint, url_prefix='/search')
@@ -265,12 +277,23 @@ app.register_blueprint(message_blueprint, url_prefix='/message')
 from .profile import profile as profile_blueprint
 app.register_blueprint(profile_blueprint, url_prefix='/profile')
 
-
 from .affiliate import affiliate as affiliate_blueprint
 app.register_blueprint(affiliate_blueprint, url_prefix='/affiliate')
 
 from .promote import promote as promote_blueprint
 app.register_blueprint(promote_blueprint, url_prefix='/promote')
+
+from .checkout import checkout as checkout_blueprint
+app.register_blueprint(checkout_blueprint, url_prefix='/checkout')
+
+from .vendorcreate import vendorcreate as vendorcreate_blueprint
+app.register_blueprint(vendorcreate_blueprint, url_prefix='/vendor-create')
+
+from .vendorverification import vendorverification as vendorverification_blueprint 
+app.register_blueprint(vendorverification_blueprint, url_prefix='/vendor-verification')
+
+from .vendor import vendor as vendor_blueprint
+app.register_blueprint(vendor_blueprint, url_prefix='/vendor')
 
 
 # btc cash wallet

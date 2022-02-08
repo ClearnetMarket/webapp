@@ -1,0 +1,102 @@
+{% extends "/layouts/account_holder.html" %}
+
+{% block content %}
+
+    <form method="post" class="form-horizontal" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {% if user.vendor_account == 1 %}
+            <div class="text-center">
+                {% if user.vacation ==1 %}
+                    Vacation Status: On Vacation
+                {% else %}
+                    Vacation Status: Open for business
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <div class="col-12 text-center">
+                    {% if user.vacation ==1 %}
+                        {{ render_field(vacform.Vacation, class="btn btn-success",
+		               value="Vacation Mode Off") }}
+                    {% else %}
+                        {{ render_field(vacform.Vacation, class="btn btn-danger",
+		                   value="Vacation Mode On") }}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label class="col-12">Current Image</label>
+            <div class="col-12 col-sm-6">
+                <img src="{{ user.id|profilepicture }}" width="125px" height="125px">
+            </div>
+            {% if current_user.profileimage == 'user-unknown.png' %}
+            {% else %}
+                {{ render_field(form.delete, value="Delete Image", class='btn btn-danger') }}
+            {% endif %}
+        </div>
+
+
+        {% if current_user.profileimage == 'user-unknown.png' %}
+            <div class="form-group">
+                <label>Upload New Image</label>
+
+                {{ render_field(form.imageprofile, class="form-inline",
+                        value=user.profileimage) }}
+                <div id="form_error">
+                        <span class="error">
+                      {% if form.imageprofile.errors %}
+                          {% for error in form.imageprofile.errors %}
+                              {{ error }}. Only 'png', 'jpeg', 'jpg', 'png', 'gif'
+                              extensions allowed.  Images below 1920x1080 only.
+                          {% endfor %}
+                      {% endif %}
+                    </span>
+                </div>
+            </div>
+        {% else %}
+        {% endif %}
+
+        <div class="form-group ">
+            <label class="col-12">My Country</label>
+            <div class="col-6 col-sm-5">
+                {{ render_field(form.origincountry1, class="form-control") }}
+            </div>
+            <div class="col-6 vol-sm-6"></div>
+        </div>
+
+        <div class="form-group ">
+            <label class="col-12">My Currency</label>
+            <div class="col-5 col-sm-4">
+                {{ render_field(form.currency1, class="form-control") }}
+            </div>
+            <div class="col-5 vol-sm-6"></div>
+        </div>
+
+
+        <div class="form-group col-12">
+            <label>Your Bio<br>
+                <h5>
+                    Place messanger links/other info here</h5></label>
+            {{ render_field(form.Bio, value=user.bio, autocomplete="off",
+                        class="form-control", rows=15, cols=55) }}
+            <div id="form_error">
+                            <span class="error">
+                          {% if form.Bio.errors %}
+                              {% for error in form.Bio.errors %}
+                                  {{ error }}
+                              {% endfor %}
+                          {% endif %}
+                        </span>
+            </div>
+        </div>
+
+        <div class="col-md-12 text-center">
+            <label></label>
+            {{ render_field(form.submit,  value="Update", autocomplete="off",
+                 class="btn btn-primary") }}
+        </div>
+    </form>
+
+{% endblock %}

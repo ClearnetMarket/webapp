@@ -165,16 +165,16 @@
     <!--THIRD COLUMN-->
     <div class="col-12 col-sm-3 col-md-3 btnwhite card text-left">
         <a class="btn btn-warning btn-sm w-100 mb-2 mt-1"  href="{{ url_for('item.buyitagain', id=order.item_id) }}" role="button">Buy It Again</a>
-        <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('auth.orders_viewtracking', id=order.id) }}" role="button">View Tracking</a>
+        <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('orders.ordershome_viewtracking', id=order.id) }}" role="button">View Tracking</a>
         <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('service.helpwithitem', id=order.id) }}" role="button">Customer Service</a>
 
         {% if order.new_order == 1%}
-            <a class="btn btn-danger btn-sm w-100 mb-2 mt-1" href="{{ url_for('auth.orders_cancelorder', id=order.id) }}" role="button">Cancel Order</a>
+            <a class="btn btn-danger btn-sm w-100 mb-2 mt-1" href="{{ url_for('orders.ordershome_cancelorder', id=order.id) }}" role="button">Cancel Order</a>
         {%  endif %}
 
         {% if order.accepted_order == 1 %}
             {% if order.request_cancel == 0 %}
-                <a class="btn btn-danger btn-sm w-100 mb-2 mt-1" href="{{ url_for('auth.orders_requestcancelorder', id=order.id) }}" role="button">Request Cancel </a>
+                <a class="btn btn-danger btn-sm w-100 mb-2 mt-1" href="{{ url_for('orders.ordershome_requestcancelorder', id=order.id) }}" role="button">Request Cancel </a>
             {% elif order.request_cancel == 1 %}
             {% else %}
             {% endif %}
@@ -209,7 +209,7 @@
         {%  endif %}
 
         {% if order.accepted_order == 1  or order.waiting_order == 1 %}
-            <a class="btn btn-success" href="{{ url_for('auth.orders_markasrecieved', id=order.id) }}" role="button">
+            <a class="btn btn-success" href="{{ url_for('orders.ordershome_markasrecieved', id=order.id) }}" role="button">
                 Finalize Purchase</a>
         {%  endif %}
     </div>

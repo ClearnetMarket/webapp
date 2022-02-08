@@ -11,6 +11,7 @@ def usdtocurrency_btccash(price, currency):
     if currency == 1:
         return price
     else:
+        
         x = Decimal(price) / Decimal(getcurrentprice.price)
         bt = (Decimal(getcurrentprice.price) * x)
         c = '{0:.2f}'.format(bt)

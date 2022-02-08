@@ -1,3 +1,7 @@
+from app.common.decorators import \
+    ping_user, \
+    login_required, \
+    website_offline
 from flask import render_template, \
     redirect, \
     url_for, \
@@ -42,11 +46,7 @@ from app.service.forms import \
 from datetime import datetime
 from sqlalchemy import or_
 from app.exppoints import exppoint
-from app.achievements.a import Grassisgreeneronmyside
-from app.common.decorators import \
-    ping_user, \
-    login_required, \
-    website_offline
+from app.achs.a import Grassisgreeneronmyside
 
 
 @service.route('/')
@@ -650,7 +650,7 @@ def helpwithitem_active(id):
                                     flash('Feedback submitted.  Exp Points Given for the feedback!.',
                                           'success')
 
-                                    return redirect(url_for('auth.orders', username=current_user.username))
+                                    return redirect(url_for('orders.ordershome', username=current_user.username))
                                 except Exception as e:
                                     print(str(e))
                                     return redirect(url_for('service.helpwithitem_active', id=order.id))
@@ -660,21 +660,21 @@ def helpwithitem_active(id):
                                     'Invalid Review. Please make sure you filled out '
                                     'the ratings and feedback(longer than 10 characters)',
                                     'danger')
-                                return redirect(url_for('auth.orders', username=current_user.username))
+                                return redirect(url_for('orders.ordershome', username=current_user.username))
                         else:
                             flash(
                                 'Invalid Review. Please make sure you filled out '
                                 'the ratings and feedback(longer than 10 characters)',
                                 'danger')
-                            return redirect(url_for('auth.orders', username=current_user.username))
+                            return redirect(url_for('orders.ordershome', username=current_user.username))
                     else:
                         flash(
                             'Invalid Review. Please make sure you'
                             ' filled out the ratings and feedback(longer than 10 characters)',
                             'danger')
-                        return redirect(url_for('auth.orders', username=current_user.username))
+                        return redirect(url_for('orders.ordershome', username=current_user.username))
                 else:
-                    return redirect(url_for('auth.orders', username=current_user.username))
+                    return redirect(url_for('orders.ordershome', username=current_user.username))
 
         return render_template('service/chatroom/helpwithitem.html',
                                user=user,

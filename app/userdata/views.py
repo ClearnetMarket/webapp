@@ -14,8 +14,9 @@ from app.classes.affiliate import \
     AffiliateStats
 
 # End Models
-from app.achievements.c import howmanyitemsbought_customer, howmanytrades_customer
-from app.achievements.v import howmanyitemssold_vendor, howmanytrades_vendor
+
+from app.achs.c import howmanyitemsbought_customer, howmanytrades_customer
+from app.achs.v import howmanyitemssold_vendor, howmanytrades_vendor
 from app.common.functions import mkdir_p,  btc_cash_converttolocal, userimagelocation
 from datetime import datetime
 from decimal import Decimal
@@ -288,6 +289,31 @@ def vendortotalmade_btccash(user_id, amount):
 
     db.session.add(vendorstats)
 
+# AFFILIATE Stats
+
+
+def affstats(user_id, amount, currency):
+
+    aff_stats = db.session\
+        .query(AffiliateStats)\
+        .filter(user_id == AffiliateStats.user_id)\
+        .first()
+
+    totalorders = aff_stats.totalitemsordered + 1
+
+    aff_stats.totalitemsordered = totalorders
+    aff_stats.promoenteredcount = totalorders
+
+    if currency == 2:
+        newamount = aff_stats.btc_earned + amount
+        aff_stats.btc_earned = newamount
+
+    else:
+        newamount = aff_stats.btc_cash_earned + amount
+        aff_stats.btc_cash_earned = newamount
+
+    db.session.add(aff_stats)
+
 
 # def totalrecbyusers(user_id, amount, howmany):
 #     # how much money a user has spent of physical items
@@ -335,27 +361,3 @@ def vendortotalmade_btccash(user_id, amount):
 #     vendorstats.totalbtccashspent = x
 #     db.session.add(vendorstats)
 #     db.session.commit()
-
-
-# AFFILIATE Stats
-def affstats(user_id, amount, currency):
-
-    aff_stats = db.session\
-        .query(AffiliateStats)\
-        .filter(user_id == AffiliateStats.user_id)\
-        .first()
-
-    totalorders = aff_stats.totalitemsordered + 1
-
-    aff_stats.totalitemsordered = totalorders
-    aff_stats.promoenteredcount = totalorders
-
-    if currency == 2:
-        newamount = aff_stats.btc_earned + amount
-        aff_stats.btc_earned = newamount
-
-    else:
-        newamount = aff_stats.btc_cash_earned + amount
-        aff_stats.btc_cash_earned = newamount
-
-    db.session.add(aff_stats)

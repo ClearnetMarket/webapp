@@ -13,7 +13,9 @@
   </div>
 </div>
 
-{% else %} {% endif %} {% endif %}
+{% else %} 
+{% endif %}
+ {% endif %}
 <div class="row">
   <div class="col-12 text-center">
     <h4>Returns and Disputes</h4>
@@ -91,7 +93,7 @@
       {{ moment(timestamp=order.age, local=False).fromNow(refresh=True) }}
     </td>
     <td class="hidden-xs col-sm-1 linkcolor bg-danger">
-      {{ order.price|formatbtctostring }} BTC
+      {{ order.price|formatbtctostring_btccash }} BCH
     </td>
     <td class="col-3 linkcolor bg-danger">
       <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
@@ -153,7 +155,7 @@
       {{ moment(timestamp=order.age, local=False).fromNow(refresh=True) }}
     </td>
     <td class="hidden-xs col-sm-1 linkcolor bg-danger">
-      {{ order.price|formatbtctostring }} BTC
+      {{ order.price|formatbtctostring_btccash }} BTC
     </td>
     <td class="col-3 bg-danger">
       {% if order.type == 1 %} {% if order.return_id == 0 and

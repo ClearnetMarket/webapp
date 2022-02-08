@@ -22,16 +22,16 @@
             >
           </li>
           <li>
-            <a href="{{ url_for('auth.orders') }}">Recent Orders</a>
+            <a href="{{ url_for('orders.ordershome') }}">Recent Orders</a>
           </li>
           <li>
             <a
-              href="{{ url_for('profile.achs', username=current_user.username) }}"
+              href="{{ url_for('achievements.profile_achs', username=current_user.username) }}"
               >My Achievements</a
             >
           </li>
           <li>
-            <a href="{{ url_for('auth.selectuserAchs') }}"
+            <a href="{{ url_for('achievements.selectuserachs') }}"
               >Customize profile bar</a
             >
           </li>
@@ -64,12 +64,12 @@
         <b>Vendor</b>
         <ul>
           <li>
-            <a href="{{ url_for('vendor.vendorverification') }}"
+            <a href="{{ url_for('vendorverification.vendorverificationhome') }}"
               >Vendor Verification</a
             >
           </li>
           <li>
-            <a href="{{ url_for('vendor.itemsforSale')}}"> My Items </a>
+            <a href="{{ url_for('vendorcreate.itemsforSale')}}"> My Items </a>
           </li>
           <li>
             <a href="{{ url_for('vendor.vendorRefunds') }}"> Issues </a>

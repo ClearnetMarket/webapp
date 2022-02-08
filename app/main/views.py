@@ -56,17 +56,6 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
-@app.before_request
-def load_users():
-    # Time before user is auto logged out
-
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(hours=1)
-    if current_user.is_authenticated:
-        g.user = current_user.get_id()
-    else:
-        g.user = 'Guest'
-
 
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
@@ -440,95 +429,6 @@ def privacy():
     return render_template('/privacy.html')
 
 
-@main.route('/allachievements')
-def allachievements_main():
-    title = "All Achievements"
-    achievements = db.session\
-        .query(Achievements)\
-        .order_by(Achievements.dateadded.desc())\
-        .all()
-    return render_template('/achievements/achievementsall.html',
-                           title=title,
-                           achievements=achievements,
-                           )
-
-
-@main.route('/achievementscommon')
-def achievements_common():
-    title = "Common Achievements"
-    achievements = db.session\
-        .query(Achievements)\
-        .filter_by(category=1)\
-        .all()
-    return render_template('/achievements/achievementscommon.html',
-                           title=title,
-                           achievements=achievements,
-                           )
-
-
-@main.route('/achievementsExperience')
-def achievements_experience():
-    title = "Experience Achievements"
-    achievements = db.session\
-        .query(Achievements)\
-        .filter_by(category=2)\
-        .all()
-    return render_template('/achievements/achievementsExperience.html',
-                           title=title,
-                           achievements=achievements,
-                           )
-
-
-@main.route('/allachievementsCustmer')
-def achievements_customer():
-    title = "Customer Achievements"
-    achievements = db.session\
-        .query(Achievements)\
-        .filter_by(category=3)\
-        .all()
-    return render_template('/achievements/achievementscustomer.html',
-                           title=title,
-                           achievements=achievements,
-                           )
-
-
-@main.route('/allachievementsVendor')
-def achievements_vendor():
-    title = "Vendor Achievements"
-    achievements = db.session\
-        .query(Achievements)\
-        .filter_by(category=4)\
-        .all()
-    return render_template('/achievements/achievementsvendor.html',
-                           title=title,
-                           achievements=achievements,
-                           )
-
-
-@main.route('/allachievements/coin')
-def achievements_coin():
-    title = "Coin Achievements"
-    achievements = db.session\
-        .query(Achievements)\
-        .filter_by(category=5)\
-        .all()
-    return render_template('/achievements/achievementscoin.html',
-                           title=title,
-                           achievements=achievements,
-                           )
-
-
-@main.route('/allachievementsUnique')
-def achievements_unique():
-    title = "Unique Achievements"
-    achievements = db.session\
-        .query(Achievements)\
-        .filter_by(category=6)\
-        .all()
-    return render_template('/achievements/achievementsunique.html',
-                           title=title,
-                           achievements=achievements,
-                           )
 
 
 @main.route('/bugbounty', methods=['GET', 'POST'])

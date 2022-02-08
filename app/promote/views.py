@@ -114,7 +114,7 @@ def promoteitem(itemid):
                             db.session.commit()
 
                             flash("Item Promoted", category="success")
-                            return redirect(url_for('vendor.itemsforSale'))
+                            return redirect(url_for('vendorcreate.itemsforSale'))
                         else:
                             flash("Not enough coin in your wallet",
                                   category="danger")
@@ -134,7 +134,7 @@ def promoteitem(itemid):
                             db.session.commit()
 
                             flash("Item Promoted", category="success")
-                            return redirect(url_for('vendor.itemsforSale'))
+                            return redirect(url_for('vendorcreate.itemsforSale'))
                         else:
                             flash("Not enough coin in your wallet",
                                   category="danger")

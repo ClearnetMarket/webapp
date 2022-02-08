@@ -3,11 +3,11 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
         {% if current_user.is_authenticated %}
             {% if current_user.vendor_account == 0 %}
-                <a href="{{ url_for('auth.becomeVendor') }}">
+                <a href="{{ url_for('vendor.becomevendor') }}">
                     <img src="{{ url_for('static', filename='/images/homepage/startselling.png'  )  }}" width="395px" height="200px">
                 </a>
             {% else %}
-                <a href="{{ url_for('vendor.itemsforSale') }}">
+                <a href="{{ url_for('vendorcreate.itemsforSale') }}">
                     <img src="{{ url_for('static', filename='/images/homepage/startselling.png'  )  }}" width="395px" height="200px">
                 </a>
             {% endif %}
@@ -26,7 +26,7 @@
                     <img src="{{ url_for('static', filename='/images/homepage/getverification.png'  )  }}"  width="395px" height="200px">
                 </a>
             {% else %}
-                <a href="{{ url_for('vendor.vendorverification') }}">
+                <a href="{{ url_for('vendorverification.vendorverificationhome') }}">
                     <img src="{{ url_for('static', filename='/images/homepage/getverification.png'  )  }}"  width="395px" height="200px">
                 </a>
             {% endif %}

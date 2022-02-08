@@ -40,23 +40,7 @@
     </a>
     {% endif %}
   </div>
-  {% if vendorwidth %}
-  <div class="col-sm-12 text-center">
-    Level({{ vendorwidth }}%)
-    <div class="progress">
-      <div
-        class="progress-bar progress-bar-warning"
-        role="progressbar"
-        aria-valuenow="{{"
-        level.experiencepoints
-        }}
-        aria-valuemin="0"
-        aria-valuemax="100"
-        style="width:{{ vendorwidth }}%"
-      ></div>
-    </div>
-  </div>
-  {% endif %}
+ 
   <!--msg-->
   {% if current_user.id == vendor.id%} {% else %}
   <div class="col-sm-12 text-center">

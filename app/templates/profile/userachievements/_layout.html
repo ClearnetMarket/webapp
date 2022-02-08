@@ -10,44 +10,44 @@
           <b>Achievement Category</b>
           <ul>
             <li class="linkcolor">
-              <a href="{{ url_for('profile.achs', username=user.username) }}"
+              <a href="{{ url_for('achievements.profile_achs', username=user.username) }}"
                 >Newest added</a
               >
             </li>
             <li class="linkcolor">
               <a
-                href="{{ url_for('profile.achievements_common', username=user.username) }}"
+                href="{{ url_for('achievements.profile_achievements_common', username=user.username) }}"
                 >Common</a
               >
             </li>
             <li class="linkcolor">
               <a
-                href="{{ url_for('profile.achievements_experience', username=user.username) }}"
+                href="{{ url_for('achievements.profile_achievements_experience', username=user.username) }}"
                 >Experience</a
               >
             </li>
 
             <li class="linkcolor">
               <a
-                href="{{ url_for('profile.achievements_unique', username=user.username) }}"
+                href="{{ url_for('achievements.profile_achievements_unique', username=user.username) }}"
                 >Unique</a
               >
             </li>
             <li class="linkcolor">
               <a
-                href="{{ url_for('profile.achievements_customer', username=user.username) }}"
+                href="{{ url_for('achievements.profile_achievements_customer', username=user.username) }}"
                 >Customer</a
               >
             </li>
             <li class="linkcolor">
               <a
-                href="{{ url_for('profile.achievements_vendor', username=user.username) }}"
+                href="{{ url_for('achievements.profile_achievements_vendor', username=user.username) }}"
                 >Vendor</a
               >
             </li>
             <li class="linkcolor">
               <a
-                href="{{ url_for('profile.achievements_coin', username=user.username) }}"
+                href="{{ url_for('achievements.profile_achievements_coin', username=user.username) }}"
                 >Coin</a
               >
             </li>

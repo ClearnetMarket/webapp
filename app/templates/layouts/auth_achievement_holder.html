@@ -12,28 +12,25 @@
           <b>Achievement Category</b>
           <ul>
             <li class="linkcolor">
-              <a href="{{ url_for('auth.achievements_all') }}">Newest added</a>
+              <a href="{{ url_for('achievements.achievements_all_home') }}">Newest added</a>
             </li>
             <li class="linkcolor">
-              <a href="{{ url_for('auth.achievements_common') }}">Common</a>
+              <a href="{{ url_for('achievements.auth_achievements_common') }}">Common</a>
             </li>
             <li class="linkcolor">
-              <a href="{{ url_for('auth.achievements_experience') }}"
-                >Experience</a
-              >
-            </li>
-
-            <li class="linkcolor">
-              <a href="{{ url_for('auth.achievements_unique') }}">Unique</a>
+              <a href="{{ url_for('achievements.auth_achievements_experience') }}">Experience</a>
             </li>
             <li class="linkcolor">
-              <a href="{{ url_for('auth.achievements_customer') }}">Customer</a>
+              <a href="{{ url_for('achievements.auth_achievements_unique') }}">Unique</a>
             </li>
             <li class="linkcolor">
-              <a href="{{ url_for('auth.achievements_vendor') }}">Vendor</a>
+              <a href="{{ url_for('achievements.auth_achievements_customer') }}">Customer</a>
             </li>
             <li class="linkcolor">
-              <a href="{{ url_for('auth.achievements_coin') }}">Coin</a>
+              <a href="{{ url_for('achievements.auth_achievements_vendor') }}">Vendor</a>
+            </li>
+            <li class="linkcolor">
+              <a href="{{ url_for('achievements.auth_achievements_coin') }}">Coin</a>
             </li>
           </ul>
         </div>

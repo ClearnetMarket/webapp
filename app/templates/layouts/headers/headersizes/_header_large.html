@@ -60,9 +60,9 @@
         <div class="col-md-2">
           {% if current_user.is_authenticated %} {% if
           current_user.vendor_account == 0 %} {% else %}
-          <a href="{{ url_for('auth.becomeVendor') }}">Post Item</a>
+          <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
           {% endif %} {% else %}
-          <a href="{{ url_for('auth.becomeVendor') }}">Post Item</a>
+          <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
           {% endif %}
         </div>
       </div>
@@ -112,12 +112,12 @@
       </div>
       <div class="row h-50">
         <div class="col-md-6">
-          <a href="{{ url_for('auth.orders',username=current_user.username) }}" >
+          <a href="{{ url_for('orders.ordershome',username=current_user.username) }}" >
             <b>Orders</b>
           </a>
         </div>
         <div class="col-md-6">
-          <a href="{{ url_for('item.shoppingcart') }}">
+          <a href="{{ url_for('checkout.shoppingcart') }}">
             <b>{{ tot }} items</b>
           </a>
         </div>

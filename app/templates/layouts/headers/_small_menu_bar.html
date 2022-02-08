@@ -25,26 +25,26 @@
             <li>
                 {% if current_user.is_authenticated %}
                 {% if current_user.vendor_account == 0 %}
-                <a href="{{ url_for('auth.becomeVendor') }}">
+                <a href="{{ url_for('vendor.becomevendor') }}">
                     Post Item
                 </a>
                 {% else %}
-                <a href="{{ url_for('auth.becomeVendor') }}">Post Item</a>
+                <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
                 {% endif %}
                 {% else %}
-                <a href="{{ url_for('auth.becomeVendor') }}">Post Item</a>
+                <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
                 {% endif %}
             </li>
             <li>
                 My Wallets
             </li>
             <li>
-                <a href="{{ url_for('auth.orders', username=current_user.username) }}">
+                <a href="{{ url_for('orders.ordershome', username=current_user.username) }}">
                     Orders
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('item.shoppingcart') }}">
+                <a href="{{ url_for('checkout.shoppingcart') }}">
                     {{ tot }} items
                 </a>
             </li>

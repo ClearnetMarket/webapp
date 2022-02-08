@@ -32,7 +32,7 @@ from app.common.decorators import\
     ping_user,\
     login_required
 
-from app.achievements.b import\
+from app.achs.b import\
     likemoneyinthebank,\
     withdrawl
 from flask_login import\
@@ -210,7 +210,8 @@ def send():
                               str(wfee), category="danger")
                         return redirect(url_for('wallet_bch.send'))
                 else:
-                    flash("Cannot withdraw more than your balance including fee", category="danger")
+                    flash(
+                        "Cannot withdraw more than your balance including fee", category="danger")
                     return redirect(url_for('wallet_bch.send'))
             else:
                 flash(
@@ -229,7 +230,6 @@ def send():
                 else:
                     db.session.commit()
                     return redirect(url_for('wallet_bch.send'))
-
 
     return render_template('/wallet/wallet_btccash/send.html',
                            now=now,

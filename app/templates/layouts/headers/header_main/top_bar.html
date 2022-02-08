@@ -96,12 +96,12 @@
                         <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
                             {% if current_user.is_authenticated %}
                             {% if current_user.vendor_account == 0 %}
-                            <a href="{{ url_for('auth.becomeVendor') }}">
+                            <a href="{{ url_for('vendor.becomevendor') }}">
                                 <i class="bi bi-upload"></i>
                                 Become Vendor
                             </a>
                             {% else %}
-                            <a href="{{ url_for('vendor.createItem') }}">
+                            <a href="{{ url_for('vendorcreate.createItem') }}">
                                 <i class="bi bi-upload"></i>
                                 Post Item
                             </a>
@@ -162,7 +162,7 @@
                         {% else %}
                         {% endif %}
                         <div class="col-3  sidebar_top_right border_gray_right  p-2 linkcolor_topb border_gray_bottom">
-                            <a href="{{ url_for('item.shoppingcart') }}"><i class="bi bi-cart"></i> Checkout</a>
+                            <a href="{{ url_for('checkout.shoppingcart') }}"><i class="bi bi-cart"></i> Checkout</a>
                         </div>
                     </div>
                 </div>
