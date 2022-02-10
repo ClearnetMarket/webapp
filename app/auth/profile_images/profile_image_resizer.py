@@ -81,8 +81,7 @@ def imagespider(base_path):
                                 # convert
                                 wpercent = (basewidth_225/float(img.size[0]))
                                 hsize = int((float(img.size[1])*float(wpercent)))
-                                img = img.resize((basewidth_225, hsize),
-                                                 Image.ANTIALIAS)
+                                img = img.resize((basewidth_225, hsize),Image.ANTIALIAS)
                                 imagesave = os.path.join(root, renamed_file)
                                 img.save(imagesave, subsampling=0, quality=100, optimize=True)
                                 os.chmod(renamed_file, 0o775)

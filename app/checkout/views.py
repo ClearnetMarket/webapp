@@ -69,7 +69,6 @@ from app.userdata.views import \
 @checkout.route('/movefornow/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def movecartitem(id):
     try:
         theitem = ShoppingCart.query.get(id)
@@ -106,7 +105,6 @@ def movecartitem(id):
 @checkout.route('/cart', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def shoppingcart():
     now = datetime.utcnow()
     form = shoppingcartForm(request.form)
@@ -664,7 +662,6 @@ checkout.route('/checkout', methods=['GET', 'POST'])
 
 @website_offline
 @login_required
-@ping_user
 def checkout():
     # forms
     secretinfo = custominfo()

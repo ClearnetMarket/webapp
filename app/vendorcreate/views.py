@@ -11,7 +11,6 @@ from flask_paginate import Pagination, get_page_args
 from app.common.decorators import \
     website_offline, \
     login_required, \
-    ping_user, \
     vendoraccount_required
 from app.common.functions import \
     mkdir_p, \
@@ -41,7 +40,6 @@ from app.vendor.images.image_forms import image1, image2, image3, image4, image5
 @vendorcreate.route('/trade-options/')
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def tradeOptions():
     """
@@ -54,7 +52,6 @@ def tradeOptions():
 @vendorcreate.route('/myitems', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def itemsforSale():
     """
@@ -413,95 +410,167 @@ def createItem():
                 else:
                     digital_currency3 = 0
 
+
                 # Selectfield entries
                 # Get currency from query
-                currencyfull = form.currency.data
-                cur = currencyfull.code
+                if form.currency.data:
+                    currencyfull = form.currency.data
+                    cur = currencyfull.code
+                else:
+                    cur = 0
 
                 # get item condition query
-                itemconditionfull = form.itemcondition.data
-                itemcondition = itemconditionfull.value
+                if form.itemcondition.data:
+                    itemconditionfull = form.itemcondition.data
+                    itemcondition = itemconditionfull.value
+                else:
+                    itemcondition = 0
 
                 # get itemcount query
-                itemcountfull = form.itemcount.data
-                itemcount = itemcountfull.value
+                if form.itemcount.data:
+                    itemcountfull = form.itemcount.data
+                    itemcount = itemcountfull.value
+                else:
+                    itemcount = 0
 
+                if form.origincountry.data:
                 # get origin country query
-                origincountryfull = form.origincountry.data
-                origincountry = origincountryfull.numericcode
+                    origincountryfull = form.origincountry.data
+                    origincountry = origincountryfull.numericcode
+                else:
+                    origincountry = 0
 
                 # get destination 1
-                getdest1full = form.destination1.data
-                getdest1 = getdest1full.numericcode
+                if form.destination1.data:
+                    getdest1full = form.destination1.data
+                    getdest1 = getdest1full.numericcode
+                else:
+                    getdest1 = 0
 
                 # get destination2
-                getdest2full = form.destination2.data
-                getdest2 = getdest2full.numericcode
+                if form.destination2.data:
+                    getdest2full = form.destination2.data
+                    getdest2 = getdest2full.numericcode
+                else:
+                    getdest2 = 0
 
                 # getdestination 3
-                getdest3full = form.destination3.data
-                getdest3 = getdest3full.numericcode
+                if form.destination3.data:
+                    getdest3full = form.destination3.data
+                    getdest3 = getdest3full.numericcode
+                else:
+                    getdest3 = 0
 
                 # getdestination 4
-                getdest4full = form.destination4.data
-                getdest4 = getdest4full.numericcode
+                if form.destination4.data:
+                    getdest4full = form.destination4.data
+                    getdest4 = getdest4full.numericcode
+                else:
+                    getdest4 = 0
 
                 # getdestination 5
-                getdest5full = form.destination5.data
-                getdest5 = getdest5full.numericcode
+                if form.destination5.data:
+                    getdest5full = form.destination5.data
+                    getdest5 = getdest5full.numericcode
+                else:
+                    getdest5 = 0
+
 
                 # get get not shipping 1
-                getnotship1full = form.notshipping1.data
-                getnotship1 = getnotship1full.value
+                if form.notshipping1.data:
+                    getnotship1full = form.notshipping1.data
+                    getnotship1 = getnotship1full.value
+                else:
+                    getnotship1 = 0
 
                 # get get not shipping 2
-                getnotship2full = form.notshipping2.data
-                getnotship2 = getnotship2full.value
+                if form.notshipping2.data:
+                    getnotship2full = form.notshipping2.data
+                    getnotship2 = getnotship2full.value
+                else:
+                    getnotship2 = 0
 
                 # get get not shipping 3
-                getnotship3full = form.notshipping3.data
-                getnotship3 = getnotship3full.value
+                if form.notshipping3.data:
+                    getnotship3full = form.notshipping3.data
+                    getnotship3 = getnotship3full.value
+                else:
+                    getnotship3 = 0
 
                 # get get not shipping 4
-                getnotship4full = form.notshipping1.data
-                getnotship4 = getnotship4full.value
+                if form.notshipping1.data:
+                    getnotship4full = form.notshipping1.data
+                    getnotship4 = getnotship4full.value
+                else:
+                    getnotship4 = 0
 
                 # get get not shipping 5
-                getnotship5full = form.notshipping5.data
-                getnotship5 = getnotship5full.value
+                if form.notshipping5.data:
+                    getnotship5full = form.notshipping5.data
+                    getnotship5 = getnotship5full.value
+                else:
+                    getnotship5 = 0
 
                 # get get not shipping 6
-                getnotship6full = form.notshipping6.data
-                getnotship6 = getnotship6full.value
+                if form.notshipping6.data:
+                    getnotship6full = form.notshipping6.data
+                    getnotship6 = getnotship6full.value
+                else:
+                    getnotship6 = 0
 
                 # get shippindayleast 0
-                getshipdayleastfull0 = form.shippingdayleast0.data
-                getshipdayleast0 = getshipdayleastfull0.value
+                if form.shippingdayleast0.data:
+                    getshipdayleastfull0 = form.shippingdayleast0.data
+                    getshipdayleast0 = getshipdayleastfull0.value
+                else:
+                    getshipdayleast0 = 0
+                    
 
                 # get shipping day most 0
-                getshippingdaymostfull0 = form.shippingdaymost0.data
-                getshippingdaymost0 = getshippingdaymostfull0.value
+                if form.shippingdaymost0.data:
+                    getshippingdaymostfull0 = form.shippingdaymost0.data
+                    getshippingdaymost0 = getshippingdaymostfull0.value
+                else:
+                    getshippingdaymost0 = 0
 
                 # get shippindayleast 2
-                getshipdayleastfull2 = form.shippingdayleast2.data
-                getshipdayleast2 = getshipdayleastfull2.value
+                if form.shippingdayleast2.data:
+                    getshipdayleastfull2 = form.shippingdayleast2.data
+                    getshipdayleast2 = getshipdayleastfull2.value
+                else:
+                    getshipdayleast2 = 0
+
 
                 # get shipping day most 2
-                getshippingdaymostfull2 = form.shippingdaymost2.data
-                getshippingdaymost2 = getshippingdaymostfull2.value
+                if form.shippingdaymost2.data:
+                    getshippingdaymostfull2 = form.shippingdaymost2.data
+                    getshippingdaymost2 = getshippingdaymostfull2.value
+                else:
+                    getshippingdaymost2 = 0
 
                 # get shippindayleast 3
-                getshipdayleastfull3 = form.shippingdayleast3.data
-                getshipdayleast3 = getshipdayleastfull3.value
+                if form.shippingdayleast3.data:
+                    getshipdayleastfull3 = form.shippingdayleast3.data
+                    getshipdayleast3 = getshipdayleastfull3.value
+                else:
+                    getshipdayleast3 = 0
+
 
                 # get shipping day most 3
-                getshippingdaymostfull3 = form.shippingdaymost3.data
-                getshippingdaymost3 = getshippingdaymostfull3.value
+                if form.shippingdaymost3.data:
+                    getshippingdaymostfull3 = form.shippingdaymost3.data
+                    getshippingdaymost3 = getshippingdaymostfull3.value
+                else:
+                    getshippingdaymost3 = 0
 
                 # category query
-                categoryfull = form.category.data
-                cat0 = categoryfull.id
-                categoryname0 = categoryfull.name
+                if form.category.data:
+                    categoryfull = form.category.data
+                    cat0 = categoryfull.id
+                    categoryname0 = categoryfull.name
+                else:
+                    cat0 = 0
+                    categoryname0 = ''
 
                 # create image of item in database
                 item = marketItem(
@@ -511,7 +580,7 @@ def createItem():
                     digital_currency1=0,
                     digital_currency2=digital_currency2,
                     digital_currency3=digital_currency3,
-                    created=datetime.utcnow(),
+                    created=now,
                     vendor_name=current_user.username,
                     vendor_id=current_user.id,
                     origincountry=origincountry,
@@ -567,7 +636,7 @@ def createItem():
                     online=0,
                     aditem=0,
                     aditem_level=0,
-                    aditem_timer=datetime.utcnow(),
+                    aditem_timer=now,
                     amazonid=0,
                     amazon_last_checked=now,
                 )
@@ -575,37 +644,35 @@ def createItem():
                 db.session.add(item)
                 db.session.flush()
 
+
                 # node location
-                getitemlocation = itemlocation(x=item.id)
-                item.stringnodeid = getitemlocation
-
-                # Images
                 getimagesubfolder = itemlocation(x=item.id)
-                directoryifitemlisting = os.path.join(
-                    UPLOADED_FILES_DEST_ITEM, getimagesubfolder, (str(item.id)))
+                # item location by id
+                item.stringnodeid = getimagesubfolder
+                # directory of image
+                directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST_ITEM, getimagesubfolder, (str(item.id)))
+                # make directory
                 mkdir_p(path=directoryifitemlisting)
+                # upload images
+                image1(formdata=form.imageone1.data,
+                       item=item,
+                       directoryifitemlisting=directoryifitemlisting)
+                image2(formdata=form.imagetwo.data,
+                       item=item,
+                       directoryifitemlisting=directoryifitemlisting)
+                image3(formdata=form.imagethree.data, 
+                       item=item,
+                       directoryifitemlisting=directoryifitemlisting)
+                image4(formdata=form.imagefour.data,
+                       item=item,
+                       directoryifitemlisting=directoryifitemlisting)
+                image5(formdata=form.imagefive.data,
+                       item=item,
+                       directoryifitemlisting=directoryifitemlisting)
 
-                image1(formdata=form.imageone1.data, item=item,
-                       directoryifitemlisting=directoryifitemlisting)
-                image2(formdata=form.imagetwo.data, item=item,
-                       directoryifitemlisting=directoryifitemlisting)
-                image3(formdata=form.imagethree.data, item=item,
-                       directoryifitemlisting=directoryifitemlisting)
-                image4(formdata=form.imagefour.data, item=item,
-                       directoryifitemlisting=directoryifitemlisting)
-                image5(formdata=form.imagefive.data, item=item,
-                       directoryifitemlisting=directoryifitemlisting)
-
-                if item.shippingprice2 is None:
-                    item.shippingprice2 = 0
-
-                if item.shippingprice3 is None:
-                    item.shippingprice3 = 0
-
-                if item.price is None:
-                    item.price = 0
 
                 # update item id location for pathing
+                # change this in future
                 item.auctionid = item.id
                 item.stringauctionid = '/' + str(item.id) + '/'
 
@@ -615,12 +682,12 @@ def createItem():
 
                 flash("Created New Item ", category="success")
                 return redirect(url_for('vendorcreate.itemsforSale', username=current_user.username))
+            else:
+                print(form.errors)
+                print(form.data)
+                return redirect(url_for('vendorcreate.createItem', username=current_user.username))
 
-            return redirect(url_for('vendorcreate.createItem', username=current_user.username))
-
-        return render_template('/vendor/itemsforsale/createItem.html',
-                               form=form,
-                               user=user)
+        return render_template('/vendor/itemsforsale/createItem.html', form=form, user=user)
     else:
         flash("100 items max", category="danger")
         return redirect(url_for('vendorcreate.itemsforSale', username=current_user.username))
@@ -649,6 +716,7 @@ def edititem(id):
         if item.vendor_id == user.id:
 
             vendorcreateItem = add_product_form_factory(item=item)
+            
             form = vendorcreateItem(
                 digital_currency2=item.digital_currency2,
                 digital_currency3=item.digital_currency2,
@@ -707,24 +775,27 @@ def edititem(id):
                 if item.vendor_id == user.id:
                     # Image location
                     getimagesubfolder = itemlocation(x=item.id)
-                    directoryifitemlisting = os.path.join(
-                        UPLOADED_FILES_DEST_ITEM, getimagesubfolder, (str(item.id)))
+                    directoryifitemlisting = os.path.join(UPLOADED_FILES_DEST_ITEM, getimagesubfolder, (str(item.id)))
                     mkdir_p(path=directoryifitemlisting)
 
-                    image1(formdata=form.imageone1.data, item=item,
+                    image1(formdata=form.imageone1.data, 
+                           item=item,
                            directoryifitemlisting=directoryifitemlisting)
-                    image2(formdata=form.imagetwo.data, item=item,
+                    image2(formdata=form.imagetwo.data, 
+                           item=item,
                            directoryifitemlisting=directoryifitemlisting)
-                    image3(formdata=form.imagethree.data, item=item,
+                    image3(formdata=form.imagethree.data,
+                           item=item,
                            directoryifitemlisting=directoryifitemlisting)
-                    image4(formdata=form.imagefour.data, item=item,
+                    image4(formdata=form.imagefour.data, 
+                           item=item,
                            directoryifitemlisting=directoryifitemlisting)
-                    image5(formdata=form.imagefive.data, item=item,
+                    image5(formdata=form.imagefive.data,
+                           item=item,
                            directoryifitemlisting=directoryifitemlisting)
 
                     if form.shippingtwo.data is True:
                         shippingtwo = 1
-
                     else:
                         shippingtwo = 0
 
@@ -738,167 +809,223 @@ def edititem(id):
                     else:
                         digital_currency3 = 0
 
+                    if form.return_this_item.data is True:
+                        return_allowed = 1
+                    else:
+                        return_allowed = 0
+
                     # get category and subcategory
-                    categoryfull = form.category_edit.data
-                    cat0 = categoryfull.cat_id
-                    categoryname0 = categoryfull.name
+                    if form.category_edit.data:
+                        categoryfull = form.category_edit.data
+                        cat0 = categoryfull.cat_id
+                        categoryname0 = categoryfull.name
+                    else:
+                        cat0 = 0
+                        categoryname0 = ''
 
                     # Get currency from query
-                    currencyfull = form.currency1.data
-                    cur = currencyfull.code
+                    if form.currency1.data:
+                        currencyfull = form.currency1.data
+                        cur = currencyfull.code
+                    else:
+                        cur = 0
 
                     # get item condition query
-                    itemconditionfull = form.itemcondition_edit.data
-                    itemcondition = itemconditionfull.value
+                    if form.itemcondition_edit.data:
+                        itemconditionfull = form.itemcondition_edit.data
+                        itemcondition = itemconditionfull.value
+                    else:
+                        itemcondition = 0
 
                     # get iitemcount query
-                    itemcountfull = form.itemcount_edit.data
-                    itemcount = itemcountfull.value
+                    if form.itemcount_edit.data:
+                        itemcountfull = form.itemcount_edit.data
+                        itemcount = itemcountfull.value
+                    else:
+                        itemcount = 0
 
                     # get origin country query
-                    origincountryfull = form.origincountry1.data
-                    origincountry = origincountryfull.numericcode
+                    if form.origincountry1.data:
+                        origincountryfull = form.origincountry1.data
+                        origincountry = origincountryfull.numericcode
+                    else:
+                        origincountry = 0
 
                     # get destination 1
-                    getdest1full = form.destination11.data
-                    getdest1 = getdest1full.numericcode
+                    if form.destination11.data:
+                        getdest1full = form.destination11.data
+                        getdest1 = getdest1full.numericcode
+                    else:
+                        getdest1 = 0
 
                     # get destination2
-                    getdest2full = form.destination21.data
-                    getdest2 = getdest2full.numericcode
+                    if form.destination21.data:
+                        getdest2full = form.destination21.data
+                        getdest2 = getdest2full.numericcode
+                    else:
+                        getdest2 = 0
 
                     # getdestination 3
-                    getdest3full = form.destination31.data
-                    getdest3 = getdest3full.numericcode
+                    if form.destination31.data:
+                        getdest3full = form.destination31.data
+                        getdest3 = getdest3full.numericcode
+                    else:
+                        getdest3 = 0
 
                     # getdestination 4
-                    getdest4full = form.destination41.data
-                    getdest4 = getdest4full.numericcode
+                    if form.destination41.data:
+                        getdest4full = form.destination41.data
+                        getdest4 = getdest4full.numericcode
+                    else:
+                        getdest4 = 0
 
                     # getdestination 5
-                    getdest5full = form.destination51.data
-                    getdest5 = getdest5full.numericcode
+                    if form.destination51.data:
+                        getdest5full = form.destination51.data
+                        getdest5 = getdest5full.numericcode
+                    else:
+                        getdest5 = 0
 
                     # get get not shipping 1
-                    getnotship1full = form.notshipping11.data
-                    getnotship1 = getnotship1full.value
+                    if form.notshipping11.data:
+                        getnotship1full = form.notshipping11.data
+                        getnotship1 = getnotship1full.value
+                    else:
+                        getnotship1 = 0
 
                     # get get not shipping 2
-                    getnotship2full = form.notshipping21.data
-                    getnotship2 = getnotship2full.value
+                    if form.notshipping21.data:
+                        getnotship2full = form.notshipping21.data
+                        getnotship2 = getnotship2full.value
+                    else:
+                        getnotship2 = 0
 
                     # get get not shipping 3
-                    getnotship3full = form.notshipping31.data
-                    getnotship3 = getnotship3full.value
+                    if form.notshipping31.data:
+                        getnotship3full = form.notshipping31.data
+                        getnotship3 = getnotship3full.value
+                    else:
+                        getnotship3 = 0
 
                     # get get not shipping 4
-                    getnotship4full = form.notshipping41.data
-                    getnotship4 = getnotship4full.value
-
+                    if form.notshipping41.data:
+                        getnotship4full = form.notshipping41.data
+                        getnotship4 = getnotship4full.value
+                    else:
+                        getnotship4 = 0
+                        
                     # get get not shipping 5
-                    getnotship5full = form.notshipping51.data
-                    getnotship5 = getnotship5full.value
+                    if form.notshipping51.data:
+                        getnotship5full = form.notshipping51.data
+                        getnotship5 = getnotship5full.value
+                    else:
+                        getnotship5 = 0
 
                     # get get not shipping 6
-                    getnotship6full = form.notshipping61.data
-                    getnotship6 = getnotship6full.value
-
+                    if form.notshipping61.data:
+                        getnotship6full = form.notshipping61.data
+                        getnotship6 = getnotship6full.value
+                    else:
+                        getnotship6 = 0
+                        
                     # get shippindayleast 0
-                    getshipdayleastfull0 = form.shippingdayleast01.data
-                    getshipdayleast0 = getshipdayleastfull0.value
+                    if form.shippingdayleast01.data:
+                        getshipdayleastfull0 = form.shippingdayleast01.data
+                        getshipdayleast0 = getshipdayleastfull0.value
+                    else:
+                        getshipdayleast0 = 0
 
                     # get shipping day most 0
-                    getshippingdaymostfull0 = form.shippingdaymost01.data
-                    getshippingdaymost0 = getshippingdaymostfull0.value
+                    if form.shippingdaymost01.data:
+                        getshippingdaymostfull0 = form.shippingdaymost01.data
+                        getshippingdaymost0 = getshippingdaymostfull0.value
+                    else:
+                        getshippingdaymost0 = 0
 
                     # get shippindayleast 2
-                    getshipdayleastfull2 = form.shippingdayleast21.data
-                    getshipdayleast2 = getshipdayleastfull2.value
+                    if form.shippingdayleast21.data:
+                        getshipdayleastfull2 = form.shippingdayleast21.data
+                        getshipdayleast2 = getshipdayleastfull2.value
+                    else:
+                        getshipdayleast2 = 0
 
                     # get shipping day most 2
-                    getshippingdaymostfull2 = form.shippingdaymost21.data
-                    getshippingdaymost2 = getshippingdaymostfull2.value
+                    if form.shippingdaymost21.data:
+                        getshippingdaymostfull2 = form.shippingdaymost21.data
+                        getshippingdaymost2 = getshippingdaymostfull2.value
+                    else:
+                        getshippingdaymost2 = 0
 
                     # get shippindayleast 3
-                    getshipdayleastfull3 = form.shippingdayleast31.data
-                    getshipdayleast3 = getshipdayleastfull3.value
+                    if form.shippingdayleast31.data:
+                        getshipdayleastfull3 = form.shippingdayleast31.data
+                        getshipdayleast3 = getshipdayleastfull3.value
+                    else:
+                        getshipdayleast3 = 0
 
                     # get shipping day most 3
-                    getshippingdaymostfull3 = form.shippingdaymost31.data
-                    getshippingdaymost3 = getshippingdaymostfull3.value
+                    if form.shippingdaymost31.data:
+                        getshippingdaymostfull3 = form.shippingdaymost31.data
+                        getshippingdaymost3 = getshippingdaymostfull3.value
+                    else:
+                        getshippingdaymost3 = 0
 
                     # Form data
-                    item.categoryname0 = categoryname0,
-                    item.categoryid0 = cat0,
-                    item.shippingtwo = shippingtwo,
-                    item.shippingthree = shippingthree,
-                    item.digital_currency1 = 0,
-                    item.digital_currency2 = 0,
-                    item.digital_currency3 = digital_currency3,
-                    item.origincountry = origincountry,
-                    item.destinationcountry = getdest1,
-                    item.destinationcountrytwo = getdest2,
-                    item.destinationcountrythree = getdest3,
-                    item.destinationcountryfour = getdest4,
-                    item.destinationcountryfive = getdest5,
-                    item.itemcondition = itemcondition,
-                    item.itemtitlee = form.itemtitlee.data,
-                    item.itemcount = itemcount,
-                    item.itemdescription = form.itemdescription.data,
-                    item.itemrefundpolicy = form.itemrefundpolicy.data,
-                    item.price = form.pricee.data,
-                    item.currency = cur,
-                    item.keywords = form.keywords.data,
-                    item.return_allowed = form.return_this_item.data,
-                    item.shippingfree = form.shippingfree.data,
-                    item.shippinginfo0 = form.shippinginfo0.data,
-                    item.shippingdayleast0 = getshipdayleast0,
-                    item.shippingdaymost0 = getshippingdaymost0,
-                    item.shippinginfo2 = form.shippinginfo2.data,
-                    item.shippingprice2 = form.shippingprice2.data,
-                    item.shippingdayleast2 = getshipdayleast2,
-                    item.shippingdaymost2 = getshippingdaymost2,
-                    item.shippinginfo3 = form.shippinginfo3.data,
-                    item.shippingprice3 = form.shippingprice3.data,
-                    item.shippingdayleast3 = getshipdayleast3,
-                    item.shippingdaymost3 = getshippingdaymost3,
-                    item.notshipping1 = getnotship1,
-                    item.notshipping2 = getnotship2,
-                    item.notshipping3 = getnotship3,
-                    item.notshipping4 = getnotship4,
-                    item.notshipping5 = getnotship5,
-                    item.notshipping6 = getnotship6,
-                    item.details1 = form.details1.data,
-                    item.details1answer = form.details1answer.data,
-                    item.details2 = form.details2.data,
-                    item.details2answer = form.details2answer.data,
-                    item.details3 = form.details3.data,
-                    item.details3answer = form.details3answer.data,
-                    item.details4 = form.details4.data,
-                    item.details4answer = form.details4answer.data,
-                    item.details5 = form.details5.data,
-                    item.details5answer = form.details5answer.data,
-
-                    if form.details.data is False:
-                        item.details = 0
-                    else:
-                        item.details = 1
-
-                    if form.shippingfree.data is False:
-                        item.shippingfree = 0
-                    else:
-                        item.shippingfree = 1
-
-                    if form.return_this_item.data is True:
-                        item.return_allowed = 1
-                    else:
-                        item.return_allowed = 0
+                    item.categoryname0 = categoryname0
+                    item.categoryid0 = cat0
+                    item.digital_currency1 = 0
+                    item.digital_currency2 = 0
+                    item.digital_currency3 = digital_currency3
+                    item.origincountry = origincountry
+                    item.destinationcountry = getdest1
+                    item.destinationcountrytwo = getdest2
+                    item.destinationcountrythree = getdest3
+                    item.destinationcountryfour = getdest4
+                    item.destinationcountryfive = getdest5
+                    item.itemcondition = itemcondition
+                    item.itemtitlee = form.itemtitlee.data
+                    item.itemcount = itemcount
+                    item.itemdescription = form.itemdescription.data
+                    item.itemrefundpolicy = form.itemrefundpolicy.data
+                    item.price = form.pricee.data
+                    item.currency = cur
+                    item.keywords = form.keywords.data
+                    item.return_allowed = return_allowed
+                    item.shippingfree = form.shippingfree.data
+                    item.shippingtwo = shippingtwo
+                    item.shippingthree = shippingthree
+                    item.shippinginfo0 = form.shippinginfo0.data
+                    item.shippingdayleast0 = getshipdayleast0
+                    item.shippingdaymost0 = getshippingdaymost0
+                    item.shippinginfo2 = form.shippinginfo2.data
+                    item.shippingprice2 = form.shippingprice2.data
+                    item.shippingdayleast2 = getshipdayleast2
+                    item.shippingdaymost2 = getshippingdaymost2
+                    item.shippinginfo3 = form.shippinginfo3.data
+                    item.shippingprice3 = form.shippingprice3.data
+                    item.shippingdayleast3 = getshipdayleast3
+                    item.shippingdaymost3 = getshippingdaymost3
+                    item.notshipping1 = getnotship1
+                    item.notshipping2 = getnotship2
+                    item.notshipping3 = getnotship3
+                    item.notshipping4 = getnotship4
+                    item.notshipping5 = getnotship5
+                    item.notshipping6 = getnotship6
+                    item.details1 = form.details.data
+                    item.details1answer = form.details1answer.data
+                    item.details2 = form.details2.data
+                    item.details2answer = form.details2answer.data
+                    item.details3 = form.details3.data
+                    item.details3answer = form.details3answer.data
+                    item.details4 = form.details4.data
+                    item.details4answer = form.details4answer.data
+                    item.details5 = form.details5.data
+                    item.details5answer = form.details5answer.data
 
                     db.session.add(item)
                     db.session.commit()
 
-                    flash(f"Updated: Item #{str(item.id)}",
-                          category="success")
+                    flash(f"Updated: Item #{str(item.id)}", category="success")
                     return redirect(url_for('vendorcreate.itemsforSale'))
 
             return render_template('/vendor/itemsforsale/edititem.html',
@@ -915,7 +1042,6 @@ def edititem(id):
 @vendorcreate.route('/deletevendoritem/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def deleteItem(id):
     """
@@ -923,174 +1049,97 @@ def deleteItem(id):
     :param id:
     :return:
     """
-    ext_1 = '_225x'
-    ext_2 = '_500x'
+    ext_1 = '_225x.jpg'
+    ext_2 = '_500x.jpg'
+    file_extension1 = '.jpg'
     item = marketItem.query.get(id)
     if item:
         if item.vendor_id == current_user.id:
-            try:
-                specific_folder = str(item.id)
-                getitemlocation = itemlocation(x=item.id)
-                link = 'item'
+            # gets the node for the folder
+            getitemlocation = itemlocation(x=item.id)
+            # Gets items folder id on server
+            specific_folder = str(item.id)
 
-                pathtofile1 = os.path.join(
-                    UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imageone)
-                pathtofile2 = os.path.join(
-                    UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagetwo)
-                pathtofile3 = os.path.join(
-                    UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagethree)
-                pathtofile4 = os.path.join(
-                    UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagefour)
-                pathtofile5 = os.path.join(
-                    UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagefive)
+            # returns path of the folder minus extension at end
+            pathtofile1 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imageone)
+            pathtofile2 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagetwo)
+            pathtofile3 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagethree)
+            pathtofile4 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagefour)
+            pathtofile5 = os.path.join(UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, item.imagefive)
 
+            if len(item.imageone) > 10:
+                file00 = pathtofile1 + file_extension1
+                file01 = pathtofile1 + ext_1
+                file02 = pathtofile1 + ext_2
                 try:
-                    pathtofile1, file_extension1 = os.path.splitext(
-                        pathtofile1)
-                except:
-                    pass
-
-                try:
-                    pathtofile2, file_extension2 = os.path.splitext(
-                        pathtofile2)
-                except:
-                    pass
-
-                try:
-                    pathtofile3, file_extension3 = os.path.splitext(
-                        pathtofile3)
+                    os.remove(file00)
                 except:
                     pass
                 try:
-                    pathtofile4, file_extension4 = os.path.splitext(
-                        pathtofile4)
+                    os.remove(file01)
+                    os.remove(file02)
                 except:
                     pass
-
+   
+            if len(item.imagetwo) > 10:
+                file10 = pathtofile2 + file_extension1
+                file11 = pathtofile2 + ext_1
+                file12 = pathtofile2 + ext_2
                 try:
-                    pathtofile5, file_extension5 = os.path.splitext(
-                        pathtofile5)
+                    os.remove(file10)
                 except:
                     pass
-
                 try:
-                    delete_file_one = str(pathtofile1 + file_extension1)
-                    delete_file_one_ext1 = str(
-                        pathtofile1 + ext_1 + file_extension1)
-                    delete_file_one_ext2 = str(
-                        pathtofile1 + ext_2 + file_extension1)
+                    os.remove(file11)
+                    os.remove(file12)
                 except:
                     pass
 
+            if len(item.imagethree) > 10:
+                file20 = pathtofile3 + file_extension1
+                file21 = pathtofile3 + ext_1
+                file22 = pathtofile3 + ext_2
                 try:
-                    delete_file_two = str(pathtofile2 + file_extension2)
-                    delete_file_two_ext1 = str(
-                        pathtofile2 + ext_1 + file_extension2)
-                    delete_file_two_ext2 = str(
-                        pathtofile2 + ext_2 + file_extension2)
+                    os.remove(file20)
                 except:
                     pass
-
                 try:
-                    delete_file_three = str(pathtofile3 + file_extension3)
-                    delete_file_three_ext1 = str(
-                        pathtofile3 + ext_1 + file_extension3)
-                    delete_file_three_ext2 = str(
-                        pathtofile3 + ext_2 + file_extension3)
+                    os.remove(file21)
+                    os.remove(file22)
                 except:
                     pass
-
+     
+            if len(item.imagefour) > 10:
+                file30 = pathtofile4 + file_extension1
+                file31 = pathtofile4 + ext_1
+                file32 = pathtofile4 + ext_2
                 try:
-                    delete_file_four = str(pathtofile4 + file_extension4)
-                    delete_file_four_ext1 = str(
-                        pathtofile4 + ext_1 + file_extension4)
-                    delete_file_four_ext2 = str(
-                        pathtofile4 + ext_2 + file_extension4)
+                    os.remove(file30)
                 except:
                     pass
-
                 try:
-                    delete_file_five = str(pathtofile5 + file_extension5)
-                    delete_file_five_ext1 = str(
-                        pathtofile5 + ext_1 + file_extension5)
-                    delete_file_five_ext2 = str(
-                        pathtofile5 + ext_2 + file_extension5)
+                    os.remove(file31)
+                    os.remove(file32)
+                except:
+                    pass
+   
+            if len(item.imagefive) > 10:
+                file40 = pathtofile5 + file_extension1
+                file41 = pathtofile5 + ext_1
+                file42 = pathtofile5 + ext_2
+                try:
+                    os.remove(file40)
+                except:
+                    pass
+                try:
+                    os.remove(file41)
+                    os.remove(file42)
                 except:
                     pass
 
-                item_one_image = item.imageone
-                if len(item_one_image) > 10:
-                    try:
-                        os.remove(delete_file_one)
-                    except:
-                        pass
-                    try:
-                        os.remove(delete_file_one_ext1)
-                        os.remove(delete_file_one_ext2)
-                    except:
-                        pass
+            db.session.delete(item)
+            db.session.commit()
 
-                else:
-                    pass
-                item_two_image = item.imagetwo
-                if len(item_two_image) > 10:
-                    try:
-                        os.remove(delete_file_two)
-                    except:
-                        pass
-                    try:
-                        os.remove(delete_file_two_ext1)
-                        os.remove(delete_file_two_ext2)
-                    except:
-                        pass
-
-                else:
-                    pass
-                item_three_image = item.imagethree
-                if len(item_three_image) > 10:
-                    try:
-                        os.remove(delete_file_three)
-                    except:
-                        pass
-                    try:
-                        os.remove(delete_file_three_ext1)
-                        os.remove(delete_file_three_ext2)
-                    except:
-                        pass
-
-                else:
-                    pass
-                item_four_image = item.imagefour
-                if len(item_four_image) > 10:
-                    try:
-                        os.remove(delete_file_four)
-                    except:
-                        pass
-                    try:
-                        os.remove(delete_file_four_ext1)
-                        os.remove(delete_file_four_ext2)
-                    except:
-                        pass
-                else:
-                    pass
-                item_five_image = item.imagefive
-                if len(item_five_image) > 10:
-                    try:
-                        os.remove(delete_file_five)
-                    except:
-                        pass
-                    try:
-                        os.remove(delete_file_five_ext1)
-                        os.remove(delete_file_five_ext2)
-                    except:
-                        pass
-                else:
-                    pass
-
-                db.session.delete(item)
-                db.session.commit()
-            except:
-                return redirect(url_for('vendorcreate.itemsforSale', username=current_user.username))
         else:
             return redirect(url_for('vendorcreate.itemsforSale', username=current_user.username))
         return redirect(url_for('vendorcreate.itemsforSale', username=current_user.username))
@@ -1204,25 +1253,27 @@ def cloneitem(id):
 
                     # IMAGES
                     # Make New image folder
+                    # get location of node
                     getitemlocation = itemlocation(x=item.id)
-                    listingdir = '/' + getitemlocation + \
-                        '/' + str(item.id) + '/'
+                    # get directory of item to be closed
+                    listingdir = '/' + getitemlocation + '/' + str(item.id) + '/'
+                    # make the directory
                     mkdir_p(path=UPLOADED_FILES_DEST_ITEM + listingdir)
                     # get old directory path
-                    oldirectory = UPLOADED_FILES_DEST_ITEM + "/" + \
-                        getitemlocation + '/' + str(vendoritem.id) + '/'
+                    oldirectory = UPLOADED_FILES_DEST_ITEM + '/' + getitemlocation + '/' + str(vendoritem.id) + '/'
                     # new directory path
-                    newdirectory = UPLOADED_FILES_DEST + listingdir
-                    # lopp over the files and copy them
+                    newdirectory = UPLOADED_FILES_DEST_ITEM + listingdir
+                    # loop over the files and copy them
                     for file_name in os.listdir(oldirectory):
                         full_file_name = os.path.join(oldirectory, file_name)
                         if os.path.isfile(full_file_name):
                             shutil.copy(full_file_name, newdirectory)
+                            
                     # query the newly added item, and change the id's accordingly
                     item.stringauctionid = '/' + str(item.id) + '/'
-
-                    getitemlocation = itemlocation(x=item.id)
                     item.stringnodeid = getitemlocation
+                    
+                    # commit to db
                     db.session.add(item)
                     db.session.commit()
 
@@ -1246,7 +1297,6 @@ def cloneitem(id):
 @vendorcreate.route('/need-a-vacation/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vacation():
     """
@@ -1287,7 +1337,6 @@ def vacation():
 @vendorcreate.route('/deletepicture/<int:id>/<string:img>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def deleteimg(id, img):
     """
@@ -1296,115 +1345,83 @@ def deleteimg(id, img):
     :param img:
     :return:
     """
-    try:
-        vendoritem = db.session\
-            .query(marketItem)\
-            .filter_by(id=id)\
-            .first()
-        if vendoritem:
-            if vendoritem.vendor_id == current_user.id:
-                try:
-                    specific_folder = str(vendoritem.id)
 
-                    link = 'item'
-                    pathtofile = os.path.join(
-                        UPLOADED_FILES_DEST, link, specific_folder, img)
-                    pathtofile, file_extension = os.path.splitext(pathtofile)
+    item = db.session\
+        .query(marketItem)\
+        .filter_by(id=id)\
+        .first()
+    if item:
+        if item.vendor_id == current_user.id:
+            # get folder for item id
+            specific_folder = str(item.id)
+            # get node location
+            getitemlocation = itemlocation(x=item.id)
+            # get path of item on folder
+            pathtofile = os.path.join(
+                UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, img)
 
-                    ext_1 = '_225x'
-                    ext_2 = '_500x'
+            ext_1 = '_225x.jpg'
+            ext_2 = '_500x.jpg'
+            file0 = pathtofile + ".jpg"
+            file1 = pathtofile + ext_1
+            file2 = pathtofile + ext_2
 
-                    file0 = os.path.join(pathtofile, ".", file_extension)
-                    file1 = os.path.join(
-                        pathtofile, ext_1, ".", file_extension)
-                    file2 = os.path.join(
-                        pathtofile, ext_2, ".", file_extension)
-                    if len(img) > 20:
-                        x1 = vendoritem.imageone
-                        x2 = vendoritem.imagetwo
-                        x3 = vendoritem.imagethree
-                        x4 = vendoritem.imagefour
-                        x5 = vendoritem.imagefive
+            if len(img) > 20:
 
-                        if x1 == img:
-                            vendoritem.imageone = '0'
-                            db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
+                if item.imageone == img:
 
-                        elif x2 == img:
-                            vendoritem.imagetwo = '0'
-                            db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
-
-                        elif x3 == img:
-                            vendoritem.imagethree = '0'
-                            db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
-
-                        elif x4 == img:
-                            vendoritem.imagefour = '0'
-                            db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
-
-                        elif x5 == img:
-                            vendoritem.imagefive = '0'
-                            db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
-
-                        else:
-                            redirect(
-                                (request.args.get('next', request.referrer)))
-                        db.session.commit()
-                    redirect((request.args.get('next', request.referrer)))
-                except Exception:
-                    redirect((request.args.get('next', request.referrer)))
+                    os.remove(file0)
+                    os.remove(file1)
+                    os.remove(file2)
+                    item.imageone = '0'
+                    db.session.add(item)
+                    db.session.commit()
+                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                elif item.imagetwo == img:
+                    os.remove(file0)
+                    os.remove(file1)
+                    os.remove(file2)
+                    item.imagetwo = '0'
+                    db.session.add(item)
+                    db.session.commit()
+                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                elif xitem.imagethree3 == img:
+                    os.remove(file0)
+                    os.remove(file1)
+                    os.remove(file2)
+                    item.imagethree = '0'
+                    db.session.add(item)
+                    db.session.commit()
+                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                elif item.imagefour == img:
+                    os.remove(file0)
+                    os.remove(file1)
+                    os.remove(file2)
+                    item.imagefour = '0'
+                    db.session.add(item)
+                    db.session.commit()
+                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                elif item.imagefive == img:
+                    os.remove(file0)
+                    os.remove(file1)
+                    os.remove(file2)
+                    item.imagefive = '0'
+                    db.session.add(item)
+                    db.session.commit()
+                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                else:
+                    flash("No Matching Images", category="danger")
+                    return redirect(url_for('vendorcreate.edititem', id=item.id))
             else:
-                redirect((request.args.get('next', request.referrer)))
+                print("down 1")
+                flash("Incorrect Image Size", category="danger")
+                return redirect(url_for('vendorcreate.edititem', id=item.id))
         else:
-            flash("Error", category="danger")
-            return redirect(url_for('index'))
-    except:
-        redirect((request.args.get('next', request.referrer)))
+            flash("Incorrect user.", category="danger")
+            return redirect(url_for('vendorcreate.edititem', id=item.id))
+    else:
+        flash("Error", category="danger")
+        return redirect(url_for('vendorcreate.edititem', id=item.id))
 
 
 def deleteimg_noredirect(id, img):
@@ -1413,95 +1430,63 @@ def deleteimg_noredirect(id, img):
         if vendoritem:
             if vendoritem.vendor_id == current_user.id:
                 try:
-                    specific_folder = str(vendoritem.id)
-                    link = 'listing'
+                    # get folder for item id
+                    specific_folder = str(item.id)
+                    # get node location
+                    getitemlocation = itemlocation(x=item.id)
+                    # get path of item on folder
                     pathtofile = os.path.join(
-                        UPLOADED_FILES_DEST, link, specific_folder, img)
-                    pathtofile, file_extension = os.path.splitext(pathtofile)
-                    ext_1 = '_225x'
-                    ext_2 = '_500x'
-                    file0 = os.path.join(pathtofile, ".", file_extension)
-                    file1 = os.path.join(
-                        pathtofile + ext_1, ".", file_extension)
-                    file2 = os.path.join(
-                        pathtofile + ext_2, ".", file_extension)
+                        UPLOADED_FILES_DEST_ITEM, getitemlocation, specific_folder, img)
+
+                    ext_1 = '_225x.jpg'
+                    ext_2 = '_500x.jpg'
+                    file0 = pathtofile + ".jpg"
+                    file1 = pathtofile + ext_1
+                    file2 = pathtofile + ext_2
 
                     if len(img) > 20:
-                        x1 = vendoritem.imageone
-                        x2 = vendoritem.imagetwo
-                        x3 = vendoritem.imagethree
-                        x4 = vendoritem.imagefour
-                        x5 = vendoritem.imagefive
-
-                        if x1 == img:
+                        if vendoritem.imageone == img:
                             vendoritem.imageone = '0'
                             db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                            except Exception:
-                                pass
-
-                        elif x2 == img:
+                            os.remove(file0)
+                            os.remove(file1)
+                            db.session.commit()
+                        elif vendoritem.imagetwo == img:
                             vendoritem.imagetwo = '0'
                             db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                            except Exception:
-                                pass
-
-                        elif x3 == img:
+                            os.remove(file0)
+                            os.remove(file1)
+                            db.session.commit()
+                        elif vendoritem.imagethree == img:
                             vendoritem.imagethree = '0'
                             db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
-
-                        elif x4 == img:
+                            os.remove(file0)
+                            os.remove(file1)
+                            os.remove(file2)
+                            db.session.commit()
+                        elif vendoritem.imagefour == img:
                             vendoritem.imagefour = '0'
                             db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
-
-                        elif x5 == img:
+                            os.remove(file0)
+                            os.remove(file1)
+                            os.remove(file2)
+                            db.session.commit()
+                        elif vendoritem.imagefive == img:
                             vendoritem.imagefive = '0'
                             db.session.add(vendoritem)
-                            try:
-                                os.remove(file0)
-                            except Exception:
-                                pass
-                            try:
-                                os.remove(file1)
-                                os.remove(file2)
-                            except Exception:
-                                pass
-
+                            os.remove(file0)
+                            os.remove(file1)
+                            os.remove(file2)
+                            db.session.commit()
                         else:
                             pass
-                        db.session.commit()
+                    else:
+                        pass
                 except Exception:
                     flash("Error", category="danger")
                     return redirect(url_for('index'))
+            else:
+                pass
         else:
             flash("Error", category="danger")
             return redirect(url_for('index'))

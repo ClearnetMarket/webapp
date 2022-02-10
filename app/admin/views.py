@@ -80,7 +80,7 @@ from app.common.decorators import \
 
 @admin.route('/', methods=['GET', 'POST'])
 @website_offline
-@ping_user
+
 @login_required
 @ADMINaccount_required
 @ADMINaccountlevel3_required
@@ -446,7 +446,7 @@ def addAchievement():
 @admin.route('/dispute/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
+
 @ADMINaccount_required
 @ADMINaccountlevel3_required
 def dispute(id):
@@ -922,7 +922,7 @@ def dispute(id):
 
 
 @admin.route('/msg/<int:id>', methods=['GET', 'POST'])
-@ping_user
+
 @website_offline
 @login_required
 @ADMINaccount_required
@@ -1191,7 +1191,7 @@ def removeflags(id):
 @admin.route('/deletevendoritem/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
+
 @ADMINaccount_required
 @ADMINaccountlevel3_required
 def deleteItem(id):

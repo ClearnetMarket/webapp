@@ -48,7 +48,6 @@ from app import UPLOADED_FILES_DEST
 
 @item.route('/<int:id>', methods=['GET', 'POST'])
 @website_offline
-@ping_user
 def itemforsale(id):
     now = datetime.utcnow()
     preview = 0
@@ -464,7 +463,6 @@ def itemforsale(id):
 @item.route('/deletepicture/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def deletecartitem(id):
     try:
         user = db.session.query(User).filter_by(
@@ -486,7 +484,6 @@ def deletecartitem(id):
 @item.route('/saveforlater/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def savecartitem(id):
     try:
         user = db.session\
@@ -511,7 +508,6 @@ def savecartitem(id):
 @item.route('/create-shipping/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def createshipping(id):
     try:
         user = db.session\
@@ -535,7 +531,6 @@ def createshipping(id):
 
 @item.route('/preview/<int:id>', methods=['GET', 'POST'])
 @website_offline
-@ping_user
 @login_required
 def previewItem(id):
     now = datetime.utcnow()
@@ -650,7 +645,6 @@ def previewItem(id):
 @item.route('/cart/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def buyitagain(id):
     try:
         # get the item

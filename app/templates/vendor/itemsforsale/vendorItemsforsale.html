@@ -71,15 +71,15 @@
 
             <td class=" hidden-xs col-sm-2 linkcolor">
                 {% if item.imageone == '0' %}
-                <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" width="125px"
-                    height="125px" />
+                <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}"
+                 width="125px"  height="125px" />
                 {% elif item.imageone == 0 %}
-                <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" width="125px"
-                    height="125px" />
+                <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" 
+                width="125px" height="125px" />
 
                 {% else %}
                 <img
-                    src="{{ url_for('userdata.media_file', filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg"))}}">
+                    src="{{ url_for('userdata.media_file', filename=(item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg"))}}">
                 {% endif %}
             </td>
             <td class="col-3 linkcolor">

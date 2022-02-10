@@ -87,7 +87,6 @@ def customerserviceHome():
 @service.route('/feedback', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def feedback():
     form = Feedback(request.form)
     user = db.session\
@@ -268,7 +267,6 @@ def helpwithitem(id):
 @service.route('/redirect/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def find_item(id):
     """
     This routes the order for the admin
@@ -285,7 +283,6 @@ def find_item(id):
 @service.route('/messagecustomerservice', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def customerserviceMessage():
     """
     The home screen for submitting a ticket for support

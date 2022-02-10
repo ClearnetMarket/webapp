@@ -14,7 +14,7 @@
             <div class="col-12" style="height:275px;">
                 <a href="{{ url_for('item.itemforsale', id=item.id) }}">
                     <img src="{{ url_for('userdata.media_file',
-                        filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg")) }}"
+                        filename=( item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg")) }}"
                          class="relevantlisting">
                 </a>
             </div>

@@ -27,7 +27,6 @@ from app.common.decorators import login_required, ping_user
 
 @message.route('/messagecenter', methods=['GET', 'POST'])
 @login_required
-@ping_user
 def messagecenter():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
@@ -127,7 +126,6 @@ def messagecenter():
 
 @message.route('/messagecenter-disputes', methods=['GET', 'POST'])
 @login_required
-@ping_user
 def messagecenter_disputes():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
@@ -232,7 +230,6 @@ def messagecenter_disputes():
 
 @message.route('/messagecenterold', methods=['GET', 'POST'])
 @login_required
-@ping_user
 def messagecenter_oldmsgs():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
@@ -554,7 +551,6 @@ def messagecenter_Sent():
 
 @message.route('/messagecenter-compose', methods=['GET', 'POST'])
 @login_required
-@ping_user
 def messagecenter_Compose():
     now = datetime.utcnow()
     form = sendmessageForm(request.form)
@@ -675,7 +671,6 @@ def messagecenter_Compose():
 
 @message.route('/messagecenter-compose-specific/<person>/', methods=['GET', 'POST'])
 @login_required
-@ping_user
 def messagecenter_Compose_specificperson(person):
     now = datetime.utcnow()
     if current_user.admin > 0:
@@ -788,7 +783,6 @@ def messagecenter_Compose_specificperson(person):
 
 @message.route('/messagecenter-compose-specific-admin/<person>/', methods=['GET', 'POST'])
 @login_required
-@ping_user
 def messagecenter_Compose_specificperson_admin(person):
     now = datetime.utcnow()
 

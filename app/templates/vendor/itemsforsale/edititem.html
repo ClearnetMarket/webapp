@@ -2,372 +2,23 @@
 {% block content %}
 
 
-<ol class="breadcrumb linkcolor">
-    <li><a href="{{ url_for('index') }}">Home</a></li>
-    <li><a href="{{ url_for('vendorcreate.itemsforSale') }}">My Items</a></li>
-</ol>
+<nav aria-label="breadcrumb" class="linkcolor">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('vendorcreate.itemsforSale') }}">My Items</a></li>
+    </ol>
+</nav>
 
-<div class="row" style="width: 500px; margin: auto">
-    <!--Item title -->
-    <div id="form_error">
-        {% if form.itemtitlee.errors %}
-        {% for error in form.itemtitlee.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Item Title: {{ error }}
+    {% for field, errors in form.errors.items() %}
+    <div class="row">
+        <div class="col-6 offset-3">
+            {{ ', '.join(errors) }}
         </div>
-        {% endfor %}
-        {% endif %}
     </div>
-    <!--itemcondition -->
-    <div id="form_error">
-        {% if form.itemcondition_edit.errors %}
-        {% for error in form.itemcondition_edit.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Item Condition: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--itemrefundpolicy -->
-    <div id="form_error">
-        {% if form.itemrefundpolicy.errors %}
-        {% for error in form.itemrefundpolicy.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Refund Policy: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--price -->
-    <div id="form_error">
-        {% if form.pricee.errors %}
-        {% for error in form.pricee.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Price: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--itemcount -->
-    <div id="form_error">
-        {% if form.itemcount_edit.errors %}
-        {% for error in form.itemcount_edit.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Item Count: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--itemdescription -->
-    <div id="form_error">
-        {% if form.itemdescription.errors %}
-        {% for error in form.itemdescription.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Item Description: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--imageone -->
-    <div id="form_error">
-        {% if form.imageone1.errors %}
-        {% for error in form.imageone1.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Image One: {{ error }} Only 'png', 'jpeg', 'jpg', 'png', 'gif' extensions allowed. Images below 1920x1080
-            only.
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--imagetwo -->
-    <div id="form_error">
-        {% if form.imagetwo.errors %}
-        {% for error in form.imagetwo.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Image Two: {{ error }} Only 'png', 'jpeg', 'jpg', 'png', 'gif' extensions allowed. Images below 1920x1080
-            only.
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--imagethree -->
-    <div id="form_error">
-        {% if form.imagethree.errors %}
-        {% for error in form.imagethree.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Image Three: {{ error }} Only 'png', 'jpeg', 'jpg', 'png', 'gif' extensions allowed. Images below 1920x1080
-            only.
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--imagefour -->
-    <div id="form_error">
-        {% if form.imagefour.errors %}
-        {% for error in form.imagefour.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Image Four: {{ error }} Only 'png', 'jpeg', 'jpg', 'png', 'gif' extensions allowed. Images below 1920x1080
-            only.
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--imagefive -->
-    <div id="form_error">
-        {% if form.imagefive.errors %}
-        {% for error in form.imagefive.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Image Five: {{ error }} Only 'png', 'jpeg', 'jpg', 'png', 'gif' extensions allowed. Images below 1920x1080
-            only.
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--keywords -->
-    <div id="form_error">
-        {% if form.keywords.errors %}
-        {% for error in form.keywords.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Keywords: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!-- destination 1 -->
-    <div id="form_error">
-        {% if form.destination11.errors %}
-        {% for error in form.destination11.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Destination 1: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!-- destination 2 -->
-    <div id="form_error">
-        {% if form.destination21.errors %}
-        {% for error in form.destination21.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Destination 2: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--shippinginfo -->
-    <div id="form_error">
-        {% if form.shippinginfo0.errors %}
-        {% for error in form.shippinginfo0.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Shipping Info 1: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--shippinginfo 2 -->
-    <div id="form_error">
-        {% if form.shippinginfo2.errors %}
-        {% for error in form.shippinginfo2.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Shipping Info 2: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--shippinginfo 3 -->
-    <div id="form_error">
-        {% if form.shippinginfo3.errors %}
-        {% for error in form.shippinginfo3.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Shipping Info 2: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--shippingprice 3 -->
-    <div id="form_error">
-        {% if form.shippingprice3.errors %}
-        {% for error in form.shippingprice3.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Shipping Price 3: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--shippingprice 2 -->
-    <div id="form_error">
-        {% if form.shippingprice2.errors %}
-        {% for error in form.shippingprice2.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Shipping Price 2: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details 1 -->
-    <div id="form_error">
-        {% if form.details1.errors %}
-        {% for error in form.details.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 1: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details 1 answer -->
-    <div id="form_error">
-        {% if form.details1answer.errors %}
-        {% for error in form.details1answer.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 1 Answer: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details 2 -->
-    <div id="form_error">
-        {% if form.details2.errors %}
-        {% for error in form.details2.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 2: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details 2 answer -->
-    <div id="form_error">
-        {% if form.details2answer.errors %}
-        {% for error in form.details2answer.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 2 Answer: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details 3 -->
-    <div id="form_error">
-        {% if form.details3.errors %}
-        {% for error in form.details3.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 3: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details3 answer -->
-    <div id="form_error">
-        {% if form.details3answer.errors %}
-        {% for error in form.details3answer.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 3 Answer: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details 4 -->
-    <div id="form_error">
-        {% if form.details4.errors %}
-        {% for error in form.details4.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 4: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details4 answer -->
-    <div id="form_error">
-        {% if form.details4answer.errors %}
-        {% for error in form.details4answer.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 4 Answer: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <!--details 5 -->
-    <div id="form_error">
-        {% if form.details5.errors %}
-        {% for error in form.details5.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 5: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-
-    </div>
-    <!--details5 answer -->
-    <div id="form_error">
-        {% if form.details5answer.errors %}
-        {% for error in form.details5answer.errors %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-            Details 5 Answer: {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-
-</div>
+    {% endfor %}
 
 <form method="post" enctype="multipart/form-data" class="form-horizontal">
     {{ form.csrf_token }}
-
 
     <div class="row text-center mb-1" style="max-width: 1000px; ">
         <div class="row">
@@ -393,7 +44,15 @@
             <div class="col-6">
                 The price of the item in your local currency
             </div>
+            <div id="col-12">
+                {% if form.pricee.errors %}
+                    {% for error in form.pricee.errors %}
+                            {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
+   
 
         <div class="row w-100 mb-1">
             <div class="col-2 control-label">Currency</div>
@@ -402,6 +61,13 @@
             </div>
             <div class="col-6">
                 The currency you are selling this item in.
+            </div>
+            <div id="col-12">
+                {% if form.currency1.errors %}
+                    {% for error in form.currency1.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
 
@@ -413,6 +79,13 @@
             <div class="col-6">
                 How many items you are selling
             </div>
+            <div id="col-12">
+                {% if form.itemcount_edit.errors %}
+                    {% for error in form.itemcount_edit.errors %}
+                            {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
 
         <div class="row w-100 mb-1">
@@ -422,6 +95,13 @@
             </div>
             <div class="col-6">
             </div>
+            <div id="col-12">
+                {% if form.btc_accepted.errors %}
+                    {% for error in form.btc_accepted.errors %}
+                            {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
 
         <div class="row w-100 mb-1">
@@ -430,6 +110,13 @@
                 {{ render_field(form.btc_cash_accepted, type="checkbox") }}
             </div>
             <div class="col-6">
+            </div>
+            <div id="col-12">
+                {% if form.btc_cash_accepted.errors %}
+                    {% for error in form.btc_cash_accepted.errors %}
+                            {{ error }}
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>
@@ -450,6 +137,13 @@
             <div class="col-6">
                 The title is the headline for your listing
             </div>
+            <div id="col-12">
+                {% if form.itemtitlee.errors %}
+                    {% for error in form.itemtitlee.errors %}
+                            {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
 
         <div class="row w-100 mb-1">
@@ -459,6 +153,13 @@
             </div>
             <div class="col-6">
                 The category of your item. Used for searches, and finding your item.
+            </div>
+            <div id="col-12">
+                {% if form.category_edit.errors %}
+                    {% for error in form.category_edit.errors %}
+                            {{ error }}
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
 
@@ -470,6 +171,13 @@
             <div class="col-6">
                 The condition of your item
             </div>
+            <div id="col-12">
+                {% if form.itemcondition_edit.errors %}
+                    {% for error in form.itemcondition_edit.errors %}
+                            {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -480,18 +188,18 @@
         </div>
         <div class="row w-100 mb-1">
             {% if form.itemdescription.errors %}
-            <div class="col-6 has-error">
-                {% for error in form.itemdescription.errors %}
-                {{ render_field(form.itemdescription, rows=7, cols=45, class="form-control" )}}
-                {% endfor %}
-            </div>
+                <div class="col-6 has-error">
+                    {% for error in form.itemdescription.errors %}
+                        {{ render_field(form.itemdescription, rows=7, cols=45, class="form-control border-danger" )}}
+                    {% endfor %}
+                </div>
             {% else %}
-            <div class="col-8">
-                {{ render_field(form.itemdescription, rows=7, cols=45,class="form-control" )}}
-            </div>
-            <div class="col-2">
-                The item description is required. HTML Markup is allowed. Linking of images is allowed.
-            </div>
+                <div class="col-8">
+                    {{ render_field(form.itemdescription, rows=7, cols=45,class="form-control" )}}
+                </div>
+                <div class="col-2">
+                    The item description is required. HTML Markup is allowed. Linking of images is allowed.
+                </div>
             {% endif %}
         </div>
     </div>
@@ -519,9 +227,23 @@
             <div class="col-2">Detail #1: </div>
             <div class="col-4">
                 {{ render_field(form.details1, class="form-control", placeholder="Label") }}
+                <div id="form_error">
+                    {% if form.details1.errors %}
+                    {% for error in form.details.errors %}
+                     {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                </div>
             </div>
             <div class="col-6">
                 {{ render_field(form.details1answer, class="form-control", placeholder="Description") }}
+                    <div id="form_error">
+                    {% if form.details1answer.errors %}
+                    {% for error in form.details1answer.errors %}
+                     {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
         </div>
 
@@ -529,9 +251,23 @@
             <div class="col-2">Detail #2: </div>
             <div class="col-4">
                 {{ render_field(form.details2, class="form-control", placeholder="Label") }}
+                    <div id="form_error">
+                    {% if form.details2.errors %}
+                    {% for error in form.details2.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
             <div class="col-6">
                 {{ render_field(form.details2answer, class="form-control", placeholder="Description") }}
+                    <div id="form_error">
+                    {% if form.details2answer.errors %}
+                    {% for error in form.details2answer.errors %}
+                         {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
         </div>
 
@@ -539,9 +275,23 @@
             <div class="col-2">Detail #3: </div>
             <div class="col-4">
                 {{ render_field(form.details3, class="form-control", placeholder="Label") }}
+                    <div id="form_error">
+                    {% if form.details3.errors %}
+                    {% for error in form.details3.errors %}
+                         {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
             <div class="col-6">
                 {{ render_field(form.details3answer, class="form-control", placeholder="Description") }}
+                    <div id="form_error">
+                    {% if form.details3answer.errors %}
+                    {% for error in form.details3answer.errors %}
+                         {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
         </div>
 
@@ -549,9 +299,23 @@
             <div class="col-2">Detail #4: </div>
             <div class="col-4">
                 {{ render_field(form.details4, class="form-control", placeholder="Label") }}
+                    <div id="form_error">
+                    {% if form.details4.errors %}
+                    {% for error in form.details4.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
             <div class="col-6">
                 {{ render_field(form.details4answer, class="form-control", placeholder="Description") }}
+                    <div id="form_error">
+                    {% if form.details4answer.errors %}
+                    {% for error in form.details4answer.errors %}
+                     {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
         </div>
 
@@ -559,9 +323,23 @@
             <div class="col-2">Detail #5: </div>
             <div class="col-4">
                 {{ render_field(form.details5, class="form-control", placeholder="Label") }}
+                    <div id="form_error">
+                    {% if form.details5.errors %}
+                    {% for error in form.details5.errors %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
             <div class="col-6">
                 {{ render_field(form.details5answer, class="form-control", placeholder="Description") }}
+                    <div id="form_error">
+                    {% if form.details5answer.errors %}
+                    {% for error in form.details5answer.errors %}
+                       {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         </div>
 
@@ -583,162 +361,164 @@
         </div>
         <div id="imageholder" class="border">
             {% if item.imageone %}
-            {% if item.imageone  == '0'%}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Primary</div>
-                    <div id="imageimage">
-                        <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
-                            height="140px"></div>
-                    <div id="imageLabelbutton">{{ render_field(form.imageone1, class="form-inline" ) }}</div>
-                </div>
-            </div>
-            {% else %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Primary</div>
-                    <div id="imageimage">
-                        <img
-                            src="{{ url_for('userdata.media_file', filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
-                    </div>
-                    <div id="imageLabelbutton">
-                        <a class="btn btn-danger" type="submit"
-                            href="{{ url_for('vendorcreate.deleteItem',id=item.id, img=item.imageone) }}" role="button">
-                            Delete
-                        </a>
+                {% if item.imageone  == '0'%}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Primary</div>
+                        <div id="imageimage">
+                            <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
+                                height="140px"></div>
+                        <div id="imageLabelbutton">{{ render_field(form.imageone1, class="form-inline" ) }}</div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% else %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Primary</div>
+                        <div id="imageimage">
+                            <img
+                                src="{{ url_for('userdata.media_file', filename=( item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
+                        </div>
+                        <div id="imageLabelbutton">
+                            <a class="btn btn-danger" type="submit"
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imageone) }}" role="button">
+                                Delete Image
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             {% endif %}
             {% if item.imagetwo %}
-            {% if item.imagetwo  == '0' %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image One</div>
-                    <div id="imageimage">
-                        <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
-                            height="140px">
-                    </div>
-                    <div id="imageLabelbutton">
-                        {{ render_field(form.imagetwo, class="form-inline" ) }}
+                {% if item.imagetwo  == '0' %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image One</div>
+                        <div id="imageimage">
+                            <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
+                                height="140px">
+                        </div>
+                        <div id="imageLabelbutton">
+                            {{ render_field(form.imagetwo, class="form-inline" ) }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% else %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image One</div>
-                    <div id="imageimage">
-                        <img
-                            src="{{ url_for('userdata.media_file',
-                                     filename=('item/' +item.stringnodeid +item.stringauctionid + item.imagetwo + "_225x.jpg")) }}">
+                {% else %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image One</div>
+                        <div id="imageimage">
+                            <img
+                                src="{{ url_for('userdata.media_file',
+                                        filename=(item.stringnodeid +item.stringauctionid + item.imagetwo + "_225x.jpg")) }}">
+                        </div>
+                        <div id="imageLabelbutton">
+                            <a class="btn btn-danger" type="submit"
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagetwo) }}"
+                                role="button">Delete Image</a></div>
                     </div>
-                    <div id="imageLabelbutton">
-                        <a class="btn btn-danger" type="submit"
-                            href="{{ url_for('vendorcreate.deleteItem',id=item.id, img=item.imagetwo) }}"
-                            role="button">Delete</a></div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
             {% endif %}
 
             {% if item.imagethree %}
-            {% if item.imagethree  == '0' %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image Two</div>
-                    <div id="imageimage">
-                        <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
-                            height="140px"></div>
-                    <div id="imageLabelbutton">
-                        {{ render_field(form.imagethree, class="form-inline" ) }}
+                {% if item.imagethree  == '0' %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image Two</div>
+                        <div id="imageimage">
+                            <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
+                                height="140px"></div>
+                        <div id="imageLabelbutton">
+                            {{ render_field(form.imagethree, class="form-inline" ) }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% else %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image Two</div>
-                    <div id="imageimage">
-                        <img
-                            src="{{ url_for('userdata.media_file',
-                                     filename=('item/' +item.stringnodeid +item.stringauctionid + item.imagethree + "_225x.jpg")) }}">
-                    </div>
-                    <div id="imageLabelbutton">
-                        <a class="btn btn-danger" type="submit" href="{{ url_for('vendorcreate.deleteItem',id=item.id,
-                                     img=item.imagethree) }}" role="button">Delete
-                        </a>
+                {% else %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image Two</div>
+                        <div id="imageimage">
+                            <img
+                                src="{{ url_for('userdata.media_file',
+                                        filename=(item.stringnodeid +item.stringauctionid + item.imagethree + "_225x.jpg")) }}">
+                        </div>
+                        <div id="imageLabelbutton">
+                            <a class="btn btn-danger" 
+                            type="submit"
+                            href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagethree) }}"
+                            role="button">Delete Image
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
             {% endif %}
 
             {% if item.imagefour %}
-            {% if item.imagefour == '0' %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image Four</div>
-                    <div id="imageimage">
-                        <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
-                            height="140px"></div>
-                    <div id="imageLabelbutton">
-                        {{ render_field(form.imagefour, class="form-inline" ) }}
+                {% if item.imagefour == '0' %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image Four</div>
+                        <div id="imageimage">
+                            <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
+                                height="140px"></div>
+                        <div id="imageLabelbutton">
+                            {{ render_field(form.imagefour, class="form-inline" ) }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% else %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image Three</div>
-                    <div id="imageimage">
-                        <img
-                            src="{{ url_for('userdata.media_file',
-                                    filename=('item/' +item.stringnodeid +item.stringauctionid + item.imagefour + "_225x.jpg")) }}">
-                    </div>
-                    <div id="imageLabelbutton">
-                        <a class="btn btn-danger" type="submit"
-                            href="{{ url_for('vendorcreate.deleteItem',id=item.id, img=item.imagefour) }}" role="button">Delete
-                        </a>
+                {% else %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image Three</div>
+                        <div id="imageimage">
+                            <img
+                                src="{{ url_for('userdata.media_file',
+                                        filename=(item.stringnodeid +item.stringauctionid + item.imagefour + "_225x.jpg")) }}">
+                        </div>
+                        <div id="imageLabelbutton">
+                            <a class="btn btn-danger" type="submit"
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagefour) }}" role="button">Delete Image
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
             {% endif %}
 
             {% if item.imagefive  %}
-            {% if item.imagefive == '0' %}
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image Four</div>
-                    <div id="imageimage">
-                        <img src="{{ url_for('static',
-                                 filename=('images/no-product-image.png')  )  }}" width="140px" height="140px">
-                    </div>
-                    <div id="imageLabelbutton">
-                        {{ render_field(form.imagefive, class="form-inline" ) }}
+                {% if item.imagefive == '0' %}
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image Four</div>
+                        <div id="imageimage">
+                            <img src="{{ url_for('static',
+                                    filename=('images/no-product-image.png')  )  }}" width="140px" height="140px">
+                        </div>
+                        <div id="imageLabelbutton">
+                            {{ render_field(form.imagefive, class="form-inline" ) }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% else %}
+                {% else %}
 
-            <div id="imageOne">
-                <div class="text-center">
-                    <div id="imageLabel">Image Four</div>
-                    <div id="imageimage">
-                        <img
-                            src="{{ url_for('userdata.media_file',
-                                        filename=('item/' + item.stringnodeid +item.stringauctionid + item.imagefive + "_225x.jpg")) }}">
-                    </div>
-                    <div id="imageLabelbutton">
-                        <a class="btn btn-danger" type="submit"
-                            href="{{ url_for('vendorcreate.deleteItem',id=item.id, img=item.imagefive) }}" role="button">Delete
-                        </a>
+                <div id="imageOne">
+                    <div class="text-center">
+                        <div id="imageLabel">Image Four</div>
+                        <div id="imageimage">
+                            <img
+                                src="{{ url_for('userdata.media_file',
+                                            filename=( item.stringnodeid +item.stringauctionid + item.imagefive + "_225x.jpg")) }}">
+                        </div>
+                        <div id="imageLabelbutton">
+                            <a class="btn btn-danger" type="submit"
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagefive) }}" role="button">Delete Image
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
+                {% endif %}
             {% endif %}
         </div>
         <div style="clear: both;"></div>
@@ -762,6 +542,15 @@
         <div class="row w-100 mb-1">
             <div class="col-6">
                 {{ render_field(form.itemrefundpolicy,rows=7, cols=45, class="form-control") }}
+                    <div id="form_error">
+                    {% if form.itemrefundpolicy.errors %}
+                    {% for error in form.itemrefundpolicy.errors %}
+                   
+                         {{ error }}
+              
+                    {% endfor %}
+                    {% endif %}
+                    </div>
             </div>
             <div class="col-6">
                 Allow item returns help sell your item. We dont charge any extra fees. If you allow returns,

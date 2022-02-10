@@ -109,7 +109,7 @@
                             <div class="hidden-xs hidden-sm col-md-2">
                                 <img src="{{ url_for('userdata.media_file',
 
-                                 filename=('item/' +sale.stringnodeid +sale.stringauctionid + sale.image_of_item + "_225x.jpg")) }}"
+                                 filename=(sale.stringnodeid +sale.stringauctionid + sale.image_of_item + "_225x.jpg")) }}"
                                      width="100px" height="100px">
                             </div>
                             <!-- Item    Info -->
@@ -812,7 +812,7 @@
                                 <!-- Image -->
                                 <td class="col-2">
                                     <img src="{{ url_for('userdata.media_file',
-                                    filename=('item/' + sale.stringnodeid + sale.stringauctionid + sale.image_of_item)) }}"
+                                    filename=( sale.stringnodeid + sale.stringauctionid + sale.image_of_item)) }}"
                                          width="100px" height="100px">
                                 </td>
                                 <!-- Title -->

@@ -46,7 +46,7 @@ def convertimage_225(newfullpathfilename, root, file):
     else:
         # creates new basename
         print("")
-        print("")
+
         print("*"*10)
         print("name: ", newfullpathfilename)
         print("format:", img.format)
@@ -62,7 +62,6 @@ def convertimage_225(newfullpathfilename, root, file):
         print("name: ", renamed_file)
         print("dimensions:", "%dx%d" % img.size)
         print("*"*10)
-        print("")
         print("")
         getsize = os.path.getsize(imagesave)
         if getsize == 0:
@@ -85,7 +84,6 @@ def convertimage_500(newfullpathfilename, root, file):
     else:
         # creates new basename
         print("")
-        print("")
         print("*"*10)
         print("name: ", newfullpathfilename)
         print("format:", img.format)
@@ -102,7 +100,7 @@ def convertimage_500(newfullpathfilename, root, file):
         print("dimensions:", "%dx%d" % img.size)
         print("*"*10)
         print("")
-        print("")
+        # if size is 0 delete it
         getsize = os.path.getsize(imagesave)
         if getsize == 0:
             print("Deleted bad convert")
@@ -112,26 +110,30 @@ def imagespider(base_path):
     for root, dirs, files in os.walk(base_path):
         for file in files:
             if file.endswith(tuple(ext)):
+                # path of image and file
                 pathofimage = (os.path.join(root, file))
+                # get file name with extension
                 filename_w_ext = os.path.basename(pathofimage)
+                # split file name and extension
                 filename, file_extension = os.path.splitext(filename_w_ext)
+                # get root directory name and extension
                 newfullpathfilename = root + '/' + filename + extension
-                if file.endswith("-unknown.png"):
+
+                # convert image if not jpg
+                if not file.endswith(".jpg"):
+                    convertimage(thefile=file, pathoffile=pathofimage, directoryofimage=root)
+                # pass files already dne
+                if file.endswith("_225x.jpg"):
+                    pass
+                elif file.endswith("_500x.jpg"):
                     pass
                 else:
-                    # convert image if not jpg
-                    if not file.endswith(".jpg"):
-                        convertimage(thefile=file, pathoffile=pathofimage, directoryofimage=root)
-                    # pass files already dne
-                    if file.endswith("_250x.jpg"):
-                        pass
-                    elif file.endswith("_500x.jpg"):
+                    # see if width greater than 250
+                    y = testsize(newfullpathfilename)
+                    if y == 1:
                         pass
                     else:
-                        # see if width greater than 250
-                        y = testsize(newfullpathfilename)
-                        if y == 1:
-                            pass
-                        else:
-                            convertimage_225(newfullpathfilename, root, file)
-                            convertimage_500(newfullpathfilename, root, file)
+                        # convert image to 225
+                        convertimage_225(newfullpathfilename, root, file)
+                        # convert image to 500
+                        convertimage_500(newfullpathfilename, root, file)

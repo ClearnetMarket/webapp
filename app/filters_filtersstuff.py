@@ -188,12 +188,11 @@ def profilepicture(id):
         .filter_by(id=id)\
         .first()
 
-    filenameofprofile = os.path.join('user', '1', str(user.id), user.profileimage)
+    filenameofprofile = os.path.join(str(user.usernode), str(
+        user.id), (user.profileimage + str('_125x.jpg')))
 
     if user.profileimage == 'user-unknown.png':
-        return url_for('userdata.profile_image', filename=('user/' + 'user-unknown.png'))
-    elif user.profileimage == '0':
-        return url_for('userdata.profile_image', filename=('user/' + 'user-unknown.png'))
+        return url_for('userdata.profile_image', filename=('user-unknown.png'))
     else:
         return url_for('userdata.profile_image', filename=(filenameofprofile))
 
@@ -395,7 +394,7 @@ def orderpicture(itemid, type):
                 return url_for('static', filename='/images/Noimage.png')
             else:
                 # get primary image
-                return url_for('userdata.media_file', nodeid=x.stringnodeid, filename=('item/' + x.string + x.imageone))
+                return url_for('userdata.media_file', nodeid=x.stringnodeid, filename=(x.string + x.imageone))
     elif type == 2:
         pass
 
@@ -410,7 +409,8 @@ def usdtocurrency(price, currency):
     from app.classes.models import btc_cash_Prices
     from app import db
     from decimal import Decimal
-    getcurrentprice = db.session.query(btc_cash_Prices).filter_by(currency_id=currency).first()
+    getcurrentprice = db.session.query(
+        btc_cash_Prices).filter_by(currency_id=currency).first()
     if currency == 0:
         return price
     else:

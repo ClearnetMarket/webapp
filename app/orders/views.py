@@ -61,7 +61,6 @@ from app.classes.models import \
 @orders.route('/order-tracking/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def orders_viewtracking(id):
     now = datetime.utcnow()
     form = searchForm()
@@ -100,7 +99,6 @@ def orders_viewtracking(id):
 @orders.route('/order-customerservice', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def orders_customerservice():
     return redirect(url_for('auth.setupAccount'))
 
@@ -108,7 +106,6 @@ def orders_customerservice():
 @orders.route('/customer-returninstructions/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def customerOrders_returninstructions(id):
     now = datetime.utcnow()
     trackingform = markasSent(request.form)
@@ -218,7 +215,6 @@ def customerOrders_returninstructions(id):
 @orders.route('/order-cancel/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def orders_cancelorder(id):
     now = datetime.utcnow()
     try:
@@ -312,7 +308,6 @@ def orders_cancelorder(id):
 @orders.route('/order-recieved/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def orders_markasrecieved(id):
 
     now = datetime.utcnow()
@@ -490,7 +485,6 @@ def orders_markasrecieved(id):
 @orders.route('/order-requestcancel/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def orders_requestcancelorder(id):
     cancelorder = db.session.query(Orders).filter_by(id=id).first()
     if cancelorder:
@@ -535,7 +529,6 @@ def orders_requestcancelorder(id):
 @orders.route('/customer-returnorder/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def customerOrders_return(id):
     now = datetime.utcnow()
     returnitem = returnitem_form_factory(orderid=id)
@@ -599,7 +592,6 @@ def customerOrders_return(id):
 @orders.route('/orders', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def ordershome():
     user, \
         order, \

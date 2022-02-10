@@ -6,7 +6,7 @@
 
             {% if item.imageone != '0' %}
                 <img src="{{ url_for('userdata.media_file',
-            filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}" class="searchresultimage">
+            filename=( item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}" class="searchresultimage">
             {% else %}
                 <img src="{{ url_for('static', filename=('images/no-product-image.png')) }}" class="imagefrontpage">
             {% endif %}

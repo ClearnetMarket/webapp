@@ -1,6 +1,6 @@
 import os
 from app.userdata import userdata
-from app import UPLOADED_FILES_DEST
+from app import UPLOADED_FILES_DEST_ITEM, UPLOADED_FILES_DEST_USER
 from flask import send_from_directory
 from app import db
 # models
@@ -26,14 +26,22 @@ now = datetime.utcnow()
 
 @userdata.route('/item/<path:filename>')
 def media_file(filename):
+    """Function is for returning item images
 
-    return send_from_directory(UPLOADED_FILES_DEST, filename, as_attachment=False)
+    Args:
+        filename ([type]): [description]
+
+    Returns:
+        returns url link
+    """
+    
+    return send_from_directory(UPLOADED_FILES_DEST_ITEM, filename, as_attachment=False)
 
 
 @userdata.route('/user/<path:filename>')
 def profile_image(filename):
 
-    return send_from_directory(UPLOADED_FILES_DEST, filename, as_attachment=False)
+    return send_from_directory(UPLOADED_FILES_DEST_USER, filename, as_attachment=False)
 
 
 def addtotalItemsSold(user_id, howmany):

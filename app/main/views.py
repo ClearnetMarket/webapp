@@ -39,7 +39,7 @@ from app.classes.models import \
 from app.profile.profilebar import profilebar
 
 from app.auth.forms import searchForm
-from app.search.searchfunction import headerfunctions_vendor,headerfunctions
+from app.search.searchfunction import headerfunctions_vendor, headerfunctions
 from datetime import timedelta, datetime
 from app.common.functions import btc_cash_convertlocaltobtc
 import os
@@ -56,7 +56,6 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
-
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
@@ -71,7 +70,6 @@ def static_from_root():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @website_offline
-@ping_user
 def index():
 
     now = datetime.utcnow()
@@ -330,7 +328,6 @@ def index():
 
 @main.route('/about', methods=['GET', 'POST'])
 @website_offline
-@ping_user
 def about():
     return render_template('/general/about.html')
 
@@ -429,8 +426,6 @@ def privacy():
     return render_template('/privacy.html')
 
 
-
-
 @main.route('/bugbounty', methods=['GET', 'POST'])
 def bugbounty():
     return render_template('/general/bugbounty.html')
@@ -462,7 +457,7 @@ def levels():
     fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
     thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
     twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
-  
+
     hundred = Decimal(hundred)
     twofity = Decimal(twofity)
     fivehundred = Decimal(fivehundred)

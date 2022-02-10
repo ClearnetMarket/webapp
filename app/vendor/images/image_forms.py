@@ -1,7 +1,6 @@
 from ast import Pass
 import os
 from werkzeug.utils import secure_filename
-from werkzeug.datastructures import CombinedMultiDict
 from app import db
 from flask_login import current_user
 from app.vendor.images.item_image_resizer import imagespider
@@ -10,8 +9,9 @@ from app.common.functions import \
     id_generator_picture2, \
     id_generator_picture3, \
     id_generator_picture4, \
-    id_generator_picture5
-from app import UPLOADED_FILES_DEST
+    id_generator_picture5, \
+    itemlocation
+from app import UPLOADED_FILES_DEST_ITEM
 from app.classes.item import \
     marketItem
 
@@ -22,26 +22,20 @@ def deleteimg_noredirect(id, img):
             if vendoritem.vendor_id == current_user.id:
                 try:
                     specific_folder = str(vendoritem.id)
-
-                    link = 'listing'
+                    getimagesubfolder = itemlocation(x=id)
                     spacer = '/'
-                    pathtofile = str(UPLOADED_FILES_DEST + link +
-                                     spacer + specific_folder + spacer + img)
-                    pathtofile, file_extension = os.path.splitext(pathtofile)
 
+                    pathtofile = str(UPLOADED_FILES_DEST_ITEM + spacer + getimagesubfolder + spacer + specific_folder + spacer + img)
+                    file_extension=".jpg"
                     ext1 = '_225x'
-
+                    ext2 = '_500x'
                     file0 = str(pathtofile + file_extension)
                     file1 = str(pathtofile + ext1 + file_extension)
+                    file2 = str(pathtofile + ext2 + file_extension)
 
                     if len(img) > 20:
-                        x1 = vendoritem.imageone
-                        x2 = vendoritem.imagetwo
-                        x3 = vendoritem.imagethree
-                        x4 = vendoritem.imagefour
-                        x5 = vendoritem.imagefive
 
-                        if x1 == img:
+                        if vendoritem.imageone == img:
                             vendoritem.imageone = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
@@ -54,7 +48,7 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif x2 == img:
+                        elif vendoritem.imagetwo == img:
                             vendoritem.imagetwo = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
@@ -67,7 +61,7 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif x3 == img:
+                        elif vendoritem.imagethree == img:
                             vendoritem.imagethree = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
@@ -80,7 +74,7 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif x4 == img:
+                        elif vendoritem.imagefour == img:
                             vendoritem.imagefour = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
@@ -93,7 +87,7 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif x5 == img:
+                        elif vendoritem.imagefive == img:
                             vendoritem.imagefive = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
@@ -109,6 +103,8 @@ def deleteimg_noredirect(id, img):
                             pass
                 except Exception:
                     pass
+            else:
+                pass
         else:
             pass
     except:
@@ -116,6 +112,7 @@ def deleteimg_noredirect(id, img):
 
 def image1(formdata, item, directoryifitemlisting):
     id_pic1 = id_generator_picture1()
+    # if the form has an image
     if formdata:
         deleteimg_noredirect(id=item.id, img=item.imageone)
         filename = secure_filename(formdata.filename)
@@ -135,19 +132,18 @@ def image1(formdata, item, directoryifitemlisting):
         os.rename(filenamenewfull, newfileNameDestination)
 
         if len(formdata.filename) > 2:
-            x1 = newfileName
             item.imageone = id_pic1
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            x1 = "0"
-        return x1
+            item.imageone = "0"
     else:
+        # nothing no changes
         if len(item.imageone) > 5:
             pass
         else:
-            x1 = "0"
-            return x1
+            # no image change to 0
+            item.imageone = "0"
 
 
 def image2(formdata, item, directoryifitemlisting):
@@ -170,20 +166,17 @@ def image2(formdata, item, directoryifitemlisting):
         # renames file
         os.rename(filenamenewfull, newfileNameDestination2)
         if len(formdata.filename) > 2:
-            x2 = newfileName
             item.imagetwo = id_pic2
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            x2 = "0"
-        return x2
+            item.imagetwo = "0"
     else:
         if item.imagetwo:
             if len(item.imagetwo) > 5:
                 pass
         else:
-            x2 = "0"
-            return x2
+            item.imagetwo = "0"
 
 
 def image3(formdata, item, directoryifitemlisting):
@@ -206,22 +199,21 @@ def image3(formdata, item, directoryifitemlisting):
         newfileNameDestination = os.path.join(directoryifitemlisting, newfileName)
         # renames file
         os.rename(filenamenewfull, newfileNameDestination)
-        if len(formdata.filename) > 2:
-            x3 = newfileName
+        if len(formdata.filename) > 5:
             # add profile to db
             item.imagethree = id_pic3
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            x3 = "0"
-        return x3
+            item.imagethree = "0"
+
     else:
-        if item.imagetwo:
+        if item.imagethree is not None:
             if len(item.imagethree) > 5:
                 pass
         else:
-            x3 = "0"
-            return x3
+            item.imagethree = "0"
+
 
 
 def image4(formdata, item, directoryifitemlisting):
@@ -244,21 +236,19 @@ def image4(formdata, item, directoryifitemlisting):
         # renames file
         os.rename(filenamenewfull, newfileNameDestination)
         if len(formdata.filename) > 2:
-            x4 = newfileName
+  
             # add profile to db
             item.imagefour = id_pic4
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            x4 = "0"
-        return x4
+            item.imagefour = "0"
     else:
         if item.imagefour:
             if len(item.imagefour) > 5:
                 pass
         else:
-            x4 = "0"
-            return x4
+            item.imagefour = "0"
 
 
 def image5(formdata, item, directoryifitemlisting):
@@ -281,18 +271,16 @@ def image5(formdata, item, directoryifitemlisting):
         # renames file
         os.rename(filenamenewfull, newfileNameDestination)
         if len(formdata.filename) > 2:
-            x5 = newfileName
+
             # add profile to db
             item.imagefive = id_pic5
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            x5 = "0"
-        return x5
+            item.imagefive = "0"
     else:
         if item.imagefive:
             if len(item.imagefive) > 5:
                 pass
         else:
-            x5 = "0"
-            return x5
+            item.imagefive = "0"

@@ -9,7 +9,7 @@
                      <a href="{{ url_for('item.itemforsale', id=item.id) }}">
                     <img src="{{ url_for('userdata.media_file',
 
-                    filename=('item/' + item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg")) }}">
+                    filename=( item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg")) }}">
                     </a>
                 </div>
                 <div id="simpleitem_title" class="text-center"><b>{{ item.itemtitlee|truncate(20) }}</b></div>

@@ -1,18 +1,15 @@
-from app.auth import auth
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, logout_user, login_user
-from app import db, UPLOADED_FILES_DEST
-from app.auth.profile_image_resizer import imagespider
+from app.auth import auth
+from app import db, UPLOADED_FILES_DEST_USER
 import os
 from datetime import datetime
 from sqlalchemy.orm.exc import UnmappedInstanceError
 from werkzeug.datastructures import CombinedMultiDict
-from werkzeug.utils import secure_filename
 from sqlalchemy.sql import func
-from app.common.functions import id_generator_picture1
+from app.common.functions import mkdir_p, userimagelocation
 from app.achs.v import becamevendor
 from app.achs.a import newbie
-
 from app.classes.vendor import \
     vendorVerification
 from app.classes.userdata import \
@@ -44,20 +41,13 @@ from app.auth.forms import LoginForm, \
 from app.classes.wallet_bch import \
     BchWallet
 from app.common.decorators import \
-    ping_user, \
     website_offline, \
     login_required
 from app.wallet_bch.wallet_btccash_work import \
     btc_cash_create_wallet
-from app.common.functions import mkdir_p, userimagelocation
-
-
-
-# btc cash work
-
-# forms
-# models
-
+from app.auth.profile_images.profile_images import \
+    deleteprofileimage, \
+    image1
 
 @auth.route("/logout", methods=["GET"])
 def logout():
@@ -72,14 +62,15 @@ def logout():
 
 @auth.route('/login', methods=['GET', 'POST'])
 @website_offline
-@ping_user
 def login():
     form = LoginForm(request.form)
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            user = db.session.query(User).filter_by(
-                username=form.username.data).first()
+            user = db.session\
+                .query(User)\
+                .filter_by(username=form.username.data)\
+                .first()
             if user:
                 if user.confirmed == 1:
                     if user is not None:
@@ -268,14 +259,14 @@ def register():
 
         # creates bitcoin cash wallet in db
         btc_cash_create_wallet(user_id=new_user.id)
-
+        
+        # achievement
         newbie(user_id=new_user.id)
 
         # make a user a directory
 
         getuserlocation = userimagelocation(user_id=new_user.id)
-        userfolderlocation = os.path.join(UPLOADED_FILES_DEST,
-                                          "user",
+        userfolderlocation = os.path.join(UPLOADED_FILES_DEST_USER,
                                           getuserlocation,
                                           str(new_user.id))
         mkdir_p(path=userfolderlocation)
@@ -404,43 +395,9 @@ def confirmseed():
         return render_template('/auth/confirmseed.html', form=form)
 
 
-def deleteprofileimage(id, img, type):
-    if current_user.id == id:
-        user = db.session \
-            .query(User)\
-            .filter(User.id == id)\
-            .first()
-        user_id = str(id)
-        userimg1 = str(img)
-        userimg2 = str(img)[:-9] + '.jpg'
-        usernodelocation = str(user.usernode)
-        file0 = os.path.join(UPLOADED_FILES_DEST, "user",
-                             usernodelocation, user_id, userimg1)
-        file1 = os.path.join(UPLOADED_FILES_DEST, "user",
-                             usernodelocation, user_id, userimg2)
-        try:
-            os.remove(file0)
-            os.remove(file1)
-        except Exception:
-            user.profileimage = 'user-unknown.png'
-            db.session.add(user)
-            db.session.commit()
-        if type == 0:
-            pass
-        elif type == 1:
-            user.profileimage = 'user-unknown.png'
-            db.session.add(user)
-            db.session.commit()
-        else:
-            pass
-    else:
-        return redirect(url_for('index'))
-
-
 @auth.route('/my-account/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def myAccount():
     now = datetime.utcnow()
     title = 'My Account'
@@ -450,7 +407,7 @@ def myAccount():
         .filter_by(username=current_user.username)\
         .first()
 
-    id_pic1 = id_generator_picture1()
+
     vacform = VacationForm()
     myaccountform = myaccount_form_factory(user)
 
@@ -461,65 +418,22 @@ def myAccount():
     )
 
     if request.method == 'POST':
-
+        
         if vacform.Vacation.data:
-            return redirect(url_for('vendor.vacation', username=current_user.username))
+            return redirect(url_for('vendorcreate.vacation', username=current_user.username))
 
         if form.delete.data:
+            # type 1 = make database have user-unknown
             deleteprofileimage(id=user.id, img=user.profileimage, type=1)
+            # deleted profile image
             return redirect(url_for('auth.myAccount', username=current_user.username))
 
         if form.submit.data and form.validate_on_submit():
-            userlocation = os.path.join(
-                UPLOADED_FILES_DEST, "user", str(user.usernode), (str(user.id)))
-
-            def image1():
-                if form.imageprofile.data:
-                    try:
-                        mkdir_p(path=userlocation)
-                        deleteprofileimage(
-                            id=current_user.id, img=current_user.profileimage, type=0)
-                        filename = secure_filename(
-                            form.imageprofile.data.filename)
-                        # saves it to location
-                        profileimagefilepath = os.path.join(
-                            userlocation, filename)
-                        form.imageprofile.data.save(profileimagefilepath)
-                        # RENAMING FILE
-                        # split file name and ending
-                        filenamenew, file_extension = os.path.splitext(
-                            profileimagefilepath)
-                        # gets new 64 digit filename
-                        newfileName = id_pic1 + file_extension
-                        # puts new name with ending
-                        filenamenewfull = filenamenew + file_extension
-                        # gets aboslute path of new file
-                        newfileNameDestination = os.path.join(
-                            userlocation, newfileName)
-                        # renames file
-                        os.rename(filenamenewfull, newfileNameDestination)
-
-                        dbname = id_pic1 + "_125x.jpg"
-                    except Exception as e:
-                        flash("Error WIth Picture Submission",
-                              category="success")
-                        return redirect(url_for('auth.myAccount', username=current_user.username))
-                    if form.imageprofile.data.filename:
-                        x1 = dbname
-                        # add profile to db
-                        user.profileimage = x1
-                        db.session.add(user)
-
-                    else:
-                        x1 = "user-unknown.png"
-                    imagespider(base_path=userlocation)
-                    return x1
-
-                else:
-                    pass
-
-            image1()
-            # get origin country query
+            # gets user location on server
+            if form.imageprofile.data:
+                userlocation = os.path.join(UPLOADED_FILES_DEST_USER, str(user.usernode), (str(user.id)))
+                image1(formdata=form.imageprofile.data, directoryifitemlisting=userlocation, user=user)
+            # dropdown changes on forms
             origincountryfull = form.origincountry1.data
             origincountry = origincountryfull.numericcode
             currencyfull = form.currency1.data
@@ -527,16 +441,13 @@ def myAccount():
             user.currency = cur,
             user.bio = form.Bio.data,
             user.country = origincountry,
-
             db.session.add(user)
             db.session.commit()
             flash("Information Updated", category="success")
-            return redirect(url_for('auth.myAccount',
-                                    username=current_user.username))
+            return redirect(url_for('auth.myAccount', username=current_user.username))
         else:
             flash("Form Error", category="danger")
-            return redirect(url_for('auth.myAccount',
-                                    username=current_user.username))
+            return redirect(url_for('auth.myAccount', username=current_user.username))
     return render_template('auth/account/myaccount.html',
                            title=title,
                            form=form,
@@ -548,7 +459,6 @@ def myAccount():
 @auth.route('/vendor-signup', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def setupAccount():
     now = datetime.utcnow()
     form = vendorSignup(request.form)

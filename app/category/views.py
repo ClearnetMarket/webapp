@@ -35,7 +35,6 @@ from app.common.decorators import \
 
 @category.route('/category/<int:maincatid>', methods=['GET', 'POST'])
 @website_offline
-@ping_user
 def viewcategory(maincatid):
     now = datetime.utcnow()
     # forms
@@ -60,17 +59,17 @@ def viewcategory(maincatid):
     # Currency Prices
     try:
         btc_cash_price = db.session\
-                        .query(btc_cash_Prices)\
-                        .filter(or_(btc_cash_Prices.currency_id == 1,
-                                    btc_cash_Prices.currency_id == 30,
-                                    btc_cash_Prices.currency_id == 17,
-                                    btc_cash_Prices.currency_id == 23,
-                                    btc_cash_Prices.currency_id == 30,
-                                    btc_cash_Prices.currency_id == 6,
-                                    btc_cash_Prices.currency_id == 4,
-                                    ))\
-                        .order_by(btc_cash_Prices.currency_id.asc())\
-                        .all()
+            .query(btc_cash_Prices)\
+            .filter(or_(btc_cash_Prices.currency_id == 1,
+                        btc_cash_Prices.currency_id == 30,
+                        btc_cash_Prices.currency_id == 17,
+                        btc_cash_Prices.currency_id == 23,
+                        btc_cash_Prices.currency_id == 30,
+                        btc_cash_Prices.currency_id == 6,
+                        btc_cash_Prices.currency_id == 4,
+                        ))\
+            .order_by(btc_cash_Prices.currency_id.asc())\
+            .all()
     except Exception as e:
         btc_cash_price = 0
     # Currency Prices
@@ -113,10 +112,10 @@ def viewcategory(maincatid):
     # Main Page search
     try:
         itemfull = db.session\
-        .query(marketItem)\
-        .filter(marketItem.online == 1)\
-        .filter(marketItem.categoryid0 == maincatid)\
-        .limit(per_page).offset(offset)
+            .query(marketItem)\
+            .filter(marketItem.online == 1)\
+            .filter(marketItem.categoryid0 == maincatid)\
+            .limit(per_page).offset(offset)
 
         pagination = Pagination(page=page,
                                 total=itemfull.count(),
@@ -127,7 +126,7 @@ def viewcategory(maincatid):
                                 css_framework='bootstrap',
                                 inner_window=inner_window,
                                 outer_window=outer_window)
-                        
+
     except Exception as e:
         return redirect(url_for('index'))
     # END Main Page search
@@ -189,8 +188,8 @@ def viewcategory(maincatid):
             ##
 
             itemfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)
+                .query(marketItem)\
+                .filter(marketItem.online == 1)
 
             # FILTERS
             # Price Filter
@@ -201,7 +200,7 @@ def viewcategory(maincatid):
 
             else:
                 itemfull = itemfull.filter(lowprice <= marketItem.price)\
-                .filter(marketItem.price <= highprice)
+                    .filter(marketItem.price <= highprice)
 
             # btc Filter
             if btc_sort == 0:
@@ -228,7 +227,7 @@ def viewcategory(maincatid):
                 itemfull = itemfull
             # END FILTERS
 
-            ###No sort
+            # No sort
             if sortresults.sortCategory.data == '0':
                 itemfull = itemfull
             ###
@@ -289,7 +288,7 @@ def viewcategory(maincatid):
                                pagination=pagination,
                                getcategory=getcategory,
 
-                               # side 
+                               # side
                                highprice=highprice,
                                lowprice=lowprice,
                                btccash_sort=btccash_sort,
@@ -300,7 +299,7 @@ def viewcategory(maincatid):
                                promoteditems=promoteditems,
 
                                # coin prices
-            
+
                                btc_cash_price=btc_cash_price,
 
                                )
@@ -334,5 +333,3 @@ def viewcategory(maincatid):
                            # coin prices
                            btc_cash_price=btc_cash_price
                            )
-
-

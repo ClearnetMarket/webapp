@@ -31,7 +31,6 @@ from app.classes.wallet_bch import *
 @vendorverification.route('/becomeverified', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorverificationhome():
     now = datetime.utcnow()
@@ -178,7 +177,6 @@ def vendorverificationcancel():
 @vendorverification.route('/becomeverified-level1', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorverification_confirm_level1():
     now = datetime.utcnow()
@@ -244,7 +242,6 @@ def vendorverification_confirm_level1():
 @vendorverification.route('/becomeverified-level2', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorverification_confirm_level2():
     now = datetime.utcnow()

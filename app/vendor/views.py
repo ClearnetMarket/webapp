@@ -67,7 +67,6 @@ from app.classes.wallet_bch import *
 @vendor.route('/sell', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def becomevendor():
     if current_user.vendor_account == 0:
         form = becomeavendor(request.form)
@@ -81,7 +80,6 @@ def becomevendor():
 @vendor.route('/vendor-accept/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorOrders_accept(id):
     try:
@@ -111,7 +109,6 @@ def vendorOrders_accept(id):
 @vendor.route('/vendor-send/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorOrders_send(id):
     try:
@@ -144,7 +141,6 @@ def vendorOrders_send(id):
 @vendor.route('/vendor-dispute/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorOrders_dispute(id):
     try:
@@ -167,7 +163,6 @@ def vendorOrders_dispute(id):
 @vendor.route('/customer-dispute/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def customerOrders_dispute(id):
     item = Orders.query.get(id)
@@ -191,7 +186,6 @@ def customerOrders_dispute(id):
 @vendor.route('/vendor-reject/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorOrders_reject(id):
     now = datetime.utcnow()
@@ -349,7 +343,6 @@ def vendorOrders_cancelandrefund(id):
 @vendor.route('/vendor-leavereviewforuser/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def vendorOrders_leavereviewforuser(id):
     now = datetime.utcnow()
     form = vendorleavereview()
@@ -536,7 +529,6 @@ def vendorOrders_addtracking(id):
 @vendor.route('/vendor-reasonforcancel/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorOrders_reasonforcancel(id):
     item = db.session.query(Orders).filter_by(id=id).first()
@@ -550,7 +542,6 @@ def vendorOrders_reasonforcancel(id):
 @vendor.route('/vendor-ratings', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorRatings():
     now = datetime.utcnow()
@@ -658,7 +649,6 @@ def vendorRatings():
 @vendor.route('/vendor-viewfeedbackspecific/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 def vendorviewspecificfeedback(id):
     try:
         now = datetime.utcnow()
@@ -776,7 +766,6 @@ def viewOrder(id):
 @vendor.route('/vendor-refunds', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorRefunds():
     now = datetime.utcnow()
@@ -827,7 +816,6 @@ def vendorRefunds():
 @vendor.route('/return-add-address/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def addtempaddress(id):
     now = datetime.utcnow()
@@ -981,7 +969,6 @@ def addtempaddress(id):
 @vendor.route('/return-edit-address/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def edittempaddress(id):
     returnaddress = db.session\
@@ -1039,7 +1026,6 @@ def edittempaddress(id):
 @vendor.route('/vendor-markasreturned/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ping_user
 @vendoraccount_required
 def vendorOrders_recievereturn(id):
     now = datetime.utcnow()

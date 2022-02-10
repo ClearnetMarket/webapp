@@ -2,12 +2,12 @@
 <div class="card mr-1 mb-5" >
     <a href="{{ url_for('item.itemforsale',id=item.id) }}">
     <img class="card-img-top" style="max-width: 200px; height: 200px;"
-            {% if item.imageone != '0' %}
-                src="{{ url_for('userdata.media_file',
-                    filename=('item/' + item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
-            {% else %}
-                src="{{ url_for('static', filename=('images/no-product-image.png')) }}">
-            {% endif %}
+        {% if item.imageone != '0' %}
+            src="{{ url_for('userdata.media_file',
+                filename=(item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
+        {% else %}
+            src="{{ url_for('static', filename=('images/no-product-image.png')) }}">
+        {% endif %}
     </a>
     <hr>
     <div class="card-body text-center">
@@ -22,18 +22,20 @@
 
         {# btc Price #}
         {% if item.digital_currency2 == 1 %}
-        <div class="col-12" style="font-size: 12px;">
-            {{ item.price|btcprice(currency=item.currency) }} BTC <br>
-        </div>
+            <div class="col-12" style="font-size: 12px;">
+                {{ item.price|btcprice(currency=item.currency) }} BTC <br>
+            </div>
         {% endif %}
 
         {# currency logos #}
         <div class="col-12text-center linkcolor" >
             {% if item.digital_currency2 == 1 %}
-                <img src="{{ url_for('static', filename=('images/currency_logos/btc/btc_small.png')) }}" style="width: 25px; height: 20px;">
+                <img src="{{ url_for('static', filename=('images/currency_logos/btc/btc_small.png')) }}" 
+                style="width: 25px; height: 20px;">
             {% endif %}
             {% if item.digital_currency3 == 1 %}
-                <img src="{{ url_for('static', filename=('images/currency_logos/bch/bch_small.png')) }}" style="width: 25px; height: 20px;">
+                <img src="{{ url_for('static', filename=('images/currency_logos/bch/bch_small.png')) }}" 
+                style="width: 25px; height: 20px;">
             {% endif %}
             Accepted
         </div>

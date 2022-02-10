@@ -98,80 +98,77 @@ def user(username):
     outer_window = 5  # search bar at bottom used for .. lots of pages
     per_page = 20
     now = datetime.utcnow()
-    if username != 'Guest':
-        user = db.session.query(User).filter_by(username=username).first()
-        if user:
-            user1, \
-                user1pictureid, \
-                user1stats, \
-                user1wallet, \
-                user1level, \
-                user1width, \
-                user1ach, \
-                user1vendorstats, \
-                user2getlevel, \
-                user2pictureid, \
-                user2stats, \
-                user2wallet, \
-                user2level, \
-                user2width, \
-                user2ach, \
-                user2vendorstats, \
-                user2 = profilebar(user_id1=user.id, user_id2=0)
 
-            user_recent_ach = db.session\
-                .query(UserAchievements_recent) \
-                .filter_by(user_id=user.id) \
-                .order_by(UserAchievements_recent.achievement_date.desc()) \
-                .limit(10)
+    user = db.session.query(User).filter_by(username=username).first()
+    if current_user.is_authenticated:
+        user1, \
+            user1pictureid, \
+            user1stats, \
+            user1wallet, \
+            user1level, \
+            user1width, \
+            user1ach, \
+            user1vendorstats, \
+            user2getlevel, \
+            user2pictureid, \
+            user2stats, \
+            user2wallet, \
+            user2level, \
+            user2width, \
+            user2ach, \
+            user2vendorstats, \
+            user2 = profilebar(user_id1=user.id, user_id2=0)
 
-            # stats
-            stats = db.session\
-                .query(StatisticsUser)\
-                .filter_by(username=user.username)\
-                .first()
+        user_recent_ach = db.session\
+            .query(UserAchievements_recent) \
+            .filter_by(user_id=user.id) \
+            .order_by(UserAchievements_recent.achievement_date.desc()) \
+            .limit(10)
 
-            started = stats.startedbuying.strftime("%m/%d/%y")
+        # stats
+        stats = db.session\
+            .query(StatisticsUser)\
+            .filter_by(username=user.username)\
+            .first()
 
-            # User reviews
-            getratings = db.session\
-                .query(Userreviews)\
-                .filter(Userreviews.customer == user.username)\
-                .order_by(Userreviews.dateofreview.desc())
+        started = stats.startedbuying.strftime("%m/%d/%y")
 
-            usercount = getratings.count()
-            userreview = getratings.limit(per_page).offset(offset)
+        # User reviews
+        getratings = db.session\
+            .query(Userreviews)\
+            .filter(Userreviews.customer == user.username)\
+            .order_by(Userreviews.dateofreview.desc())
 
-            paginationuserreview = Pagination(page=page,
-                                              total=getratings.count(),
-                                              search=False,
-                                              record_name='items',
-                                              offset=offset,
-                                              per_page=per_page,
-                                              css_framework='bootstrap4',
-                                              inner_window=inner_window,
-                                              outer_window=outer_window)
+        usercount = getratings.count()
+        userreview = getratings.limit(per_page).offset(offset)
 
-            return render_template('profile/customer.html',
-                                   user=user, now=now,
-                                   userreview=userreview,
-                                   usercount=usercount,
-                                   paginationuserreview=paginationuserreview,
-                                   stats=stats,
-                                   started=started,
-                                   user1=user1,
-                                   user1width=user1width,
-                                   user1level=user1level,
-                                   user1pictureid=user1pictureid,
-                                   user1wallet=user1wallet,
-                                   user1stats=user1stats,
-                                   user1ach=user1ach,
-                                   user1vendorstats=user1vendorstats,
-                                   user_recent_ach=user_recent_ach
-                                   )
-        else:
-            flash("User does not have an account", category="danger")
-            return redirect(url_for('index', username=current_user.username))
+        paginationuserreview = Pagination(page=page,
+                                            total=getratings.count(),
+                                            search=False,
+                                            record_name='items',
+                                            offset=offset,
+                                            per_page=per_page,
+                                            css_framework='bootstrap4',
+                                            inner_window=inner_window,
+                                            outer_window=outer_window)
+
+        return render_template('profile/customer.html',
+                                user=user, now=now,
+                                userreview=userreview,
+                                usercount=usercount,
+                                paginationuserreview=paginationuserreview,
+                                stats=stats,
+                                started=started,
+                                user1=user1,
+                                user1width=user1width,
+                                user1level=user1level,
+                                user1pictureid=user1pictureid,
+                                user1wallet=user1wallet,
+                                user1stats=user1stats,
+                                user1ach=user1ach,
+                                user1vendorstats=user1vendorstats,
+                                user_recent_ach=user_recent_ach
+                                )
     else:
         flash("User does not have an account", category="danger")
         return redirect(url_for('index', username=current_user.username))
