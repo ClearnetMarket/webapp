@@ -27,6 +27,7 @@ import re
 from app.auth.validation import allowspace
 from app.classes.models import Categories, Country
 
+
 class ConfirmSeed(FlaskForm):
     seedanswer0 = StringField('Word 1', validators=[
         DataRequired(message='Word is Required'),
@@ -136,6 +137,7 @@ def searchside():
 def searchside_default():
     return Categories.query.filter(Categories.id == 1).first()
 
+
 class searchForm(FlaskForm):
 
     searchString = StringField('searchString', validators=[DataRequired()])
@@ -235,7 +237,8 @@ class RegistrationForm(FlaskForm):
     def validate(self):
         rv = FlaskForm.validate(self)
         if rv is True:
-            username = User.query.filter(func.lower(User.username) == func.lower(self.username.data)).first()
+            username = User.query.filter(func.lower(
+                User.username) == func.lower(self.username.data)).first()
             if username:
 
                 flash('Username is already taken', category="success")
@@ -243,7 +246,6 @@ class RegistrationForm(FlaskForm):
 
             else:
                 return True
-
 
 
 class CheckSeed(FlaskForm):
@@ -368,18 +370,21 @@ def myaccount_form_factory(user):
 
         ])
 
-        origincountry1 = QuerySelectField(query_factory=lambda: Country.query.all(),
-                                          get_label='name',
-                                          default=lambda: Country.query.filter_by(numericcode=user.country).first(),
-                                          validators=[DataRequired(message='Your Country is required')])
+        origin_country_1 = QuerySelectField(query_factory=lambda: Country.query.all(),
+                                            get_label='name',
+                                            default=lambda: Country.query.filter_by(
+                                                numericcode=user.country).first(),
+                                            validators=[DataRequired(message='Your Country is required')])
 
         currency1 = QuerySelectField(query_factory=lambda: Currency.query.all(),
-                                     default=lambda: Currency.query.filter_by(code=user.currency).first(),
+                                     default=lambda: Currency.query.filter_by(
+                                         code=user.currency).first(),
                                      get_label='symbol',
                                      validators=[DataRequired(message='Your Currency is required')])
 
         imageprofile = FileField(validators=[Optional(),
-                                             FileAllowed(['jpg', 'png', 'gif', 'png', 'jpeg'], 'Images only')
+                                             FileAllowed(
+                                                 ['jpg', 'png', 'gif', 'png', 'jpeg'], 'Images only')
                                              ])
 
         submit = SubmitField()
@@ -454,7 +459,6 @@ class requestCancelform(FlaskForm):
     ])
 
     submit = SubmitField()
-
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)

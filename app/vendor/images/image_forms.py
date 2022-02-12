@@ -13,11 +13,12 @@ from app.common.functions import \
     itemlocation
 from app import UPLOADED_FILES_DEST_ITEM
 from app.classes.item import \
-    marketItem
+    marketitem
+
 
 def deleteimg_noredirect(id, img):
     try:
-        vendoritem = marketItem.query.get(id)
+        vendoritem = marketitem.query.get(id)
         if vendoritem:
             if vendoritem.vendor_id == current_user.id:
                 try:
@@ -25,8 +26,9 @@ def deleteimg_noredirect(id, img):
                     getimagesubfolder = itemlocation(x=id)
                     spacer = '/'
 
-                    pathtofile = str(UPLOADED_FILES_DEST_ITEM + spacer + getimagesubfolder + spacer + specific_folder + spacer + img)
-                    file_extension=".jpg"
+                    pathtofile = str(UPLOADED_FILES_DEST_ITEM + spacer +
+                                     getimagesubfolder + spacer + specific_folder + spacer + img)
+                    file_extension = ".jpg"
                     ext1 = '_225x'
                     ext2 = '_500x'
                     file0 = str(pathtofile + file_extension)
@@ -35,8 +37,8 @@ def deleteimg_noredirect(id, img):
 
                     if len(img) > 20:
 
-                        if vendoritem.imageone == img:
-                            vendoritem.imageone = '0'
+                        if vendoritem.image_one == img:
+                            vendoritem.image_one = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
                             try:
@@ -48,8 +50,8 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif vendoritem.imagetwo == img:
-                            vendoritem.imagetwo = '0'
+                        elif vendoritem.image_two == img:
+                            vendoritem.image_two = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
                             try:
@@ -61,8 +63,8 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif vendoritem.imagethree == img:
-                            vendoritem.imagethree = '0'
+                        elif vendoritem.image_three == img:
+                            vendoritem.image_three = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
                             try:
@@ -74,8 +76,8 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif vendoritem.imagefour == img:
-                            vendoritem.imagefour = '0'
+                        elif vendoritem.image_four == img:
+                            vendoritem.image_four = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
                             try:
@@ -87,8 +89,8 @@ def deleteimg_noredirect(id, img):
                             except Exception:
                                 pass
 
-                        elif vendoritem.imagefive == img:
-                            vendoritem.imagefive = '0'
+                        elif vendoritem.image_five == img:
+                            vendoritem.image_five = '0'
                             db.session.add(vendoritem)
                             db.session.commit()
                             try:
@@ -110,11 +112,12 @@ def deleteimg_noredirect(id, img):
     except:
         pass
 
+
 def image1(formdata, item, directoryifitemlisting):
     id_pic1 = id_generator_picture1()
     # if the form has an image
     if formdata:
-        deleteimg_noredirect(id=item.id, img=item.imageone)
+        deleteimg_noredirect(id=item.id, img=item.image_one)
         filename = secure_filename(formdata.filename)
         # makes directory (generic location + auction number id as folder)
         # saves it to location
@@ -127,29 +130,30 @@ def image1(formdata, item, directoryifitemlisting):
         # puts new name with ending
         filenamenewfull = filenamenew + file_extension
         # gets aboslute path of new file
-        newfileNameDestination = os.path.join(directoryifitemlisting, newfileName)
+        newfileNameDestination = os.path.join(
+            directoryifitemlisting, newfileName)
         # renames file
         os.rename(filenamenewfull, newfileNameDestination)
 
         if len(formdata.filename) > 2:
-            item.imageone = id_pic1
+            item.image_one = id_pic1
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            item.imageone = "0"
+            item.image_one = "0"
     else:
         # nothing no changes
-        if len(item.imageone) > 5:
+        if len(item.image_one) > 5:
             pass
         else:
             # no image change to 0
-            item.imageone = "0"
+            item.image_one = "0"
 
 
 def image2(formdata, item, directoryifitemlisting):
     id_pic2 = id_generator_picture2()
     if formdata:
-        deleteimg_noredirect(id=item.id, img=item.imagetwo)
+        deleteimg_noredirect(id=item.id, img=item.image_two)
         filename = secure_filename(formdata.filename)
         # makes directory (generic location + auction number id as folder)
         # saves it to location
@@ -162,27 +166,28 @@ def image2(formdata, item, directoryifitemlisting):
         # puts new name with ending
         filenamenewfull = filenamenew + file_extension
         # gets aboslute path of new file
-        newfileNameDestination2 = os.path.join(directoryifitemlisting, newfileName)
+        newfileNameDestination2 = os.path.join(
+            directoryifitemlisting, newfileName)
         # renames file
         os.rename(filenamenewfull, newfileNameDestination2)
         if len(formdata.filename) > 2:
-            item.imagetwo = id_pic2
+            item.image_two = id_pic2
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            item.imagetwo = "0"
+            item.image_two = "0"
     else:
-        if item.imagetwo:
-            if len(item.imagetwo) > 5:
+        if item.image_two:
+            if len(item.image_two) > 5:
                 pass
         else:
-            item.imagetwo = "0"
+            item.image_two = "0"
 
 
 def image3(formdata, item, directoryifitemlisting):
     id_pic3 = id_generator_picture3()
     if formdata:
-        deleteimg_noredirect(id=item.id, img=item.imagethree)
+        deleteimg_noredirect(id=item.id, img=item.image_three)
         filename = secure_filename(formdata.filename)
         # makes directory (generic location + auction number id as folder)
         # saves it to location
@@ -190,36 +195,36 @@ def image3(formdata, item, directoryifitemlisting):
         formdata.save(imagepath)
         # split file name and ending
         filenamenew, file_extension = os.path.splitext(
-                            imagepath)
+            imagepath)
         # gets new 64 digit filenam
         newfileName = id_pic3 + file_extension
         # puts new name with ending
         filenamenewfull = filenamenew + file_extension
         # gets aboslute path of new file
-        newfileNameDestination = os.path.join(directoryifitemlisting, newfileName)
+        newfileNameDestination = os.path.join(
+            directoryifitemlisting, newfileName)
         # renames file
         os.rename(filenamenewfull, newfileNameDestination)
         if len(formdata.filename) > 5:
             # add profile to db
-            item.imagethree = id_pic3
+            item.image_three = id_pic3
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            item.imagethree = "0"
+            item.image_three = "0"
 
     else:
-        if item.imagethree is not None:
-            if len(item.imagethree) > 5:
+        if item.image_three is not None:
+            if len(item.image_three) > 5:
                 pass
         else:
-            item.imagethree = "0"
-
+            item.image_three = "0"
 
 
 def image4(formdata, item, directoryifitemlisting):
     id_pic4 = id_generator_picture4()
     if formdata:
-        deleteimg_noredirect(id=item.id, img=item.imagefour)
+        deleteimg_noredirect(id=item.id, img=item.image_four)
         filename = secure_filename(formdata.filename)
         # makes directory (generic location + auction number id as folder)
         # saves it to location
@@ -232,29 +237,30 @@ def image4(formdata, item, directoryifitemlisting):
         # puts new name with ending
         filenamenewfull = filenamenew + file_extension
         # gets aboslute path of new file
-        newfileNameDestination = os.path.join(directoryifitemlisting, newfileName)
+        newfileNameDestination = os.path.join(
+            directoryifitemlisting, newfileName)
         # renames file
         os.rename(filenamenewfull, newfileNameDestination)
         if len(formdata.filename) > 2:
-  
+
             # add profile to db
-            item.imagefour = id_pic4
+            item.image_four = id_pic4
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            item.imagefour = "0"
+            item.image_four = "0"
     else:
-        if item.imagefour:
-            if len(item.imagefour) > 5:
+        if item.image_four:
+            if len(item.image_four) > 5:
                 pass
         else:
-            item.imagefour = "0"
+            item.image_four = "0"
 
 
 def image5(formdata, item, directoryifitemlisting):
     id_pic5 = id_generator_picture5()
     if formdata:
-        deleteimg_noredirect(id=item.id, img=item.imagefive)
+        deleteimg_noredirect(id=item.id, img=item.image_five)
         filename = secure_filename(formdata.filename)
         # makes directory (generic location + auction number id as folder)
         # saves it to location
@@ -267,20 +273,21 @@ def image5(formdata, item, directoryifitemlisting):
         # puts new name with ending
         filenamenewfull = filenamenew + file_extension
         # gets aboslute path of new file
-        newfileNameDestination = os.path.join(directoryifitemlisting, newfileName)
+        newfileNameDestination = os.path.join(
+            directoryifitemlisting, newfileName)
         # renames file
         os.rename(filenamenewfull, newfileNameDestination)
         if len(formdata.filename) > 2:
 
             # add profile to db
-            item.imagefive = id_pic5
+            item.image_five = id_pic5
             db.session.add(item)
             imagespider(base_path=directoryifitemlisting)
         else:
-            item.imagefive = "0"
+            item.image_five = "0"
     else:
-        if item.imagefive:
-            if len(item.imagefive) > 5:
+        if item.image_five:
+            if len(item.image_five) > 5:
                 pass
         else:
-            item.imagefive = "0"
+            item.image_five = "0"

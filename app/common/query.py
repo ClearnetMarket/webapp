@@ -72,7 +72,6 @@ def achievementcategory():
     return list
 
 
-
 def sorttheresults():
     list = [
         (0, 'Most Relevant'),
@@ -81,7 +80,6 @@ def sorttheresults():
         (3, 'Top Sellers/Trades'),
     ]
     return list
-
 
 
 def sortbyrating():
@@ -101,6 +99,8 @@ def sortbyage():
         (2, 'Oldest First'),
     ]
     return list
+
+
 def requestreturn():
     list = [
         (0, 'Ordered by mistake'),
@@ -115,6 +115,7 @@ def requestreturn():
 
     ]
     return list
+
 
 def requestcancel():
     list = [
@@ -153,6 +154,7 @@ def feedbacklist():
     ]
     return list
 
+
 def physicalordigital():
     list = [
         (0, ''),
@@ -163,7 +165,7 @@ def physicalordigital():
     return list
 
 
-def itemCount():
+def item_count():
     list = [
         (0, ''),
         (1, '1'),
@@ -338,7 +340,7 @@ def shippingdaymost():
     return list
 
 
-def itemCondition():
+def item_condition():
     list = [
         (0, ''),
         (1, 'New'),
@@ -416,7 +418,7 @@ def durationList():
 
 
 def countryList():
-    list =[
+    list = [
         (0, ''),
         (1, 'World Wide'),
         (2, 'World Wide Web'),
@@ -662,6 +664,7 @@ def countryList():
         (246, 'Zimbabwe')]
 
     return list
+
 
 def admin_role():
     list = [

@@ -2,9 +2,9 @@
 <div class="card mr-1 mb-5" >
     <a href="{{ url_for('item.itemforsale',id=item.id) }}">
     <img class="card-img-top" style="max-width: 200px; height: 200px;"
-        {% if item.imageone != '0' %}
+        {% if item.image_one != '0' %}
             src="{{ url_for('userdata.media_file',
-                filename=(item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
+                filename=(item.string_node_id +item.string_auction_id + item.image_one + "_225x.jpg")) }}">
         {% else %}
             src="{{ url_for('static', filename=('images/no-product-image.png')) }}">
         {% endif %}
@@ -12,7 +12,7 @@
     <hr>
     <div class="card-body text-center">
     <div class="card-title">
-        {{ item.itemtitlee|truncate(35) }}
+        {{ item.item_title|truncate(35) }}
     </div>
         {#  Price #}
         <div class="col-12 font-weight-bold" style="font-size: 12px;">
@@ -21,19 +21,19 @@
         </div>
 
         {# btc Price #}
-        {% if item.digital_currency2 == 1 %}
+        {% if item.digital_currency_2 == 1 %}
             <div class="col-12" style="font-size: 12px;">
-                {{ item.price|btcprice(currency=item.currency) }} BTC <br>
+                {{ item.bch_to_currency(currency=item.currency) }} BTC <br>
             </div>
         {% endif %}
 
         {# currency logos #}
         <div class="col-12text-center linkcolor" >
-            {% if item.digital_currency2 == 1 %}
+            {% if item.digital_currency_2 == 1 %}
                 <img src="{{ url_for('static', filename=('images/currency_logos/btc/btc_small.png')) }}" 
                 style="width: 25px; height: 20px;">
             {% endif %}
-            {% if item.digital_currency3 == 1 %}
+            {% if item.digital_currency_3 == 1 %}
                 <img src="{{ url_for('static', filename=('images/currency_logos/bch/bch_small.png')) }}" 
                 style="width: 25px; height: 20px;">
             {% endif %}

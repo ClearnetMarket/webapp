@@ -32,7 +32,7 @@ from app.classes.admin import \
     flagged
 
 from app.classes.item import \
-    marketItem
+    marketitem
 
 from app.classes.message import \
     Chat, \
@@ -80,7 +80,6 @@ from app.common.decorators import \
 
 @admin.route('/', methods=['GET', 'POST'])
 @website_offline
-
 @login_required
 @ADMINaccount_required
 @ADMINaccountlevel3_required
@@ -202,7 +201,7 @@ def changeitem():
     if request.method == 'POST':
         if current_user.admin == 1:
             if form.finditem.data:
-                getitem = db.session.query(marketItem).filter_by(
+                getitem = db.session.query(marketitem).filter_by(
                     id=form.searchbar.data).first()
                 if getitem:
                     try:
@@ -212,7 +211,7 @@ def changeitem():
                             vendorname=getitem.vendor_name,
                             vendorid=getitem.vendor_id,
                             comment=form.comment.data,
-                            itemrating=form.itemrating.data,
+                            item_rating=form.item_rating.data,
                             item_id=form.searchbar.data,
                             type=1,
                             vendorrating=form.vendorrating.data,
@@ -286,7 +285,7 @@ def changeuser(username):
         vendor_totalbtcrecieved=getstatsvendor.totalbtcrecieved,
         vendor_totalbtcspent=getstatsvendor.totalbtcspent,
         vendor_vendorrating=getstatsvendor.vendorrating,
-        vendor_itemrating=getstatsvendor.avgitemrating,
+        vendor_item_rating=getstatsvendor.avgitemrating,
     )
 
     if request.method == 'POST':
@@ -305,7 +304,7 @@ def changeuser(username):
                 getstatsvendor.totalbtcrecieved = form.vendor_totalbtcrecieved.data
                 getstatsvendor.totalbtcspent = form.vendor_totalbtcspent.data
                 getstatsvendor.diffpartners = form.difftradingpartners.data
-                getstatsvendor.avgitemrating = form.vendor_itemrating.data
+                getstatsvendor.avgitemrating = form.vendor_item_rating.data
                 getstatsvendor.vendorrating = form.vendor_vendorrating.data
 
                 db.session.add(getstatscustomer)
@@ -446,7 +445,6 @@ def addAchievement():
 @admin.route('/dispute/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-
 @ADMINaccount_required
 @ADMINaccountlevel3_required
 def dispute(id):
@@ -922,7 +920,6 @@ def dispute(id):
 
 
 @admin.route('/msg/<int:id>', methods=['GET', 'POST'])
-
 @website_offline
 @login_required
 @ADMINaccount_required
@@ -1191,7 +1188,6 @@ def removeflags(id):
 @admin.route('/deletevendoritem/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-
 @ADMINaccount_required
 @ADMINaccountlevel3_required
 def deleteItem(id):
@@ -1242,7 +1238,7 @@ def deleteItem(id):
 
     global pathtofile5
     global file_extension5
-    item = marketItem.query.get(id)
+    item = marketitem.query.get(id)
 
     try:
         specific_folder = str(item.id)
@@ -1250,15 +1246,15 @@ def deleteItem(id):
         link = 'item'
         spacer = '/'
         pathtofile1 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                          specific_folder + spacer + item.imageone)
+                          specific_folder + spacer + item.image_one)
         pathtofile2 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                          specific_folder + spacer + item.imagetwo)
+                          specific_folder + spacer + item.image_two)
         pathtofile3 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                          specific_folder + spacer + item.imagethree)
+                          specific_folder + spacer + item.image_three)
         pathtofile4 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                          specific_folder + spacer + item.imagefour)
+                          specific_folder + spacer + item.image_four)
         pathtofile5 = str(UPLOADED_FILES_DEST + spacer + link + spacer +
-                          specific_folder + spacer + item.imagefive)
+                          specific_folder + spacer + item.image_five)
 
         try:
 
@@ -1326,7 +1322,7 @@ def deleteItem(id):
         except:
             pass
 
-        x1 = item.imageone
+        x1 = item.image_one
         if len(x1) > 10:
             try:
                 os.remove(file10)
@@ -1346,7 +1342,7 @@ def deleteItem(id):
                 pass
         else:
             pass
-        x2 = item.imagetwo
+        x2 = item.image_two
         if len(x2) > 10:
             try:
                 os.remove(file20)
@@ -1366,7 +1362,7 @@ def deleteItem(id):
                 pass
         else:
             pass
-        x3 = item.imagethree
+        x3 = item.image_three
         if len(x3) > 10:
             try:
                 os.remove(file30)
@@ -1386,7 +1382,7 @@ def deleteItem(id):
                 pass
         else:
             pass
-        x4 = item.imagefour
+        x4 = item.image_four
         if len(x4) > 10:
             try:
                 os.remove(file40)
@@ -1406,7 +1402,7 @@ def deleteItem(id):
                 pass
         else:
             pass
-        x5 = item.imagefive
+        x5 = item.image_five
         if len(x5) > 10:
             try:
                 os.remove(file50)
@@ -1648,7 +1644,7 @@ def admin_viewitem(id):
     now = datetime.utcnow()
     user = db.session.query(User).filter_by(
         username=current_user.username).first()
-    getitem = db.session.query(marketItem).filter_by(id=id).first()
+    getitem = db.session.query(marketitem).filter_by(id=id).first()
     return render_template('admin/viewid/viewitem.html',
                            user=user, now=now,
                            getitem=getitem)
@@ -1672,8 +1668,8 @@ def admin_vieworder(id):
         flash("Order has been deleted.", category="success")
         return redirect(url_for('index', username=current_user.username))
 
-    item = db.session.query(marketItem).filter(
-        marketItem.id == order.item_id).first()
+    item = db.session.query(marketitem).filter(
+        marketitem.id == order.item_id).first()
 
     transactfull = db.session.query(TransactionsBch)
     transactfull = transactfull.filter(TransactionsBch.commentbtc == str(id))

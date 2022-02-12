@@ -5,9 +5,9 @@ from wtforms.validators import Length, Optional
 from app.classes.models import Categories, Country
 
 
-
 def searchside():
     return Categories.query.filter(Categories.id != 1000, Categories.id != 100).order_by(Categories.id.asc()).all()
+
 
 def searchside_default():
     return Categories.query.filter(Categories.id == 1).first()
@@ -33,8 +33,6 @@ class searchForm(FlaskForm):
     # Shipping
     freeshipping = BooleanField(validators=[Optional()])
 
- 
-
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
 
@@ -57,9 +55,9 @@ class sortResults(FlaskForm):
                  ]
     )
 
-    destinationcountry = QuerySelectField(query_factory=lambda: Country.query.all(),
-                                          get_label='name',
-                                          validators=[Optional()])
+    destination_country_one = QuerySelectField(query_factory=lambda: Country.query.all(),
+                                               get_label='name',
+                                               validators=[Optional()])
     # payment methods
     btccash = BooleanField(validators=[Optional()])
     btc = BooleanField(validators=[Optional()])

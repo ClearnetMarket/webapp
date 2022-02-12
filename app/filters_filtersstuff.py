@@ -342,11 +342,11 @@ def lastseen(id):
 # Gets the item count in marketitems subcategory
 @app.template_filter('itemsincat')
 def itemsincat(subcatid):
-    from app.classes.item import marketItem
+    from app.classes.item import marketitem
     from app import db
-    getitems = db.session.query(marketItem)
-    getitems = getitems.filter(marketItem.subcategory == subcatid)
-    getitems = getitems.filter(marketItem.online == 1)
+    getitems = db.session.query(marketitem)
+    getitems = getitems.filter(marketitem.subcategory == subcatid)
+    getitems = getitems.filter(marketitem.online == 1)
     item = getitems.count()
     return item
 
@@ -354,11 +354,11 @@ def itemsincat(subcatid):
 # Gets the item count in marketitems main category
 @app.template_filter('itemsincatmain')
 def itemsincatmain(id):
-    from app.classes.item import marketItem
+    from app.classes.item import marketitem
     from app import db
-    getitems = db.session.query(marketItem)
-    getitems = getitems.filter(marketItem.category == id)
-    getitems = getitems.filter(marketItem.online == 1)
+    getitems = db.session.query(marketitem)
+    getitems = getitems.filter(marketitem.category == id)
+    getitems = getitems.filter(marketitem.online == 1)
     item = getitems.count()
     return item
 
@@ -378,23 +378,23 @@ def carrierformat(id):
 # Gets an item picture if exists..else returns default image
 @app.template_filter('orderpicture')
 def orderpicture(itemid, type):
-    from app.classes.item import marketItem
+    from app.classes.item import marketitem
     from app import db
     # <img src="{{ order.trade_id|orderpicture(type=2) }}" width="200px" height="200px">
     # <img src="{{ order.item_id|orderpicture(type=1) }}" width="200px" height="200px">
 
     if type == 1:
-        x = db.session.query(marketItem).filter(
-            itemid == marketItem.id).first()
+        x = db.session.query(marketitem).filter(
+            itemid == marketitem.id).first()
         if x == None:
             # give default image
             return url_for('static', filename='/images/Noimage.png')
         else:
-            if x.imageone == '0':
+            if x.image_one == '0':
                 return url_for('static', filename='/images/Noimage.png')
             else:
                 # get primary image
-                return url_for('userdata.media_file', nodeid=x.stringnodeid, filename=(x.string + x.imageone))
+                return url_for('userdata.media_file', nodeid=x.string_node_id, filename=(x.string + x.image_one))
     elif type == 2:
         pass
 

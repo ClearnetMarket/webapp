@@ -48,7 +48,7 @@
           {% else %} {% endif %}
           <br />
           {{
-          wallet.currentbalance|btccashtocurrency(currency=current_user.currency)
+          wallet.currentbalance|bch_to_currency(currency=current_user.currency)
           }} {{ current_user.currency|currencyformat }}
         </div>
       </div>

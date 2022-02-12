@@ -12,7 +12,7 @@ from flask_paginate import\
     get_page_args
 # models
 from app.classes.item import \
-    marketItem
+    marketitem
 from app.classes.models import \
     btc_cash_Prices
 from app.classes.category import Categories
@@ -95,11 +95,11 @@ def viewcategory(maincatid):
 
     # PROMOTED
     promoteditems = db.session\
-        .query(marketItem)\
-        .filter(marketItem.online == 1)\
-        .filter(marketItem.aditem == 1)\
-        .filter(marketItem.aditem_level == 1)\
-        .order_by(marketItem.totalsold.desc())\
+        .query(marketitem)\
+        .filter(marketitem.online == 1)\
+        .filter(marketitem.ad_item is True)\
+        .filter(marketitem.ad_item_level == 1)\
+        .order_by(marketitem.total_sold.desc())\
         .limit(4)
     # END PROMOTED
 
@@ -112,9 +112,9 @@ def viewcategory(maincatid):
     # Main Page search
     try:
         itemfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.categoryid0 == maincatid)\
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.category_id_0 == maincatid)\
             .limit(per_page).offset(offset)
 
         pagination = Pagination(page=page,
@@ -188,8 +188,8 @@ def viewcategory(maincatid):
             ##
 
             itemfull = db.session\
-                .query(marketItem)\
-                .filter(marketItem.online == 1)
+                .query(marketitem)\
+                .filter(marketitem.online == 1)
 
             # FILTERS
             # Price Filter
@@ -199,14 +199,14 @@ def viewcategory(maincatid):
                 itemfull = itemfull
 
             else:
-                itemfull = itemfull.filter(lowprice <= marketItem.price)\
-                    .filter(marketItem.price <= highprice)
+                itemfull = itemfull.filter(lowprice <= marketitem.price)\
+                    .filter(marketitem.price <= highprice)
 
             # btc Filter
             if btc_sort == 0:
                 itemfull = itemfull
             elif btc_sort == 1:
-                itemfull = itemfull.filter(marketItem.digital_currency2 == 1)
+                itemfull = itemfull.filter(marketitem.digital_currency_2 == 1)
             else:
                 itemfull = itemfull
 
@@ -214,7 +214,7 @@ def viewcategory(maincatid):
             if btccash_sort == 0:
                 itemfull = itemfull
             elif btccash_sort == 1:
-                itemfull = itemfull.filter(marketItem.digital_currency3 == 1)
+                itemfull = itemfull.filter(marketitem.digital_currency_3 == 1)
             else:
                 itemfull = itemfull
 
@@ -222,7 +222,7 @@ def viewcategory(maincatid):
             if shipping_boolean == 0:
                 itemfull = itemfull
             elif shipping_boolean == 1:
-                itemfull = itemfull.filter(marketItem.shippingfree == 1)
+                itemfull = itemfull.filter(marketitem.shipping_free == 1)
             else:
                 itemfull = itemfull
             # END FILTERS
@@ -234,18 +234,18 @@ def viewcategory(maincatid):
             # PRICE highest first
             ##
             elif sortresults.sortCategory.data == '1':
-                itemfull = itemfull.order_by(marketItem.price.desc())
+                itemfull = itemfull.order_by(marketitem.price.desc())
             ###
             # PRICE lowest first
             ##
             elif sortresults.sortCategory.data == '2':
-                itemfull = itemfull.order_by(marketItem.price.asc())
+                itemfull = itemfull.order_by(marketitem.price.asc())
 
             ###
             # top selling/traded
             ##
             elif sortresults.sortCategory.data == '3':
-                itemfull = itemfull.order_by(marketItem.totalsold.desc())
+                itemfull = itemfull.order_by(marketitem.total_sold.desc())
 
             else:
                 flash(sortresults.sortCategory.data, category="danger")

@@ -12,7 +12,7 @@ from app.common.decorators import \
     vendoraccount_required
 
 # models
-from app.classes.item import marketItem
+from app.classes.item import marketitem
 from app.classes.wallet_bch import BchWallet
 # End Models
 
@@ -37,20 +37,20 @@ def promotehome():
     form = PromoHomeForm()
 
     items = db.session\
-        .query(marketItem)\
-        .filter(marketItem.vendor_id == current_user.id, marketItem.aditem == 1)\
+        .query(marketitem)\
+        .filter(marketitem.vendor_id == current_user.id, marketitem.ad_item is True)\
         .all()
     if request.method == 'POST':
         if form.submitcheckbox.data and form.validate_on_submit():
             for v in request.form.getlist('checkit'):
                 intv = int(v)
                 specific_item = db.session\
-                    .query(marketItem)\
+                    .query(marketitem)\
                     .filter_by(id=intv)\
                     .first()
-                if specific_item.aditem == 1:
-                    specific_item.aditem = 0
-                    specific_item.aditem_level = 0
+                if specific_item.ad_item is True:
+                    specific_item.ad_item = 0
+                    specific_item.ad_item_level = 0
                     db.session.add(specific_item)
             db.session.commit()
             return redirect(url_for('promote.promotehome'))
@@ -68,8 +68,8 @@ def promotehome():
 def promoteitem(itemid):
     now = datetime.utcnow()
     item = db.session\
-        .query(marketItem)\
-        .filter(marketItem.id == itemid)\
+        .query(marketitem)\
+        .filter(marketitem.id == itemid)\
         .first()
 
     catcost = btc_cash_convertlocaltobtc(amount=1, currency=1)
@@ -88,14 +88,14 @@ def promoteitem(itemid):
         myaccountform = add_promo_form_factory(item=itemid)
 
         form = myaccountform(
-            promotype=item.aditem_level,
+            promotype=item.ad_item_level,
         )
 
         if request.method == 'POST':
             if form.submit.data and form.validate_on_submit():
                 selection = form.promotype.data
                 promoselection = selection.value
-                if item.aditem == 0:
+                if item.ad_item == 0:
                     if promoselection == 0:
                         flash("No selection made", category="danger")
                         return redirect(url_for('promote.promoteitem', itemid=itemid))
@@ -106,9 +106,9 @@ def promoteitem(itemid):
                                           comment=item.id,
                                           user_id=current_user.id
                                           )
-                            item.aditem = 1
-                            item.aditem_level = 1
-                            item.aditem_timer = now
+                            item.ad_item = 1
+                            item.ad_item_level = 1
+                            item.ad_item_timer = now
 
                             db.session.add(item)
                             db.session.commit()
@@ -126,9 +126,9 @@ def promoteitem(itemid):
                                           comment=item.id,
                                           user_id=current_user.id
                                           )
-                            item.aditem = 1
-                            item.aditem_level = 2
-                            item.aditem_timer = now
+                            item.ad_item = 1
+                            item.ad_item_level = 2
+                            item.ad_item_timer = now
 
                             db.session.add(item)
                             db.session.commit()

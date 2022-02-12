@@ -1,0 +1,227 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<nav aria-label="breadcrumb" class="linkcolor">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('vendorcreate.itemsforSale') }}">My Items</a></li>
+    </ol>
+</nav>
+
+<div class="row">
+    {% for field, errors in form.errors.items() %}
+        <div class="col-6 offset-3">
+            {{ ', '.join(errors) }}
+        </div>
+    {% endfor %}
+</div>
+<form method="post" enctype="multipart/form-data" class="form-horizontal">
+    {{ form.csrf_token }}
+    <div class="row text-center mb-1" style="max-width: 1000px; ">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h5>Create an Item - General Info</h5>
+            </div>
+        </div>
+    </div>
+{# 
+Top Row
+#}
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+        <div class="col-12 font-weight-bold">
+            <h5>Item Info</h5>
+            <hr>
+        </div>
+    {# 
+     Title
+     #}
+        <div class="row w-100 mb-1">
+            <div class="col-2">Title</div>
+            <div class="col-4">
+                {{ render_field(form.item_title, class="form-control" ) }}
+                {% if form.item_title.errors %}
+                    <ul class="errors">
+                        {% for error in form.item_title.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                The title is the headline for your listing
+            </div>
+        </div>
+
+    {# 
+     Category
+     #}
+        <div class="row w-100 mb-1">
+            <div class="col-2">Category</div>
+            <div class="col-4">
+                {{ render_field(form.category,  class="form-control") }}
+                {% if form.category.errors %}
+                    <ul class="errors">
+                        {% for error in form.category.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                The category of your item. Used for searches, and finding your item.
+            </div>
+        </div>
+    {# 
+     Condition
+     #}
+        <div class="row w-100 mb-1">
+            <div class="col-2">Condition</div>
+            <div class="col-4">
+                {{ render_field(form.item_condition, class="form-control", default="0") }}
+                {% if form.item_condition.errors %}
+                    <ul class="errors">
+                        {% for error in form.item_condition.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                The condition of your item
+            </div>
+        </div>
+    </div>
+
+
+{# 
+Bottom Row
+#}
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+        <div class="col-12 font-weight-bold">
+            <h5>Pricing</h5>
+            <hr>
+        </div>
+    {# 
+     Price
+     #}
+        <div class="row w-100 mb-1">
+            <div class="col-2 control-label">
+                Price
+            </div>
+            <div class="col-4">
+                {{ render_field(form.price, class="form-control" ) }}
+                {% if form.price.errors %}
+                    <ul class="errors">
+                        {% for error in form.price.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                The price of the item in your local currency
+            </div>
+        </div>
+    {# 
+     Currency
+     #}
+        <div class="row w-100 mb-1">
+            <div class="col-2 control-label">Currency</div>
+            <div class="col-4">
+                {{ render_field(form.currency, class="form-control" ) }}
+                {% if form.currency.errors %}
+                    <ul class="errors">
+                        {% for error in form.currency.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                The currency you are selling this item in.
+            </div>
+        </div>
+    {# 
+     Item Count
+     #}
+        <div class="row w-100 mb-1">
+            <div class="col-2 control-label">Quantity</div>
+            <div class="col-3">
+                {{ render_field(form.item_count, class="form-control") }}
+                {% if form.item_count.errors %}
+                    <ul class="errors">
+                        {% for error in form.item_count.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                How many items you are selling
+            </div>
+        </div>
+    {# 
+     BTC CASH Acepted
+     #}
+        <div class="row w-100 mb-1">
+            <div class="col-sm-2 control-label text-lefte">Bitcoin Cash:</div>
+            <div class="col-4">
+                {{ render_field(form.btc_cash_accepted, type="checkbox") }}
+                {% if form.btc_cash_accepted.errors %}
+                    <ul class="errors">
+                        {% for error in form.btc_cash_accepted.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+            </div>
+        </div>
+    </div>
+{# 
+Third Row
+#}
+
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+    {# 
+     KEYWORDS
+     #}
+        <div class="col-12 font-weight-bold">
+            <h5>KeyWords</h5>
+            <hr>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-6">
+                {{ render_field(form.keywords, class="form-control" ) }}
+                {% if form.keywords.errors %}
+                <ul class="errors">
+                    {% for error in form.keywords.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Keywords are import to find your item in the Clearnet Market search engine. Comma seperated keywords are
+                required to
+                find your items.
+            </div>
+        </div>
+    </div>
+
+    {# 
+     Create Button
+     #}
+    <div class="row mb-5">
+        <div class="col-6 offset-3 d-grid gap-2">
+            {{ render_field(form.submit, value="Proceed", class="btn btn-primary") }}
+        </div>
+    </div>
+
+</form>
+
+
+{% endblock %}

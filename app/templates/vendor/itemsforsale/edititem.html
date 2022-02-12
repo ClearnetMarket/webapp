@@ -39,14 +39,14 @@
                 Price
             </div>
             <div class="col-4">
-                {{ render_field(form.pricee, class="form-control" ) }}
+                {{ render_field(form.price, class="form-control" ) }}
             </div>
             <div class="col-6">
                 The price of the item in your local currency
             </div>
             <div id="col-12">
-                {% if form.pricee.errors %}
-                    {% for error in form.pricee.errors %}
+                {% if form.price.errors %}
+                    {% for error in form.price.errors %}
                             {{ error }}
                     {% endfor %}
                 {% endif %}
@@ -74,14 +74,14 @@
         <div class="row w-100 mb-1">
             <div class="col-2 control-label">Quantity</div>
             <div class="col-3">
-                {{ render_field(form.itemcount_edit, class="form-control") }}
+                {{ render_field(form.item_count_edit, class="form-control") }}
             </div>
             <div class="col-6">
                 How many items you are selling
             </div>
             <div id="col-12">
-                {% if form.itemcount_edit.errors %}
-                    {% for error in form.itemcount_edit.errors %}
+                {% if form.item_count_edit.errors %}
+                    {% for error in form.item_count_edit.errors %}
                             {{ error }}
                     {% endfor %}
                 {% endif %}
@@ -132,14 +132,14 @@
         <div class="row w-100 mb-1">
             <div class="col-2">Title</div>
             <div class="col-4">
-                {{ render_field(form.itemtitlee, class="form-control" ) }}
+                {{ render_field(form.item_title, class="form-control" ) }}
             </div>
             <div class="col-6">
                 The title is the headline for your listing
             </div>
             <div id="col-12">
-                {% if form.itemtitlee.errors %}
-                    {% for error in form.itemtitlee.errors %}
+                {% if form.item_title.errors %}
+                    {% for error in form.item_title.errors %}
                             {{ error }}
                     {% endfor %}
                 {% endif %}
@@ -166,14 +166,14 @@
         <div class="row w-100 mb-1">
             <div class="col-2">Condition</div>
             <div class="col-4">
-                {{ render_field(form.itemcondition_edit, class="form-control", default="0") }}
+                {{ render_field(form.item_condition_edit, class="form-control", default="0") }}
             </div>
             <div class="col-6">
                 The condition of your item
             </div>
             <div id="col-12">
-                {% if form.itemcondition_edit.errors %}
-                    {% for error in form.itemcondition_edit.errors %}
+                {% if form.item_condition_edit.errors %}
+                    {% for error in form.item_condition_edit.errors %}
                             {{ error }}
                     {% endfor %}
                 {% endif %}
@@ -187,15 +187,15 @@
             <hr>
         </div>
         <div class="row w-100 mb-1">
-            {% if form.itemdescription.errors %}
+            {% if form.item_description.errors %}
                 <div class="col-6 has-error">
-                    {% for error in form.itemdescription.errors %}
-                        {{ render_field(form.itemdescription, rows=7, cols=45, class="form-control border-danger" )}}
+                    {% for error in form.item_description.errors %}
+                        {{ render_field(form.item_description, rows=7, cols=45, class="form-control border-danger" )}}
                     {% endfor %}
                 </div>
             {% else %}
                 <div class="col-8">
-                    {{ render_field(form.itemdescription, rows=7, cols=45,class="form-control" )}}
+                    {{ render_field(form.item_description, rows=7, cols=45,class="form-control" )}}
                 </div>
                 <div class="col-2">
                     The item description is required. HTML Markup is allowed. Linking of images is allowed.
@@ -226,9 +226,9 @@
         <div class="row w-100 mb-1">
             <div class="col-2">Detail #1: </div>
             <div class="col-4">
-                {{ render_field(form.details1, class="form-control", placeholder="Label") }}
+                {{ render_field(form.details_1, class="form-control", placeholder="Label") }}
                 <div id="form_error">
-                    {% if form.details1.errors %}
+                    {% if form.details_1.errors %}
                     {% for error in form.details.errors %}
                      {{ error }}
                     {% endfor %}
@@ -236,10 +236,10 @@
                 </div>
             </div>
             <div class="col-6">
-                {{ render_field(form.details1answer, class="form-control", placeholder="Description") }}
+                {{ render_field(form.details_1_answer, class="form-control", placeholder="Description") }}
                     <div id="form_error">
-                    {% if form.details1answer.errors %}
-                    {% for error in form.details1answer.errors %}
+                    {% if form.details_1_answer.errors %}
+                    {% for error in form.details_1_answer.errors %}
                      {{ error }}
                     {% endfor %}
                     {% endif %}
@@ -250,20 +250,20 @@
         <div class="row w-100 mb-1">
             <div class="col-2">Detail #2: </div>
             <div class="col-4">
-                {{ render_field(form.details2, class="form-control", placeholder="Label") }}
+                {{ render_field(form.details_2, class="form-control", placeholder="Label") }}
                     <div id="form_error">
-                    {% if form.details2.errors %}
-                    {% for error in form.details2.errors %}
+                    {% if form.details_2.errors %}
+                    {% for error in form.details_2.errors %}
                         {{ error }}
                     {% endfor %}
                     {% endif %}
                     </div>
             </div>
             <div class="col-6">
-                {{ render_field(form.details2answer, class="form-control", placeholder="Description") }}
+                {{ render_field(form.details_2_answer, class="form-control", placeholder="Description") }}
                     <div id="form_error">
-                    {% if form.details2answer.errors %}
-                    {% for error in form.details2answer.errors %}
+                    {% if form.details_2_answer.errors %}
+                    {% for error in form.details_2_answer.errors %}
                          {{ error }}
                     {% endfor %}
                     {% endif %}
@@ -274,20 +274,20 @@
         <div class="row w-100 mb-1">
             <div class="col-2">Detail #3: </div>
             <div class="col-4">
-                {{ render_field(form.details3, class="form-control", placeholder="Label") }}
+                {{ render_field(form.details_3, class="form-control", placeholder="Label") }}
                     <div id="form_error">
-                    {% if form.details3.errors %}
-                    {% for error in form.details3.errors %}
+                    {% if form.details_3.errors %}
+                    {% for error in form.details_3.errors %}
                          {{ error }}
                     {% endfor %}
                     {% endif %}
                     </div>
             </div>
             <div class="col-6">
-                {{ render_field(form.details3answer, class="form-control", placeholder="Description") }}
+                {{ render_field(form.details_3_answer, class="form-control", placeholder="Description") }}
                     <div id="form_error">
-                    {% if form.details3answer.errors %}
-                    {% for error in form.details3answer.errors %}
+                    {% if form.details_3_answer.errors %}
+                    {% for error in form.details_3_answer.errors %}
                          {{ error }}
                     {% endfor %}
                     {% endif %}
@@ -298,20 +298,20 @@
         <div class="row w-100 mb-1">
             <div class="col-2">Detail #4: </div>
             <div class="col-4">
-                {{ render_field(form.details4, class="form-control", placeholder="Label") }}
+                {{ render_field(form.details_4, class="form-control", placeholder="Label") }}
                     <div id="form_error">
-                    {% if form.details4.errors %}
-                    {% for error in form.details4.errors %}
+                    {% if form.details_4.errors %}
+                    {% for error in form.details_4.errors %}
                         {{ error }}
                     {% endfor %}
                     {% endif %}
                     </div>
             </div>
             <div class="col-6">
-                {{ render_field(form.details4answer, class="form-control", placeholder="Description") }}
+                {{ render_field(form.details_4_answer, class="form-control", placeholder="Description") }}
                     <div id="form_error">
-                    {% if form.details4answer.errors %}
-                    {% for error in form.details4answer.errors %}
+                    {% if form.details_4_answer.errors %}
+                    {% for error in form.details_4_answer.errors %}
                      {{ error }}
                     {% endfor %}
                     {% endif %}
@@ -322,20 +322,20 @@
         <div class="row w-100 mb-1">
             <div class="col-2">Detail #5: </div>
             <div class="col-4">
-                {{ render_field(form.details5, class="form-control", placeholder="Label") }}
+                {{ render_field(form.details_5, class="form-control", placeholder="Label") }}
                     <div id="form_error">
-                    {% if form.details5.errors %}
-                    {% for error in form.details5.errors %}
+                    {% if form.details_5.errors %}
+                    {% for error in form.details_5.errors %}
                         {{ error }}
                     {% endfor %}
                     {% endif %}
                     </div>
             </div>
             <div class="col-6">
-                {{ render_field(form.details5answer, class="form-control", placeholder="Description") }}
+                {{ render_field(form.details_5_answer, class="form-control", placeholder="Description") }}
                     <div id="form_error">
-                    {% if form.details5answer.errors %}
-                    {% for error in form.details5answer.errors %}
+                    {% if form.details_5_answer.errors %}
+                    {% for error in form.details_5_answer.errors %}
                        {{ error }}
                     {% endfor %}
                     {% endif %}
@@ -360,28 +360,28 @@
             </div>
         </div>
         <div id="imageholder" class="border">
-            {% if item.imageone %}
-                {% if item.imageone  == '0'%}
-                <div id="imageOne">
+            {% if item.image_one %}
+                {% if item.image_one  == '0'%}
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Primary</div>
                         <div id="imageimage">
                             <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
                                 height="140px"></div>
-                        <div id="imageLabelbutton">{{ render_field(form.imageone1, class="form-inline" ) }}</div>
+                        <div id="imageLabelbutton">{{ render_field(form.image_one1, class="form-inline" ) }}</div>
                     </div>
                 </div>
                 {% else %}
-                <div id="imageOne">
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Primary</div>
                         <div id="imageimage">
                             <img
-                                src="{{ url_for('userdata.media_file', filename=( item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
+                                src="{{ url_for('userdata.media_file', filename=( item.string_node_id +item.string_auction_id + item.image_one + "_225x.jpg")) }}">
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imageone) }}" role="button">
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_one) }}" role="button">
                                 Delete Image
                             </a>
                         </div>
@@ -389,9 +389,9 @@
                 </div>
                 {% endif %}
             {% endif %}
-            {% if item.imagetwo %}
-                {% if item.imagetwo  == '0' %}
-                <div id="imageOne">
+            {% if item.image_two %}
+                {% if item.image_two  == '0' %}
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image One</div>
                         <div id="imageimage">
@@ -399,54 +399,54 @@
                                 height="140px">
                         </div>
                         <div id="imageLabelbutton">
-                            {{ render_field(form.imagetwo, class="form-inline" ) }}
+                            {{ render_field(form.image_two, class="form-inline" ) }}
                         </div>
                     </div>
                 </div>
                 {% else %}
-                <div id="imageOne">
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image One</div>
                         <div id="imageimage">
                             <img
                                 src="{{ url_for('userdata.media_file',
-                                        filename=(item.stringnodeid +item.stringauctionid + item.imagetwo + "_225x.jpg")) }}">
+                                        filename=(item.string_node_id +item.string_auction_id + item.image_two + "_225x.jpg")) }}">
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagetwo) }}"
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_two) }}"
                                 role="button">Delete Image</a></div>
                     </div>
                 </div>
                 {% endif %}
             {% endif %}
 
-            {% if item.imagethree %}
-                {% if item.imagethree  == '0' %}
-                <div id="imageOne">
+            {% if item.image_three %}
+                {% if item.image_three  == '0' %}
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image Two</div>
                         <div id="imageimage">
                             <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
                                 height="140px"></div>
                         <div id="imageLabelbutton">
-                            {{ render_field(form.imagethree, class="form-inline" ) }}
+                            {{ render_field(form.image_three, class="form-inline" ) }}
                         </div>
                     </div>
                 </div>
                 {% else %}
-                <div id="imageOne">
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image Two</div>
                         <div id="imageimage">
                             <img
                                 src="{{ url_for('userdata.media_file',
-                                        filename=(item.stringnodeid +item.stringauctionid + item.imagethree + "_225x.jpg")) }}">
+                                        filename=(item.string_node_id +item.string_auction_id + item.image_three + "_225x.jpg")) }}">
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" 
                             type="submit"
-                            href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagethree) }}"
+                            href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_three) }}"
                             role="button">Delete Image
                             </a>
                         </div>
@@ -455,31 +455,31 @@
                 {% endif %}
             {% endif %}
 
-            {% if item.imagefour %}
-                {% if item.imagefour == '0' %}
-                <div id="imageOne">
+            {% if item.image_four %}
+                {% if item.image_four == '0' %}
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image Four</div>
                         <div id="imageimage">
                             <img src="{{ url_for('static', filename=('images/no-product-image.png')  )  }}" width="140px"
                                 height="140px"></div>
                         <div id="imageLabelbutton">
-                            {{ render_field(form.imagefour, class="form-inline" ) }}
+                            {{ render_field(form.image_four, class="form-inline" ) }}
                         </div>
                     </div>
                 </div>
                 {% else %}
-                <div id="imageOne">
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image Three</div>
                         <div id="imageimage">
                             <img
                                 src="{{ url_for('userdata.media_file',
-                                        filename=(item.stringnodeid +item.stringauctionid + item.imagefour + "_225x.jpg")) }}">
+                                        filename=(item.string_node_id +item.string_auction_id + item.image_four + "_225x.jpg")) }}">
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagefour) }}" role="button">Delete Image
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_four) }}" role="button">Delete Image
                             </a>
                         </div>
                     </div>
@@ -487,9 +487,9 @@
                 {% endif %}
             {% endif %}
 
-            {% if item.imagefive  %}
-                {% if item.imagefive == '0' %}
-                <div id="imageOne">
+            {% if item.image_five  %}
+                {% if item.image_five == '0' %}
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image Four</div>
                         <div id="imageimage">
@@ -497,23 +497,23 @@
                                     filename=('images/no-product-image.png')  )  }}" width="140px" height="140px">
                         </div>
                         <div id="imageLabelbutton">
-                            {{ render_field(form.imagefive, class="form-inline" ) }}
+                            {{ render_field(form.image_five, class="form-inline" ) }}
                         </div>
                     </div>
                 </div>
                 {% else %}
 
-                <div id="imageOne">
+                <div id="image_one">
                     <div class="text-center">
                         <div id="imageLabel">Image Four</div>
                         <div id="imageimage">
                             <img
                                 src="{{ url_for('userdata.media_file',
-                                            filename=( item.stringnodeid +item.stringauctionid + item.imagefive + "_225x.jpg")) }}">
+                                            filename=( item.string_node_id +item.string_auction_id + item.image_five + "_225x.jpg")) }}">
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.imagefive) }}" role="button">Delete Image
+                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_five) }}" role="button">Delete Image
                             </a>
                         </div>
                     </div>
@@ -541,10 +541,10 @@
         </div>
         <div class="row w-100 mb-1">
             <div class="col-6">
-                {{ render_field(form.itemrefundpolicy,rows=7, cols=45, class="form-control") }}
+                {{ render_field(form.item_refund_policy,rows=7, cols=45, class="form-control") }}
                     <div id="form_error">
-                    {% if form.itemrefundpolicy.errors %}
-                    {% for error in form.itemrefundpolicy.errors %}
+                    {% if form.item_refund_policy.errors %}
+                    {% for error in form.item_refund_policy.errors %}
                    
                          {{ error }}
               
@@ -568,7 +568,7 @@
         <div class="row w-100 mb-1">
             <label class="col-1 control-label">Origin Country</label>
             <div class="col-4">
-                {{ render_field(form.origincountry1,  class="form-control") }}
+                {{ render_field(form.origin_country_1,  class="form-control") }}
             </div>
             <div class="col-6">
                 Select Origin Country your package is from. Required
@@ -640,7 +640,7 @@
         <div class="row w-100 mb-1">
             <label class="col-1 control-label">Option #1:</label>
             <div class="col-4">
-                {{ render_field(form.notshipping11,  class="form-control") }}
+                {{ render_field(form.not_shipping_11,  class="form-control") }}
             </div>
             <div class="col-6">
                 Select countrys you wont ship too. They are optional
@@ -650,7 +650,7 @@
         <div class="row w-100 mb-1">
             <label class="col-1 control-label">Option #2:</label>
             <div class="col-4">
-                {{ render_field(form.notshipping21,  class="form-control") }}
+                {{ render_field(form.not_shipping_21,  class="form-control") }}
             </div>
             <div class="col-6">
                 Optional
@@ -660,7 +660,7 @@
         <div class="row w-100 mb-1">
             <label class="col-1 control-label">Option #3:</label>
             <div class="col-4">
-                {{ render_field(form.notshipping31,  class="form-control") }}
+                {{ render_field(form.not_shipping_31,  class="form-control") }}
             </div>
             <div class="col-6">
                 Optional
@@ -670,7 +670,7 @@
         <div class="row w-100 mb-1">
             <label class="col-1 control-label">Option #4:</label>
             <div class="col-4">
-                {{ render_field(form.notshipping41,  class="form-control") }}
+                {{ render_field(form.not_shipping_41,  class="form-control") }}
             </div>
             <div class="col-6">
                 Optional
@@ -680,7 +680,7 @@
         <div class="row w-100 mb-1">
             <label class="col-sm-1 control-label">Option #5:</label>
             <div class="col-4">
-                {{ render_field(form.notshipping51,  class="form-control") }}
+                {{ render_field(form.not_shipping_51,  class="form-control") }}
             </div>
             <div class="col-6">
                 Optional
@@ -720,11 +720,11 @@
 
         <div class="row w-100 mb-1">
             <div class="col-1">
-                {{ render_field(form.shippingfree, type="checkbox") }}
+                {{ render_field(form.shipping_free, type="checkbox") }}
             </div>
             <div class="col-2">Shipping FREE #1: </div>
             <div class="col-4">
-                {{ render_field(form.shippinginfo0, class="form-control input-sm", placeholder="Description") }}
+                {{ render_field(form.shipping_info_0, class="form-control input-sm", placeholder="Description") }}
             </div>
             <div class="col-4">
                 <div class="input-group">
@@ -741,13 +741,13 @@
                 From:
             </div>
             <div class="col-2">
-                {{ render_field(form.shippingdayleast01, class="form-control") }}
+                {{ render_field(form.shipping_day_least_01, class="form-control") }}
             </div>
             <div class="col-1">
                 To:
             </div>
             <div class="col-2">
-                {{ render_field(form.shippingdaymost01, class="form-control") }}
+                {{ render_field(form.shipping_day_most01, class="form-control") }}
             </div>
             <div class="col-1">
                 Days
@@ -758,18 +758,18 @@
 
         <div class="row w-100 mb-1">
             <div class="col-1">
-                {{ render_field(form.shippingtwo) }}
+                {{ render_field(form.shipping_two) }}
             </div>
             <div class="col-2">Shipping Option #2: </div>
             <div class="col-4">
-                {{ render_field(form.shippinginfo2, class="form-control", placeholder="Description") }}
+                {{ render_field(form.shipping_info_2, class="form-control", placeholder="Description") }}
             </div>
             <div class="col-3">
                 <div class="input-group">
                     <div class="input-group-addon">
                         {{ user.currency|currencyformat  }}
                     </div>
-                    {{ render_field(form.shippingprice2, class="form-control") }}
+                    {{ render_field(form.shipping_price_2, class="form-control") }}
                 </div>
             </div>
             <div class="col-2">
@@ -783,13 +783,13 @@
                 From:
             </div>
             <div class="col-2">
-                {{ render_field(form.shippingdayleast21, class="form-control") }}
+                {{ render_field(form.shipping_day_least_21, class="form-control") }}
             </div>
             <div class="col-1">
                 To:
             </div>
             <div class="col-2">
-                {{ render_field(form.shippingdaymost21, class="form-control") }}
+                {{ render_field(form.shipping_day_most_21, class="form-control") }}
             </div>
             <div class="col-1">
                 Days
@@ -798,18 +798,18 @@
         <hr>
         <div class="row w-100 mb-1">
             <div class="col-1">
-                {{ render_field(form.shippingthree) }}
+                {{ render_field(form.shipping_three) }}
             </div>
             <div class="col-2 control-label">Shipping Option #3:</div>
             <div class="col-4">
-                {{ render_field(form.shippinginfo3, class="form-control", placeholder="Description") }}
+                {{ render_field(form.shipping_info_3, class="form-control", placeholder="Description") }}
             </div>
             <div class="col-md-3">
                 <div class="input-group">
                     <div class="input-group-addon">
                         {{ user.currency|currencyformat  }}
                     </div>
-                    {{ render_field(form.shippingprice3, class="form-control") }}
+                    {{ render_field(form.shipping_price_3, class="form-control") }}
                 </div>
             </div>
             <div class="col-2">
@@ -826,13 +826,13 @@
                 From:
             </div>
             <div class="col-2">
-                {{ render_field(form.shippingdayleast31, class="form-control") }}
+                {{ render_field(form.shipping_day_least_31, class="form-control") }}
             </div>
             <div class="col-1">
                 To:
             </div>
             <div class="col-2">
-                {{ render_field(form.shippingdaymost31, class="form-control") }}
+                {{ render_field(form.shipping_day_most_31, class="form-control") }}
             </div>
             <div class="col-1">
                 Days

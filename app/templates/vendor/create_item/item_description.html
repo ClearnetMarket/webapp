@@ -1,0 +1,218 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<nav aria-label="breadcrumb" class="linkcolor">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('vendorcreate.itemsforSale') }}">My Items</a></li>
+    </ol>
+</nav>
+
+<div class="row">
+    {% for field, errors in form.errors.items() %}
+        <div class="col-6 offset-3">
+            {{ ', '.join(errors) }}
+        </div>
+    {% endfor %}
+</div>
+<form method="post" enctype="multipart/form-data" class="form-horizontal">
+    {{ form.csrf_token }}
+    <div class="row text-center mb-1" style="max-width: 1000px; ">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h5>Create an Item - Description</h5>
+            </div>
+        </div>
+    </div>
+
+{# 
+Description
+#}
+
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+
+        <div class="row w-100 mb-1">
+            <div class="col-8">
+                {{ render_field(form.item_description, rows=7, cols=45,class="form-control" )}}
+                {% if form.item_description.errors %}
+                    <ul class="errors">
+                        {% for error in form.item_description.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-2">
+                The item description is required. HTML Markup is allowed. Linking of images is allowed.
+            </div>
+
+        </div>
+    </div>
+
+{# 
+Details
+#}
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+
+        <div class="col-12 font-weight-bold">
+            <h5>Item Details</h5>
+            <hr>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-12">
+                Details are optional. They are best for item specifics
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-6">Include Details?:</div>
+            <div class="col-6">
+                {{ render_field(form.details, type="checkbox") }}
+                {% if form.details.errors %}
+                    <ul class="errors">
+                        {% for error in form.details.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-2">Detail #1: </div>
+            <div class="col-4">
+                {{ render_field(form.details_1, class="form-control", placeholder="Label") }}
+                {% if form.details_1.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_1.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {{ render_field(form.details_1_answer, class="form-control", placeholder="Description") }}
+                {% if form.details_1_answer.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_1_answer.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-2">Detail #2: </div>
+            <div class="col-4">
+                {{ render_field(form.details_2, class="form-control", placeholder="Label") }}
+                {% if form.details_2.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_2.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {{ render_field(form.details_2_answer, class="form-control", placeholder="Description") }}
+                {% if form.details_2_answer.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_2_answer.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-2">Detail #3: </div>
+            <div class="col-4">
+                {{ render_field(form.details_3, class="form-control", placeholder="Label") }}
+                {% if form.details_3.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_3.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {{ render_field(form.details_3_answer, class="form-control", placeholder="Description") }}
+                {% if form.details_3_answer.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_3_answer.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-2">Detail #4: </div>
+            <div class="col-4">
+                {{ render_field(form.details_4, class="form-control", placeholder="Label") }}
+                {% if form.details_1.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_1.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {{ render_field(form.details_4_answer, class="form-control", placeholder="Description") }}
+                {% if form.details_4_answer.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_4_answer.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-2">Detail #5: </div>
+            <div class="col-4">
+                {{ render_field(form.details_5, class="form-control", placeholder="Label") }}
+                {% if form.details_5.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_5.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {{ render_field(form.details_5_answer, class="form-control", placeholder="Description") }}
+                {% if form.details_5_answer.errors %}
+                    <ul class="errors">
+                        {% for error in form.details_5_answer.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {# 
+     Button
+     #}
+    <div class="row mb-5">
+        <div class="col-6 offset-3 d-grid gap-2">
+            {{ render_field(form.submit, value="Proceed", class="btn btn-primary") }}
+        </div>
+    </div>
+
+</form>
+
+
+{% endblock %}

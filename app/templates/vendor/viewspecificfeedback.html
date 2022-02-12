@@ -76,23 +76,23 @@
             {% else %}
                 <b>Item Rating:</b>
 
-                {% if rating.itemrating == 1 %}
+                {% if rating.item_rating == 1 %}
                     <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}">
                 {% endif %}
 
-                {% if rating.itemrating == 2 %}
+                {% if rating.item_rating == 2 %}
                     <img src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}">
                 {% endif %}
 
-                {% if rating.itemrating == 3 %}
+                {% if rating.item_rating == 3 %}
                     <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}">
                 {% endif %}
 
-                {% if rating.itemrating == 4 %}
+                {% if rating.item_rating == 4 %}
                     <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}">
                 {% endif %}
 
-                {% if rating.itemrating == 5 %}
+                {% if rating.item_rating == 5 %}
                     <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
                 {% endif %}
             {% endif %}

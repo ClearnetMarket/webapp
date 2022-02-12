@@ -2,9 +2,9 @@
 <div class="card mr-1" style="max-width: 200px;">
     <a href="{{ url_for('item.itemforsale',id=item.id) }}">
         <img class="card-img-top" style="max-width: 200px; height: 200px;"
-                {% if item.imageone != '0' %}
+                {% if item.image_one != '0' %}
              src="{{ url_for('userdata.media_file',
-                    filename=( item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
+                    filename=( item.string_node_id +item.string_auction_id + item.image_one + "_225x.jpg")) }}">
                 {% else %}
                     src="{{ url_for('static', filename=('images/no-product-image.png')) }}">
                 {% endif %}
@@ -12,66 +12,66 @@
     <hr>
     <div class="card-body text-center">
         <div class="col-12 text-center" style="height: 50px; overflow: hidden; font-size: 12px;">
-            {{ item.itemtitlee| truncate(35) }}
+            {{ item.item_title| truncate(35) }}
         </div>
 
         <div class="col-12 text-center">
-            {%  if item.itemrating == 0 %}
+            {%  if item.item_rating == 0 %}
                 <div id="related_Vendor_0" class="text-center">
 
                 </div>
             {%  endif %}
-            {%  if 0.499 >= item.itemrating >= 0.0001  %}
+            {%  if 0.499 >= item.item_rating >= 0.0001  %}
                 <div id="related_Vendor_0">
                     <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}">
                 </div>
             {%  endif %}
-            {%  if 0.999 >= item.itemrating >= 0.5  %}
+            {%  if 0.999 >= item.item_rating >= 0.5  %}
                 <div id="related_Vendor_0">
                     <img src="{{ url_for('static', filename='/images/stars/05stars.png'  )  }}" >
                 </div>
             {%  endif %}
-            {%  if 1.4999 >= item.itemrating >= 1  %}
+            {%  if 1.4999 >= item.item_rating >= 1  %}
                 <div id="related_Vendor_1">
                     <img src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}" >
                 </div>
             {%  endif %}
-            {%  if 1.99999 >= item.itemrating >= 1.5  %}
+            {%  if 1.99999 >= item.item_rating >= 1.5  %}
                 <div id="related_Vendor_1">
                     <img src="{{ url_for('static', filename='/images/stars/15stars.png'  )  }}" >
                 </div>
             {%  endif %}
-            {%  if 2.4999 >= item.itemrating >= 2  %}
+            {%  if 2.4999 >= item.item_rating >= 2  %}
                 <div id="related_Vendor_2">
                     <img src="{{ url_for('static', filename='/images/stars/20stars.png' )}}" >
                 </div>
             {%  endif %}
-            {%  if 2.99999 >= item.itemrating >= 2.5  %}
+            {%  if 2.99999 >= item.item_rating >= 2.5  %}
                 <div id="related_Vendor_2">
                     <img src="{{ url_for('static', filename='/images/stars/25stars.png' )}}" >
                 </div>
             {%  endif %}
-            {%  if 3.499 >= item.itemrating >= 3  %}
+            {%  if 3.499 >= item.item_rating >= 3  %}
                 <div id="related_Vendor_3">
                     <img src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}" >
                 </div>
             {%  endif %}
-            {%  if 3.99999 >= item.itemrating >= 3.5  %}
+            {%  if 3.99999 >= item.item_rating >= 3.5  %}
                 <div id="related_Vendor_3">
                     <img src="{{ url_for('static', filename='/images/stars/35stars.png'  )  }}" >
                 </div>
             {%  endif %}
-            {%  if 4.499 >= item.itemrating >= 4  %}
+            {%  if 4.499 >= item.item_rating >= 4  %}
                 <div id="related_Vendor_4">
                     <img src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}" >
                 </div>
             {%  endif %}
-            {%  if 4.99999 >= item.itemrating >= 4.5  %}
+            {%  if 4.99999 >= item.item_rating >= 4.5  %}
                 <div id="related_Vendor_4">
                     <img src="{{ url_for('static', filename='/images/stars/45stars.png'  )  }}" >
                 </div>
             {%  endif %}
-            {%  if item.itemrating == 5  %}
+            {%  if item.item_rating == 5  %}
                 <div id="related_Vendor_5">
                     <img src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}">
                 </div>
@@ -84,18 +84,18 @@
         </div>
 
         {# btc Price #}
-        {% if item.digital_currency2 == 1 %}
+        {% if item.digital_currency_2 == 1 %}
             <div style="display: inline; font-size: 12px;">
-                {{ item.price|btcprice(currency=item.currency) }} BTC <br>
+                {{ item.bch_to_currency(currency=item.currency) }} BTC <br>
             </div>
         {% endif %}
 
         {# currency logos #}
         <div class="text-center linkcolor" style="display: inline;">
-            {% if item.digital_currency2 == 1 %}
+            {% if item.digital_currency_2 == 1 %}
                 <img src="{{ url_for('static', filename=('images/currency_logos/btc/btc_small.png')) }}" style="width: 25px; height: 20px;">
             {% endif %}
-            {% if item.digital_currency3 == 1 %}
+            {% if item.digital_currency_3 == 1 %}
                 <img src="{{ url_for('static', filename=('images/currency_logos/bch/bch_small.png')) }}" style="width: 25px; height: 20px;">
             {% endif %}
 

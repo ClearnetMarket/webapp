@@ -1,0 +1,110 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<nav aria-label="breadcrumb" class="linkcolor">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('vendorcreate.itemsforSale') }}">My Items</a></li>
+    </ol>
+</nav>
+
+<div class="row">
+    {% for field, errors in form.errors.items() %}
+        <div class="col-6 offset-3">
+            {{ ', '.join(errors) }}
+        </div>
+    {% endfor %}
+</div>
+<form method="post" enctype="multipart/form-data" class="form-horizontal">
+    {{ form.csrf_token }}
+    <div class="row text-center mb-1" style="max-width: 1000px; ">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h5>Create an Item - Images</h5>
+            </div>
+        </div>
+    </div>
+
+{# 
+Images
+#}
+ <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+        <div class="col-12 font-weight-bold">
+            <h5>Images</h5>
+            <hr>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-12">
+                Ideal image size should be 300x500(.Jpg, .Jpeg, .GIF, or .PNG).
+                We use that size for the images on your item page.<br>
+                Thumbnails are generated automatically in 200px by 200px size.
+                This is used for search thumbnails, edit page thumbnails, etc.
+            </div>
+        </div>
+
+        <div style="clear: both;"></div>
+        <div id="addimage">
+
+            {{ render_field(form.image_one1, class="form-inline" ) }}
+            {% if form.image_one1.errors %}
+                <ul class="errors">
+                    {% for error in form.image_one1.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+
+            {{ render_field(form.image_two, class="form-inline" ) }}
+            {% if form.image_two.errors %}
+                <ul class="errors">
+                    {% for error in form.image_two.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+
+            {{ render_field(form.image_three, class="form-inline" ) }}
+            {% if form.image_three.errors %}
+                <ul class="errors">
+                    {% for error in form.image_three.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {{ render_field(form.image_four, class="form-inline" ) }}
+            {% if form.image_four.errors %}
+                <ul class="errors">
+                    {% for error in form.image_four.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {{ render_field(form.image_five, class="form-inline" ) }}
+            {% if form.image_five.errors %}
+                <ul class="errors">
+                    {% for error in form.image_five.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+
+{# 
+Button
+#}
+    <div class="row mb-5">
+        <div class="col-6 offset-3 d-grid gap-2">
+            {{ render_field(form.submit, value="Proceed", class="btn btn-primary") }}
+        </div>
+    </div>
+
+</form>
+
+
+{% endblock %}

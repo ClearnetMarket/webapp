@@ -43,7 +43,7 @@ from app.classes.auth import \
 from app.classes.affiliate import \
     AffiliateOverview
 from app.classes.item import \
-    marketItem
+    marketitem
 from app.classes.service import \
     shippingSecret, \
     Returns, \
@@ -118,8 +118,8 @@ def customerOrders_returninstructions(id):
         if order.customer_id == current_user.id or order.vendor_id == current_user.id:
             # item
             getitem = db.session\
-                .query(marketItem)\
-                .filter(marketItem.id == order.item_id)\
+                .query(marketitem)\
+                .filter(marketitem.id == order.item_id)\
                 .first()
             vendortracking = db.session\
                 .query(Tracking)\
@@ -264,12 +264,12 @@ def orders_cancelorder(id):
                         db.session.delete(msg)
 
                     if getorder.type == 1:
-                        getitem = db.session.query(marketItem).filter(
-                            getorder.item_id == marketItem.id).first()
-                        x = getitem.itemcount
+                        getitem = db.session.query(marketitem).filter(
+                            getorder.item_id == marketitem.id).first()
+                        x = getitem.item_count
                         y = getorder.quantity
                         z = x + y
-                        getitem.itemcount = z
+                        getitem.item_count = z
 
                         db.session.add(getitem)
 
@@ -535,8 +535,8 @@ def customerOrders_return(id):
     form = returnitem(request.form)
     order = db.session.query(Orders).filter_by(id=id).first()
     if order:
-        item = db.session.query(marketItem).filter(
-            marketItem.id == order.item_id).first()
+        item = db.session.query(marketitem).filter(
+            marketitem.id == order.item_id).first()
         msg = db.session.query(shippingSecret).filter_by(orderid=id).first()
         gettracking = db.session.query(Tracking).filter_by(sale_id=id).first()
         if order.completed == 0 and order.released == 0 and order.accepted_order == 0 and order.vendor_id != 0:
@@ -680,15 +680,15 @@ def ordershome():
                         if getitemid.type == 3:
                             text_box_value_vendorrating = request.form.get(
                                 "vendorrating")
-                            text_box_value_itemrating = 0
+                            text_box_value_item_rating = 0
                         else:
                             text_box_value_vendorrating = request.form.get(
                                 "vendorrating")
-                            text_box_value_itemrating = request.form.get(
-                                "itemrating")
-                        if text_box_value_vendorrating and text_box_value_itemrating is not None:
+                            text_box_value_item_rating = request.form.get(
+                                "item_rating")
+                        if text_box_value_vendorrating and text_box_value_item_rating is not None:
                             if (1 <= int(text_box_value_vendorrating) <= 5) \
-                                    and (1 <= int(text_box_value_itemrating) <= 5):
+                                    and (1 <= int(text_box_value_item_rating) <= 5):
                                 add = Feedback(
                                     type=getitemid.type,
                                     sale_id=getitemid.id,
@@ -698,7 +698,7 @@ def ordershome():
                                     customername=current_user.username,
                                     author_id=current_user.id,
                                     comment=feedbackform.feedbacktext.data,
-                                    itemrating=text_box_value_itemrating,
+                                    item_rating=text_box_value_item_rating,
                                     vendorrating=text_box_value_vendorrating,
                                     item_id=getitemid.item_id,
                                     addedtodb=0,

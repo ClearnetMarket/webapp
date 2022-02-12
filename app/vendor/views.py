@@ -41,7 +41,7 @@ from app.auth.forms import becomeavendor
 from app.classes.auth import User
 
 from app.classes.item import \
-    marketItem
+    marketitem
 
 from app.classes.profile import \
     Userreviews, \
@@ -238,12 +238,12 @@ def vendorOrders_reject(id):
                             db.session.delete(gettracking)
                         # change the quantity
                         if item.type == 1:
-                            getitem = db.session.query(marketItem).filter(
-                                item.item_id == marketItem.id).first()
-                            x = getitem.itemcount
+                            getitem = db.session.query(marketitem).filter(
+                                item.item_id == marketitem.id).first()
+                            x = getitem.item_count
                             y = item.quantity
                             z = x + y
-                            getitem.itemcount = z
+                            getitem.item_count = z
                             db.session.add(getitem)
 
                         notification(type=7, username=item.customer,
@@ -356,15 +356,15 @@ def vendorOrders_leavereviewforuser(id):
                 .limit(20)
 
             item = db.session\
-                .query(marketItem)\
-                .filter(marketItem.id == order.item_id)\
+                .query(marketitem)\
+                .filter(marketitem.id == order.item_id)\
                 .first()
 
             if request.method == "POST" and form.validate_on_submit():
                 if order.cancelled == 0:
                     try:
                         text_box_value_userrating = request.form.get(
-                            "itemrating")
+                            "item_rating")
                         text_box_value_comment = request.form.get(
                             "reviewcomment")
 
@@ -554,7 +554,7 @@ def vendorRatings():
         = headerfunctions_vendor()
 
     getavgitem = db.session.query(
-        func.avg(Feedback.itemrating).label("avgitem"))
+        func.avg(Feedback.item_rating).label("avgitem"))
     getavgitem = getavgitem.filter(Feedback.vendorid == user.id)
     gitem = getavgitem.all()
     itemscore = str((gitem[0][0]))[:4]
@@ -709,8 +709,8 @@ def viewOrder(id):
                     .filter_by(sale_id=id)\
                     .first()
                 getitem = db.session\
-                    .query(marketItem)\
-                    .filter(marketItem.id == order.item_id)\
+                    .query(marketitem)\
+                    .filter(marketitem.id == order.item_id)\
                     .first()
                 # delete return address
                 returninfo = db.session\
@@ -827,8 +827,8 @@ def addtempaddress(id):
 
     # figure out price
     getitem = db.session\
-        .query(marketItem)\
-        .filter(marketItem.id == order.item_id)\
+        .query(marketitem)\
+        .filter(marketitem.id == order.item_id)\
         .first()
     totalprice = (Decimal(order.shipping_price) + Decimal(order.price))
 
@@ -980,8 +980,8 @@ def edittempaddress(id):
         .filter_by(id=id)\
         .first()
     getitem = db.session\
-        .query(marketItem)\
-        .filter(marketItem.id == order.item_id)\
+        .query(marketitem)\
+        .filter(marketitem.id == order.item_id)\
         .first()
     # vendor is True
 

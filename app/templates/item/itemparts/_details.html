@@ -8,38 +8,38 @@
 
     <table class="table table-condensed col-12">
 
-        {% if item.details1 or item.details2 %}
+        {% if item.details_1 or item.details_2 %}
         <tr>
-            {% if item.details1 %}
-            <td>{{ item.details1 }}:</td>
-            <td>{{ item.details1answer }}</td>
+            {% if item.details_1 %}
+            <td>{{ item.details_1 }}:</td>
+            <td>{{ item.details_1_answer }}</td>
             {% endif %}
 
-            {% if item.details2 %}
-            <td>{{ item.details2 }}:</td>
-            <td>{{ item.details2answer }}</td>
+            {% if item.details_2 %}
+            <td>{{ item.details_2 }}:</td>
+            <td>{{ item.details_2_answer }}</td>
             {% endif %}
         </tr>
     {% endif %}
 
-        {% if item.details3 or item.details4 %}
+        {% if item.details_3 or item.details_4 %}
         <tr>
-            {% if item.details3 %}
-            <td>{{ item.details3 }}:</td>
-            <td>{{ item.details3answer }}</td>
+            {% if item.details_3 %}
+            <td>{{ item.details_3 }}:</td>
+            <td>{{ item.details_3_answer }}</td>
             {% endif %}
-            {% if item.details4 %}
-            <td>{{ item.details4 }}:</td>
-            <td>{{ item.details4answer }}</td>
+            {% if item.details_4 %}
+            <td>{{ item.details_4 }}:</td>
+            <td>{{ item.details_4_answer }}</td>
             {% endif %}
         </tr>
     {% endif %}
 
-        {% if item.details5 %}
+        {% if item.details_5 %}
         <tr>
-            {% if item.details5 %}
-            <td>{{ item.details5 }}:</td>
-            <td>{{ item.details5answer }}</td>
+            {% if item.details_5 %}
+            <td>{{ item.details_5 }}:</td>
+            <td>{{ item.details_5_answer }}</td>
             {% endif %}
 
         </tr>

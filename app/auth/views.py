@@ -49,6 +49,7 @@ from app.auth.profile_images.profile_images import \
     deleteprofileimage, \
     image1
 
+
 @auth.route("/logout", methods=["GET"])
 def logout():
     try:
@@ -259,7 +260,7 @@ def register():
 
         # creates bitcoin cash wallet in db
         btc_cash_create_wallet(user_id=new_user.id)
-        
+
         # achievement
         newbie(user_id=new_user.id)
 
@@ -407,7 +408,6 @@ def myAccount():
         .filter_by(username=current_user.username)\
         .first()
 
-
     vacform = VacationForm()
     myaccountform = myaccount_form_factory(user)
 
@@ -418,7 +418,7 @@ def myAccount():
     )
 
     if request.method == 'POST':
-        
+
         if vacform.Vacation.data:
             return redirect(url_for('vendorcreate.vacation', username=current_user.username))
 
@@ -431,16 +431,18 @@ def myAccount():
         if form.submit.data and form.validate_on_submit():
             # gets user location on server
             if form.imageprofile.data:
-                userlocation = os.path.join(UPLOADED_FILES_DEST_USER, str(user.usernode), (str(user.id)))
-                image1(formdata=form.imageprofile.data, directoryifitemlisting=userlocation, user=user)
+                userlocation = os.path.join(
+                    UPLOADED_FILES_DEST_USER, str(user.usernode), (str(user.id)))
+                image1(formdata=form.imageprofile.data,
+                       directoryifitemlisting=userlocation, user=user)
             # dropdown changes on forms
-            origincountryfull = form.origincountry1.data
-            origincountry = origincountryfull.numericcode
+            origin_countryfull = form.origin_country_1.data
+            origin_country = origin_countryfull.numericcode
             currencyfull = form.currency1.data
             cur = currencyfull.code
             user.currency = cur,
             user.bio = form.Bio.data,
-            user.country = origincountry,
+            user.country = origin_country,
             db.session.add(user)
             db.session.commit()
             flash("Information Updated", category="success")

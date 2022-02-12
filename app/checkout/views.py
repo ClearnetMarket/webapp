@@ -17,7 +17,7 @@ from app.classes.models import \
 from app.classes.auth import User, UserFees
 
 from app.classes.item import \
-    marketItem, \
+    marketitem, \
     ShoppingCart, \
     ShoppingCartTotal
 
@@ -168,8 +168,8 @@ def shoppingcart():
         # see if still exists
         try:
             getitem = db.session\
-                .query(marketItem)\
-                .filter(marketItem.id == i.item_id)\
+                .query(marketitem)\
+                .filter(marketitem.id == i.item_id)\
                 .first()
         except Exception as e:
             flash(i.title_of_item +
@@ -180,7 +180,7 @@ def shoppingcart():
 
         # image
         try:
-            i.stringauctionid = '/' + str(i.item_id) + '/'
+            i.string_auction_id = '/' + str(i.item_id) + '/'
         except Exception as e:
             flash(i.title_of_item +
                   " is not available.  It has been removed from your cart", category="success")
@@ -188,7 +188,7 @@ def shoppingcart():
             db.session.commit()
             return redirect(url_for('checkout.shoppingcart', username=current_user.username))
         try:
-            i.image_of_item = getitem.imageone
+            i.image_of_item = getitem.image_one
         except Exception as e:
             i.image_of_item = '0'
 
@@ -204,7 +204,7 @@ def shoppingcart():
 
         # supply
         try:
-            i.vendorsupply = getitem.itemcount
+            i.vendorsupply = getitem.item_count
             if i.vendorsupply <= 0:
                 flash(i.title_of_item + " has been sold out.  It has been removed from your cart",
                       category="success")
@@ -220,7 +220,7 @@ def shoppingcart():
 
         # shipping
         try:
-            if i.shippingfree == 0 and i.shippingtwo == 0 and i.shippingthree == 0:
+            if i.shipping_free == 0 and i.shipping_two == 0 and i.shipping_three == 0:
                 flash("Item#" + str(i.id) +
                       ": Doesnt have a shipping method", category="danger")
                 db.session.delete(i)
@@ -231,40 +231,40 @@ def shoppingcart():
 
         # shipping1
         try:
-            i.shippinginfo0 = getitem.shippinginfo0,
-            i.shippingdayleast0 = getitem.shippingdayleast0,
-            i.shippingdaymost0 = getitem.shippingdaymost0,
+            i.shipping_info_0 = getitem.shipping_info_0,
+            i.shipping_day_least_0 = getitem.shipping_day_least_0,
+            i.shipping_day_most_0 = getitem.shipping_day_most_0,
 
         except Exception:
-            i.shippinginfo0 = '',
-            i.shippingdayleast0 = '',
-            i.shippingdaymost0 = '',
+            i.shipping_info_0 = '',
+            i.shipping_day_least_0 = '',
+            i.shipping_day_most_0 = '',
 
         # shipping2
         try:
-            i.shippinginfo2 = getitem.shippinginfo2,
-            i.shippingprice2 = getitem.shippingprice2,
-            i.shippingdayleast2 = getitem.shippingdayleast2,
-            i.shippingdaymost2 = getitem.shippingdaymost2,
+            i.shipping_info_2 = getitem.shipping_info_2,
+            i.shipping_price_2 = getitem.shipping_price_2,
+            i.shipping_day_least_2 = getitem.shipping_day_least_2,
+            i.shipping_day_most_2 = getitem.shipping_day_most_2,
 
         except Exception:
-            i.shippinginfo2 = '',
-            i.shippingprice2 = '',
-            i.shippingdayleast2 = '',
-            i.shippingdaymost2 = '',
+            i.shipping_info_2 = '',
+            i.shipping_price_2 = '',
+            i.shipping_day_least_2 = '',
+            i.shipping_day_most_2 = '',
 
         # shipping 3
         try:
-            i.shippinginfo3 = getitem.shippinginfo3,
-            i.shippingprice3 = getitem.shippingprice3,
-            i.shippingdayleast3 = getitem.shippingdayleast3,
-            i.shippingdaymost3 = getitem.shippingdaymost3,
+            i.shipping_info_3 = getitem.shipping_info_3,
+            i.shipping_price_3 = getitem.shipping_price_3,
+            i.shipping_day_least_3 = getitem.shipping_day_least_3,
+            i.shipping_day_most_3 = getitem.shipping_day_most_3,
 
         except Exception:
-            i.shippinginfo3 = '',
-            i.shippingprice3 = '',
-            i.shippingdayleast3 = '',
-            i.shippingdaymost3 = '',
+            i.shipping_info_3 = '',
+            i.shipping_price_3 = '',
+            i.shipping_day_least_3 = '',
+            i.shipping_day_most_3 = '',
 
         db.session.add(i)
         db.session.flush()
@@ -290,15 +290,15 @@ def shoppingcart():
         if i.selected_shipping == 1:
             btc_cash_shipprice2 = 0
             i.final_shipping_price = 0
-            i.selected_shipping_description = str(getitem.shippinginfo0) \
-                + ': ' + '(' + str(getitem.shippingdayleast0) \
-                + ' days to ' + str(getitem.shippingdaymost0) \
+            i.selected_shipping_description = str(getitem.shipping_info_0) \
+                + ': ' + '(' + str(getitem.shipping_day_least_0) \
+                + ' days to ' + str(getitem.shipping_day_most_0) \
                 + ' days)'
 
         elif i.selected_shipping == 2:
             # PRICE
             # get shipping price local currency
-            shipprice = Decimal(getitem.shippingprice2)
+            shipprice = Decimal(getitem.shipping_price_2)
 
             # convert it to btc cash
             btc_cash_shiprice1 = Decimal(btc_cash_convertlocaltobtc(amount=shipprice,
@@ -314,11 +314,11 @@ def shoppingcart():
             btc_cash_shiprice = (floating_decimals(shippingtotal, 8))
 
             # SHIPPING
-            i.selected_shipping_description = str(getitem.shippinginfo2) \
+            i.selected_shipping_description = str(getitem.shipping_info_2) \
                 + ': ' + '(' \
-                + str(getitem.shippingdayleast2) \
+                + str(getitem.shipping_day_least_2) \
                 + ' days to ' \
-                + str(getitem.shippingdaymost2) \
+                + str(getitem.shipping_day_most_2) \
                 + ' days)'
 
             i.final_shipping_price = btc_cash_shiprice
@@ -326,7 +326,7 @@ def shoppingcart():
         elif i.selected_shipping == 3:
             # PRICE
             # get shipping price local currency
-            shipprice = Decimal(getitem.shippingprice3)
+            shipprice = Decimal(getitem.shipping_price_3)
             # convert it to btc cash
             btc_cash_shiprice1 = (btc_cash_convertlocaltobtc(amount=shipprice,
                                                              currency=getitem.currency))
@@ -339,29 +339,29 @@ def shoppingcart():
 
             # SHIPPING
             # concat info for shipping information
-            i.selected_shipping_description = str(getitem.shippinginfo2) \
+            i.selected_shipping_description = str(getitem.shipping_info_2) \
                 + ': ' \
                 + '(' \
-                + str(getitem.shippingdayleast3) \
+                + str(getitem.shipping_day_least_3) \
                 + ' days to ' \
-                + str(getitem.shippingdaymost3) \
+                + str(getitem.shipping_day_most_3) \
                 + ' days)'
 
             i.final_shipping_price = btc_cash_shiprice
 
         else:
             # see what shipping is avaliable as first choice ..
-            if i.shippingfree == 1:
+            if i.shipping_free == 1:
                 btc_cash_shipprice2 = 0
                 i.selected_shipping_description = 0
-            elif i.shippingtwo == 1:
+            elif i.shipping_two == 1:
                 btc_cash_shipprice2 = btc_cash_convertlocaltobtc(
-                    amount=i.shippingprice2, currency=i.currency)
-                i.selected_shipping_description = i.shippinginfo2
-            elif i.shippingtwo == 1:
+                    amount=i.shipping_price_2, currency=i.currency)
+                i.selected_shipping_description = i.shipping_info_2
+            elif i.shipping_two == 1:
                 btc_cash_shipprice2 = btc_cash_convertlocaltobtc(
-                    amount=i.shippingprice3, currency=i.currency)
-                i.selected_shipping_description = i.shippinginfo3
+                    amount=i.shipping_price_3, currency=i.currency)
+                i.selected_shipping_description = i.shipping_info_3
             else:
                 btc_cash_shipprice2 = 0
                 i.selected_shipping_description = 0
@@ -474,9 +474,9 @@ def shoppingcart():
                             # check to see if they picked a shipping method
                             if int(y.id) == int(valueincheckbox):
                                 # see if item exists and check its shipping
-                                markett = db.session.query(marketItem) \
-                                    .filter(y.item_id == marketItem.id).first()
-                                if int(markett.itemcount) < int(newquant):
+                                markett = db.session.query(marketitem) \
+                                    .filter(y.item_id == marketitem.id).first()
+                                if int(markett.item_count) < int(newquant):
                                     flash("Vendor does not have that much",
                                           category="danger")
                                     return redirect(url_for('checkout.shoppingcart', username=user.username))
@@ -595,9 +595,9 @@ def shoppingcart():
                             escrow=0,
                             disputed_order=0,
                             item_id=k.item_id,
-                            stringauctionid=k.stringauctionid,
-                            stringnodeid=k.stringnodeid,
-                            imageone=k.image_of_item,
+                            string_auction_id=k.string_auction_id,
+                            string_node_id=k.string_node_id,
+                            image_one=k.image_of_item,
                             request_cancel=0,
                             reason_cancel=0,
                             overallreason=0,
@@ -987,7 +987,7 @@ def checkout():
                         # get specific item being purchased
                         try:
                             getitem = db.session\
-                                .query(marketItem) \
+                                .query(marketitem) \
                                 .filter_by(id=specificitemincart.item_id) \
                                 .first()
                         except Exception:
@@ -1004,12 +1004,12 @@ def checkout():
                         # k.shipto_secretmsg = msg.txtmsg
 
                         # add total sold to item
-                        newsold = int(getitem.totalsold) + \
+                        newsold = int(getitem.total_sold) + \
                             int(specificitemincart.quantity)
-                        newquantleft = int(getitem.itemcount) - \
+                        newquantleft = int(getitem.item_count) - \
                             int(specificitemincart.quantity)
-                        getitem.totalsold = newsold
-                        getitem.itemcount = newquantleft
+                        getitem.total_sold = newsold
+                        getitem.item_count = newquantleft
 
                         # add diff trading partners
                         differenttradingpartners_user(user_id=specificitemincart.customer_id,
@@ -1065,7 +1065,7 @@ def checkout():
                         db.session.flush()
 
                         # turn off if item is less than one
-                        if getitem.itemcount < 1:
+                        if getitem.item_count < 1:
 
                             getitem.online = 0
                             db.session.add(getitem)

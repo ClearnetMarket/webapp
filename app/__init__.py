@@ -1,6 +1,8 @@
 # coding=utf-8
 
-from flask import Flask, request, render_template, redirect, url_for, g
+
+
+from flask import Flask, request, render_template
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_moment import Moment
@@ -157,12 +159,10 @@ def csrf_error():
     return render_template('404.html'), 400
 
 
-
 # FILTERS
-from app import filters_btc_cash, filters_filtersstuff
 
 # regular filters
-
+from app import filters_bch, filters_filtersstuff
 app.jinja_env.filters['maincatname'] = filters_filtersstuff.maincatname
 app.jinja_env.filters['orderpicture'] = filters_filtersstuff.orderpicture
 app.jinja_env.filters['cancelwhy'] = filters_filtersstuff.cancelwhy
@@ -187,13 +187,13 @@ app.jinja_env.filters['currencyformat'] = filters_filtersstuff.currencyformat
 app.jinja_env.filters['usdtocurrency'] = filters_filtersstuff.usdtocurrency
 
 # BTC_Cash FILTERS
-app.jinja_env.filters['btccashtocurrency'] = filters_btc_cash.btccashtocurrency
-app.jinja_env.filters['formatbtctostring_btccash'] = filters_btc_cash.formatbtctostring_btccash
-app.jinja_env.filters['otherformatbtctostring_btccash'] = filters_btc_cash.otherformatbtctostring_btccash
-app.jinja_env.filters['currencyformat_btccash'] = filters_btc_cash.currencyformat_btccash
-app.jinja_env.filters['btcprice_btccash'] = filters_btc_cash.btcprice_btccash
-app.jinja_env.filters['currencytocurrency_btccash'] = filters_btc_cash.currencytocurrency_btccash
-app.jinja_env.filters['usdtocurrency_btccash'] = filters_btc_cash.usdtocurrency_btccash
+app.jinja_env.filters['bch_to_currency'] = filters_bch.bch_to_currency
+app.jinja_env.filters['format_to_string_bch'] = filters_bch.format_to_string_bch
+app.jinja_env.filters['format_to_string_bch'] = filters_bch.format_to_string_bch
+
+app.jinja_env.filters['convert_local_to_bch_filter'] = filters_bch.convert_local_to_bch_filter
+
+app.jinja_env.filters['usd_to_currency_bch'] = filters_bch.usd_to_currency_bch
 
 
 # configuration
@@ -225,13 +225,17 @@ Session.permanent = True
 app.permanent_session_lifetime = timedelta(hours=24)
 
 # bind a function after each request, even if an exception is encountered.
+
+
 @app.teardown_request
 def teardown_request(response_or_exc):
     db.session.remove()
-    
+
+
 @app.teardown_appcontext
 def teardown_appcontext(response_or_exc):
     db.session.remove()
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -289,6 +293,9 @@ app.register_blueprint(checkout_blueprint, url_prefix='/checkout')
 from .vendorcreate import vendorcreate as vendorcreate_blueprint
 app.register_blueprint(vendorcreate_blueprint, url_prefix='/vendor-create')
 
+from .vendorcreateitem import vendorcreateitem as vendorcreateitem_blueprint
+app.register_blueprint(vendorcreateitem_blueprint, url_prefix='/vendor-create-item')
+
 from .vendorverification import vendorverification as vendorverification_blueprint 
 app.register_blueprint(vendorverification_blueprint, url_prefix='/vendor-verification')
 
@@ -296,10 +303,9 @@ from .vendor import vendor as vendor_blueprint
 app.register_blueprint(vendor_blueprint, url_prefix='/vendor')
 
 
-# btc cash wallet
+# bch wallet
 from app.wallet_bch import wallet_bch as wallet_bch_blueprint
 app.register_blueprint(wallet_bch_blueprint, url_prefix='/bch')
-
 
 db.configure_mappers()
 db.create_all()

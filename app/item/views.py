@@ -23,7 +23,7 @@ from app.classes.achievements import \
 from app.classes.admin import \
     flagged
 from app.classes.item import \
-    marketItem, \
+    marketitem, \
     ShoppingCart, \
     ItemtoDelete
 from app.classes.profile import \
@@ -69,15 +69,15 @@ def itemforsale(id):
 
     # Get the item query
     try:
-        vendoritem = marketItem.query.get(id)
+        vendoritem = marketitem.query.get(id)
         if vendoritem is None:
             flash("item is no longer available", category="primary")
             return redirect(url_for('index', username=current_user.username))
         else:
             vendoritem = vendoritem
             # add count to item viewed
-            addviewer = int(vendoritem.viewcount) + 1
-            vendoritem.viewcount = int(addviewer)
+            addviewer = int(vendoritem.view_count) + 1
+            vendoritem.view_count = int(addviewer)
             db.session.add(vendoritem)
             db.session.flush()
     except Exception:
@@ -86,9 +86,9 @@ def itemforsale(id):
 
     # facebook twitter info
     itemurl = 'https://www.clearnetmarket.com/info/item/item/' \
-              + str(vendoritem.stringnodeid) \
-              + str(vendoritem.stringauctionid) \
-              + str(vendoritem.imageone)
+              + str(vendoritem.string_node_id) \
+              + str(vendoritem.string_auction_id) \
+              + str(vendoritem.image_one)
     converprice = btc_cash_convertlocaltobtc(
         amount=vendoritem.price, currency=vendoritem.currency)
     socialdescriptiontwitter = str('You Can buy this item for bitcoin on Clearnet Market for ') \
@@ -121,7 +121,7 @@ def itemforsale(id):
         .filter_by(item_id=id)\
         .order_by(Feedback.timestamp.desc())\
         .limit(25)
-    feedbackofitemcount = db.session\
+    feedbackofitem_count = db.session\
         .query(Feedback)\
         .filter_by(item_id=id)\
         .order_by(Feedback.timestamp.desc())\
@@ -145,36 +145,36 @@ def itemforsale(id):
     # Related queries
     # gets other vendor items he has for sale
     otheritemsvendorsellsfull = db.session\
-        .query(marketItem)\
-        .filter(marketItem.online == 1)\
-        .filter(marketItem.imageone != '0')\
-        .filter(marketItem.vendor_id == vendor.id)\
-        .order_by(marketItem.totalsold.desc())
+        .query(marketitem)\
+        .filter(marketitem.online == 1)\
+        .filter(marketitem.image_one != '0')\
+        .filter(marketitem.vendor_id == vendor.id)\
+        .order_by(marketitem.total_sold.desc())
     otheritemsvendorsells = otheritemsvendorsellsfull.limit(6)
     otheritemsvendorhascount = otheritemsvendorsells.count()
 
     # get items with same keyword
     otheritemssamekeywordfull = db.session\
-        .query(marketItem)\
-        .filter(marketItem.online == 1)\
-        .filter(marketItem.imageone != '')\
-        .filter(marketItem.keywords.like('%' + vendoritem.keywords + '%'))
+        .query(marketitem)\
+        .filter(marketitem.online == 1)\
+        .filter(marketitem.image_one != '')\
+        .filter(marketitem.keywords.like('%' + vendoritem.keywords + '%'))
     samekeyword = otheritemssamekeywordfull.limit(6)
     samekeywordcount = otheritemssamekeywordfull.count()
 
     # get top selling items in category
     topsellingcatfull = db.session\
-        .query(marketItem)\
-        .filter(marketItem.online == 1)\
-        .filter(marketItem.imageone != '')\
-        .filter(marketItem.categoryid0 == vendoritem.categoryid0)\
+        .query(marketitem)\
+        .filter(marketitem.online == 1)\
+        .filter(marketitem.image_one != '')\
+        .filter(marketitem.category_id_0 == vendoritem.category_id_0)\
         .order_by(func.random())
     topsellingcat = topsellingcatfull.limit(6)
     topsellingcatcount = topsellingcatfull.count()
     # End related Queries
 
     # see what currency the user wants to sell in
-    if vendoritem.digital_currency2 == 1:
+    if vendoritem.digital_currency_2 == 1:
         defaultselectedcurrency = 2
     else:
         defaultselectedcurrency = 3
@@ -202,7 +202,7 @@ def itemforsale(id):
                     return redirect(url_for('item.itemforsale', id=vendoritem.id))
                 else:
                     vendoritem = db.session\
-                        .query(marketItem)\
+                        .query(marketitem)\
                         .filter_by(id=id)\
                         .first()
                     if vendoritem.online == 1:
@@ -226,35 +226,35 @@ def itemforsale(id):
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
                                 vendor_id=vendoritem.vendor_id,
-                                title_of_item=vendoritem.itemtitlee,
-                                image_of_item=vendoritem.imageone,
+                                title_of_item=vendoritem.item_title,
+                                image_of_item=vendoritem.image_one,
                                 price_of_item=vendoritem.price,
                                 quantity_of_item=1,
                                 currency=vendoritem.currency,
-                                stringauctionid=vendoritem.stringauctionid,
-                                stringnodeid=vendoritem.stringnodeid,
-                                return_policy=vendoritem.itemrefundpolicy,
+                                string_auction_id=vendoritem.string_auction_id,
+                                string_node_id=vendoritem.string_node_id,
+                                return_policy=vendoritem.item_refund_policy,
                                 savedforlater=0,
                                 item_id=vendoritem.id,
                                 vendorsupply=1,
-                                shippinginfo0=vendoritem.shippinginfo0,
-                                shippingdayleast0=vendoritem.shippingdayleast0,
-                                shippingdaymost0=vendoritem.shippingdaymost0,
-                                shippinginfo2=vendoritem.shippinginfo2,
-                                shippingprice2=vendoritem.shippingprice2,
-                                shippingdayleast2=vendoritem.shippingdayleast2,
-                                shippingdaymost2=vendoritem.shippingdaymost2,
-                                shippinginfo3=vendoritem.shippinginfo3,
-                                shippingprice3=vendoritem.shippingprice3,
-                                shippingdayleast3=vendoritem.shippingdayleast3,
-                                shippingdaymost3=vendoritem.shippingdaymost3,
-                                shippingfree=vendoritem.shippingfree,
-                                shippingtwo=vendoritem.shippingtwo,
-                                shippingthree=vendoritem.shippingthree,
+                                shipping_info_0=vendoritem.shipping_info_0,
+                                shipping_day_least_0=vendoritem.shipping_day_least_0,
+                                shipping_day_most_0=vendoritem.shipping_day_most_0,
+                                shipping_info_2=vendoritem.shipping_info_2,
+                                shipping_price_2=vendoritem.shipping_price_2,
+                                shipping_day_least_2=vendoritem.shipping_day_least_2,
+                                shipping_day_most_2=vendoritem.shipping_day_most_2,
+                                shipping_info_3=vendoritem.shipping_info_3,
+                                shipping_price_3=vendoritem.shipping_price_3,
+                                shipping_day_least_3=vendoritem.shipping_day_least_3,
+                                shipping_day_most_3=vendoritem.shipping_day_most_3,
+                                shipping_free=vendoritem.shipping_free,
+                                shipping_two=vendoritem.shipping_two,
+                                shipping_three=vendoritem.shipping_three,
                                 return_allowed=vendoritem.return_allowed,
-                                digital_currency1=vendoritem.digital_currency1,
-                                digital_currency2=vendoritem.digital_currency2,
-                                digital_currency3=vendoritem.digital_currency3,
+                                digital_currency_1=vendoritem.digital_currency_1,
+                                digital_currency_2=vendoritem.digital_currency_2,
+                                digital_currency_3=vendoritem.digital_currency_3,
                                 selected_currency=defaultselectedcurrency,
                                 selected_shipping=0,
                                 selected_shipping_description=0,
@@ -272,35 +272,35 @@ def itemforsale(id):
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
                                 vendor_id=vendoritem.vendor_id,
-                                title_of_item=vendoritem.itemtitlee,
-                                image_of_item=vendoritem.imageone,
+                                title_of_item=vendoritem.item_title,
+                                image_of_item=vendoritem.image_one,
                                 price_of_item=vendoritem.price,
                                 quantity_of_item=1,
                                 currency=vendoritem.currency,
                                 vendorsupply=1,
-                                stringauctionid=vendoritem.stringauctionid,
-                                stringnodeid=vendoritem.stringnodeid,
-                                return_policy=vendoritem.itemrefundpolicy,
+                                string_auction_id=vendoritem.string_auction_id,
+                                string_node_id=vendoritem.string_node_id,
+                                return_policy=vendoritem.item_refund_policy,
                                 savedforlater=1,
                                 item_id=vendoritem.id,
-                                shippinginfo0=vendoritem.shippinginfo0,
-                                shippingdayleast0=vendoritem.shippingdayleast0,
-                                shippingdaymost0=vendoritem.shippingdaymost0,
-                                shippinginfo2=vendoritem.shippinginfo2,
-                                shippingprice2=vendoritem.shippingprice2,
-                                shippingdayleast2=vendoritem.shippingdayleast2,
-                                shippingdaymost2=vendoritem.shippingdaymost2,
-                                shippinginfo3=vendoritem.shippinginfo3,
-                                shippingprice3=vendoritem.shippingprice3,
-                                shippingdayleast3=vendoritem.shippingdayleast3,
-                                shippingdaymost3=vendoritem.shippingdaymost3,
-                                shippingfree=vendoritem.shippingfree,
-                                shippingtwo=vendoritem.shippingtwo,
-                                shippingthree=vendoritem.shippingthree,
+                                shipping_info_0=vendoritem.shipping_info_0,
+                                shipping_day_least_0=vendoritem.shipping_day_least_0,
+                                shipping_day_most_0=vendoritem.shipping_day_most_0,
+                                shipping_info_2=vendoritem.shipping_info_2,
+                                shipping_price_2=vendoritem.shipping_price_2,
+                                shipping_day_least_2=vendoritem.shipping_day_least_2,
+                                shipping_day_most_2=vendoritem.shipping_day_most_2,
+                                shipping_info_3=vendoritem.shipping_info_3,
+                                shipping_price_3=vendoritem.shipping_price_3,
+                                shipping_day_least_3=vendoritem.shipping_day_least_3,
+                                shipping_day_most_3=vendoritem.shipping_day_most_3,
+                                shipping_free=vendoritem.shipping_free,
+                                shipping_two=vendoritem.shipping_two,
+                                shipping_three=vendoritem.shipping_three,
                                 return_allowed=vendoritem.return_allowed,
-                                digital_currency1=vendoritem.digital_currency1,
-                                digital_currency2=vendoritem.digital_currency2,
-                                digital_currency3=vendoritem.digital_currency3,
+                                digital_currency_1=vendoritem.digital_currency_1,
+                                digital_currency_2=vendoritem.digital_currency_2,
+                                digital_currency_3=vendoritem.digital_currency_3,
                                 selected_currency=defaultselectedcurrency,
                                 selected_shipping=0,
                                 selected_shipping_description=0,
@@ -380,7 +380,7 @@ def itemforsale(id):
                         newflagged = flagged(
                             user_id=vendoritem.vendor_id,
                             vendorname=vendoritem.vendor_name,
-                            listingtitle=vendoritem.itemtitlee,
+                            listingtitle=vendoritem.item_title,
                             howmany=1,
                             typeitem=1,
                             listingid=vendoritem.id,
@@ -443,7 +443,7 @@ def itemforsale(id):
                            finditem=finditem,
                            itemfeedback=itemfeedback,
                            vendorfeedback=vendorfeedback,
-                           feedbackofitemcount=feedbackofitemcount,
+                           feedbackofitem_count=feedbackofitem_count,
                            vendorfeedbackcount=vendorfeedbackcount,
                            vendorstats=vendorstats,
                            vendor=vendor,
@@ -536,7 +536,7 @@ def previewItem(id):
     now = datetime.utcnow()
     preview = 1
     try:
-        vendoritem = marketItem.query.get(id)
+        vendoritem = marketitem.query.get(id)
         if vendoritem is None:
             flash("item is no longer available", category="primary")
             return redirect(url_for('index', username=current_user.username))
@@ -572,8 +572,8 @@ def previewItem(id):
 
     try:
         # add count to item viewed
-        addviewer = int(vendoritem.viewcount) + 1
-        vendoritem.viewcount = int(addviewer)
+        addviewer = int(vendoritem.view_count) + 1
+        vendoritem.view_count = int(addviewer)
         db.session.add(vendoritem)
         db.session.commit()
     except Exception as e:
@@ -593,7 +593,7 @@ def previewItem(id):
     # Item Feedback
     itemfeedback = db.session.query(Feedback).filter_by(
         item_id=id).order_by(Feedback.timestamp.desc()).limit(25)
-    feedbackofitemcount = db.session.query(Feedback).filter_by(
+    feedbackofitem_count = db.session.query(Feedback).filter_by(
         item_id=id).order_by(Feedback.timestamp.desc()).count()
     # Vendor Feedback
     vendorfeedback = db.session.query(Feedback).filter_by(
@@ -630,7 +630,7 @@ def previewItem(id):
                            relatedcount=relatedcount,
                            itemfeedback=itemfeedback,
                            vendorfeedback=vendorfeedback,
-                           feedbackofitemcount=feedbackofitemcount,
+                           feedbackofitem_count=feedbackofitem_count,
                            vendorfeedbackcount=vendorfeedbackcount,
 
                            vendorstats=vendorstats,
@@ -648,10 +648,10 @@ def previewItem(id):
 def buyitagain(id):
     try:
         # get the item
-        vendoritem = db.session.query(marketItem).filter_by(id=id).first()
+        vendoritem = db.session.query(marketitem).filter_by(id=id).first()
 
         # see what currency the user wants t sell in/
-        if vendoritem.digital_currency2 == 1:
+        if vendoritem.digital_currency_2 == 1:
             defaultselectedcurrency = 2
         else:
             defaultselectedcurrency = 3
@@ -684,35 +684,35 @@ def buyitagain(id):
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
                                 vendor_id=vendoritem.vendor_id,
-                                title_of_item=vendoritem.itemtitlee,
-                                image_of_item=vendoritem.imageone,
+                                title_of_item=vendoritem.item_title,
+                                image_of_item=vendoritem.image_one,
                                 price_of_item=vendoritem.price,
                                 quantity_of_item=1,
                                 currency=vendoritem.currency,
-                                stringauctionid=vendoritem.stringauctionid,
-                                stringnodeid=vendoritem.stringnodeid,
-                                return_policy=vendoritem.itemrefundpolicy,
+                                string_auction_id=vendoritem.string_auction_id,
+                                string_node_id=vendoritem.string_node_id,
+                                return_policy=vendoritem.item_refund_policy,
                                 savedforlater=0,
                                 item_id=vendoritem.id,
                                 vendorsupply=1,
-                                shippinginfo0=vendoritem.shippinginfo0,
-                                shippingdayleast0=vendoritem.shippingdayleast0,
-                                shippingdaymost0=vendoritem.shippingdaymost0,
-                                shippinginfo2=vendoritem.shippinginfo2,
-                                shippingprice2=vendoritem.shippingprice2,
-                                shippingdayleast2=vendoritem.shippingdayleast2,
-                                shippingdaymost2=vendoritem.shippingdaymost2,
-                                shippinginfo3=vendoritem.shippinginfo3,
-                                shippingprice3=vendoritem.shippingprice3,
-                                shippingdayleast3=vendoritem.shippingdayleast3,
-                                shippingdaymost3=vendoritem.shippingdaymost3,
-                                shippingfree=vendoritem.shippingfree,
-                                shippingtwo=vendoritem.shippingtwo,
-                                shippingthree=vendoritem.shippingthree,
+                                shipping_info_0=vendoritem.shipping_info_0,
+                                shipping_day_least_0=vendoritem.shipping_day_least_0,
+                                shipping_day_most_0=vendoritem.shipping_day_most_0,
+                                shipping_info_2=vendoritem.shipping_info_2,
+                                shipping_price_2=vendoritem.shipping_price_2,
+                                shipping_day_least_2=vendoritem.shipping_day_least_2,
+                                shipping_day_most_2=vendoritem.shipping_day_most_2,
+                                shipping_info_3=vendoritem.shipping_info_3,
+                                shipping_price_3=vendoritem.shipping_price_3,
+                                shipping_day_least_3=vendoritem.shipping_day_least_3,
+                                shipping_day_most_3=vendoritem.shipping_day_most_3,
+                                shipping_free=vendoritem.shipping_free,
+                                shipping_two=vendoritem.shipping_two,
+                                shipping_three=vendoritem.shipping_three,
                                 return_allowed=vendoritem.return_allowed,
-                                digital_currency1=vendoritem.digital_currency1,
-                                digital_currency2=vendoritem.digital_currency2,
-                                digital_currency3=vendoritem.digital_currency3,
+                                digital_currency_1=vendoritem.digital_currency_1,
+                                digital_currency_2=vendoritem.digital_currency_2,
+                                digital_currency_3=vendoritem.digital_currency_3,
                                 selected_currency=defaultselectedcurrency,
                                 selected_shipping=0,
                                 selected_shipping_description=0,
@@ -733,35 +733,35 @@ def buyitagain(id):
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
                                 vendor_id=vendoritem.vendor_id,
-                                title_of_item=vendoritem.itemtitlee,
-                                image_of_item=vendoritem.imageone,
+                                title_of_item=vendoritem.item_title,
+                                image_of_item=vendoritem.image_one,
                                 price_of_item=vendoritem.price,
                                 quantity_of_item=1,
                                 currency=vendoritem.currency,
                                 vendorsupply=1,
-                                stringauctionid=vendoritem.stringauctionid,
-                                stringnodeid=vendoritem.stringnodeid,
-                                return_policy=vendoritem.itemrefundpolicy,
+                                string_auction_id=vendoritem.string_auction_id,
+                                string_node_id=vendoritem.string_node_id,
+                                return_policy=vendoritem.item_refund_policy,
                                 savedforlater=1,
                                 item_id=vendoritem.id,
-                                shippinginfo0=vendoritem.shippinginfo0,
-                                shippingdayleast0=vendoritem.shippingdayleast0,
-                                shippingdaymost0=vendoritem.shippingdaymost0,
-                                shippinginfo2=vendoritem.shippinginfo2,
-                                shippingprice2=vendoritem.shippingprice2,
-                                shippingdayleast2=vendoritem.shippingdayleast2,
-                                shippingdaymost2=vendoritem.shippingdaymost2,
-                                shippinginfo3=vendoritem.shippinginfo3,
-                                shippingprice3=vendoritem.shippingprice3,
-                                shippingdayleast3=vendoritem.shippingdayleast3,
-                                shippingdaymost3=vendoritem.shippingdaymost3,
-                                shippingfree=vendoritem.shippingfree,
-                                shippingtwo=vendoritem.shippingtwo,
-                                shippingthree=vendoritem.shippingthree,
+                                shipping_info_0=vendoritem.shipping_info_0,
+                                shipping_day_least_0=vendoritem.shipping_day_least_0,
+                                shipping_day_most_0=vendoritem.shipping_day_most_0,
+                                shipping_info_2=vendoritem.shipping_info_2,
+                                shipping_price_2=vendoritem.shipping_price_2,
+                                shipping_day_least_2=vendoritem.shipping_day_least_2,
+                                shipping_day_most_2=vendoritem.shipping_day_most_2,
+                                shipping_info_3=vendoritem.shipping_info_3,
+                                shipping_price_3=vendoritem.shipping_price_3,
+                                shipping_day_least_3=vendoritem.shipping_day_least_3,
+                                shipping_day_most_3=vendoritem.shipping_day_most_3,
+                                shipping_free=vendoritem.shipping_free,
+                                shipping_two=vendoritem.shipping_two,
+                                shipping_three=vendoritem.shipping_three,
                                 return_allowed=vendoritem.return_allowed,
-                                digital_currency1=vendoritem.digital_currency1,
-                                digital_currency2=vendoritem.digital_currency2,
-                                digital_currency3=vendoritem.digital_currency3,
+                                digital_currency_1=vendoritem.digital_currency_1,
+                                digital_currency_2=vendoritem.digital_currency_2,
+                                digital_currency_3=vendoritem.digital_currency_3,
                                 selected_currency=defaultselectedcurrency,
                                 selected_shipping=0,
                                 selected_shipping_description=0,

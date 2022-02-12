@@ -29,7 +29,7 @@ class Feedback(db.Model):
     vendorname = db.Column(db.TEXT)
     vendorid = db.Column(db.INTEGER)
     comment = db.Column(db.TEXT)
-    itemrating = db.Column(db.INTEGER)
+    item_rating = db.Column(db.INTEGER)
     item_id = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
     vendorrating = db.Column(db.INTEGER)

@@ -4,12 +4,12 @@
     <div class="col-12" style="">
         <a href="{{ url_for('item.itemforsale',id=item.id) }}">
             <img src="{{ url_for('userdata.media_file',
-                                filename=( item.stringnodeid +item.stringauctionid + item.imageone + "_225x.jpg")) }}">
+                                filename=( item.string_node_id +item.string_auction_id + item.image_one + "_225x.jpg")) }}">
         </a>
     </div>
 
     <div class="col-12 text-center" style="height: 50px; overflow: hidden; font-size: 12px;">
-        {{ item.itemtitlee| truncate(40) }}
+        {{ item.item_title| truncate(40) }}
     </div>
 
     <div class="col-12 ">
@@ -34,12 +34,12 @@
     {% endif %}
 
     <div class="col-12">
-        {% if item.digital_currency2 == 1 %}
+        {% if item.digital_currency_2 == 1 %}
 
 
 
         {% endif %}
-        {% if item.digital_currency3 == 1 %}
+        {% if item.digital_currency_3 == 1 %}
             <div class="btccash">
               BCH Accepted
             </div>

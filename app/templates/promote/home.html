@@ -59,7 +59,7 @@
                         </td>
 
                         <td class="col-12 col-sm-5 linkcolor">
-                            {{ sale.itemtitlee }}
+                            {{ sale.item_title }}
 
                         </td>
 
@@ -68,7 +68,7 @@
                         </td>
 
                         <td class="col-12 col-sm-1 ">
-                            {% if sale.aditem == 1 %}
+                            {% if sale.ad_item is True %}
                                 Online
                             {% else %}
                                 Offline
@@ -77,9 +77,9 @@
                         </td>
                         <td class="col-12 col-sm-3">
 
-                            {% if sale.aditem_level == 1 %}
+                            {% if sale.ad_item_level == 1 %}
                                 Promoted in Category
-                            {% elif sale.aditem_level == 2 %}
+                            {% elif sale.ad_item_level == 2 %}
                                 Promoted Frontpage
                             {% else %}
 

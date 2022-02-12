@@ -141,7 +141,7 @@
     </div>
 
     <!-- item rating -->
-    {% if item.itemrating != 0 %}
+    {% if item.item_rating != 0 %}
         <div class="col-sm-3">
             <div class="classWithPad text-center" style="height: 150px;
                                         font-size: 18px;
@@ -149,8 +149,8 @@
                                         color:#FFFFFF;
                                         min-width:225px;">
                 <h4>Item Rating</h4>
-                <h2 class="bold padding-bottom-7">{{ item.itemrating }} <small>/ 5</small></h2>
-                {% if item.itemrating == 5 %}
+                <h2 class="bold padding-bottom-7">{{ item.item_rating }} <small>/ 5</small></h2>
+                {% if item.item_rating == 5 %}
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -168,7 +168,7 @@
                     </button>
                 {% endif %}
                 <!-- 4 star rating -->
-                {% if 4.00 <= item.itemrating <= 4.99 %}
+                {% if 4.00 <= item.item_rating <= 4.99 %}
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -186,7 +186,7 @@
                     </button>
                 {% endif %}
                 <!-- 3 star rating -->
-                {% if 3.00 <= item.itemrating <= 3.99 %}
+                {% if 3.00 <= item.item_rating <= 3.99 %}
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -204,7 +204,7 @@
                     </button>
                 {% endif %}
                 <!-- 2 star rating -->
-                {% if 2.00 <= item.itemrating <= 2.99 %}
+                {% if 2.00 <= item.item_rating <= 2.99 %}
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -222,7 +222,7 @@
                     </button>
                 {% endif %}
                 <!-- 1 star rating -->
-                {% if 1.00 <= item.itemrating <= 1.99 %}
+                {% if 1.00 <= item.item_rating <= 1.99 %}
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -240,7 +240,7 @@
                     </button>
                 {% endif %}
                 <!-- 0 star rating -->
-                {% if 0.00 <= item.itemrating <= 0.99 %}
+                {% if 0.00 <= item.item_rating <= 0.99 %}
                     <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -291,9 +291,9 @@
                         </div>
                     </div>
                     <div class="col-sm-9">
-                        <h2 class="bold padding-bottom-7">{{ feed.itemrating }}<small>/ 5</small></h2>
+                        <h2 class="bold padding-bottom-7">{{ feed.item_rating }}<small>/ 5</small></h2>
                         <div class="review-block-rate">
-                            {% if feed.itemrating == 5 %}
+                            {% if feed.item_rating == 5 %}
                                 <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                 </button>
@@ -311,7 +311,7 @@
                                 </button>
                             {% endif %}
                             <!-- 4 star rating -->
-                            {% if 4.00 <= feed.itemrating <= 4.99 %}
+                            {% if 4.00 <= feed.item_rating <= 4.99 %}
                                 <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                 </button>
@@ -329,7 +329,7 @@
                                 </button>
                             {% endif %}
                             <!-- 3 star rating -->
-                            {% if 3.00 <= feed.itemrating <= 3.99 %}
+                            {% if 3.00 <= feed.item_rating <= 3.99 %}
                                 <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                 </button>
@@ -347,7 +347,7 @@
                                 </button>
                             {% endif %}
                             <!-- 2 star rating -->
-                            {% if 2.00 <= feed.itemrating <= 2.99 %}
+                            {% if 2.00 <= feed.item_rating <= 2.99 %}
                                 <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                 </button>
@@ -365,7 +365,7 @@
                                 </button>
                             {% endif %}
                             <!-- 1 star rating -->
-                            {% if 1.00 <= feed.itemrating <= 1.99 %}
+                            {% if 1.00 <= feed.item_rating <= 1.99 %}
                                 <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                 </button>
@@ -383,7 +383,7 @@
                                 </button>
                             {% endif %}
                             <!-- 0 star rating -->
-                            {% if 0.00 <= feed.itemrating <= 0.99 %}
+                            {% if 0.00 <= feed.item_rating <= 0.99 %}
                                 <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                 </button>

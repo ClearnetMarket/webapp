@@ -13,50 +13,50 @@
             <th>To</th>
         </tr>
 
-        {% if item.shippingfree == 1 %}
+        {% if item.shipping_free == 1 %}
             <tr>
-                <td>{{ item.shippinginfo0 }}</td>
+                <td>{{ item.shipping_info_0 }}</td>
                 <td><div class="btcorange">FREE</div></td>
-                <td>{{ item.shippingdayleast0 }} days</td>
-                <td>{{ item.shippingdaymost0 }} days</td>
+                <td>{{ item.shipping_day_least_0 }} days</td>
+                <td>{{ item.shipping_day_most_0 }} days</td>
             </tr>
         {% endif %}
 
-        {% if item.shippingtwo == 1 %}
+        {% if item.shipping_two == 1 %}
             <tr>
-                <td>{{ item.shippinginfo2 }}:</td>
+                <td>{{ item.shipping_info_2 }}:</td>
                 <td>
-                    {{ item.shippingprice2 }}{{ item.currency|currencyformat }}
+                    {{ item.shipping_price_2 }}{{ item.currency|currencyformat }}
                     {% if current_user.is_authenticated %}
                         {% if item.currency != current_user.currency %}
 
-                            ({{ item.shippingprice3|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                            ({{ item.shipping_price_3|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
                             {{ current_user.currency|currencyformat }})
 
                         {% endif %}
                     {% endif %}
                 </td>
-                <td>{{ item.shippingdayleast2 }} days</td>
-                <td>{{ item.shippingdaymost2 }} days</td>
+                <td>{{ item.shipping_day_least_2 }} days</td>
+                <td>{{ item.shipping_day_most_2 }} days</td>
             </tr>
         {% endif %}
 
-        {% if item.shippingthree == 1 %}
+        {% if item.shipping_three == 1 %}
             <tr>
-                <td>{{ item.shippinginfo3 }}:</td>
-                <td>{{ item.shippingprice3 }}{{ item.currency|currencyformat }}
+                <td>{{ item.shipping_info_3 }}:</td>
+                <td>{{ item.shipping_price_3 }}{{ item.currency|currencyformat }}
 
                     {% if current_user.is_authenticated %}
                         {% if item.currency != current_user.currency %}
 
-                            ({{ item.shippingprice3|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
+                            ({{ item.shipping_price_3|currencytocurrency(currency = current_user.currency, currentusercurrency = item.currency) }}
                             {{ current_user.currency|currencyformat }})
 
                         {% endif %}
                     {% endif %}
                 </td>
-                <td>{{ item.shippingdayleast3 }} days</td>
-                <td>{{ item.shippingdaymost3 }} days</td>
+                <td>{{ item.shipping_day_least_3 }} days</td>
+                <td>{{ item.shipping_day_most_3 }} days</td>
             </tr>
         {% endif %}
     </table>
@@ -64,12 +64,12 @@
 <!--END shipping-->
 
 <!--Not shipping-->
-    {% if item.notshipping1 != 0
-        or  item.notshipping2 != 0
-        or item.notshipping3 != 0
-        or item.notshipping4 != 0
-        or item.notshipping5 != 0
-        or item.notshipping6 != 0 %}
+    {% if item.not_shipping_1 != 0
+        or  item.not_shipping_2 != 0
+        or item.not_shipping_3 != 0
+        or item.not_shipping_4 != 0
+        or item.not_shipping_5 != 0
+        or item.not_shipping_6 != 0 %}
 
 
 
@@ -81,34 +81,34 @@
                 <div class="col-12 mb-1">
                     <p class="font-weight-bold">The Vendor is not shipping to the follow locations and reserves the right
                         to cancel the order: </p>
-                    {% if item.notshipping1 == 0 %}
+                    {% if item.not_shipping_1 == 0 %}
                     {% else %}
-                        {{ item.notshipping1|notshippingformat }}<br>
+                        {{ item.not_shipping_1|notshippingformat }}<br>
                     {% endif %}
 
-                    {% if item.notshipping2 == 0 %}
+                    {% if item.not_shipping_2 == 0 %}
                     {% else %}
-                        {{ item.notshipping2|notshippingformat  }}<br>
+                        {{ item.not_shipping_2|notshippingformat  }}<br>
                     {% endif %}
 
-                    {% if item.notshipping3 == 0 %}
+                    {% if item.not_shipping_3 == 0 %}
                     {% else %}
-                        {{ item.notshipping3|notshippingformat  }}<br>
+                        {{ item.not_shipping_3|notshippingformat  }}<br>
                     {% endif %}
 
-                    {% if item.notshipping4 == 0 %}
+                    {% if item.not_shipping_4 == 0 %}
                     {% else %}
-                        {{ item.notshipping4|notshippingformat  }}<br>
+                        {{ item.not_shipping_4|notshippingformat  }}<br>
                     {% endif %}
 
-                    {% if item.notshipping5 == 0 %}
+                    {% if item.not_shipping_5 == 0 %}
                     {% else %}
-                        {{ item.notshipping5|notshippingformat  }}<br>
+                        {{ item.not_shipping_5|notshippingformat  }}<br>
                     {% endif %}
 
-                    {% if item.notshipping6 == 0 %}
+                    {% if item.not_shipping_6 == 0 %}
                     {% else %}
-                        {{ item.notshipping6|notshippingformat  }}<br>
+                        {{ item.not_shipping_6|notshippingformat  }}<br>
                     {% endif %}
                 </div>
         </div>

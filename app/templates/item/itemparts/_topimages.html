@@ -9,10 +9,10 @@
 
 <div class="row">
     <div class="col-12" style="min-height:300px; min-width: 300px;">
-        {% if item.imageone != '0' %}
+        {% if item.image_one != '0' %}
 
             <img id="large-image-id" src="{{ url_for('userdata.media_file',
-             filename=( item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg"))  }}"
+             filename=( item.string_node_id + item.string_auction_id + item.image_one + "_225x.jpg"))  }}"
                  alt="large image" class="itempage_image_full">
 
         {% else %}
@@ -22,52 +22,52 @@
 </div>
 <div class="row">
     <div class="col-12">
-        {% if item.imagetwo == '0' and item.imagethree == '0' and item.imagefour == '0' and item.imagefive == '0' %}
+        {% if item.image_two == '0' and item.image_three == '0' and item.image_four == '0' and item.image_five == '0' %}
 
         {% else %}
-            {% if item.imageone != '0' %}
+            {% if item.image_one != '0' %}
                 <img
                         onclick="document.getElementById('large-image-id').src=this.src"
                         onmouseover="document.getElementById('large-image-id').src=this.src"
                         src="{{ url_for('userdata.media_file',
-                 filename=( item.stringnodeid + item.stringauctionid + item.imageone + "_225x.jpg"))  }}"
+                 filename=( item.string_node_id + item.string_auction_id + item.image_one + "_225x.jpg"))  }}"
                         style="width:100px; height:80px; margin-top: 10px;"
                         alt="thumb image">
             {% endif %}
         {% endif %}
-        {% if item.imagetwo != '0' %}
+        {% if item.image_two != '0' %}
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file',filename=( item.stringnodeid + item.stringauctionid + item.imagetwo + "_225x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file',filename=( item.string_node_id + item.string_auction_id + item.image_two + "_225x.jpg"))  }}"
                     style="width:100px; height:80px; margin-top: 10px;"
 
                     alt="thumb image">
         {% endif %}
-        {% if item.imagethree != '0' %}
+        {% if item.image_three != '0' %}
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file',  filename=( item.stringnodeid + item.stringauctionid + item.imagethree + "_225x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file',  filename=( item.string_node_id + item.string_auction_id + item.image_three + "_225x.jpg"))  }}"
                     style="width:100px; height:80px; margin-top: 10px;"
                     alt="thumb image">
         {% endif %}
 
 
-        {% if item.imagefour != '0' %}
+        {% if item.image_four != '0' %}
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file', filename=( item.stringnodeid + item.stringauctionid + item.imagefour + "_225x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file', filename=( item.string_node_id + item.string_auction_id + item.image_four + "_225x.jpg"))  }}"
                     style="width:106px; height:80px;margin-top: 10px;"
 
                     alt="thumb image">
         {% endif %}
-        {% if item.imagefive != '0' %}
+        {% if item.image_five != '0' %}
             <img
                     onclick="document.getElementById('large-image-id').src=this.src"
                     onmouseover="document.getElementById('large-image-id').src=this.src"
-                    src="{{ url_for('userdata.media_file',filename=( item.stringnodeid + item.stringauctionid + item.imagefive + "_225x.jpg"))  }}"
+                    src="{{ url_for('userdata.media_file',filename=( item.string_node_id + item.string_auction_id + item.image_five + "_225x.jpg"))  }}"
                     style="width:106px; height:80px;margin-top: 10px;"
 
                     alt="thumb image">

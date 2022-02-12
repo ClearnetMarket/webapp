@@ -169,8 +169,7 @@ def differenttradingpartners_vendor(user_id, otherid):
         .first()
     # find path of the user
 
-    thepath = os.path.join(UPLOADED_FILES_DEST, "user",
-                           getuserlocation, str(user_id))
+    thepath = os.path.join(UPLOADED_FILES_DEST_USER, getuserlocation, str(user_id))
     # make a directory if doesnt have it..should tho
     mkdir_p(path=thepath)
     # text file is user_id

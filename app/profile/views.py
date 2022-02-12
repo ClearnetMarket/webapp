@@ -10,7 +10,7 @@ from app.classes.achievements import \
     UserAchievements_recent
 
 from app.classes.item import \
-    marketItem
+    marketitem
 
 from app.classes.profile import \
     Userreviews, \
@@ -143,32 +143,32 @@ def user(username):
         userreview = getratings.limit(per_page).offset(offset)
 
         paginationuserreview = Pagination(page=page,
-                                            total=getratings.count(),
-                                            search=False,
-                                            record_name='items',
-                                            offset=offset,
-                                            per_page=per_page,
-                                            css_framework='bootstrap4',
-                                            inner_window=inner_window,
-                                            outer_window=outer_window)
+                                          total=getratings.count(),
+                                          search=False,
+                                          record_name='items',
+                                          offset=offset,
+                                          per_page=per_page,
+                                          css_framework='bootstrap4',
+                                          inner_window=inner_window,
+                                          outer_window=outer_window)
 
         return render_template('profile/customer.html',
-                                user=user, now=now,
-                                userreview=userreview,
-                                usercount=usercount,
-                                paginationuserreview=paginationuserreview,
-                                stats=stats,
-                                started=started,
-                                user1=user1,
-                                user1width=user1width,
-                                user1level=user1level,
-                                user1pictureid=user1pictureid,
-                                user1wallet=user1wallet,
-                                user1stats=user1stats,
-                                user1ach=user1ach,
-                                user1vendorstats=user1vendorstats,
-                                user_recent_ach=user_recent_ach
-                                )
+                               user=user, now=now,
+                               userreview=userreview,
+                               usercount=usercount,
+                               paginationuserreview=paginationuserreview,
+                               stats=stats,
+                               started=started,
+                               user1=user1,
+                               user1width=user1width,
+                               user1level=user1level,
+                               user1pictureid=user1pictureid,
+                               user1wallet=user1wallet,
+                               user1stats=user1stats,
+                               user1ach=user1ach,
+                               user1vendorstats=user1vendorstats,
+                               user_recent_ach=user_recent_ach
+                               )
     else:
         flash("User does not have an account", category="danger")
         return redirect(url_for('index', username=current_user.username))
@@ -245,7 +245,7 @@ def vendorprofile(username):
                                                 outer_window=outer_window)
 
             getavgitem = db.session.query(
-                func.avg(Feedback.itemrating).label("avgitem"))
+                func.avg(Feedback.item_rating).label("avgitem"))
             getavgitem = getavgitem.filter(Feedback.vendorid == user.id)
             gitem = getavgitem.all()
             itemscore = str((gitem[0][0]))[:4]
@@ -315,33 +315,33 @@ def vendorStore(username):
 
             # get users top market items
             getitems = db.session\
-                .query(marketItem) \
-                .filter(marketItem.vendor_id == user.id, marketItem.online == 1) \
-                .order_by(marketItem.totalsold.desc()) \
+                .query(marketitem) \
+                .filter(marketitem.vendor_id == user.id, marketitem.online == 1) \
+                .order_by(marketitem.total_sold.desc()) \
                 .limit(3)
 
             # get users newest market items
             getnewitems = db.session\
-                .query(marketItem) \
-                .filter(marketItem.vendor_id == user.id, marketItem.online == 1) \
-                .order_by(marketItem.created.desc()) \
+                .query(marketitem) \
+                .filter(marketitem.vendor_id == user.id, marketitem.online == 1) \
+                .order_by(marketitem.created.desc()) \
                 .limit(3)
             getitemscount = db.session\
-                .query(marketItem)\
-                .filter(marketItem.vendor_id == user.id)\
+                .query(marketitem)\
+                .filter(marketitem.vendor_id == user.id)\
                 .count()
 
             # # Get user Store
             # # market item queries
             # # join subcategories for the marketitem
-            # allcategory = db.session.query(func.count(marketItem.categoryid0).label("catcount"),
+            # allcategory = db.session.query(func.count(marketitem.category_id_0).label("catcount"),
             #                                Cats.catname0,
             #                                Cats.id,
             #                                Cats.id.label("itemnumber"))
             # allcategory = allcategory.join(Cats.catid0)
-            # allcategory = allcategory.filter(marketItem.subcategory == Cats.id)
-            # allcategory = allcategory.filter(marketItem.vendor_id == vendor.id)
-            # allcategory = allcategory.filter(marketItem.online == 1)
+            # allcategory = allcategory.filter(marketitem.subcategory == Cats.id)
+            # allcategory = allcategory.filter(marketitem.vendor_id == vendor.id)
+            # allcategory = allcategory.filter(marketitem.online == 1)
             # allcategory = allcategory.group_by(Cats.catname0, Cats.id)
             # allcat = allcategory.all()
 

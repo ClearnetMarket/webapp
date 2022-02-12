@@ -1,0 +1,565 @@
+{% extends "/layouts/plain.html" %}
+{% block content %}
+
+
+<nav aria-label="breadcrumb" class="linkcolor">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('vendorcreate.itemsforSale') }}">My Items</a></li>
+    </ol>
+</nav>
+
+<div class="row">
+    {% for field, errors in form.errors.items() %}
+        <div class="col-6 offset-3">
+            {{ ', '.join(errors) }}
+        </div>
+    {% endfor %}
+</div>
+<form method="post" enctype="multipart/form-data" class="form-horizontal">
+    {{ form.csrf_token }}
+    <div class="row text-center mb-1" style="max-width: 1000px; ">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h5>Create an Item - Shipping & Returns</h5>
+            </div>
+        </div>
+    </div>
+{# 
+Returns
+#}
+   
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+        <div class="col-12 font-weight-bold">
+            <h5>Returns</h5>
+            <hr>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <label class="col-2"> Allow Returns?: </label>
+            <div class="col-4">
+                {{ render_field(form.return_this_item, type="checkbox") }}
+                {% if form.return_this_item.errors %}
+                    <ul class="errors">
+                        {% for error in form.return_this_item.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-6">
+                {{ render_field(form.item_refund_policy,rows=7, cols=45, class="form-control") }}
+                {% if form.item_refund_policy.errors %}
+                    <ul class="errors">
+                        {% for error in form.item_refund_policy.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Allow item returns help sell your item. We dont charge any extra fees. If you allow returns,
+                put the process here. Explain the return shipping process. Please note Return Items cause cause a loss
+                in Coin value.
+            </div>
+        </div>
+    </div>
+
+{# 
+Destination
+#}
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+        <div class="col-12 font-weight-bold">
+            <h5>Destination</h5>
+            <hr>
+        </div>
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Origin Country</label>
+            <div class="col-4">
+                {{ render_field(form.origin_country,  class="form-control") }}
+                {% if form.origin_country.errors %}
+                    <ul class="errors">
+                        {% for error in form.origin_country.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Select Origin Country your package is from. Required
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-1">Ships To:</div>
+            <div class="col-4">
+                {{ render_field(form.destination1,  class="form-control") }}
+                {% if form.destination1.errors %}
+                    <ul class="errors">
+                        {% for error in form.destination1.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Required. State country or world wide for shipping
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Ships To:</label>
+            <div class="col-4">
+                {{ render_field(form.destination2,  class="form-control") }}
+                {% if form.destination2.errors %}
+                    <ul class="errors">
+                        {% for error in form.destination2.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Ships To:</label>
+            <div class="col-4">
+                {{ render_field(form.destination3,  class="form-control") }}
+                {% if form.destination3.errors %}
+                    <ul class="errors">
+                        {% for error in form.destination3.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Ships To:</label>
+            <div class="col-4">
+                {{ render_field(form.destination4, class="form-control") }}
+                {% if form.destination4.errors %}
+                    <ul class="errors">
+                        {% for error in form.destination4.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Ships To:</label>
+            <div class="col-4">
+                {{ render_field(form.destination5,  class="form-control") }}
+                {% if form.destination5.errors %}
+                    <ul class="errors">
+                        {% for error in form.destination5.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+    </div>
+
+    
+{# 
+Not Shippign Options
+#}
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+        <div class="col-12 font-weight-bold">
+            <h5>Not Shipping Destination</h5>
+            <hr>
+        </div>
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Option #1:</label>
+            <div class="col-4">
+                {{ render_field(form.not_shipping_1,  class="form-control") }}
+                {% if form.not_shipping_1.errors %}
+                    <ul class="errors">
+                        {% for error in form.not_shipping_1.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Select countrys you wont ship too. They are optional
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Option #2:</label>
+            <div class="col-4">
+                {{ render_field(form.not_shipping_2,  class="form-control") }}
+                {% if form.not_shipping_2.errors %}
+                <ul class="errors">
+                    {% for error in form.not_shipping_2.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Option #3:</label>
+            <div class="col-4">
+                {{ render_field(form.not_shipping_3,  class="form-control") }}
+                {% if form.not_shipping_3.errors %}
+                    <ul class="errors">
+                        {% for error in form.not_shipping_3.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Option #4:</label>
+            <div class="col-4">
+                {{ render_field(form.not_shipping_4,  class="form-control") }}
+                {% if form.not_shipping_4.errors %}
+                    <ul class="errors">
+                        {% for error in form.not_shipping_4.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <label class="col-sm-1 control-label">Option #5:</label>
+            <div class="col-4">
+                {{ render_field(form.not_shipping_5,  class="form-control") }}
+                {% if form.not_shipping_5.errors %}
+                    <ul class="errors">
+                        {% for error in form.not_shipping_5.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <label class="col-1 control-label">Option #6:</label>
+            <div class="col-4">
+                {{ render_field(form.not_shipping_6,  class="form-control") }}
+                {% if form.not_shipping_6.errors %}
+                    <ul class="errors">
+                        {% for error in form.not_shipping_6.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                Optional
+            </div>
+        </div>
+    </div>
+
+
+    {# 
+     Shipping Prices and Times
+     #}
+    <div class="row bg-white border mb-1 p-2" style="max-width: 1000px;">
+        <div class="col-12 font-weight-bold">
+            <h5>Shipping Options</h5>
+            <hr>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-12">
+                Atleast one shipping option is required. Free shipping will always attract buyers.
+                If it is free, then estimate the shipping days and leave 0 as a price.
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-12">
+                Atleast one shipping method must be checked/filled out
+            </div>
+        </div>
+
+        <div class="row w-100 mb-1">
+            <div class="col-1">
+                {{ render_field(form.shipping_free, type="checkbox") }}
+                {% if form.shipping_free.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_free.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-2">Shipping FREE #1: </div>
+            <div class="col-4">
+                {{ render_field(form.shipping_info_0, class="form-control input-sm", placeholder="Description") }}
+                {% if form.shipping_info_0.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_info_0.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-4">
+                <div class="input-group">
+                    0.00 BCH
+                </div>
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-1">
+            </div>
+            <div class="col-2">Shipping Estimate</div>
+            <div class="col-1">
+                From:
+            </div>
+            <div class="col-2">
+                {{ render_field(form.shipping_day_least_0, class="form-control") }}
+                {% if form.shipping_day_least_0.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_day_least_0.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-1">
+                To:
+            </div>
+            <div class="col-2">
+                {{ render_field(form.shipping_day_most_0, class="form-control") }}
+                {% if form.shipping_day_most_0.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_day_most_0.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-1">
+                Days
+            </div>
+        </div>
+        <hr>
+        <div class="row w-100 mb-1">
+            <div class="col-1">
+                {{ render_field(form.shipping_two) }}
+                {% if form.shipping_two.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_two.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-2">Shipping Option #2: </div>
+            <div class="col-4">
+                {{ render_field(form.shipping_info_2, class="form-control", placeholder="Description") }}
+                {% if form.shipping_info_2.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_info_2.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        {{ current_user.currency|currencyformat  }}
+                    </div>
+                    {{ render_field(form.shipping_price_2, class="form-control") }}
+                    {% if form.shipping_price_2.errors %}
+                    <ul class="errors">
+                        {% for error in form.shipping_price_2.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-1">
+            </div>
+            <div class="col-2">Shipping Estimate</div>
+            <div class="col-1">
+                From:
+            </div>
+            <div class="col-2">
+                {{ render_field(form.shipping_day_least_2, class="form-control") }}
+                {% if form.shipping_day_least_2.errors %}
+                    <ul class="errors">
+                        {% for error in form.shipping_day_least_2.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-1">
+                To:
+            </div>
+            <div class="col-2">
+                {{ render_field(form.shipping_day_most_2, class="form-control") }}
+                {% if form.shipping_day_most_2.errors %}
+                    <ul class="errors">
+                        {% for error in form.shipping_day_most_2.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-1">
+                Days
+            </div>
+        </div>
+        <hr>
+        <div class="row w-100 mb-1">
+            <div class="col-1">
+                {{ render_field(form.shipping_three) }}
+                {% if form.shipping_three.errors %}
+                    <ul class="errors">
+                        {% for error in form.shipping_three.errors %}
+                        <li>{{ error }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-2 control-label">Shipping Option #3:</div>
+
+            <div class="col-4">
+                {{ render_field(form.shipping_info_3, class="form-control", placeholder="Description") }}
+                {% if form.shipping_info_3.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_info_3.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        {{ current_user.currency|currencyformat  }}
+                    </div>
+                    {{ render_field(form.shipping_price_3, class="form-control") }}
+                {% if form.shipping_price_3.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_price_3.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+        <div class="row w-100 mb-1">
+            <div class="col-1">
+            </div>
+            <div class="col-2">
+                Shipping Estimate
+            </div>
+            <div class="col-1">
+                From:
+            </div>
+            <div class="col-2">
+                {{ render_field(form.shipping_day_least_3, class="form-control") }}
+                {% if form.shipping_day_least_3.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_day_least_3.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-1">
+                To:
+            </div>
+            <div class="col-2">
+                {{ render_field(form.shipping_day_most_3, class="form-control") }}
+                {% if form.shipping_day_most_3.errors %}
+                <ul class="errors">
+                    {% for error in form.shipping_day_most_3.errors %}
+                    <li>{{ error }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-1">
+                Days
+            </div>
+        </div>
+    </div>
+
+    {# 
+     Create Button
+     #}
+    <div class="row mb-5">
+        <div class="col-6 offset-3 d-grid gap-2">
+            {{ render_field(form.submit, value="Finish Item Creation", class="btn btn-primary") }}
+        </div>
+    </div>
+
+</form>
+
+
+{% endblock %}

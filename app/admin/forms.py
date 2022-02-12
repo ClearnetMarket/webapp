@@ -20,8 +20,7 @@ class changeUserForm(FlaskForm):
     vendor_totalreviews = IntegerField()
     vendor_totaltrades = IntegerField()
     vendor_vendorrating = DecimalField()
-    vendor_itemrating = DecimalField()
-
+    vendor_item_rating = DecimalField()
 
     # customer
     customer_totalitemsbought = IntegerField()
@@ -43,7 +42,7 @@ class changeitemForm(FlaskForm):
         DataRequired(),
         Length(1, 164)])
     vendorrating = IntegerField()
-    itemrating = IntegerField()
+    item_rating = IntegerField()
     finditem = SubmitField('')
 
 
@@ -106,7 +105,6 @@ class settoAdmin(FlaskForm):
     submit = SubmitField('')
 
 
-
 class Chatform(FlaskForm):
 
     msgstufftosend = TextAreaField(validators=[
@@ -140,7 +138,8 @@ class Userform(FlaskForm):
 
     lockwallet = SubmitField()
     unlockwallet = SubmitField()
-    selectshard = QuerySelectField(query_factory=lambda: Query_shard.query.all(), get_label='text')
+    selectshard = QuerySelectField(
+        query_factory=lambda: Query_shard.query.all(), get_label='text')
     selectshardsubmit = SubmitField()
 
 

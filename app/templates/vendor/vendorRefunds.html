@@ -93,7 +93,7 @@
       {{ moment(timestamp=order.age, local=False).fromNow(refresh=True) }}
     </td>
     <td class="hidden-xs col-sm-1 linkcolor bg-danger">
-      {{ order.price|formatbtctostring_btccash }} BCH
+      {{ order.price|format_to_string_bch }} BCH
     </td>
     <td class="col-3 linkcolor bg-danger">
       <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
@@ -155,7 +155,7 @@
       {{ moment(timestamp=order.age, local=False).fromNow(refresh=True) }}
     </td>
     <td class="hidden-xs col-sm-1 linkcolor bg-danger">
-      {{ order.price|formatbtctostring_btccash }} BTC
+      {{ order.price|format_to_string_bch }} BTC
     </td>
     <td class="col-3 bg-danger">
       {% if order.type == 1 %} {% if order.return_id == 0 and

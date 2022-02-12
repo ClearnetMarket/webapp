@@ -4,11 +4,11 @@
     <div class="col-12 col-sm-12 col-md-3">
         {% if order.type == 1 %}
              <img src="{{ url_for('userdata.media_file',
-    filename=( order.stringnodeid + order.stringauctionid + order.imageone + "_225x.jpg"))  }}"
+    filename=( order.string_node_id + order.string_auction_id + order.image_one + "_225x.jpg"))  }}"
          class="boximage">
         {% elif order.type ==2 %}
                <img src="{{ url_for('userdata.media_file',
-    filename=( order.stringnodeid + order.stringauctionid + order.imageone))  }}"
+    filename=( order.string_node_id + order.string_auction_id + order.image_one))  }}"
          class="boximage">
         {% else %}
             <img src="{{ url_for('static', filename='/images/Bitcoin_Logo2.jpeg')  }}" width="200px" height="200px" >

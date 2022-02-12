@@ -100,23 +100,23 @@ current_user.is_authenticated %} {% if current_user.vendor_account ==1 %}
     </td>
 
     <td class="col-2 col-sm-2">
-      {% if rate.itemrating == 1 %}
+      {% if rate.item_rating == 1 %}
       <img
         src="{{ url_for('static', filename='/images/stars/10stars.png'  )  }}"
       />
-      {% endif %} {% if rate.itemrating == 2 %}
+      {% endif %} {% if rate.item_rating == 2 %}
       <img
         src="{{ url_for('static', filename='/images/stars/20stars.png'  )  }}"
       />
-      {% endif %} {% if rate.itemrating == 3 %}
+      {% endif %} {% if rate.item_rating == 3 %}
       <img
         src="{{ url_for('static', filename='/images/stars/30stars.png'  )  }}"
       />
-      {% endif %} {% if rate.itemrating == 4 %}
+      {% endif %} {% if rate.item_rating == 4 %}
       <img
         src="{{ url_for('static', filename='/images/stars/40stars.png'  )  }}"
       />
-      {% endif %} {% if rate.itemrating == 5 %}
+      {% endif %} {% if rate.item_rating == 5 %}
       <img
         src="{{ url_for('static', filename='/images/stars/50stars.png'  )  }}"
       />

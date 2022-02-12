@@ -24,7 +24,7 @@ from app.classes.affiliate import \
     AffiliateOverview, \
     AffiliateStats
 from app.classes.item import \
-    marketItem
+    marketitem
 from app.classes.category import Categories
 from app.classes.message import \
     Notifications
@@ -179,36 +179,36 @@ def index():
 
         # Newest Items
         todayfeaturedfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.imageone != '')\
-            .order_by(marketItem.created.desc())
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.image_one != '')\
+            .order_by(marketitem.created.desc())
         todayfeatured = todayfeaturedfull.limit(5)
         tfcount = todayfeaturedfull.count()
         # best sellers
         bestsellersfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.imageone != '')\
-            .order_by(marketItem.totalsold.desc())
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.image_one != '')\
+            .order_by(marketitem.total_sold.desc())
         bestsellers = bestsellersfull.limit(5)
         bestsellerscount = bestsellersfull.count()
         # Electronics
         electronicsfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.imageone != '')\
-            .filter(marketItem.categoryid0 == 9)\
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.image_one != '')\
+            .filter(marketitem.category_id_0 == 9)\
             .order_by(func.random())
         Electronics = electronicsfull.limit(5)
         Electronicscount = electronicsfull.count()
         # PROMOTED
         additemfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.imageone != "")\
-            .filter(marketItem.aditem == 1)\
-            .filter(marketItem.aditem_level == 2)\
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.image_one != "")\
+            .filter(marketitem.ad_item is True)\
+            .filter(marketitem.ad_item_level == 2)\
             .order_by(func.random())
         promoteditems = additemfull.limit(45)
         promoteditemscount = additemfull.count()
@@ -216,34 +216,34 @@ def index():
     else:
         # Newest Items
         todayfeaturedfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.imageone != '')\
-            .order_by(marketItem.created.desc())
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.image_one != '')\
+            .order_by(marketitem.created.desc())
         todayfeatured = todayfeaturedfull.limit(5)
         tfcount = todayfeaturedfull.count()
         # best sellers
         bestsellersfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.imageone != '')\
-            .order_by(marketItem.totalsold.desc())
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.image_one != '')\
+            .order_by(marketitem.total_sold.desc())
         bestsellers = bestsellersfull.limit(5)
         bestsellerscount = bestsellersfull.count()
         # Electronics
         electronicsfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.categoryid0 == 9)\
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.category_id_0 == 9)\
             .order_by(func.random())
         Electronics = electronicsfull.limit(5)
         Electronicscount = electronicsfull.count()
         # PROMOTED
         additemfull = db.session\
-            .query(marketItem)\
-            .filter(marketItem.online == 1)\
-            .filter(marketItem.aditem == 1)\
-            .filter(marketItem.aditem_level == 2)\
+            .query(marketitem)\
+            .filter(marketitem.online == 1)\
+            .filter(marketitem.ad_item is True)\
+            .filter(marketitem.ad_item_level == 2)\
             .order_by(func.random())
         promoteditems = additemfull.limit(5)
         promoteditemscount = additemfull.count()

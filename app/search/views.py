@@ -10,7 +10,7 @@ from app.classes.auth import \
     User
 
 from app.classes.item import \
-    marketItem
+    marketitem
 
 from flask_login import current_user
 from app.search.searchfunction import headerfunctions
@@ -60,9 +60,9 @@ def searchMaster(searchterm, function):
     # Form Variables
     lowprice = sortresults.pricelow.data
     highprice = sortresults.pricehigh.data
-    if lowprice is 0 and highprice is 0:
+    if lowprice == 0 and highprice == 0:
         lowprice = None
-    if highprice is 0:
+    if highprice == 0:
         highprice = None
 
     btc_boolean = sortresults.btc.data
@@ -86,13 +86,14 @@ def searchMaster(searchterm, function):
 
     # SIGNED IN USER
     if current_user.is_authenticated:
-        user = db.session.query(User).filter_by(username=current_user.username).first()
+        user = db.session.query(User).filter_by(
+            username=current_user.username).first()
         # if they didnt type in anything bring the main category
         if type(searchterm) is int:
             if int(searchterm) == int(function) and int(function) != 0:
-                data = db.session.query(marketItem)
-                data = data.filter(marketItem.online == 1)
-                data = data.filter(marketItem.categoryid0 == function)
+                data = db.session.query(marketitem)
+                data = data.filter(marketitem.online == 1)
+                data = data.filter(marketitem.category_id_0 == function)
                 items = data.limit(per_page).offset(offset)
                 limitdata = 0
                 searchterm = ''
@@ -113,9 +114,9 @@ def searchMaster(searchterm, function):
             # if user signed in..didnt pick a category
             if function == 0:
                 data = db.session\
-                .query(marketItem)\
-                .filter(marketItem.currency == user.currency).filter(marketItem.online == 1)\
-                .filter(or_(marketItem.keywords.like('%' + searchterm + '%'),(marketItem.itemtitlee.like('%' + searchterm + '%'))))
+                    .query(marketitem)\
+                    .filter(marketitem.currency == user.currency).filter(marketitem.online == 1)\
+                    .filter(or_(marketitem.keywords.like('%' + searchterm + '%'), (marketitem.item_title.like('%' + searchterm + '%'))))
 
                 # FILTERS
                 # Price Filter
@@ -125,14 +126,14 @@ def searchMaster(searchterm, function):
                     data = data
 
                 else:
-                    data = data.filter(lowprice <= marketItem.price)
-                    data = data.filter(marketItem.price <= highprice)
+                    data = data.filter(lowprice <= marketitem.price)
+                    data = data.filter(marketitem.price <= highprice)
 
                 # btc cash Filter
                 if btccash_sort == 0:
                     data = data
                 elif btccash_sort == 1:
-                    data = data.filter(marketItem.digital_currency3 == 1)
+                    data = data.filter(marketitem.digital_currency_3 == 1)
                 else:
                     data = data
 
@@ -140,7 +141,7 @@ def searchMaster(searchterm, function):
                 if btc_sort == 0:
                     data = data
                 elif btc_sort == 1:
-                    data = data.filter(marketItem.digital_currency2 == 1)
+                    data = data.filter(marketitem.digital_currency_2 == 1)
                 else:
                     data = data
 
@@ -148,7 +149,7 @@ def searchMaster(searchterm, function):
                 if shipping_boolean == 0:
                     data = data
                 elif shipping_boolean == 1:
-                    data = data.filter(marketItem.shippingfree == 1)
+                    data = data.filter(marketitem.shipping_free == 1)
                 else:
                     data = data
                 # END FILTERS
@@ -162,11 +163,12 @@ def searchMaster(searchterm, function):
                     for f in items:
                         itemsalreadyfoundinsearchresults.append(f.id)
                     # convert list to string
-                    intlist = [str(x) for x in itemsalreadyfoundinsearchresults]
+                    intlist = [str(x)
+                               for x in itemsalreadyfoundinsearchresults]
                     # end list
 
-                    otherdata = db.session.query(marketItem)
-                    otherdata = otherdata.filter(marketItem.online == 1)
+                    otherdata = db.session.query(marketitem)
+                    otherdata = otherdata.filter(marketitem.online == 1)
 
                     # FILTERS
                     # Price Filter
@@ -175,14 +177,17 @@ def searchMaster(searchterm, function):
                             or highprice is None and lowprice is not None:
                         otherdata = otherdata
                     else:
-                        otherdata = otherdata.filter(lowprice <= marketItem.price)
-                        otherdata = otherdata.filter(marketItem.price <= highprice)
+                        otherdata = otherdata.filter(
+                            lowprice <= marketitem.price)
+                        otherdata = otherdata.filter(
+                            marketitem.price <= highprice)
 
                     # btc cash Filter
                     if btccash_sort == 0:
                         otherdata = otherdata
                     elif btccash_sort == 1:
-                        otherdata = otherdata.filter(marketItem.digital_currency3 == 1)
+                        otherdata = otherdata.filter(
+                            marketitem.digital_currency_3 == 1)
                     else:
                         otherdata = otherdata
 
@@ -190,7 +195,8 @@ def searchMaster(searchterm, function):
                     if btc_sort == 0:
                         otherdata = otherdata
                     elif btc_sort == 1:
-                        otherdata = otherdata.filter(marketItem.digital_currency2 == 1)
+                        otherdata = otherdata.filter(
+                            marketitem.digital_currency_2 == 1)
                     else:
                         otherdata = otherdata
 
@@ -198,12 +204,13 @@ def searchMaster(searchterm, function):
                     if shipping_boolean == 0:
                         otherdata = otherdata
                     elif shipping_boolean == 1:
-                        otherdata = otherdata.filter(marketItem.shippingfree == 1)
+                        otherdata = otherdata.filter(
+                            marketitem.shipping_free == 1)
                     else:
                         otherdata = otherdata
 
                     # END FILTERS
-                    otherdata = otherdata.filter((~marketItem.id.in_(intlist)))
+                    otherdata = otherdata.filter((~marketitem.id.in_(intlist)))
                     limitdata = otherdata.limit(10)
 
                 # got more than 10 results
@@ -225,16 +232,16 @@ def searchMaster(searchterm, function):
             # user signed in..picked something specific with searchterm
             else:
                 data = db.session\
-                .query(marketItem)\
-                .filter(marketItem.currency == user.currency)\
-                .filter(marketItem.online == 1)\
-                .filter(marketItem.imageone != '0')\
-                .filter(marketItem.categoryid0 == function).filter(or_(marketItem.keywords.like('%' + searchterm + '%'), (marketItem.itemtitlee.like('%' + searchterm + '%'))))\
-                .filter(or_(marketItem.destinationcountry == user.country,
-                            marketItem.destinationcountrytwo == user.country,
-                            marketItem.destinationcountrythree == user.country,
-                            marketItem.destinationcountryfour == user.country,
-                            marketItem.destinationcountryfive == user.country))
+                    .query(marketitem)\
+                    .filter(marketitem.currency == user.currency)\
+                    .filter(marketitem.online == 1)\
+                    .filter(marketitem.image_one != '0')\
+                    .filter(marketitem.category_id_0 == function).filter(or_(marketitem.keywords.like('%' + searchterm + '%'), (marketitem.item_title.like('%' + searchterm + '%'))))\
+                    .filter(or_(marketitem.destination_country_one == user.country,
+                            marketitem.destination_country_two == user.country,
+                            marketitem.destination_country_three == user.country,
+                            marketitem.destination_country_four == user.country,
+                            marketitem.destination_country_five == user.country))
 
                 # FILTERS
                 # Price Filter
@@ -244,14 +251,14 @@ def searchMaster(searchterm, function):
                     data = data
 
                 else:
-                    data = data.filter(lowprice <= marketItem.price)
-                    data = data.filter(marketItem.price <= highprice)
+                    data = data.filter(lowprice <= marketitem.price)
+                    data = data.filter(marketitem.price <= highprice)
 
                 # btc cash Filter
                 if btccash_sort == 0:
                     data = data
                 elif btccash_sort == 1:
-                    data = data.filter(marketItem.digital_currency3 == 1)
+                    data = data.filter(marketitem.digital_currency_3 == 1)
                 else:
                     data = data
 
@@ -259,7 +266,7 @@ def searchMaster(searchterm, function):
                 if btc_sort == 0:
                     data = data
                 elif btc_sort == 1:
-                    data = data.filter(marketItem.digital_currency2 == 1)
+                    data = data.filter(marketitem.digital_currency_2 == 1)
                 else:
                     data = data
 
@@ -267,11 +274,11 @@ def searchMaster(searchterm, function):
                 if shipping_boolean == 0:
                     data = data
                 elif shipping_boolean == 1:
-                    data = data.filter(marketItem.shippingfree == 1)
+                    data = data.filter(marketitem.shipping_free == 1)
                 else:
                     data = data
                 # END FILTERS
-                
+
                 total = data.count()
                 # if less than ten results, query more data
 
@@ -281,20 +288,21 @@ def searchMaster(searchterm, function):
                     for f in items:
                         itemsalreadyfoundinsearchresults.append(f.id)
                     # convert list to string
-                    intlist = [str(x) for x in itemsalreadyfoundinsearchresults]
+                    intlist = [str(x)
+                               for x in itemsalreadyfoundinsearchresults]
                     # end list
 
                     otherdata = db.session\
-                    .query(marketItem)\
-                    .filter(marketItem.imageone != '0')\
-                    .filter_by(currency=user.currency)\
-                    .filter(marketItem.online == 1)\
-                    .filter(or_(marketItem.destinationcountry == user.country,
-                                marketItem.destinationcountrytwo == user.country,
-                                marketItem.destinationcountrythree == user.country,
-                                marketItem.destinationcountryfour == user.country,
-                                marketItem.destinationcountryfive == user.country))\
-                    .filter((~marketItem.id.in_(intlist)))
+                        .query(marketitem)\
+                        .filter(marketitem.image_one != '0')\
+                        .filter_by(currency=user.currency)\
+                        .filter(marketitem.online == 1)\
+                        .filter(or_(marketitem.destination_country_one == user.country,
+                                marketitem.destination_country_two == user.country,
+                                marketitem.destination_country_three == user.country,
+                                marketitem.destination_country_four == user.country,
+                                marketitem.destination_country_five == user.country))\
+                        .filter((~marketitem.id.in_(intlist)))
 
                     # FILTERS
                     # Price Filter
@@ -304,14 +312,17 @@ def searchMaster(searchterm, function):
                         otherdata = otherdata
 
                     else:
-                        otherdata = otherdata.filter(lowprice <= marketItem.price)
-                        otherdata = otherdata.filter(marketItem.price <= highprice)
+                        otherdata = otherdata.filter(
+                            lowprice <= marketitem.price)
+                        otherdata = otherdata.filter(
+                            marketitem.price <= highprice)
 
                     # btc cash Filter
                     if btccash_sort == 0:
                         otherdata = otherdata
                     elif btccash_sort == 1:
-                        otherdata = otherdata.filter(marketItem.digital_currency3 == 1)
+                        otherdata = otherdata.filter(
+                            marketitem.digital_currency_3 == 1)
                     else:
                         otherdata = otherdata
 
@@ -319,7 +330,8 @@ def searchMaster(searchterm, function):
                     if btc_sort == 0:
                         otherdata = otherdata
                     elif btc_sort == 1:
-                        otherdata = otherdata.filter(marketItem.digital_currency2 == 1)
+                        otherdata = otherdata.filter(
+                            marketitem.digital_currency_2 == 1)
                     else:
                         otherdata = otherdata
 
@@ -327,10 +339,10 @@ def searchMaster(searchterm, function):
                     if shipping_boolean == 0:
                         otherdata = otherdata
                     elif shipping_boolean == 1:
-                        otherdata = otherdata.filter(marketItem.shippingfree == 1)
+                        otherdata = otherdata.filter(
+                            marketitem.shipping_free == 1)
                     else:
                         otherdata = otherdata
-
 
                     # END FILTERS
                     limitdata = otherdata.limit(10)
@@ -356,11 +368,11 @@ def searchMaster(searchterm, function):
         if type(searchterm) is int:
             if int(searchterm) == int(function) and int(function) != 0:
                 data = db.session\
-                .query(marketItem)\
-                .filter(marketItem.online == 1)\
-                .filter(marketItem.categoryid0 == function)\
-                .limit(per_page)\
-                .offset(offset)
+                    .query(marketitem)\
+                    .filter(marketitem.online == 1)\
+                    .filter(marketitem.category_id_0 == function)\
+                    .limit(per_page)\
+                    .offset(offset)
                 limitdata = 0
 
                 pagination = Pagination(page=page,
@@ -380,10 +392,10 @@ def searchMaster(searchterm, function):
             if function == 0:
 
                 data = db.session\
-                .query(marketItem)\
-                .filter(marketItem.online == 1)\
-                .filter(or_(marketItem.keywords.like('%' + searchterm + '%'),
-                                       (marketItem.itemtitlee.like('%'+ searchterm + '%'))))
+                    .query(marketitem)\
+                    .filter(marketitem.online == 1)\
+                    .filter(or_(marketitem.keywords.like('%' + searchterm + '%'),
+                                (marketitem.item_title.like('%' + searchterm + '%'))))
 
                 # FILTERS
                 # Price Filter
@@ -393,14 +405,14 @@ def searchMaster(searchterm, function):
                     data = data
 
                 else:
-                    data = data.filter(lowprice <= marketItem.price)
-                    data = data.filter(marketItem.price <= highprice)
+                    data = data.filter(lowprice <= marketitem.price)
+                    data = data.filter(marketitem.price <= highprice)
 
                 # btc cash Filter
                 if btccash_sort == 0:
                     data = data
                 elif btccash_sort == 1:
-                    data = data.filter(marketItem.digital_currency3 == 1)
+                    data = data.filter(marketitem.digital_currency_3 == 1)
                 else:
                     data = data
 
@@ -408,7 +420,7 @@ def searchMaster(searchterm, function):
                 if btc_sort == 0:
                     data = data
                 elif btc_sort == 1:
-                    data = data.filter(marketItem.digital_currency2 == 1)
+                    data = data.filter(marketitem.digital_currency_2 == 1)
                 else:
                     data = data
 
@@ -416,7 +428,7 @@ def searchMaster(searchterm, function):
                 if shipping_boolean == 0:
                     data = data
                 elif shipping_boolean == 1:
-                    data = data.filter(marketItem.shippingfree == 1)
+                    data = data.filter(marketitem.shipping_free == 1)
                 else:
                     data = data
                 # END FILTERS
@@ -431,14 +443,15 @@ def searchMaster(searchterm, function):
                     for f in items:
                         itemsalreadyfoundinsearchresults.append(f.id)
                     # convert list to string
-                    intlist = [str(x) for x in itemsalreadyfoundinsearchresults]
+                    intlist = [str(x)
+                               for x in itemsalreadyfoundinsearchresults]
                     # end list
 
                     alldata = db.session\
-                    .query(marketItem)\
-                    .filter(marketItem.online == 1)\
-                    .order_by(marketItem.itemrating.desc())\
-                    .filter((~marketItem.id.in_(intlist)))
+                        .query(marketitem)\
+                        .filter(marketitem.online == 1)\
+                        .order_by(marketitem.item_rating.desc())\
+                        .filter((~marketitem.id.in_(intlist)))
 
                     # FILTERS
                     # Price Filter
@@ -447,12 +460,11 @@ def searchMaster(searchterm, function):
                             or highprice is None and lowprice is not None:
                         alldata = alldata
                     else:
-                        alldata = alldata.filter(lowprice <= marketItem.price)
-                        alldata = alldata.filter(marketItem.price <= highprice)
+                        alldata = alldata.filter(lowprice <= marketitem.price)
+                        alldata = alldata.filter(marketitem.price <= highprice)
                     # END FILTERS
 
                     limitdata = alldata.limit(10)
-
 
                 else:
                     items = data.limit(per_page).offset(offset)
@@ -471,11 +483,11 @@ def searchMaster(searchterm, function):
             else:
                 # Regular query if not signed in.
                 data = db.session\
-                .query(marketItem)\
-                .filter(marketItem.categoryid0 == function)\
-                .filter(marketItem.online == 1)\
-                .filter(or_(marketItem.keywords.like('%' + searchterm + '%'),
-                                       (marketItem.itemtitlee.like('%' + searchterm + '%'))))
+                    .query(marketitem)\
+                    .filter(marketitem.category_id_0 == function)\
+                    .filter(marketitem.online == 1)\
+                    .filter(or_(marketitem.keywords.like('%' + searchterm + '%'),
+                            (marketitem.item_title.like('%' + searchterm + '%'))))
 
                 # FILTERS
                 # Price Filter
@@ -485,14 +497,14 @@ def searchMaster(searchterm, function):
                     data = data
 
                 else:
-                    data = data.filter(lowprice <= marketItem.price)
-                    data = data.filter(marketItem.price <= highprice)
+                    data = data.filter(lowprice <= marketitem.price)
+                    data = data.filter(marketitem.price <= highprice)
 
                 # btc cash Filter
                 if btccash_sort == 0:
                     data = data
                 elif btccash_sort == 1:
-                    data = data.filter(marketItem.digital_currency3 == 1)
+                    data = data.filter(marketitem.digital_currency_3 == 1)
                 else:
                     data = data
 
@@ -500,7 +512,7 @@ def searchMaster(searchterm, function):
                 if btc_sort == 0:
                     data = data
                 elif btc_sort == 1:
-                    data = data.filter(marketItem.digital_currency2 == 1)
+                    data = data.filter(marketitem.digital_currency_2 == 1)
                 else:
                     data = data
 
@@ -508,7 +520,7 @@ def searchMaster(searchterm, function):
                 if shipping_boolean == 0:
                     data = data
                 elif shipping_boolean == 1:
-                    data = data.filter(marketItem.shippingfree == 1)
+                    data = data.filter(marketitem.shipping_free == 1)
                 else:
                     data = data
                 # END FILTERS
@@ -522,13 +534,14 @@ def searchMaster(searchterm, function):
                     for f in items:
                         itemsalreadyfoundinsearchresults.append(f.id)
                     # convert list to string
-                    intlist = [str(x) for x in itemsalreadyfoundinsearchresults]
+                    intlist = [str(x)
+                               for x in itemsalreadyfoundinsearchresults]
                     # end list
                     alldata = db.session\
-                    .query(marketItem)\
-                    .filter(marketItem.online == 1)\
-                    .order_by(marketItem.itemrating.desc())\
-                    .filter((~marketItem.id.in_(intlist)))
+                        .query(marketitem)\
+                        .filter(marketitem.online == 1)\
+                        .order_by(marketitem.item_rating.desc())\
+                        .filter((~marketitem.id.in_(intlist)))
                     # FILTERS
                     # Price Filter
                     if lowprice is None and highprice is None \
@@ -537,14 +550,15 @@ def searchMaster(searchterm, function):
                         alldata = alldata
 
                     else:
-                        alldata = alldata.filter(lowprice <= marketItem.price)
-                        alldata = alldata.filter(marketItem.price <= highprice)
+                        alldata = alldata.filter(lowprice <= marketitem.price)
+                        alldata = alldata.filter(marketitem.price <= highprice)
 
                     # btc cash Filter
                     if btccash_sort == 0:
                         alldata = alldata
                     elif btccash_sort == 1:
-                        alldata = alldata.filter(marketItem.digital_currency3 == 1)
+                        alldata = alldata.filter(
+                            marketitem.digital_currency_3 == 1)
                     else:
                         alldata = alldata
 
@@ -552,7 +566,8 @@ def searchMaster(searchterm, function):
                     if btc_sort == 0:
                         alldata = alldata
                     elif btc_sort == 1:
-                        alldata = alldata.filter(marketItem.digital_currency2 == 1)
+                        alldata = alldata.filter(
+                            marketitem.digital_currency_2 == 1)
                     else:
                         alldata = alldata
 
@@ -560,7 +575,7 @@ def searchMaster(searchterm, function):
                     if shipping_boolean == 0:
                         alldata = alldata
                     elif shipping_boolean == 1:
-                        alldata = alldata.filter(marketItem.shippingfree == 1)
+                        alldata = alldata.filter(marketitem.shipping_free == 1)
                     else:
                         alldata = alldata
                     # END FILTERS
@@ -600,10 +615,10 @@ def searchMaster(searchterm, function):
             if formsearch.searchString.data == '':
                 formsearch.searchString.data = cat
 
-            if lowprice is 0 and highprice is 0:
+            if lowprice == 0 and highprice == 0:
                 lowprice = None
 
-            if highprice is 0:
+            if highprice == 0:
                 highprice = None
             # currency sorting
             btc_boolean = sortresults.btc.data

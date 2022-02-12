@@ -10,12 +10,14 @@ class QueryAdType(db.Model):
     value = db.Column(db.INTEGER)
     text = db.Column(db.TEXT)
 
+
 class WordSeeds(db.Model):
     __tablename__ = 'query_word_list'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     text = db.Column(db.VARCHAR(100))
+
 
 class Categories(db.Model):
     __tablename__ = 'category'
@@ -33,7 +35,7 @@ class Cats(db.Model):
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True, nullable=False)
     catid0 = db.Column(db.INTEGER, db.ForeignKey(
-        'marketitem.categoryid0', name="fk_cat5"), nullable=False)
+        'marketitem.category_id_0', name="fk_cat5"), nullable=False)
     catname0 = db.Column(db.TEXT)
     catid1 = db.Column(db.INTEGER, db.ForeignKey(
         'marketitem.categoryid1', name="fk_cat5"), nullable=False)
@@ -172,8 +174,8 @@ class Query_Itemorder(db.Model):
     text = db.Column(db.TEXT)
 
 
-class Query_Itemcount(db.Model):
-    __tablename__ = 'query_itemcount'
+class Query_item_count(db.Model):
+    __tablename__ = 'query_item_count'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -190,8 +192,8 @@ class Query_Timer(db.Model):
     text = db.Column(db.TEXT)
 
 
-class Query_Itemcondition(db.Model):
-    __tablename__ = 'query_itemcondition'
+class Query_item_condition(db.Model):
+    __tablename__ = 'query_item_condition'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

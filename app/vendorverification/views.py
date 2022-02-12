@@ -1,22 +1,21 @@
+
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
+
 from app.vendorverification import vendorverification
 from decimal import Decimal
+
 from app.achs.v import obtainedtrustlevel
 from app.common.decorators import \
     website_offline, \
     login_required, \
-    ping_user, \
     vendoraccount_required
 from app.common.functions import btc_cash_convertlocaltobtc
+
 # forms
 from app.vendorverification.forms import \
     vendorVerify, \
     ConfirmCancel
-
-from app.wallet_bch.wallet_btccash_work import \
-    btc_cash_sendCoinfromHoldings,\
-    btc_cash_sendCointoHoldings
 
 # models
 from app.classes.achievements import UserAchievements
@@ -25,7 +24,10 @@ from app.classes.vendor import \
     Orders, \
     vendorVerification
 from app.classes.wallet_bch import *
-# End Models
+
+from app.wallet_bch.wallet_btccash_work import \
+    btc_cash_sendCoinfromHoldings,\
+    btc_cash_sendCointoHoldings
 
 
 @vendorverification.route('/becomeverified', methods=['GET', 'POST'])

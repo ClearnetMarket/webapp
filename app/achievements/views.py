@@ -20,7 +20,7 @@ from app.classes.auth import User
 from app.classes.achievements import \
     UserAchievements, \
     whichAch, \
-    UserAchievements_recent
+    UserAchievements_recent, Achievements
 from app.classes.profile import \
     StatisticsUser, \
     StatisticsVendor
@@ -544,8 +544,7 @@ def selectuserachs():
             level = 0
             width = 0
 
-        x, size = row2dict(row=db.session.query(
-            UserAchievements).filter_by(user_id=current_user.id).first())
+        x, size = row2dict(row=db.session.query(UserAchievements).filter_by(user_id=current_user.id).first())
         return render_template('/auth/userachievements/achievementscustomize.html',
                             x=x,
                             size=size,

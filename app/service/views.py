@@ -616,9 +616,9 @@ def helpwithitem_active(id):
                         if getitemid.customer_id == current_user.id:
                             text_box_value_vendorrating = request.form.get(
                                 "vendorrating")
-                            text_box_value_itemrating = request.form.get(
-                                "itemrating")
-                            if text_box_value_vendorrating and text_box_value_itemrating is not None:
+                            text_box_value_item_rating = request.form.get(
+                                "item_rating")
+                            if text_box_value_vendorrating and text_box_value_item_rating is not None:
                                 try:
                                     feed = Feedback(
                                         type=getitemid.type,
@@ -628,7 +628,7 @@ def helpwithitem_active(id):
                                         customername=current_user.username,
                                         author_id=current_user.id,
                                         comment=feedbackform.feedbacktext.data,
-                                        itemrating=text_box_value_itemrating,
+                                        item_rating=text_box_value_item_rating,
                                         vendorrating=text_box_value_vendorrating,
                                         item_id=getitemid.item_id,
                                         addedtodb=0,
