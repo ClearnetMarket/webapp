@@ -21,12 +21,12 @@ from app.vendor.forms import \
     addShipping
 
 from app.userdata.views import \
-    addtotalItemsBought, \
+    userdata_add_total_items_bought, \
     addtotalItemsSold, \
-    differenttradingpartners_user, \
-    differenttradingpartners_vendor, \
-    totalspentonitems_btccash, \
-    vendortotalmade_btccash
+    userdata_different_trading_partners_user, \
+    userdata_different_trading_partners_vendor, \
+    userdata_total_spent_on_item_bch, \
+    userdata_total_made_on_item_bch
 from app.search.searchfunction import headerfunctions_vendor
 from app.notification import notification
 
@@ -38,27 +38,27 @@ from app.wallet_bch.wallet_btccash_work import \
 from app.auth.forms import becomeavendor
 
 # models
-from app.classes.auth import User
+from app.classes.auth import Auth_User
 
 from app.classes.item import \
-    marketitem
+    Item_MarketItem
 
 from app.classes.profile import \
-    Userreviews, \
-    Feedbackcomments
+    Profile_Userreviews, \
+    Profile_FeedbackComments
 
 from app.classes.service import \
-    shippingSecret, \
-    Returns, \
-    ReturnsTracking, \
-    DefaultReturns, \
-    Tracking
+    Service_ShippingSecret, \
+    Service_Returns, \
+    Service_ReturnsTracking, \
+    Service_DefaultReturns, \
+    Service_Tracking
 
 from app.classes.userdata import \
-    Feedback
+    User_DataFeedback
 
 from app.classes.vendor import \
-    Orders
+    Vendor_Orders
 
 from app.classes.wallet_bch import *
 # End Models
@@ -67,23 +67,23 @@ from app.classes.wallet_bch import *
 @vendor.route('/sell', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def becomevendor():
+def vendor_become_vendor():
     if current_user.vendor_account == 0:
         form = becomeavendor(request.form)
         if request.method == 'POST':
-            return redirect(url_for('auth.setupAccount'))
+            return redirect(url_for('auth.setup_account'))
         return render_template('auth/account/vendorintro.html', form=form)
     else:
-        return redirect(url_for('vendorcreate.tradeOptions', username=current_user.username))
+        return redirect(url_for('vendorcreate.vendorcreate_sell_options', username=current_user.username))
 
 
 @vendor.route('/vendor-accept/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_accept(id):
+def vendor_orders_accept(id):
     try:
-        item = Orders.query.get(id)
+        item = Vendor_Orders.query.get(id)
         if item is not None:
             if item.vendor_id == current_user.id and item.vendor_id != 0 and item.released == 0:
                 try:
@@ -93,11 +93,11 @@ def vendorOrders_accept(id):
                     db.session.add(item)
                     db.session.commit()
                     flash("Order Accepted", category="success")
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
                 except Exception:
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
             else:
-                return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                return redirect(url_for('vendor.vendor_orders', username=current_user.username))
         else:
             flash("Error.  Item doesnt exist", category="danger")
             return redirect(url_for('index'))
@@ -110,9 +110,9 @@ def vendorOrders_accept(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_send(id):
+def vendor_orders_send(id):
     try:
-        item = Orders.query.get(id)
+        item = Vendor_Orders.query.get(id)
         if item:
             if item.vendor_id == current_user.id \
                     and item.vendor_id != 0 \
@@ -125,11 +125,11 @@ def vendorOrders_send(id):
                     db.session.add(item)
                     db.session.commit()
                     flash("Order Shipped", category="success")
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
                 except Exception:
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
             else:
-                return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                return redirect(url_for('vendor.vendor_orders', username=current_user.username))
         else:
             flash("Error", category="danger")
             return redirect(url_for('index'))
@@ -142,20 +142,20 @@ def vendorOrders_send(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_dispute(id):
+def vendor_orders_disput(id):
     try:
-        item = Orders.query.get(id)
+        item = Vendor_Orders.query.get(id)
         if item.vendor_id == current_user.id:
             try:
                 item.disputed_order = 1
                 db.session.add(item)
                 db.session.commit()
                 flash("Item Disputed", category="success")
-                return redirect(url_for('service.customerservice_dispute', username=current_user.username))
+                return redirect(url_for('customerservice.customerservice_dispute', username=current_user.username))
             except Exception:
-                return redirect(url_for('service.customerservice_dispute', username=current_user.username))
+                return redirect(url_for('customerservice.customerservice_dispute', username=current_user.username))
         else:
-            return redirect(url_for('service.customerservice_dispute', username=current_user.username))
+            return redirect(url_for('customerservice.customerservice_dispute', username=current_user.username))
     except:
         return redirect(url_for('index', username=current_user.username))
 
@@ -164,8 +164,8 @@ def vendorOrders_dispute(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def customerOrders_dispute(id):
-    item = Orders.query.get(id)
+def vendor_orders_customer_dispute(id):
+    item = Vendor_Orders.query.get(id)
     if item:
         try:
             if item.vendor_id == current_user.id or item.customer_id == current_user.id:
@@ -173,7 +173,7 @@ def customerOrders_dispute(id):
                 db.session.add(item)
                 db.session.commit()
                 flash("Item Disputed", category="success")
-                return redirect(url_for('service.customerservice_dispute', username=current_user.username))
+                return redirect(url_for('customerservice.customerservice_dispute', username=current_user.username))
             else:
                 return redirect(url_for('index', username=current_user.username))
         except:
@@ -187,17 +187,17 @@ def customerOrders_dispute(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_reject(id):
+def vendor_orders_reject(id):
     now = datetime.utcnow()
-    item = Orders.query.get(id)
+    item = Vendor_Orders.query.get(id)
     if item:
         try:
             msg = db.session\
-                .query(shippingSecret)\
+                .query(Service_ShippingSecret)\
                 .filter_by(orderid=id)\
                 .first()
             gettracking = db.session\
-                .query(Tracking)\
+                .query(Service_Tracking)\
                 .filter_by(sale_id=id)\
                 .first()
             if item.vendor_id == current_user.id and item.released == 0 and item.vendor_id != 0:
@@ -238,8 +238,8 @@ def vendorOrders_reject(id):
                             db.session.delete(gettracking)
                         # change the quantity
                         if item.type == 1:
-                            getitem = db.session.query(marketitem).filter(
-                                item.item_id == marketitem.id).first()
+                            getitem = db.session.query(Item_MarketItem).filter(
+                                item.item_id == Item_MarketItem.id).first()
                             x = getitem.item_count
                             y = item.quantity
                             z = x + y
@@ -250,15 +250,15 @@ def vendorOrders_reject(id):
                                      user_id=item.customer_id, salenumber=item.id, bitcoin=0)
                         flash("Order Cancelled", category="danger")
                         db.session.commit()
-                        return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                        return redirect(url_for('vendor.vendor_orders', username=current_user.username))
                     except Exception as e:
                         flash("Error", category="danger")
-                        return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                        return redirect(url_for('vendor.vendor_orders', username=current_user.username))
                 else:
                     flash("Error", category="danger")
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
             else:
-                return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                return redirect(url_for('vendor.vendor_orders', username=current_user.username))
         except Exception as e:
             return redirect(url_for('index', username=current_user.username))
     else:
@@ -270,17 +270,17 @@ def vendorOrders_reject(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_cancelandrefund(id):
+def vendor_orders_cancel_and_refund(id):
     now = datetime.utcnow()
-    item = Orders.query.get(id)
+    item = Vendor_Orders.query.get(id)
     if item:
 
         msg = db.session\
-            .query(shippingSecret)\
+            .query(Service_ShippingSecret)\
             .filter_by(orderid=id)\
             .first()
         gettracking = db.session\
-            .query(Tracking)\
+            .query(Service_Tracking)\
             .filter_by(sale_id=id)\
             .first()
 
@@ -326,15 +326,15 @@ def vendorOrders_cancelandrefund(id):
                         db.session.delete(gettracking)
                     flash("Order Cancelled", category="danger")
                     db.session.commit()
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
                 except Exception as e:
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
             else:
                 flash("Error.  Cancelled already.", category="danger")
-                return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                return redirect(url_for('vendor.vendor_orders', username=current_user.username))
         else:
             flash("Vendor id doesnt equal user id", category="danger")
-            return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+            return redirect(url_for('vendor.vendor_orders', username=current_user.username))
     else:
         flash("Error", category="danger")
         return redirect(url_for('index'))
@@ -343,21 +343,21 @@ def vendorOrders_cancelandrefund(id):
 @vendor.route('/vendor-leavereviewforuser/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def vendorOrders_leavereviewforuser(id):
+def vendor_orders_leave_review_for_user(id):
     now = datetime.utcnow()
     form = vendorleavereview()
-    order = Orders.query.get(id)
+    order = Vendor_Orders.query.get(id)
     if order:
         if order.vendor_id == current_user.id:
             userreviews = db.session\
-                .query(Userreviews)\
-                .filter(Userreviews.customer_id == order.customer_id)\
-                .order_by(Userreviews.dateofreview.desc())\
+                .query(Profile_Userreviews)\
+                .filter(Profile_Userreviews.customer_id == order.customer_id)\
+                .order_by(Profile_Userreviews.dateofreview.desc())\
                 .limit(20)
 
             item = db.session\
-                .query(marketitem)\
-                .filter(marketitem.id == order.item_id)\
+                .query(Item_MarketItem)\
+                .filter(Item_MarketItem.id == order.item_id)\
                 .first()
 
             if request.method == "POST" and form.validate_on_submit():
@@ -368,7 +368,7 @@ def vendorOrders_leavereviewforuser(id):
                         text_box_value_comment = request.form.get(
                             "reviewcomment")
 
-                        add_feedback = Userreviews(
+                        add_feedback = Profile_Userreviews(
                             order_id=order.id,
                             customer=order.customer,
                             customer_id=order.customer_id,
@@ -394,14 +394,14 @@ def vendorOrders_leavereviewforuser(id):
                         db.session.commit()
                         flash('Feedback submitted.  Exp Points Given..',
                               category='success')
-                        return redirect(url_for('vendor.vendorOrders_leavereviewforuser', id=id))
+                        return redirect(url_for('vendor.vendor_orders_leave_review_for_user', id=id))
 
                     except Exception as e:
-                        return redirect(url_for('vendor.vendorOrders_leavereviewforuser', id=id))
+                        return redirect(url_for('vendor.vendor_orders_leave_review_for_user', id=id))
                 else:
                     flash('Cant leave Feedback.  Order was cancelled',
                           category='danger')
-                    return redirect(url_for('vendor.vendorOrders_leavereviewforuser', id=id))
+                    return redirect(url_for('vendor.vendor_orders_leave_review_for_user', id=id))
 
             return render_template('/vendor/leavecustomerreview.html',
                                    username=current_user.username,
@@ -420,10 +420,10 @@ def vendorOrders_leavereviewforuser(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_deleteorderhistory(id):
+def vendor_orders_delete_order_history(id):
 
     try:
-        item = Orders.query.get(id)
+        item = Vendor_Orders.query.get(id)
         if item.vendor_id == current_user.id:
             db.session.delete(item)
             db.session.commit()
@@ -433,7 +433,7 @@ def vendorOrders_deleteorderhistory(id):
             elif item.type == 2:
                 return redirect(url_for('vendor.vendoropenTrades', username=current_user.username))
             else:
-                return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                return redirect(url_for('vendor.vendor_orders', username=current_user.username))
         else:
             return redirect(url_for('index', username=current_user.username))
     except:
@@ -445,13 +445,14 @@ def vendorOrders_deleteorderhistory(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_addtracking(id):
+def vendor_orders_add_tracking(id):
     itemcustomer = db.session\
-        .query(Orders)\
+        .query(Vendor_Orders)\
         .filter_by(id=id)\
         .first()
     if itemcustomer.vendor_id == current_user.id:
-        tracking = db.session.query(Tracking).filter_by(sale_id=id).first()
+        tracking = db.session.query(
+            Service_Tracking).filter_by(sale_id=id).first()
         if tracking:
             form = addShipping(
                 sale_id=itemcustomer.id,
@@ -486,7 +487,7 @@ def vendorOrders_addtracking(id):
 
                     db.session.add(tracking)
                     db.session.commit()
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
 
             return render_template('/vendor/addtracking.html', username=current_user.username, form=form)
         else:
@@ -503,7 +504,7 @@ def vendorOrders_addtracking(id):
                 car3 = car3full.value
 
                 if (0 <= car1 <= 4) and (0 <= car2 <= 4) and (0 <= car3 <= 4):
-                    theitem = Tracking(
+                    theitem = Service_Tracking(
                         sale_id=itemcustomer.id,
                         tracking1=form.trackingnumber1.data,
                         carrier1=car1,
@@ -519,7 +520,7 @@ def vendorOrders_addtracking(id):
                     db.session.add(theitem)
                     db.session.commit()
 
-                    return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_orders', username=current_user.username))
             return render_template('/vendor/addtracking.html', username=current_user.username, form=form)
     else:
         flash("Cannot view Info.", category="danger")
@@ -530,8 +531,8 @@ def vendorOrders_addtracking(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_reasonforcancel(id):
-    item = db.session.query(Orders).filter_by(id=id).first()
+def vendor_orders_reason_for_cancel(id):
+    item = db.session.query(Vendor_Orders).filter_by(id=id).first()
     if item.vendor_id == current_user.id:
         return render_template('/vendor/reasontocancel.html', item=item)
     else:
@@ -543,7 +544,7 @@ def vendorOrders_reasonforcancel(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorRatings():
+def vendor_ratings():
     now = datetime.utcnow()
     form = ratingsForm(request.form)
     user, \
@@ -554,14 +555,14 @@ def vendorRatings():
         = headerfunctions_vendor()
 
     getavgitem = db.session.query(
-        func.avg(Feedback.item_rating).label("avgitem"))
-    getavgitem = getavgitem.filter(Feedback.vendorid == user.id)
+        func.avg(User_DataFeedback.item_rating).label("avgitem"))
+    getavgitem = getavgitem.filter(User_DataFeedback.vendorid == user.id)
     gitem = getavgitem.all()
     itemscore = str((gitem[0][0]))[:4]
 
     getavgvendor = db.session.query(
-        func.avg(Feedback.vendorrating).label("avgvendor"))
-    getavgvendor = getavgvendor.filter(Feedback.vendorid == user.id)
+        func.avg(User_DataFeedback.vendorrating).label("avgvendor"))
+    getavgvendor = getavgvendor.filter(User_DataFeedback.vendorid == user.id)
     gvendor = getavgvendor.all()
     vendorscore = str((gvendor[0][0]))[:4]
 
@@ -588,9 +589,9 @@ def vendorRatings():
     # end pagination
 
     ratings = db.session\
-        .query(Feedback)\
+        .query(User_DataFeedback)\
         .filter_by(vendorid=current_user.id)\
-        .order_by(Feedback.timestamp.desc())
+        .order_by(User_DataFeedback.timestamp.desc())
     ratings = ratings.limit(per_page).offset(offset)
 
     pagination = Pagination(page=page,
@@ -610,23 +611,23 @@ def vendorRatings():
             pass
         elif ratingdata == '1':
             # Newest ratings first
-            r = db.session.query(Feedback)
+            r = db.session.query(User_DataFeedback)
             r = r.filter_by(vendorid=user.id)
-            r = r.order_by(Feedback.timestamp.desc())
+            r = r.order_by(User_DataFeedback.timestamp.desc())
             ratings = r.limit(per_page).offset(offset)
 
         elif ratingdata == '2':
             # Highest vendor ratings first
-            r = db.session.query(Feedback)
+            r = db.session.query(User_DataFeedback)
             r = r.filter_by(vendorid=user.id)
-            r = r.order_by(Feedback.vendorrating.desc())
+            r = r.order_by(User_DataFeedback.vendorrating.desc())
             ratings = r.limit(per_page).offset(offset)
 
         elif ratingdata == '3':
             # Highest vendor ratings first
-            r = db.session.query(Feedback)
+            r = db.session.query(User_DataFeedback)
             r = r.filter_by(vendorid=user.id)
-            r = r.order_by(Feedback.vendorrating.asc())
+            r = r.order_by(User_DataFeedback.vendorrating.asc())
             ratings = r.limit(per_page).offset(offset)
         else:
             flash("Invalid Selection.", category="danger")
@@ -649,25 +650,25 @@ def vendorRatings():
 @vendor.route('/vendor-viewfeedbackspecific/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def vendorviewspecificfeedback(id):
+def vendor_feddback_view_specific(id):
     try:
         now = datetime.utcnow()
         form = feedbackcomment(request.form)
 
         user = db.session\
-            .query(User)\
+            .query(Auth_User)\
             .filter_by(username=current_user.username)\
             .first()
         rating = db.session\
-            .query(Feedback)\
+            .query(User_DataFeedback)\
             .filter_by(id=id)\
             .first()
         ileftfeedback = db.session\
-            .query(Feedbackcomments)\
+            .query(Profile_FeedbackComments)\
             .filter_by(feedback_id=id)\
             .first()
         order = db.session\
-            .query(Orders)\
+            .query(Vendor_Orders)\
             .filter_by(id=rating.sale_id)\
             .first()
         if order is not None:
@@ -690,61 +691,61 @@ def vendorviewspecificfeedback(id):
         return redirect(url_for('index'))
 
 
-@vendor.route('/vieworder/<int:id>', methods=['GET', 'POST'])
+@vendor.route('/vendor_orders_view_specific/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def viewOrder(id):
-    order = db.session.query(Orders).filter_by(id=id).first()
+def vendor_orders_view_specific(id):
+    order = db.session.query(Vendor_Orders).filter_by(id=id).first()
     if order:
         if order.customer_id == current_user.id or order.vendor_id == current_user.id or current_user.admin_role <= 3:
             if current_user.id == order.vendor_id and order.request_return == 1:
-                return redirect(url_for('vendor.addtempaddress', id=id))
+                return redirect(url_for('vendor.vendor_add_temp_address', id=id))
 
             if current_user.id == order.customer_id and order.request_return == 2:
-                return redirect(url_for('auth.customerOrders_returninstructions', id=id))
+                return redirect(url_for('auth.orders_customer_return_instructions', id=id))
             else:
 
                 tracking = db.session\
-                    .query(Tracking)\
+                    .query(Service_Tracking)\
                     .filter_by(sale_id=id)\
                     .first()
                 getitem = db.session\
-                    .query(marketitem)\
-                    .filter(marketitem.id == order.item_id)\
+                    .query(Item_MarketItem)\
+                    .filter(Item_MarketItem.id == order.item_id)\
                     .first()
                 # delete return address
                 returninfo = db.session\
-                    .query(Returns)\
+                    .query(Service_Returns)\
                     .filter_by(ordernumber=id)\
                     .first()
                 returns = db.session\
-                    .query(Returns)\
+                    .query(Service_Returns)\
                     .filter_by(ordernumber=order.id)\
                     .first()
                 # delete return tracking
                 returntracking = db.session\
-                    .query(ReturnsTracking)\
+                    .query(Service_ReturnsTracking)\
                     .filter_by(ordernumber=id)\
                     .first()
                 vendortracking = db.session\
-                    .query(Tracking)\
+                    .query(Service_Tracking)\
                     .filter_by(sale_id=id)\
                     .first()
 
                 # get the message and tracking for order
                 msg = db.session\
-                    .query(shippingSecret)\
+                    .query(Service_ShippingSecret)\
                     .filter_by(orderid=id)\
                     .first()
                 gettracking = db.session\
-                    .query(Tracking)\
+                    .query(Service_Tracking)\
                     .filter_by(sale_id=id)\
                     .first()
                 if msg:
                     msg = msg
                 else:
                     msg = 2
-                return render_template('/vendor/vieworder.html',
+                return render_template('/vendor/vendor_orders_view_specific.html',
                                        order=order,
                                        item=getitem,
                                        returninfo=returninfo,
@@ -767,7 +768,7 @@ def viewOrder(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorRefunds():
+def vendor_refunds():
     now = datetime.utcnow()
 
     user, \
@@ -780,7 +781,7 @@ def vendorRefunds():
     # See if user has default return address
     try:
         getdefaultreturn = db.session\
-            .query(DefaultReturns)\
+            .query(Service_DefaultReturns)\
             .filter_by(username=user.username)\
             .first()
         if getdefaultreturn:
@@ -791,16 +792,16 @@ def vendorRefunds():
         getdefaultreturn = 0
 
     disputed = db.session\
-        .query(Orders)\
-        .filter(Orders.vendor == current_user.username, Orders.disputed_order == 1)\
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.vendor == current_user.username, Vendor_Orders.disputed_order == 1)\
         .all()
 
     returnorder = db.session\
-        .query(Orders)\
-        .filter(Orders.vendor == current_user.username, Orders.request_return.between(1, 3))\
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.vendor == current_user.username, Vendor_Orders.request_return.between(1, 3))\
         .all()
 
-    return render_template('/vendor/vendorRefunds.html',
+    return render_template('/vendor/vendor_refunds.html',
                            returnorder=returnorder,
                            getdefaultreturn=getdefaultreturn,
                            disputed=disputed,
@@ -817,34 +818,34 @@ def vendorRefunds():
 @website_offline
 @login_required
 @vendoraccount_required
-def addtempaddress(id):
+def vendor_add_temp_address(id):
     now = datetime.utcnow()
     form = addtempreturn()
     order = db.session\
-        .query(Orders)\
+        .query(Vendor_Orders)\
         .filter_by(id=id)\
         .first()
 
     # figure out price
     getitem = db.session\
-        .query(marketitem)\
-        .filter(marketitem.id == order.item_id)\
+        .query(Item_MarketItem)\
+        .filter(Item_MarketItem.id == order.item_id)\
         .first()
     totalprice = (Decimal(order.shipping_price) + Decimal(order.price))
 
     msg = db.session\
-        .query(shippingSecret)\
+        .query(Service_ShippingSecret)\
         .filter_by(orderid=id)\
         .first()
     gettracking = db.session\
-        .query(Tracking)\
+        .query(Service_Tracking)\
         .filter_by(sale_id=id)\
         .first()
     if request.method == 'POST' and form.validate_on_submit():
         if current_user.id == order.vendor_id:
             if order.released == 0 and order.completed == 0:
                 if form.submit.data:
-                    addtemp = Returns(
+                    addtemp = Service_Returns(
                         ordernumber=id,
                         name=form.name.data,
                         street=form.street.data,
@@ -864,7 +865,7 @@ def addtempaddress(id):
                     db.session.commit()
                     flash("Return address added for Order#" + str(order.id),
                           category="success")
-                    return redirect(url_for('vendor.vendorRefunds', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_refunds', username=current_user.username))
 
                 elif form.cancelandrefund.data:
 
@@ -905,11 +906,11 @@ def addtempaddress(id):
                                             )
 
                     # BTC CASH Spent by user
-                    totalspentonitems_btccash(
+                    userdata_total_spent_on_item_bch(
                         user_id=order.customer_id, howmany=1, amount=order.price)
 
                     # BTC CASH recieved by vendor
-                    vendortotalmade_btccash(
+                    userdata_total_made_on_item_bch(
                         user_id=order.vendor_id, amount=order.price)
 
                     # Delete temp message vendor gave
@@ -919,7 +920,7 @@ def addtempaddress(id):
                         db.session.delete(gettracking)
 
                     # Add total items bought
-                    addtotalItemsBought(
+                    userdata_add_total_items_bought(
                         user_id=order.customer_id, howmany=order.quantity)
 
                     # add total sold to vendor
@@ -927,9 +928,9 @@ def addtempaddress(id):
                                       howmany=order.quantity)
 
                     # add diff trading partners
-                    differenttradingpartners_user(
+                    userdata_different_trading_partners_user(
                         user_id=order.customer_id, otherid=order.vendor_id)
-                    differenttradingpartners_vendor(
+                    userdata_different_trading_partners_vendor(
                         user_id=order.vendor_id, otherid=order.customer_id)
 
                     # customer exp for finishing early
@@ -947,7 +948,7 @@ def addtempaddress(id):
                     db.session.commit()
                     flash("Cancelled and refunded. Order#" +
                           str(order.id), category="success")
-                    return redirect(url_for('vendor.vendorRefunds', username=current_user.username))
+                    return redirect(url_for('vendor.vendor_refunds', username=current_user.username))
                 else:
                     flash("Error", category="danger")
                     return redirect(url_for('index', username=current_user.username))
@@ -957,7 +958,7 @@ def addtempaddress(id):
         else:
             flash("Error", category="danger")
             return redirect(url_for('index', username=current_user.username))
-    return render_template('/vendor/vieworder.html',
+    return render_template('/vendor/vendor_orders_view_specific.html',
                            form=form,
                            order=order,
                            msg=msg,
@@ -970,18 +971,18 @@ def addtempaddress(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def edittempaddress(id):
+def vendor_edit_temp_address(id):
     returnaddress = db.session\
-        .query(Returns)\
+        .query(Service_Returns)\
         .filter_by(ordernumber=id)\
         .first()
     order = db.session\
-        .query(Orders)\
+        .query(Vendor_Orders)\
         .filter_by(id=id)\
         .first()
     getitem = db.session\
-        .query(marketitem)\
-        .filter(marketitem.id == order.item_id)\
+        .query(Item_MarketItem)\
+        .filter(Item_MarketItem.id == order.item_id)\
         .first()
     # vendor is True
 
@@ -1013,9 +1014,9 @@ def edittempaddress(id):
         db.session.commit()
         flash("Return address added for Order#" +
               str(order.id), category="success")
-        return redirect(url_for('vendor.vendorRefunds', username=current_user.username))
+        return redirect(url_for('vendor.vendor_refunds', username=current_user.username))
 
-    return render_template('/vendor/vieworder.html',  form=form,
+    return render_template('/vendor/vendor_orders_view_specific.html',  form=form,
                            order=order,
                            vendor=vendor,
                            item=getitem,
@@ -1027,19 +1028,19 @@ def edittempaddress(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders_recievereturn(id):
+def vendor_returns_orders_recieve(id):
     now = datetime.utcnow()
     # sent vendor order to recieved
     vendororder = db.session\
-        .query(Orders)\
+        .query(Vendor_Orders)\
         .filter_by(id=id)\
         .first()
     msg = db.session\
-        .query(shippingSecret)\
+        .query(Service_ShippingSecret)\
         .filter_by(orderid=id)\
         .first()
     gettracking = db.session\
-        .query(Tracking)\
+        .query(Service_Tracking)\
         .filter_by(sale_id=id)\
         .first()
 
@@ -1058,7 +1059,7 @@ def vendorOrders_recievereturn(id):
         try:
             # Delete temp message vendor gave
             tempaddress = db.session\
-                .query(Returns)\
+                .query(Service_Returns)\
                 .filter_by(ordernumber=id)\
                 .first()
             if tempaddress:
@@ -1075,7 +1076,7 @@ def vendorOrders_recievereturn(id):
         try:
             # delete return tracking number
             returntracking = db.session\
-                .query(ReturnsTracking)\
+                .query(Service_ReturnsTracking)\
                 .filter_by(ordernumber=id)\
                 .first()
             db.session.delete(returntracking)
@@ -1133,7 +1134,7 @@ def vendorOrders_recievereturn(id):
         try:
             # delete return address
             returninfo = db.session\
-                .query(Returns)\
+                .query(Service_Returns)\
                 .filter_by(ordernumber=id)\
                 .first()
             if returninfo:
@@ -1143,7 +1144,7 @@ def vendorOrders_recievereturn(id):
         try:
             # delete return tracking
             returntracking = db.session\
-                .query(ReturnsTracking)\
+                .query(Service_ReturnsTracking)\
                 .filter_by(ordernumber=id)\
                 .first()
             if returntracking:
@@ -1152,7 +1153,7 @@ def vendorOrders_recievereturn(id):
             pass
         db.session.commit()
         flash("Order Marked as returned", category="success")
-        return redirect(url_for('vendor.vendorOrders', username=current_user.username))
+        return redirect(url_for('vendor.vendor_orders', username=current_user.username))
     else:
         return redirect(url_for('index'))
 
@@ -1161,7 +1162,7 @@ def vendorOrders_recievereturn(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorOrders():
+def vendor_orders():
     now = datetime.utcnow()
     user, \
         order, \
@@ -1180,13 +1181,13 @@ def vendorOrders():
     per_page = 10
 
     ordernew_overall = db.session\
-        .query(Orders)\
-        .filter(Orders.vendor_id == user.id,
-                Orders.new_order == 1,
-                Orders.completed == 0,
-                Orders.type == 1
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.vendor_id == user.id,
+                Vendor_Orders.new_order == 1,
+                Vendor_Orders.completed == 0,
+                Vendor_Orders.type == 1
                 )\
-        .order_by(Orders.id.desc())
+        .order_by(Vendor_Orders.id.desc())
     ordernew = ordernew_overall.limit(per_page).offset(offset)
     ordernewcount = ordernew_overall.count()
     paginationordernew = Pagination(page=page,
@@ -1200,14 +1201,14 @@ def vendorOrders():
                                     outer_window=outer_window)
 
     orderaccepted1 = db.session\
-        .query(Orders)\
-        .filter(Orders.vendor_id == user.id,
-                Orders.accepted_order == 1,
-                Orders.completed == 0,
-                Orders.type == 1
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.vendor_id == user.id,
+                Vendor_Orders.accepted_order == 1,
+                Vendor_Orders.completed == 0,
+                Vendor_Orders.type == 1
                 )
 
-    orderaccepted1 = orderaccepted1.order_by(Orders.id.desc())
+    orderaccepted1 = orderaccepted1.order_by(Vendor_Orders.id.desc())
     orderaccepted = orderaccepted1.limit(per_page).offset(offset)
     orderacceptedcount = orderaccepted1.count()
     paginationorderaccepted = Pagination(page=page,
@@ -1221,13 +1222,13 @@ def vendorOrders():
                                          outer_window=outer_window)
 
     orderwaiting1 = db.session\
-        .query(Orders)\
-        .filter(Orders.vendor_id == user.id,
-                Orders.waiting_order == 1,
-                Orders.completed == 0,
-                Orders.type == 1
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.vendor_id == user.id,
+                Vendor_Orders.waiting_order == 1,
+                Vendor_Orders.completed == 0,
+                Vendor_Orders.type == 1
                 )
-    orderwaiting1 = orderwaiting1.order_by(Orders.id.desc())
+    orderwaiting1 = orderwaiting1.order_by(Vendor_Orders.id.desc())
     orderwaiting = orderwaiting1.limit(per_page).offset(offset)
     orderwaitingcount = orderwaiting1.count()
     paginationorderwaiting = Pagination(page=page,
@@ -1241,12 +1242,12 @@ def vendorOrders():
                                         outer_window=outer_window)
 
     completed1 = db.session\
-        .query(Orders)\
-        .filter(Orders.vendor_id == user.id,
-                Orders.completed == 1,
-                Orders.type == 1
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.vendor_id == user.id,
+                Vendor_Orders.completed == 1,
+                Vendor_Orders.type == 1
                 )
-    completed1 = completed1.order_by(Orders.id.desc())
+    completed1 = completed1.order_by(Vendor_Orders.id.desc())
     completed = completed1.limit(per_page).offset(offset)
     completedcount = completed1.count()
     paginationcompleted = Pagination(page=page,
@@ -1259,7 +1260,7 @@ def vendorOrders():
                                      inner_window=inner_window,
                                      outer_window=outer_window)
 
-    return render_template('/vendor/vendorOrders.html',
+    return render_template('/vendor/vendor_orders.html',
                            user=user, now=now,
                            completed=completed,
                            ordernew=ordernew,

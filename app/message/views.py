@@ -3,6 +3,8 @@ from flask_login import current_user
 from app.message import message
 from app import db
 
+from datetime import datetime
+
 from app.message.forms import\
     addusertoconvoForm,\
     CommentForm,\
@@ -11,23 +13,22 @@ from app.message.forms import\
     topbuttonForm
 
 # models
-from app.classes.auth import User
+from app.classes.auth import Auth_User
 
 from app.classes.message import \
-    Post, \
-    PostUser, \
-    Comment
+    Message_Post, \
+    Message_PostUser, \
+    Message_Comment
 
 from app.notification import notification
 from flask_paginate import Pagination, get_page_args
-from datetime import datetime
 
 from app.common.decorators import login_required, ping_user
 
 
-@message.route('/messagecenter', methods=['GET', 'POST'])
+@message.route('/message_center', methods=['GET', 'POST'])
 @login_required
-def messagecenter():
+def message_center():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
@@ -36,38 +37,38 @@ def messagecenter():
     # sidebar stuff
     # Get New messages count
     newmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 1)
     allmsgcount = newmsg.count()
 
     # get read msg count
     oldmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 0)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 0)
     oldmsgcount = oldmsg.count()
 
     # Get official Count
     officialmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
     disputesmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.dispute == 1, PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.dispute == 1, Message_PostUser.unread == 1)
     disputesmsgcount = disputesmsg.count()
 
     # Get all msgs for current page
     allmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 1)\
-        .order_by(PostUser.timestamp.desc())
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 1)\
+        .order_by(Message_PostUser.timestamp.desc())
 
     # Pagination
     search = False
@@ -96,7 +97,8 @@ def messagecenter():
 
     if request.method == "POST":
         for v in request.form.getlist('checkit'):
-            specific_post = db.session.query(PostUser).filter_by(id=v).first()
+            specific_post = db.session.query(
+                Message_PostUser).filter_by(id=v).first()
             if delormarkasread.delete.data:
                 if specific_post.user_id == current_user.id:
                     db.session.delete(specific_post)
@@ -107,7 +109,7 @@ def messagecenter():
             else:
                 pass
         db.session.commit()
-        return redirect(url_for('message.messagecenter', username=current_user.username))
+        return redirect(url_for('message.message_center', username=current_user.username))
 
     return render_template('messages/main.html',
                            now=now,
@@ -124,14 +126,14 @@ def messagecenter():
                            )
 
 
-@message.route('/messagecenter-disputes', methods=['GET', 'POST'])
+@message.route('/message_center-disputes', methods=['GET', 'POST'])
 @login_required
-def messagecenter_disputes():
+def message_disputes():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
     title = 'Disputes'
@@ -139,30 +141,31 @@ def messagecenter_disputes():
     # sidebar stuff
     # Get New messages count
     newmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 1)
 
     allmsgcount = newmsg.count()
 
     # Get official Count
     officialmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # get read msg count
     # get read msg count
-    oldmsg = db.session.query(PostUser)
-    oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
-    oldmsg = oldmsg.filter(PostUser.unread == 0)
+    oldmsg = db.session.query(Message_PostUser)
+    oldmsg = oldmsg.filter(Message_PostUser.user_id == current_user.id)
+    oldmsg = oldmsg.filter(Message_PostUser.unread == 0)
 
     oldmsgcount = oldmsg.count()
     # Get Disputes Count
-    disputesmsg = db.session.query(PostUser)
-    disputesmsg = disputesmsg.filter(PostUser.user_id == current_user.id)
-    disputesmsg = disputesmsg.filter(PostUser.dispute == 1)
+    disputesmsg = db.session.query(Message_PostUser)
+    disputesmsg = disputesmsg.filter(
+        Message_PostUser.user_id == current_user.id)
+    disputesmsg = disputesmsg.filter(Message_PostUser.dispute == 1)
     disputesmsgcount = disputesmsg.count()
 
     # Pagination
@@ -196,7 +199,7 @@ def messagecenter_disputes():
         try:
             for v in request.form.getlist('checkit'):
                 specific_post = db.session.query(
-                    PostUser).filter_by(id=v).first()
+                    Message_PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
                     if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
@@ -209,7 +212,7 @@ def messagecenter_disputes():
                 else:
                     pass
             db.session.commit()
-            return redirect(url_for('message.messagecenter', username=current_user.username))
+            return redirect(url_for('message.message_center', username=current_user.username))
         except:
             return redirect(url_for('index', username=current_user.username))
 
@@ -230,42 +233,42 @@ def messagecenter_disputes():
 
 @message.route('/messagecenterold', methods=['GET', 'POST'])
 @login_required
-def messagecenter_oldmsgs():
+def message_old_msgs():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
-    user = User.query.filter_by(username=current_user.username).first()
+    user = Auth_User.query.filter_by(username=current_user.username).first()
     title = 'Old Messages'
 
     # sidebar stuff
     # Get New messages count
     newmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 1)
 
     allmsgcount = newmsg.count()
 
     # Get official Count
     officialmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
     disputesmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.dispute == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.dispute == 1)
     disputesmsgcount = disputesmsg.count()
 
     # get read msg count
     oldmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 0)\
-        .order_by(PostUser.timestamp.desc())
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 0)\
+        .order_by(Message_PostUser.timestamp.desc())
 
     oldmsgcount = oldmsg.count()
     search = False
@@ -299,7 +302,7 @@ def messagecenter_oldmsgs():
         try:
             for v in request.form.getlist('checkit'):
                 specific_post = db.session.query(
-                    PostUser).filter_by(id=v).first()
+                    Message_PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
                     if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
@@ -311,7 +314,7 @@ def messagecenter_oldmsgs():
                 else:
                     pass
             db.session.commit()
-            return redirect(url_for('message.messagecenter', username=current_user.username))
+            return redirect(url_for('message.message_center', username=current_user.username))
         except:
             return redirect(url_for('index', username=current_user.username))
 
@@ -330,14 +333,14 @@ def messagecenter_oldmsgs():
                            )
 
 
-@message.route('/messagecenter-official', methods=['GET', 'POST'])
+@message.route('/message_center-official', methods=['GET', 'POST'])
 @login_required
-def messagecenter_official():
+def message_official():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
     title = 'Official Messages'
@@ -345,37 +348,37 @@ def messagecenter_official():
     # sidebar stuff
     # Get New messages count
     newmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 1)
     allmsgcount = newmsg.count()
 
     # get read msg count
     oldmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.unread == 0)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.unread == 0)
     oldmsgcount = oldmsg.count()
 
     # Get official Count
     officialmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
     disputesmsg = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.dispute == 1, PostUser.unread == 1)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.dispute == 1, Message_PostUser.unread == 1)
     disputesmsgcount = disputesmsg.count()
 
     # Get official Count
     officialmsginbox = db.session\
-        .query(PostUser)\
-        .filter(PostUser.user_id == current_user.id)\
-        .filter(PostUser.official == 1, PostUser.dispute == 0)
+        .query(Message_PostUser)\
+        .filter(Message_PostUser.user_id == current_user.id)\
+        .filter(Message_PostUser.official == 1, Message_PostUser.dispute == 0)
 
     # pagination
     search = False
@@ -407,7 +410,7 @@ def messagecenter_official():
         try:
             for v in request.form.getlist('checkit'):
                 specific_post = db.session.query(
-                    PostUser).filter_by(id=v).first()
+                    Message_PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
                     if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
@@ -420,7 +423,7 @@ def messagecenter_official():
                 else:
                     pass
             db.session.commit()
-            return redirect(url_for('message.messagecenter', username=current_user.username))
+            return redirect(url_for('message.message_center', username=current_user.username))
         except:
             return redirect(url_for('index', username=current_user.username))
 
@@ -439,50 +442,51 @@ def messagecenter_official():
                            )
 
 
-@message.route('/messagecenter-sent', methods=['GET', 'POST'])
+@message.route('/message_center-sent', methods=['GET', 'POST'])
 @login_required
-def messagecenter_Sent():
+def message_sent():
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
     title = 'Sent'
 
     # sidebar stuff
     # Get New messages count
-    newmsg = db.session.query(PostUser)
-    newmsg = newmsg.filter(PostUser.user_id == current_user.id)
-    newmsg = newmsg.filter(PostUser.unread == 1)
+    newmsg = db.session.query(Message_PostUser)
+    newmsg = newmsg.filter(Message_PostUser.user_id == current_user.id)
+    newmsg = newmsg.filter(Message_PostUser.unread == 1)
 
     allmsgcount = newmsg.count()
 
     # Get official Count
-    officialmsg = db.session.query(PostUser)
-    officialmsg = officialmsg.filter(PostUser.user_id == current_user.id)
+    officialmsg = db.session.query(Message_PostUser)
     officialmsg = officialmsg.filter(
-        PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        Message_PostUser.user_id == current_user.id)
+    officialmsg = officialmsg.filter(
+        Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
-    disputesmsg = db.session.query(PostUser)
+    disputesmsg = db.session.query(Message_PostUser)
     disputesmsg = disputesmsg.filter(
-        PostUser.dispute == 1, PostUser.unread == 1)
+        Message_PostUser.dispute == 1, Message_PostUser.unread == 1)
     disputesmsgcount = disputesmsg.count()
     # get read msg count
     # get read msg count
-    oldmsg = db.session.query(PostUser)
-    oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
-    oldmsg = oldmsg.filter(PostUser.unread == 0)
+    oldmsg = db.session.query(Message_PostUser)
+    oldmsg = oldmsg.filter(Message_PostUser.user_id == current_user.id)
+    oldmsg = oldmsg.filter(Message_PostUser.unread == 0)
     oldmsgcount = oldmsg.count()
 
     # Get sent msgs
-    sentmsg = db.session.query(PostUser)
-    sentmsg = sentmsg.filter(PostUser.author_id == current_user.id)
-    sentmsg = sentmsg.filter(PostUser.user_id == current_user.id)
-    sentmsg = sentmsg.order_by(PostUser.timestamp.desc())
+    sentmsg = db.session.query(Message_PostUser)
+    sentmsg = sentmsg.filter(Message_PostUser.author_id == current_user.id)
+    sentmsg = sentmsg.filter(Message_PostUser.user_id == current_user.id)
+    sentmsg = sentmsg.order_by(Message_PostUser.timestamp.desc())
 
     sentmsgcount = sentmsg.count()
 
@@ -516,7 +520,7 @@ def messagecenter_Sent():
         try:
             for v in request.form.getlist('checkit'):
                 specific_post = db.session.query(
-                    PostUser).filter_by(id=v).first()
+                    Message_PostUser).filter_by(id=v).first()
                 if delormarkasread.delete.data:
                     if specific_post.user_id == current_user.id:
                         db.session.delete(specific_post)
@@ -529,7 +533,7 @@ def messagecenter_Sent():
                 else:
                     pass
             db.session.commit()
-            return redirect(url_for('message.messagecenter', username=current_user.username))
+            return redirect(url_for('message.message_center', username=current_user.username))
         except:
             return redirect(url_for('index', username=current_user.username))
 
@@ -549,69 +553,71 @@ def messagecenter_Sent():
                            )
 
 
-@message.route('/messagecenter-compose', methods=['GET', 'POST'])
+@message.route('/message_center-compose', methods=['GET', 'POST'])
 @login_required
-def messagecenter_Compose():
+def message_compose():
     now = datetime.utcnow()
     form = sendmessageForm(request.form)
     aform = allActionForm(request.form)
 
-    user = User.query.filter_by(username=current_user.username).first()
+    user = Auth_User.query.filter_by(username=current_user.username).first()
     if user:
         pass
     else:
         flash("There is no user with the username " +
               form.username.data, category="danger")
-        return redirect(url_for('message.messagecenter_Compose', username=current_user.username))
+        return redirect(url_for('message.message_compose', username=current_user.username))
     title = 'Compose Message'
 
     # sidebar stuff
     # Get New messages count
-    newmsg = db.session.query(PostUser)
-    newmsg = newmsg.filter(PostUser.user_id == current_user.id)
-    newmsg = newmsg.filter(PostUser.unread == 1)
+    newmsg = db.session.query(Message_PostUser)
+    newmsg = newmsg.filter(Message_PostUser.user_id == current_user.id)
+    newmsg = newmsg.filter(Message_PostUser.unread == 1)
     allmsgcount = newmsg.count()
 
     # Get official Count
-    officialmsg = db.session.query(PostUser)
-    officialmsg = officialmsg.filter(PostUser.user_id == current_user.id)
+    officialmsg = db.session.query(Message_PostUser)
     officialmsg = officialmsg.filter(
-        PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+        Message_PostUser.user_id == current_user.id)
+    officialmsg = officialmsg.filter(
+        Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
     officialmsgcount = officialmsg.count()
 
     # Get Disputes Count
-    disputesmsg = db.session.query(PostUser)
-    disputesmsg = disputesmsg.filter(PostUser.user_id == current_user.id)
+    disputesmsg = db.session.query(Message_PostUser)
     disputesmsg = disputesmsg.filter(
-        PostUser.dispute == 1, PostUser.unread == 1)
+        Message_PostUser.user_id == current_user.id)
+    disputesmsg = disputesmsg.filter(
+        Message_PostUser.dispute == 1, Message_PostUser.unread == 1)
     disputesmsgcount = disputesmsg.count()
     # get read msg count
-    oldmsg = db.session.query(PostUser)
-    oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
-    oldmsg = oldmsg.filter(PostUser.unread == 1)
+    oldmsg = db.session.query(Message_PostUser)
+    oldmsg = oldmsg.filter(Message_PostUser.user_id == current_user.id)
+    oldmsg = oldmsg.filter(Message_PostUser.unread == 1)
 
     oldmsgcount = oldmsg.count()
 
     if request.method == 'POST' and form.validate_on_submit():
 
-        usersearch = db.session.query(User).filter_by(
+        usersearch = db.session.query(Auth_User).filter_by(
             username=form.username.data).first()
         if usersearch is None:
             flash("There is no user with the username " +
                   form.username.data, category="success")
-            return redirect(url_for('message.messagecenter_Compose', username=current_user.username))
+            return redirect(url_for('message.message_compose', username=current_user.username))
         elif usersearch.username == current_user.username:
             flash("You cant send mail to yourself.", category="success")
-            return redirect(url_for('message.messagecenter_Compose', username=current_user.username))
+            return redirect(url_for('message.message_compose', username=current_user.username))
         else:
 
-            newpost = Post(timestamp=now)
+            newpost = Message_Post(timestamp=now)
             db.session.add(newpost)
 
             db.session.flush()
 
             # create for person getting it
-            userpost = PostUser(
+            userpost = Message_PostUser(
                 # type of message
                 official=0,
                 dispute=0,
@@ -632,7 +638,7 @@ def messagecenter_Compose():
             db.session.add(userpost)
 
             # create for author
-            userpost2 = PostUser(
+            userpost2 = Message_PostUser(
                 # type of message
                 official=0,
                 dispute=0,
@@ -655,7 +661,7 @@ def messagecenter_Compose():
             notification(type=2, username=current_user.username,
                          user_id=current_user.id, salenumber=0, bitcoin=0)
 
-            return redirect(url_for('message.messagecenter', username=current_user.username))
+            return redirect(url_for('message.message_center', username=current_user.username))
 
     return render_template('messages/compose.html',
                            user=user, now=now,
@@ -669,59 +675,59 @@ def messagecenter_Compose():
                            )
 
 
-@message.route('/messagecenter-compose-specific/<person>/', methods=['GET', 'POST'])
+@message.route('/message_center-compose-specific/<person>/', methods=['GET', 'POST'])
 @login_required
-def messagecenter_Compose_specificperson(person):
+def message_compose_specific_person(person):
     now = datetime.utcnow()
     if current_user.admin > 0:
-        return redirect(url_for('message.messagecenter_Compose_specificperson_admin', person=person))
+        return redirect(url_for('message.message_compose_specific_person_admin', person=person))
     else:
         form = sendmessageForm(request.form)
         aform = allActionForm(request.form)
-        user = db.session.query(User).filter_by(username=person).first()
+        user = db.session.query(Auth_User).filter_by(username=person).first()
         if user:
             # sidebar stuff
             # Get New messages count
-            newmsg = db.session.query(PostUser)
-            newmsg = newmsg.filter(PostUser.user_id == current_user.id)
-            newmsg = newmsg.filter(PostUser.unread == 1)
+            newmsg = db.session.query(Message_PostUser)
+            newmsg = newmsg.filter(Message_PostUser.user_id == current_user.id)
+            newmsg = newmsg.filter(Message_PostUser.unread == 1)
 
             allmsgcount = newmsg.count()
 
             # Get official Count
-            officialmsg = db.session.query(PostUser)
+            officialmsg = db.session.query(Message_PostUser)
             officialmsg = officialmsg.filter(
-                PostUser.user_id == current_user.id)
+                Message_PostUser.user_id == current_user.id)
             officialmsg = officialmsg.filter(
-                PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+                Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
             officialmsgcount = officialmsg.count()
 
             # Get Disputes Count
-            disputesmsg = db.session.query(PostUser)
+            disputesmsg = db.session.query(Message_PostUser)
             disputesmsg = disputesmsg.filter(
-                PostUser.user_id == current_user.id)
+                Message_PostUser.user_id == current_user.id)
             disputesmsg = disputesmsg.filter(
-                PostUser.dispute == 1, PostUser.unread == 1)
+                Message_PostUser.dispute == 1, Message_PostUser.unread == 1)
             disputesmsgcount = disputesmsg.count()
 
             # get read msg count
-            oldmsg = db.session.query(PostUser)
-            oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
-            oldmsg = oldmsg.filter(PostUser.unread == 1)
+            oldmsg = db.session.query(Message_PostUser)
+            oldmsg = oldmsg.filter(Message_PostUser.user_id == current_user.id)
+            oldmsg = oldmsg.filter(Message_PostUser.unread == 1)
 
             oldmsgcount = oldmsg.count()
 
             if request.method == 'POST':
                 if form.validate_on_submit():
 
-                    post = Post(
+                    post = Message_Post(
                         timestamp=now
                     )
                     db.session.add(post)
                     db.session.flush()
 
                     # create postuser for author
-                    userpost2 = PostUser(
+                    userpost2 = Message_PostUser(
                         # type of message
                         official=0,
                         dispute=0,
@@ -741,7 +747,7 @@ def messagecenter_Compose_specificperson(person):
                     db.session.add(userpost2)
 
                     # create postuser for person getting it
-                    userpost = PostUser(
+                    userpost = Message_PostUser(
                         # type of message
                         official=0,
                         dispute=0,
@@ -763,7 +769,7 @@ def messagecenter_Compose_specificperson(person):
                     notification(type=2, username=user.username,
                                  user_id=user.id, salenumber=0, bitcoin=0)
                     flash("Message sent to " + user.username, category="success")
-                    return redirect(url_for('message.messagecenter', username=current_user.username))
+                    return redirect(url_for('message.message_center', username=current_user.username))
 
                 else:
                     flash("Form Error", category="danger")
@@ -778,12 +784,12 @@ def messagecenter_Compose_specificperson(person):
                                    )
         else:
             flash("User doesnt exist: " + user.username, category="danger")
-            return redirect(url_for('message.messagecenter', username=current_user.username))
+            return redirect(url_for('message.message_center', username=current_user.username))
 
 
-@message.route('/messagecenter-compose-specific-admin/<person>/', methods=['GET', 'POST'])
+@message.route('/message_center-compose-specific-admin/<person>/', methods=['GET', 'POST'])
 @login_required
-def messagecenter_Compose_specificperson_admin(person):
+def message_compose_specific_person_admin(person):
     now = datetime.utcnow()
 
     if current_user.admin == 0:
@@ -791,49 +797,49 @@ def messagecenter_Compose_specificperson_admin(person):
     else:
         form = sendmessageForm(request.form)
         aform = allActionForm(request.form)
-        user = db.session.query(User).filter_by(username=person).first()
+        user = db.session.query(Auth_User).filter_by(username=person).first()
         if user:
             # sidebar stuff
             # Get New messages count
-            newmsg = db.session.query(PostUser)
-            newmsg = newmsg.filter(PostUser.user_id == current_user.id)
-            newmsg = newmsg.filter(PostUser.unread == 1)
+            newmsg = db.session.query(Message_PostUser)
+            newmsg = newmsg.filter(Message_PostUser.user_id == current_user.id)
+            newmsg = newmsg.filter(Message_PostUser.unread == 1)
 
             allmsgcount = newmsg.count()
 
             # Get official Count
-            officialmsg = db.session.query(PostUser)
+            officialmsg = db.session.query(Message_PostUser)
             officialmsg = officialmsg.filter(
-                PostUser.user_id == current_user.id)
+                Message_PostUser.user_id == current_user.id)
             officialmsg = officialmsg.filter(
-                PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)
+                Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)
             officialmsgcount = officialmsg.count()
 
             # Get Disputes Count
-            disputesmsg = db.session.query(PostUser)
+            disputesmsg = db.session.query(Message_PostUser)
             disputesmsg = disputesmsg.filter(
-                PostUser.user_id == current_user.id)
+                Message_PostUser.user_id == current_user.id)
             disputesmsg = disputesmsg.filter(
-                PostUser.dispute == 1, PostUser.unread == 1)
+                Message_PostUser.dispute == 1, Message_PostUser.unread == 1)
             disputesmsgcount = disputesmsg.count()
 
             # get read msg count
-            oldmsg = db.session.query(PostUser)
-            oldmsg = oldmsg.filter(PostUser.user_id == current_user.id)
-            oldmsg = oldmsg.filter(PostUser.unread == 0)
+            oldmsg = db.session.query(Message_PostUser)
+            oldmsg = oldmsg.filter(Message_PostUser.user_id == current_user.id)
+            oldmsg = oldmsg.filter(Message_PostUser.unread == 0)
 
             oldmsgcount = oldmsg.count()
             if request.method == 'POST':
 
                 try:
-                    newpost = Post(
+                    newpost = Message_Post(
                         timestamp=now
                     )
                     db.session.add(newpost)
                     db.session.flush()
 
                     # create postuser for author
-                    userpost2 = PostUser(
+                    userpost2 = Message_PostUser(
                         # type of message
                         official=1,
                         dispute=0,
@@ -854,7 +860,7 @@ def messagecenter_Compose_specificperson_admin(person):
                     db.session.add(userpost2)
 
                     # create postuser for person getting it
-                    userpost = PostUser(
+                    userpost = Message_PostUser(
                         # type of message
                         official=1,
                         dispute=0,
@@ -881,11 +887,11 @@ def messagecenter_Compose_specificperson_admin(person):
                                  bitcoin=0
                                  )
                     flash("Message sent to " + user.username, category="success")
-                    return redirect(url_for('message.messagecenter'))
+                    return redirect(url_for('message.message_center'))
                 except:
                     db.session.rollback()
                     flash("Form Error", category="danger")
-                    return redirect(url_for('message.messagecenter_Compose_specificperson', person=current_user.username))
+                    return redirect(url_for('message.message_compose_specific_person', person=current_user.username))
             return render_template('messages/adminmsgcompose.html',
                                    user=user, now=now,
                                    form=form,
@@ -898,78 +904,78 @@ def messagecenter_Compose_specificperson_admin(person):
                                    )
         else:
             flash("User doesnt exist: " + user.username, category="danger")
-            return redirect(url_for('message.messagecenter', username=current_user.username))
+            return redirect(url_for('message.message_center', username=current_user.username))
 
 
 @message.route('/post/<int:id>', methods=['GET', 'POST'])
 @login_required
-def post(id):
+def message_post(id):
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     form1 = CommentForm(request.form)
     form2 = addusertoconvoForm(request.form)
     post = db.session\
-        .query(Post)\
+        .query(Message_Post)\
         .filter_by(id=id)\
         .first()
     if post:
         getpost = db.session\
-            .query(PostUser)\
-            .filter(PostUser.postid == post.id)\
-            .filter(PostUser.user_id == current_user.id)\
+            .query(Message_PostUser)\
+            .filter(Message_PostUser.postid == post.id)\
+            .filter(Message_PostUser.user_id == current_user.id)\
             .first()
 
         # getpost.unread = 0
         # db.session.add(getpost)
 
         howmanyusers = db.session\
-            .query(PostUser)\
+            .query(Message_PostUser)\
             .filter_by(postid=post.id)\
             .count()
 
         if howmanyusers == 1:
             user1 = db.session\
-                .query(PostUser)\
+                .query(Message_PostUser)\
                 .filter_by(postid=post.id)\
-                .order_by(PostUser.timestamp.desc())\
+                .order_by(Message_PostUser.timestamp.desc())\
                 .limit(1)\
                 .first()
             user2 = 0
             user3 = 0
         elif howmanyusers == 2:
             user1 = db.session\
-                .query(PostUser)\
+                .query(Message_PostUser)\
                 .filter_by(postid=post.id)\
-                .order_by(PostUser.timestamp.desc())\
+                .order_by(Message_PostUser.timestamp.desc())\
                 .limit(1)\
                 .first()
             user2 = db.session\
-                .query(PostUser)\
+                .query(Message_PostUser)\
                 .filter_by(postid=post.id)\
-                .order_by(PostUser.timestamp.desc())\
+                .order_by(Message_PostUser.timestamp.desc())\
                 .limit(1)\
                 .offset(1)\
                 .first()
             user3 = 0
         elif howmanyusers == 3:
             user1 = db.session\
-                .query(PostUser)\
+                .query(Message_PostUser)\
                 .filter_by(postid=post.id)\
-                .order_by(PostUser.timestamp.desc())\
+                .order_by(Message_PostUser.timestamp.desc())\
                 .limit(1)\
                 .offset(0)\
                 .first()
             user2 = db.session\
-                .query(PostUser)\
+                .query(Message_PostUser)\
                 .filter_by(postid=post.id)\
-                .order_by(PostUser.timestamp.desc())\
+                .order_by(Message_PostUser.timestamp.desc())\
                 .limit(1)\
                 .offset(1)\
                 .first()
             user3 = db.session\
-                .query(PostUser)\
+                .query(Message_PostUser)\
                 .filter_by(postid=post.id)\
-                .order_by(PostUser.timestamp.desc())\
+                .order_by(Message_PostUser.timestamp.desc())\
                 .limit(1)\
                 .offset(2)\
                 .first()
@@ -979,76 +985,76 @@ def post(id):
             user3 = 0
             if howmanyusers > 3:
                 user4 = db.session\
-                    .query(PostUser)\
+                    .query(Message_PostUser)\
                     .filter_by(postid=post.id)\
-                    .order_by(PostUser.timestamp.asc())\
+                    .order_by(Message_PostUser.timestamp.asc())\
                     .first()
                 db.session.delete(user4)
                 db.session.commit()
         comments = db.session\
-            .query(Comment)\
+            .query(Message_Comment)\
             .filter_by(post_id=post.id)\
-            .order_by(Comment.timestamp.desc())\
+            .order_by(Message_Comment.timestamp.desc())\
             .all()
 
         # sidebar stuff
         # Get New messages count
         allmsgcount = db.session\
-            .query(PostUser)\
-            .filter(PostUser.user_id == current_user.id)\
-            .filter(PostUser.unread == 1)\
+            .query(Message_PostUser)\
+            .filter(Message_PostUser.user_id == current_user.id)\
+            .filter(Message_PostUser.unread == 1)\
             .count()
 
         # Get official Count
         officialmsgcount = db.session\
-            .query(PostUser)\
-            .filter(PostUser.user_id == current_user.id)\
-            .filter(PostUser.official == 1, PostUser.dispute == 0, PostUser.unread == 1)\
+            .query(Message_PostUser)\
+            .filter(Message_PostUser.user_id == current_user.id)\
+            .filter(Message_PostUser.official == 1, Message_PostUser.dispute == 0, Message_PostUser.unread == 1)\
             .count()
 
         # Get Disputes Count
         disputesmsgcount = db.session\
-            .query(PostUser)\
-            .filter(PostUser.user_id == current_user.id)\
-            .filter(PostUser.dispute == 1)\
-            .filter(PostUser.unread == 1)\
+            .query(Message_PostUser)\
+            .filter(Message_PostUser.user_id == current_user.id)\
+            .filter(Message_PostUser.dispute == 1)\
+            .filter(Message_PostUser.unread == 1)\
             .count()
 
         # get read msg count
         oldmsgcount = db.session\
-            .query(PostUser)\
-            .filter(PostUser.user_id == current_user.id)\
-            .filter(PostUser.unread == 0)\
+            .query(Message_PostUser)\
+            .filter(Message_PostUser.user_id == current_user.id)\
+            .filter(Message_PostUser.unread == 0)\
             .count()
 
         if request.method == 'POST':
             try:
                 if form1.submit1.data and form1.validate_on_submit():
-                    comment = Comment(body=form1.msgplace.data,
-                                      post_id=post.id,
-                                      author=current_user.username,
-                                      author_id=current_user.id,
-                                      modid=0,
-                                      timestamp=datetime.utcnow()
-                                      )
+                    comment = Message_Comment(body=form1.msgplace.data,
+                                              post_id=post.id,
+                                              author=current_user.username,
+                                              author_id=current_user.id,
+                                              modid=0,
+                                              timestamp=datetime.utcnow()
+                                              )
                     db.session.add(comment)
                     db.session.flush()
 
                     getallposts = db.session\
-                        .query(PostUser)\
-                        .filter(PostUser.postid == post.id)\
-                        .filter(PostUser.user_id != current_user.id)\
+                        .query(Message_PostUser)\
+                        .filter(Message_PostUser.postid == post.id)\
+                        .filter(Message_PostUser.user_id != current_user.id)\
                         .all()
                     for f in getallposts:
                         f.unread = 1
                         db.session.add(post)
                     db.session.commit()
                     flash('Your comment has been published.', category="success")
-                    return redirect(url_for('message.post', id=post.id))
+                    return redirect(url_for('message.message_post', id=post.id))
                 elif form2.submit2.data and form2.validate_on_submit():
                     if howmanyusers <= 3:
                         if form2.adduserbody.data == "clearnet":
-                            newpost = PostUser(
+                            newpost = Message_PostUser(
                                 # type of message
                                 official=user1.official,
                                 dispute=user1.dispute,
@@ -1071,10 +1077,10 @@ def post(id):
                             db.session.commit()
                             flash(
                                 "support added to conversation.  Please wait for support to message. ", category="success")
-                            return redirect(url_for('message.post', id=post.id))
+                            return redirect(url_for('message.message_post', id=post.id))
 
                         elif form2.adduserbody.data == "Admin":
-                            newpost2 = PostUser(
+                            newpost2 = Message_PostUser(
                                 official=user1.official,
                                 dispute=user1.dispute,
                                 usermsg=user1.usermsg,
@@ -1093,20 +1099,20 @@ def post(id):
                             db.session.commit()
                             flash(
                                 "support added to conversation.  Please wait for support to message. ", category="success")
-                            return redirect(url_for('message.post', id=post.id))
+                            return redirect(url_for('message.message_post', id=post.id))
                         else:
                             Usersearch = db.session\
-                                .query(User)\
+                                .query(Auth_User)\
                                 .filter_by(username=form2.adduserbody.data)\
                                 .first()
                             if Usersearch is None:
                                 flash("There is no user with the username " +
                                       form2.adduserbody.data, category="success")
-                                return redirect(url_for('message.post', id=post.id))
+                                return redirect(url_for('message.message_post', id=post.id))
                             else:
                                 if howmanyusers <= 3:
                                     if user2 == 0:
-                                        newpost3 = PostUser(
+                                        newpost3 = Message_PostUser(
                                             official=user1.official,
                                             dispute=user1.dispute,
                                             usermsg=user1.usermsg,
@@ -1130,9 +1136,9 @@ def post(id):
                                               category="success")
                                         db.session.add(newpost3)
                                         db.session.commit()
-                                        return redirect(url_for('message.post', id=post.id))
+                                        return redirect(url_for('message.message_post', id=post.id))
                                     elif user3 == 0:
-                                        newpost = PostUser(
+                                        newpost = Message_PostUser(
                                             # type of message
                                             official=user1.official,
                                             dispute=user1.dispute,
@@ -1157,23 +1163,23 @@ def post(id):
                                         db.session.commit()
                                         flash("User added to conversation",
                                               category="success")
-                                        return redirect(url_for('message.post', id=post.id))
+                                        return redirect(url_for('message.message_post', id=post.id))
                                     else:
                                         flash(
                                             "3 maximum users per conversation", category="success")
-                                        return redirect(url_for('message.post', id=post.id))
+                                        return redirect(url_for('message.message_post', id=post.id))
                                 else:
                                     flash("3 users max on a conversation",
                                           category="danger")
-                                    return redirect(url_for('message.post', id=post.id))
+                                    return redirect(url_for('message.message_post', id=post.id))
                     else:
                         flash("3 users maximum", category="danger")
-                        return redirect(url_for('message.post', id=post.id))
+                        return redirect(url_for('message.message_post', id=post.id))
                 else:
                     flash("Form Error", category="danger")
-                    return redirect(url_for('message.post', id=post.id))
+                    return redirect(url_for('message.message_post', id=post.id))
             except:
-                return redirect(url_for('message.post', id=post.id))
+                return redirect(url_for('message.message_post', id=post.id))
         return render_template('messages/post.html',
                                post=post,
                                comments=comments,
@@ -1194,15 +1200,15 @@ def post(id):
         return redirect(url_for('index'))
 
 
-@message.route('/messagecenter-commentdelete/<int:id>', methods=['GET', 'POST'])
+@message.route('/message_center-commentdelete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def messagecenter_delete_comment(id):
-    item = Comment.query.get(id)
+def message_delete_comment(id):
+    item = Message_Comment.query.get(id)
     if item:
         if item.author_id == current_user.id:
             db.session.delete(item)
             db.session.commit()
-            return redirect(url_for('message.post', id=item.post_id))
+            return redirect(url_for('message.message_post', id=item.post_id))
         else:
             return redirect(url_for('index', username=current_user.username))
     else:
@@ -1210,15 +1216,15 @@ def messagecenter_delete_comment(id):
         return redirect(url_for('index'))
 
 
-def messagecenter_WEBSITEcompose(personid, message, subject):
+def message_website_compose(personid, message, subject):
     now = datetime.utcnow()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=personid)\
         .first()
     if request.method == 'POST':
         # create postuser for author
-        userpost2 = PostUser(
+        userpost2 = Message_PostUser(
             official=1,
             dispute=0,
             usermsg=0,

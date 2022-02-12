@@ -4,7 +4,7 @@
     <div id="comment_left">
         <div id="comment_topbar_holder">
             <div id="comment_topbar_name" class="linkcolor">
-            <a href="{{ url_for('profile.user', username=comment.username) }}">
+            <a href="{{ url_for('profile.profile_user', username=comment.username) }}">
             {{ comment.username }}
             ({{ comment.user_id|userrating }})
             ({{ comment.user_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)

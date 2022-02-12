@@ -99,13 +99,13 @@
                 <div id="Vendorverification_button" class="linkcolor">
                     {% if allow == 1 %}
                         <div class="text-center">
-                            <a href="{{ url_for('vendor.upgradevendorverification') }}"> Upgrade here</a>
+                            <a href="{{ url_for('vendor.vendorverification_upgrade_vendor_verification') }}"> Upgrade here</a>
                         </div>
                         <br>
                         {{ render_field(form.cancel, class="btn btn-warning", Value="Cancel and Refund") }}
                     {% else %}
                         <div class="text-center">
-                            <a href="{{ url_for('vendor.upgradevendorverification') }}"> Upgrade here</a>
+                            <a href="{{ url_for('vendor.vendorverification_upgrade_vendor_verification') }}"> Upgrade here</a>
                         </div>
                         Cannot cancel or downgrade.  Your last order was within a week.
                     {% endif %}

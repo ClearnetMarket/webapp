@@ -11,12 +11,12 @@ from wtforms.validators import DataRequired,\
     Regexp,\
     EqualTo,\
     Optional
-from app.classes.auth import User
-from app.classes.models import Currency,\
-    Query_mainsearch,\
+from app.classes.auth import Auth_User
+from app.classes.models import Query_Currency,\
+    Query_MainSearch,\
     Query_Carriers,\
-    Query_requestreturn,\
-    Country
+    Query_RequestReturn,\
+    Query_Country
 from flask import flash
 from sqlalchemy import func
 from flask_wtf.file import FileAllowed
@@ -25,10 +25,11 @@ from app.auth.validation import general,\
     usernames
 import re
 from app.auth.validation import allowspace
-from app.classes.models import Categories, Country
+from app.classes.models import Query_Country
+from app.classes.category import Category_Categories
 
 
-class ConfirmSeed(FlaskForm):
+class confirm_seed(FlaskForm):
     seedanswer0 = StringField('Word 1', validators=[
         DataRequired(message='Word is Required'),
         Length(1, 50),
@@ -69,7 +70,7 @@ class ConfirmSeed(FlaskForm):
 
 
 class vendorSignup(FlaskForm):
-    country = QuerySelectField(query_factory=lambda: Country.query.all(),
+    country = QuerySelectField(query_factory=lambda: Query_Country.query.all(),
                                get_label='name',
                                validators=[DataRequired(message='Country is Required')])
 
@@ -131,11 +132,11 @@ class shipselectForm(FlaskForm):
 
 
 def searchside():
-    return Categories.query.filter(Categories.id != 1000, Categories.id != 100).order_by(Categories.id.asc()).all()
+    return Category_Categories.query.filter(Category_Categories.id != 1000, Category_Categories.id != 100).order_by(Category_Categories.id.asc()).all()
 
 
 def searchside_default():
-    return Categories.query.filter(Categories.id == 1).first()
+    return Category_Categories.query.filter(Category_Categories.id == 1).first()
 
 
 class searchForm(FlaskForm):
@@ -208,12 +209,12 @@ class RegistrationForm(FlaskForm):
         DataRequired(),
         Regexp(general),
     ])
-    country = QuerySelectField(query_factory=lambda: Country.query.order_by(Country.name.asc()).all(),
+    country = QuerySelectField(query_factory=lambda: Query_Country.query.order_by(Query_Country.name.asc()).all(),
                                get_label='name',
                                validators=[
         DataRequired()
     ])
-    currency = QuerySelectField(query_factory=lambda: Currency.query.order_by(Currency.symbol.asc()).all(),
+    currency = QuerySelectField(query_factory=lambda: Query_Currency.query.order_by(Query_Currency.symbol.asc()).all(),
                                 get_label='symbol',
                                 validators=[
         DataRequired()
@@ -237,8 +238,8 @@ class RegistrationForm(FlaskForm):
     def validate(self):
         rv = FlaskForm.validate(self)
         if rv is True:
-            username = User.query.filter(func.lower(
-                User.username) == func.lower(self.username.data)).first()
+            username = Auth_User.query.filter(func.lower(
+                Auth_User.username) == func.lower(self.username.data)).first()
             if username:
 
                 flash('Username is already taken', category="success")
@@ -370,14 +371,14 @@ def myaccount_form_factory(user):
 
         ])
 
-        origin_country_1 = QuerySelectField(query_factory=lambda: Country.query.all(),
+        origin_country_1 = QuerySelectField(query_factory=lambda: Query_Country.query.all(),
                                             get_label='name',
-                                            default=lambda: Country.query.filter_by(
+                                            default=lambda: Query_Country.query.filter_by(
                                                 numericcode=user.country).first(),
                                             validators=[DataRequired(message='Your Country is required')])
 
-        currency1 = QuerySelectField(query_factory=lambda: Currency.query.all(),
-                                     default=lambda: Currency.query.filter_by(
+        currency1 = QuerySelectField(query_factory=lambda: Query_Currency.query.all(),
+                                     default=lambda: Query_Currency.query.filter_by(
                                          code=user.currency).first(),
                                      get_label='symbol',
                                      validators=[DataRequired(message='Your Currency is required')])
@@ -447,7 +448,7 @@ class feedbackonorderForm(FlaskForm):
 
 class requestCancelform(FlaskForm):
 
-    type = QuerySelectField(query_factory=lambda: Query_requestreturn.query.all(),
+    type = QuerySelectField(query_factory=lambda: Query_RequestReturn.query.all(),
                             get_label='text',
 
                             validators=[DataRequired(message='Category Required')])
@@ -516,7 +517,7 @@ class returnitemconfirm(FlaskForm):
 def returnitem_form_factory(orderid):
     class requestReturn(FlaskForm):
 
-        type = QuerySelectField(query_factory=lambda: (Query_requestreturn).query.all(),
+        type = QuerySelectField(query_factory=lambda: (Query_RequestReturn).query.all(),
                                 get_label='text',
                                 validators=[DataRequired(message='Category Required')])
 

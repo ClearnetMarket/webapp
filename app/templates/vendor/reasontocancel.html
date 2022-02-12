@@ -10,7 +10,7 @@
                 <div id="reasontocancelbottombox"><h4>Customer Response:</h4> {{ item.overallreason }}</div>
 
                 <div id="reasontocancelbuttons">
-                    <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject', id=item.id) }}" role="button">Cancel Order</a>
+                    <a class="btn btn-danger" href="{{ url_for('vendor.vendor_orders_reject', id=item.id) }}" role="button">Cancel Order</a>
                    </div>
         </div>
 

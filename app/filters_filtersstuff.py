@@ -5,14 +5,14 @@ import os
 
 @app.template_filter('maincatname')
 def maincatname(catdid0):
-    from app.classes.item import Categories
+    from app.classes.category import Category_Categories
     from app import db
     if catdid0 == 0:
-        nameofcat = 'All Categories'
+        nameofcat = 'All Category_Categories'
         return str(nameofcat)
     else:
-        thecat = db.session.query(Categories).filter(
-            Categories.id == catdid0).first()
+        thecat = db.session.query(Category_Categories).filter(
+            Category_Categories.id == catdid0).first()
         if thecat:
             nameofcat = thecat.name
             return str(nameofcat)
@@ -23,9 +23,10 @@ def maincatname(catdid0):
 
 @app.template_filter('trustlevel')
 def trustlevel(id):
-    from app.classes.vendor import vendorVerification
+    from app.classes.vendor import Vendor_VendorVerification
     from app import db
-    x = db.session.query(vendorVerification).filter_by(vendor_id=id).first()
+    x = db.session.query(Vendor_VendorVerification).filter_by(
+        vendor_id=id).first()
     if x:
         level = x.vendor_level
         return str(level)
@@ -36,9 +37,9 @@ def trustlevel(id):
 
 @app.template_filter('marginpercent')
 def marginpercent(margin):
-    from app.classes.models import Query_margin
+    from app.classes.models import Query_Margin
     from app import db
-    marginq = db.session.query(Query_margin).filter_by(id=margin).first()
+    marginq = db.session.query(Query_Margin).filter_by(id=margin).first()
     return marginq.value
 
 
@@ -80,12 +81,12 @@ def achievementdescription(categoryid):
 # converts id to country
 @app.template_filter('countryformat')
 def countryformat(id):
-    from app.classes.models import Country
+    from app.classes.models import Query_Country
     from app import db
 
     try:
         getcountry = db.session.query(
-            Country).filter_by(numericcode=id).first()
+            Query_Country).filter_by(numericcode=id).first()
         return getcountry.name
     except Exception:
         name = "World Wide"
@@ -96,11 +97,12 @@ def countryformat(id):
 
 @app.template_filter('currencyformat')
 def currencyformat(id):
-    from app.classes.models import Currency
+    from app.classes.models import Query_Currency
     from app import db
 
     try:
-        getcurrency = db.session.query(Currency).filter_by(code=id).first()
+        getcurrency = db.session.query(
+            Query_Currency).filter_by(code=id).first()
         return getcurrency.symbol
     except Exception:
         name = ""
@@ -125,10 +127,10 @@ def notshippingformat(id):
 
 @app.template_filter('returnwhy')
 def returnwhy(id):
-    from app.classes.models import Query_requestreturn
+    from app.classes.models import Query_RequestReturn
     from app import db
 
-    getreturn = db.session.query(Query_requestreturn).filter_by(id=id).first()
+    getreturn = db.session.query(Query_RequestReturn).filter_by(id=id).first()
     if not None:
         return getreturn.text
     else:
@@ -139,9 +141,9 @@ def returnwhy(id):
 
 @app.template_filter('cancelwhy')
 def cancelwhy(id):
-    from app.classes.models import Query_requestcancel
+    from app.classes.models import Query_RequestCancel
     from app import db
-    getreturn = db.session.query(Query_requestcancel).filter_by(id=id).first()
+    getreturn = db.session.query(Query_RequestCancel).filter_by(id=id).first()
     if not None:
         return getreturn.text
     else:
@@ -151,10 +153,10 @@ def cancelwhy(id):
 # Gets how many ratings for the user
 @app.template_filter('username')
 def username(id):
-    from app.classes.auth import User
+    from app.classes.auth import Auth_User
     from app import db
 
-    getuser = db.session.query(User)
+    getuser = db.session.query(Auth_User)
     getuser = getuser.filter_by(id=id).first()
     return getuser.username
 
@@ -163,10 +165,10 @@ def username(id):
 
 @app.template_filter('adminusername')
 def adminusername(id):
-    from app.classes.auth import User
+    from app.classes.auth import Auth_User
     from app import db
 
-    getuser = db.session.query(User)
+    getuser = db.session.query(Auth_User)
     getuser = getuser.filter_by(id=id).first()
     if id == 1:
         return "Escrow"
@@ -180,11 +182,11 @@ def adminusername(id):
 
 @app.template_filter('profilepicture')
 def profilepicture(id):
-    from app.classes.auth import User
+    from app.classes.auth import Auth_User
     from app import db
 
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=id)\
         .first()
 
@@ -200,11 +202,11 @@ def profilepicture(id):
 # Gets how many ratings for the user
 @app.template_filter('userrating')
 def userrating(id):
-    from app.classes.profile import StatisticsUser
+    from app.classes.profile import Profile_StatisticsUser
     from app import db
 
-    getratings = db.session.query(StatisticsUser)
-    getratings = getratings.filter(StatisticsUser.user_id == id)
+    getratings = db.session.query(Profile_StatisticsUser)
+    getratings = getratings.filter(Profile_StatisticsUser.user_id == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -215,11 +217,11 @@ def userrating(id):
 # Gets avg of the ratings for the user
 @app.template_filter('avguserrating')
 def avguserrating(id):
-    from app.classes.profile import StatisticsUser
+    from app.classes.profile import Profile_StatisticsUser
     from app import db
 
-    getratings = db.session.query(StatisticsUser)
-    getratings = getratings.filter(StatisticsUser.user_id == id)
+    getratings = db.session.query(Profile_StatisticsUser)
+    getratings = getratings.filter(Profile_StatisticsUser.user_id == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -230,11 +232,11 @@ def avguserrating(id):
 # Gets how many ratings for the vendor
 @app.template_filter('vendorratingcount')
 def vendorratingcount(id):
-    from app.classes.profile import StatisticsVendor
+    from app.classes.profile import Profile_StatisticsVendor
     from app import db
 
-    getratings = db.session.query(StatisticsVendor)
-    getratings = getratings.filter(StatisticsVendor.vendorid == id)
+    getratings = db.session.query(Profile_StatisticsVendor)
+    getratings = getratings.filter(Profile_StatisticsVendor.vendorid == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -245,11 +247,11 @@ def vendorratingcount(id):
 # Gets avg of the ratings for the vendor
 @app.template_filter('avgvendorrating')
 def avgvendorrating(id):
-    from app.classes.profile import StatisticsVendor
+    from app.classes.profile import Profile_StatisticsVendor
     from app import db
 
-    getratings = db.session.query(StatisticsVendor)
-    getratings = getratings.filter(StatisticsVendor.vendorid == id)
+    getratings = db.session.query(Profile_StatisticsVendor)
+    getratings = getratings.filter(Profile_StatisticsVendor.vendorid == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -260,10 +262,10 @@ def avgvendorrating(id):
 # Gets avg of the ratings for the vendor
 @app.template_filter('vendorratingonorder')
 def vendorratingonorder(id):
-    from app.classes.userdata import Feedback
+    from app.classes.userdata import User_DataFeedback
     from app import db
-    getratings = db.session.query(Feedback)
-    getratings = getratings.filter(Feedback.sale_id == id)
+    getratings = db.session.query(User_DataFeedback)
+    getratings = getratings.filter(User_DataFeedback.sale_id == id)
     rate = getratings.first()
     if rate is None:
         return 0
@@ -273,30 +275,30 @@ def vendorratingonorder(id):
 
 @app.template_filter('feedbackcategory')
 def feedbackcategory(id):
-    from app.classes.models import Query_websitefeedback
+    from app.classes.models import Query_WebsiteFeedback
     from app import db
 
     feedback = db.session.query(
-        Query_websitefeedback).filter_by(value=id).first()
+        Query_WebsiteFeedback).filter_by(value=id).first()
     return feedback.text
 
 
 @app.template_filter('lastseen_text')
 def lastseen_text(id):
-    from app.classes.auth import User
+    from app.classes.auth import Auth_User
     from app import db
-    user = db.session.query(User).filter_by(id=id).first()
+    user = db.session.query(Auth_User).filter_by(id=id).first()
     lastseen = user.last_seen
     return lastseen
 
 
 @app.template_filter('lastseen')
 def lastseen(id):
-    from app.classes.auth import User
+    from app.classes.auth import Auth_User
     from datetime import timedelta, datetime
     from app import db
 
-    user = db.session.query(User).filter_by(id=id).first()
+    user = db.session.query(Auth_User).filter_by(id=id).first()
     lastseen = user.last_seen
     now = datetime.utcnow()
     oneminutes = (datetime.utcnow() - timedelta(minutes=1))
@@ -342,11 +344,11 @@ def lastseen(id):
 # Gets the item count in marketitems subcategory
 @app.template_filter('itemsincat')
 def itemsincat(subcatid):
-    from app.classes.item import marketitem
+    from app.classes.item import Item_MarketItem
     from app import db
-    getitems = db.session.query(marketitem)
-    getitems = getitems.filter(marketitem.subcategory == subcatid)
-    getitems = getitems.filter(marketitem.online == 1)
+    getitems = db.session.query(Item_MarketItem)
+    getitems = getitems.filter(Item_MarketItem.subcategory == subcatid)
+    getitems = getitems.filter(Item_MarketItem.online == 1)
     item = getitems.count()
     return item
 
@@ -354,11 +356,11 @@ def itemsincat(subcatid):
 # Gets the item count in marketitems main category
 @app.template_filter('itemsincatmain')
 def itemsincatmain(id):
-    from app.classes.item import marketitem
+    from app.classes.item import Item_MarketItem
     from app import db
-    getitems = db.session.query(marketitem)
-    getitems = getitems.filter(marketitem.category == id)
-    getitems = getitems.filter(marketitem.online == 1)
+    getitems = db.session.query(Item_MarketItem)
+    getitems = getitems.filter(Item_MarketItem.category == id)
+    getitems = getitems.filter(Item_MarketItem.online == 1)
     item = getitems.count()
     return item
 
@@ -378,14 +380,14 @@ def carrierformat(id):
 # Gets an item picture if exists..else returns default image
 @app.template_filter('orderpicture')
 def orderpicture(itemid, type):
-    from app.classes.item import marketitem
+    from app.classes.item import Item_MarketItem
     from app import db
     # <img src="{{ order.trade_id|orderpicture(type=2) }}" width="200px" height="200px">
     # <img src="{{ order.item_id|orderpicture(type=1) }}" width="200px" height="200px">
 
     if type == 1:
-        x = db.session.query(marketitem).filter(
-            itemid == marketitem.id).first()
+        x = db.session.query(Item_MarketItem).filter(
+            itemid == Item_MarketItem.id).first()
         if x == None:
             # give default image
             return url_for('static', filename='/images/Noimage.png')
@@ -406,11 +408,11 @@ def orderpicture(itemid, type):
 
 @app.template_filter('usdtocurrency')
 def usdtocurrency(price, currency):
-    from app.classes.models import btc_cash_Prices
+    from app.classes.wallet_bch import Bch_Prices
     from app import db
     from decimal import Decimal
     getcurrentprice = db.session.query(
-        btc_cash_Prices).filter_by(currency_id=currency).first()
+        Bch_Prices).filter_by(currency_id=currency).first()
     if currency == 0:
         return price
     else:

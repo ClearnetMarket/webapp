@@ -7,10 +7,10 @@
 
 
 	{% if id > 100 %}
-	<li><a href="{{ url_for('category.viewcategory', maincatid=breadcrumb2.mainid) }}">{{ breadcrumb2.mainCategory }}</a></li>
-	<li><a href="{{ url_for('category.viewcategory', maincatid=breadcrumb2.id) }}">{{ breadcrumb2.subname1 }}</a></li>
+	<li><a href="{{ url_for('category.view_category', maincatid=breadcrumb2.mainid) }}">{{ breadcrumb2.mainCategory }}</a></li>
+	<li><a href="{{ url_for('category.view_category', maincatid=breadcrumb2.id) }}">{{ breadcrumb2.subname1 }}</a></li>
 	{% else %}
-	<li><a href="{{ url_for('category.viewcategory', maincatid=main.mainid) }}">{{ main.mainCategory }}</a></li>
+	<li><a href="{{ url_for('category.view_category', maincatid=main.mainid) }}">{{ main.mainCategory }}</a></li>
 	{% endif %}
 
 

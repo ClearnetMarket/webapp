@@ -3,7 +3,7 @@ from wtforms import SubmitField, TextAreaField, StringField
 from wtforms.validators import Regexp, Length, DataRequired, optional
 from wtforms_sqlalchemy.fields import QuerySelectField
 from app.auth.validation import general
-from app.classes.models import Query_Currencylist
+from app.classes.models import Query_CurrencyList
 from app.auth.validation import usernames
 
 
@@ -16,4 +16,3 @@ class additemForm(FlaskForm):
 
     addtocart1 = SubmitField()
     save = SubmitField()
-

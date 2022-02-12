@@ -13,14 +13,14 @@ from decimal import Decimal
 
 # models
 from app.classes.auth import \
-    User
+    Auth_User
 
 from app.classes.admin import \
-    clearnetprofit_btccash, \
-    clearnetholdings_btccash
+    Admin_ClearnetProfitBCH, \
+    Admin_ClearnetHoldingsBCH
 
 from app.classes.wallet_bch import *
-from app.classes.auth import UserFees
+from app.classes.auth import Auth_UserFees
 # end models
 
 
@@ -31,11 +31,11 @@ def btc_cash_walletstatus(user_id):
     :return:
     """
     userswallet = db.session\
-        .query(BchWallet)\
-        .filter_by(BchWallet.user_id == user_id)\
+        .query(Bch_Wallet)\
+        .filter_by(Bch_Wallet.user_id == user_id)\
         .first()
     getuser = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter(User.id == user_id)\
         .first()
     if userswallet:
@@ -69,15 +69,15 @@ def btc_cash_create_wallet(user_id):
     """
     current_shard = 1
     userswallet = db.session\
-                    .query(BchWallet)\
-                    .filter(BchWallet.user_id == user_id)\
+                    .query(Bch_Wallet)\
+                    .filter(Bch_Wallet.user_id == user_id)\
                     .first()
 
     if userswallet:
         # find a new clean address
         getnewaddress = db.session\
-            .query(BchWalletAddresses) \
-            .filter(BchWalletAddresses.status == 0, BchWalletAddresses.shard == userswallet.shard) \
+            .query(Bch_WalletAddresses) \
+            .filter(Bch_WalletAddresses.status == 0, Bch_WalletAddresses.shard == userswallet.shard) \
             .first()
 
         # sets users wallet with this
@@ -94,22 +94,22 @@ def btc_cash_create_wallet(user_id):
     else:
 
         # create a new wallet
-        btc_cash_walletcreate = BchWallet(user_id=user_id,
-                                          currentbalance=0,
-                                          unconfirmed=0,
-                                          address1='',
-                                          address1status=0,
-                                          address2='',
-                                          address2status=0,
-                                          address3='',
-                                          address3status=0,
-                                          locked=0,
-                                          shard=current_shard,
-                                          transactioncount=0
-                                          )
+        btc_cash_walletcreate = Bch_Wallet(user_id=user_id,
+                                           currentbalance=0,
+                                           unconfirmed=0,
+                                           address1='',
+                                           address1status=0,
+                                           address2='',
+                                           address2status=0,
+                                           address3='',
+                                           address3status=0,
+                                           locked=0,
+                                           shard=current_shard,
+                                           transactioncount=0
+                                           )
         db.session.add(btc_cash_walletcreate)
 
-        btc_cash_newunconfirmed = BchUnconfirmed(
+        btc_cash_newunconfirmed = Bch_WalletUnconfirmed(
             user_id=user_id,
             unconfirmed1=0,
             unconfirmed2=0,
@@ -126,8 +126,8 @@ def btc_cash_create_wallet(user_id):
         db.session.flush()
 
         getnewaddress = db.session \
-            .query(BchWalletAddresses) \
-            .filter(BchWalletAddresses.status == 0, BchWalletAddresses.shard == btc_cash_walletcreate.shard) \
+            .query(Bch_WalletAddresses) \
+            .filter(Bch_WalletAddresses.status == 0, Bch_WalletAddresses.shard == btc_cash_walletcreate.shard) \
             .first()
 
         btc_cash_walletcreate.address1 = getnewaddress.bchaddress
@@ -151,7 +151,7 @@ def btc_cash_sendCoin(user_id, sendto, amount, comment):
     """
     timestamp = datetime.utcnow()
     getwallet = db.session\
-        .query(BchWalletFee)\
+        .query(Bch_WalletFee)\
         .filter_by(id=1)\
         .first()
     walletfee = getwallet.btc
@@ -161,11 +161,11 @@ def btc_cash_sendCoin(user_id, sendto, amount, comment):
         strcomment = str(comment)
         type_transaction = 2
         userswallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=user_id)\
             .first()
 
-        wallet = BchWalletWork(
+        wallet = Bch_WalletWork(
             user_id=user_id,
             type=type_transaction,
             amount=amount,
@@ -217,7 +217,7 @@ def btc_cash_sendCointoEscrow(amount, comment, user_id):
         try:
             type_transaction = 4
             userswallet = db.session.query(
-                BchWallet).filter_by(user_id=user_id).first()
+                Bch_Wallet).filter_by(user_id=user_id).first()
             curbal = Decimal(userswallet.currentbalance)
             amounttomod = Decimal(amount)
             newbalance = Decimal(curbal) - Decimal(amounttomod)
@@ -268,7 +268,7 @@ def btc_cash_send_coin_to_user_as_admin(amount, comment, user_id):
     type_transaction = 9
 
     userswallet = db.session.query(
-        BchWallet).filter_by(user_id=user_id).first()
+        Bch_Wallet).filter_by(user_id=user_id).first()
     curbal = Decimal(userswallet.currentbalance)
     amounttomod = Decimal(amount)
     newbalance = Decimal(curbal) + Decimal(amounttomod)
@@ -299,7 +299,7 @@ def btc_cash_takeCointoUser_asAdmin(amount, comment, user_id):
     type_transaction = 10
     a = Decimal(amount)
     userswallet = db.session.query(
-        BchWallet).filter_by(user_id=user_id).first()
+        Bch_Wallet).filter_by(user_id=user_id).first()
     curbal = Decimal(userswallet.currentbalance)
     amounttomod = Decimal(amount)
     newbalance = Decimal(curbal) - Decimal(amounttomod)
@@ -317,12 +317,12 @@ def btc_cash_takeCointoUser_asAdmin(amount, comment, user_id):
                             )
 
     getcurrentprofit = db.session\
-        .query(clearnetprofit_btccash)\
-        .order_by(clearnetprofit_btccash.id.desc())\
+        .query(Admin_ClearnetProfitBCH)\
+        .order_by(Admin_ClearnetProfitBCH.id.desc())\
         .first()
     currentamount = floating_decimals(getcurrentprofit.total, 8)
     newamount = floating_decimals(currentamount, 8) + floating_decimals(a, 8)
-    prof = clearnetprofit_btccash(
+    prof = Admin_ClearnetProfitBCH(
         amount=amount,
         timestamp=datetime.utcnow(),
         total=newamount
@@ -344,11 +344,11 @@ def sendcoinforad(amount, user_id, comment):
         type_transaction = 9
         now = datetime.utcnow()
         user = db.session\
-            .query(User)\
-            .filter(User.id == user_id)\
+            .query(Auth_User)\
+            .filter(Auth_User.id == user_id)\
             .first()
         userswallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=user_id)\
             .first()
         curbal = Decimal(userswallet.currentbalance)
@@ -372,14 +372,14 @@ def sendcoinforad(amount, user_id, comment):
                                 )
 
         getcurrentholdings = db.session\
-            .query(clearnetholdings_btccash)\
-            .order_by(clearnetholdings_btccash.id.desc())\
+            .query(Admin_ClearnetHoldingsBCH)\
+            .order_by(Admin_ClearnetHoldingsBCH.id.desc())\
             .first()
         currentamount = floating_decimals(getcurrentholdings.total, 8)
         newamount = floating_decimals(
             currentamount, 8) + floating_decimals(a, 8)
 
-        holdingsaccount = clearnetholdings_btccash(
+        holdingsaccount = Admin_ClearnetHoldingsBCH(
             amount=a,
             timestamp=now,
             user_id=user_id,
@@ -403,11 +403,11 @@ def btc_cash_sendCointoHoldings(amount, user_id, comment):
         type_transaction = 7
         now = datetime.utcnow()
         user = db.session\
-            .query(User)\
-            .filter(User.id == user_id)\
+            .query(Auth_User)\
+            .filter(Auth_User.id == user_id)\
             .first()
         userswallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=user_id)\
             .first()
         curbal = Decimal(userswallet.currentbalance)
@@ -431,14 +431,14 @@ def btc_cash_sendCointoHoldings(amount, user_id, comment):
                                 )
 
         getcurrentholdings = db.session\
-            .query(clearnetholdings_btccash)\
-            .order_by(clearnetholdings_btccash.id.desc())\
+            .query(Admin_ClearnetHoldingsBCH)\
+            .order_by(Admin_ClearnetHoldingsBCH.id.desc())\
             .first()
         currentamount = floating_decimals(getcurrentholdings.total, 8)
         newamount = floating_decimals(
             currentamount, 8) + floating_decimals(a, 8)
 
-        holdingsaccount = clearnetholdings_btccash(
+        holdingsaccount = Admin_ClearnetHoldingsBCH(
             amount=a,
             timestamp=now,
             user_id=user_id,
@@ -461,11 +461,11 @@ def btc_cash_sendCoinfromHoldings(amount, user_id, comment):
     type_transaction = 8
     now = datetime.utcnow()
     user = db.session\
-        .query(User)\
-        .filter(User.id == user_id)\
+        .query(Auth_User)\
+        .filter(Auth_User.id == user_id)\
         .first()
     userswallet = db.session\
-        .query(BchWallet)\
+        .query(Bch_Wallet)\
         .filter_by(user_id=user_id)\
         .first()
     curbal = Decimal(userswallet.currentbalance)
@@ -489,12 +489,12 @@ def btc_cash_sendCoinfromHoldings(amount, user_id, comment):
                             balance=newbalance
                             )
 
-    getcurrentholdings = db.session.query(clearnetholdings_btccash).order_by(
-        clearnetholdings_btccash.id.desc()).first()
+    getcurrentholdings = db.session.query(Admin_ClearnetHoldingsBCH).order_by(
+        Admin_ClearnetHoldingsBCH.id.desc()).first()
     currentamount = floating_decimals(getcurrentholdings.total, 8)
     newamount = floating_decimals(currentamount, 8) - floating_decimals(a, 8)
 
-    holdingsaccount = clearnetholdings_btccash(
+    holdingsaccount = Admin_ClearnetHoldingsBCH(
         amount=a,
         timestamp=now,
         user_id=user_id,
@@ -529,12 +529,12 @@ def btc_cash_sendCointoclearnet(amount, comment, shard):
     )
 
     getcurrentprofit = db.session\
-        .query(clearnetprofit_btccash)\
-        .order_by(clearnetprofit_btccash.id.desc())\
+        .query(Admin_ClearnetProfitBCH)\
+        .order_by(Admin_ClearnetProfitBCH.id.desc())\
         .first()
     currentamount = floating_decimals(getcurrentprofit.total, 8)
     newamount = floating_decimals(currentamount, 8) + floating_decimals(a, 8)
-    prof = clearnetprofit_btccash(
+    prof = Admin_ClearnetProfitBCH(
         amount=amount,
         order=oid,
         timestamp=now,
@@ -557,7 +557,7 @@ def btc_cash_sendCointoUser(amount, comment, user_id):
     oid = int(comment)
 
     userswallet = db.session.query(
-        BchWallet).filter_by(user_id=user_id).first()
+        Bch_Wallet).filter_by(user_id=user_id).first()
     curbal = Decimal(userswallet.currentbalance)
     amounttomod = Decimal(amount)
     newbalance = Decimal(curbal) + Decimal(amounttomod)
@@ -591,7 +591,7 @@ def btc_cash_sendcointoaffiliate(amount, comment, user_id):
     oid = int(comment)
 
     userswallet = db.session.query(
-        BchWallet).filter_by(user_id=user_id).first()
+        Bch_Wallet).filter_by(user_id=user_id).first()
     curbal = Decimal(userswallet.currentbalance)
     amounttomod = Decimal(amount)
     newbalance = Decimal(curbal) + Decimal(amounttomod)

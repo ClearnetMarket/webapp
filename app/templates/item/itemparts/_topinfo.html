@@ -9,7 +9,7 @@
                     <nav aria-label="breadcrumb" class="linkcolor">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-                            <li class="breadcrumb-item"> <a href="{{ url_for('category.viewcategory',maincatid=item.category_id_0) }}" >
+                            <li class="breadcrumb-item"> <a href="{{ url_for('category.view_category',maincatid=item.category_id_0) }}" >
                                 {{ item.category_name_0 }}
                             </a></li>
                         </ol>
@@ -340,7 +340,7 @@
                     <b>Returns:</b> 30 Day return to Amazon.
                     <br>
                     <div class="linkcolororange text-center">
-                    <a href="{{ url_for('service.customerservice_returnitem') }}" >View the Return Policy</a>
+                    <a href="{{ url_for('customerservice.customerservice_returnitem') }}" >View the Return Policy</a>
                     </div>
                     <br>
                 {% endif %}

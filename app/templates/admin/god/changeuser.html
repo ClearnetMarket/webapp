@@ -5,7 +5,7 @@
 
     <ol class="breadcrumb linkcolor">
         <li><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="{{ url_for('admin.adminHome') }}">Admin Home</a></li>
+        <li><a href="{{ url_for('admin.admin_home') }}">Admin Home</a></li>
     </ol>
 
     <h3>Stats for: {{ username }}</h3>
@@ -128,7 +128,7 @@
         </div>
         <div class="col-md-12 text-center">
             <label></label>
-            {{ render_field(form.changeuser,  value="Submit", autocomplete="off", class="btn btn-primary") }}
+            {{ render_field(form.change_user,  value="Submit", autocomplete="off", class="btn btn-primary") }}
         </div>
     </form>
 

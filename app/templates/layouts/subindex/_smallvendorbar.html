@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-12 linkcolor">
-            <a href="{{ url_for('vendorcreate.itemsforSale') }}">
+            <a href="{{ url_for('vendorcreate.vendorcreate_items_for_sale') }}">
                 My Items
             </a>
         </div>
@@ -23,13 +23,13 @@
         <!--Issues -->
         {% if issues == 0 %}
             <div class="col-12 linkcolor">
-                <a href="{{ url_for('vendor.vendorRefunds') }}">
+                <a href="{{ url_for('vendor.vendor_refunds') }}">
                     Issues
                 </a>
             </div>
         {% else %}
             <div class="col-12 linkcolororange">
-                <a href="{{ url_for('vendor.vendorRefunds') }}">
+                <a href="{{ url_for('vendor.vendor_refunds') }}">
                     Issues({{ issues }})
                 </a>
             </div>
@@ -39,13 +39,13 @@
         <!--Orders -->
         {% if order == 0 %}
             <div class="col-12 linkcolor">
-                <a href="{{ url_for('vendor.vendorOrders') }}">
+                <a href="{{ url_for('vendor.vendor_orders') }}">
                     OpenOrders
                 </a>
             </div>
         {% else %}
             <div class="col-12 linkcolororange">
-                <a href="{{ url_for('vendor.vendorOrders') }}">
+                <a href="{{ url_for('vendor.vendor_orders') }}">
                     OpenOrders({{ order }})
                 </a>
             </div>

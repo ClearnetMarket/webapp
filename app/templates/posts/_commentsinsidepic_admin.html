@@ -29,7 +29,7 @@
                         {% else %}
                             <div class="linkcolor">
 
-                                    <a href="{{ url_for('profile.user', username=comment.author) }}">
+                                    <a href="{{ url_for('profile.profile_user', username=comment.author) }}">
                                     <img src="{{ comment.author_id|profilepicture|safe }}" width="50px" height="50px;">
                                     {{ comment.author }}</a>
 

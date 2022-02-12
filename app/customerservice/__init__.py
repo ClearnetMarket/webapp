@@ -2,7 +2,7 @@
 from flask import Blueprint
 
 
-service = Blueprint('service', __name__)
+customerservice = Blueprint('customerservice', __name__)
 
 
 from . import views

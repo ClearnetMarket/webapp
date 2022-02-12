@@ -12,8 +12,8 @@ from app.common.decorators import \
     vendoraccount_required
 
 # models
-from app.classes.item import marketitem
-from app.classes.wallet_bch import BchWallet
+from app.classes.item import Item_MarketItem
+from app.classes.wallet_bch import Bch_Wallet
 # End Models
 
 # forms
@@ -28,24 +28,24 @@ from app.wallet_bch.wallet_btccash_work import sendcoinforad
 from datetime import datetime
 from decimal import Decimal
 
-from app.common.functions import btc_cash_convertlocaltobtc
+from app.common.functions import convert_local_to_bch
 
 
 @promote.route('/', methods=['GET', 'POST'])
 @website_offline
-def promotehome():
+def promote_home():
     form = PromoHomeForm()
 
     items = db.session\
-        .query(marketitem)\
-        .filter(marketitem.vendor_id == current_user.id, marketitem.ad_item is True)\
+        .query(Item_MarketItem)\
+        .filter(Item_MarketItem.vendor_id == current_user.id, Item_MarketItem.ad_item is True)\
         .all()
     if request.method == 'POST':
         if form.submitcheckbox.data and form.validate_on_submit():
             for v in request.form.getlist('checkit'):
                 intv = int(v)
                 specific_item = db.session\
-                    .query(marketitem)\
+                    .query(Item_MarketItem)\
                     .filter_by(id=intv)\
                     .first()
                 if specific_item.ad_item is True:
@@ -53,7 +53,7 @@ def promotehome():
                     specific_item.ad_item_level = 0
                     db.session.add(specific_item)
             db.session.commit()
-            return redirect(url_for('promote.promotehome'))
+            return redirect(url_for('promote.promote_home'))
 
     return render_template('/promote/home.html',
                            items=items,
@@ -65,22 +65,22 @@ def promotehome():
 @website_offline
 @login_required
 @vendoraccount_required
-def promoteitem(itemid):
+def promote_item(itemid):
     now = datetime.utcnow()
     item = db.session\
-        .query(marketitem)\
-        .filter(marketitem.id == itemid)\
+        .query(Item_MarketItem)\
+        .filter(Item_MarketItem.id == itemid)\
         .first()
 
-    catcost = btc_cash_convertlocaltobtc(amount=1, currency=1)
-    frontpagecost = btc_cash_convertlocaltobtc(amount=10, currency=1)
+    catcost = convert_local_to_bch(amount=1, currency=1)
+    frontpagecost = convert_local_to_bch(amount=10, currency=1)
 
     decimaldollar = Decimal(catcost)
     decimaltendollar = Decimal(frontpagecost)
 
     if item.vendor_id == current_user.id:
         userwallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
@@ -98,7 +98,7 @@ def promoteitem(itemid):
                 if item.ad_item == 0:
                     if promoselection == 0:
                         flash("No selection made", category="danger")
-                        return redirect(url_for('promote.promoteitem', itemid=itemid))
+                        return redirect(url_for('promote.promote_item', itemid=itemid))
                     elif promoselection == 1:
                         # category promo
                         if useramount > decimaldollar:
@@ -114,11 +114,11 @@ def promoteitem(itemid):
                             db.session.commit()
 
                             flash("Item Promoted", category="success")
-                            return redirect(url_for('vendorcreate.itemsforSale'))
+                            return redirect(url_for('vendorcreate.vendorcreate_items_for_sale'))
                         else:
                             flash("Not enough coin in your wallet",
                                   category="danger")
-                            return redirect(url_for('promote.promoteitem', itemid=itemid))
+                            return redirect(url_for('promote.promote_item', itemid=itemid))
                     elif promoselection == 2:
                         # Font page promo
                         if useramount > decimaltendollar:
@@ -134,17 +134,17 @@ def promoteitem(itemid):
                             db.session.commit()
 
                             flash("Item Promoted", category="success")
-                            return redirect(url_for('vendorcreate.itemsforSale'))
+                            return redirect(url_for('vendorcreate.vendorcreate_items_for_sale'))
                         else:
                             flash("Not enough coin in your wallet",
                                   category="danger")
-                            return redirect(url_for('promote.promoteitem', itemid=itemid))
+                            return redirect(url_for('promote.promote_item', itemid=itemid))
                     else:
                         flash("Unknown Selection", category="danger")
-                        return redirect(url_for('promote.promoteitem', itemid=itemid))
+                        return redirect(url_for('promote.promote_item', itemid=itemid))
                 else:
                     flash("Item is already promoted", category="danger")
-                    return redirect(url_for('promote.promoteitem', itemid=itemid))
+                    return redirect(url_for('promote.promote_item', itemid=itemid))
 
     else:
         return redirect(url_for('index'))

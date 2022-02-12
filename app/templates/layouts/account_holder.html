@@ -17,12 +17,12 @@
         <ul>
           <li>
             <a
-              href="{{ url_for('auth.myAccount', username=current_user.username) }}"
+              href="{{ url_for('auth.my_account', username=current_user.username) }}"
               >Account</a
             >
           </li>
           <li>
-            <a href="{{ url_for('orders.ordershome') }}">Recent Orders</a>
+            <a href="{{ url_for('orders.orders_home') }}">Recent Orders</a>
           </li>
           <li>
             <a
@@ -36,7 +36,7 @@
             >
           </li>
           <li>
-            <a href="{{ url_for('service.customerserviceHome') }}">
+            <a href="{{ url_for('customerservice.customerserviceHome') }}">
               Customer Service
             </a>
           </li>
@@ -52,10 +52,10 @@
         <b>Security</b>
         <ul>
           <li>
-            <a href="{{ url_for('auth.changepin') }}"> Wallet Pin </a>
+            <a href="{{ url_for('auth.change_pin') }}"> Wallet Pin </a>
           </li>
           <li>
-            <a href="{{ url_for('auth.changepassword') }}">
+            <a href="{{ url_for('auth.change_password') }}">
               Account Password
             </a>
           </li>
@@ -64,21 +64,21 @@
         <b>Vendor</b>
         <ul>
           <li>
-            <a href="{{ url_for('vendorverification.vendorverificationhome') }}"
+            <a href="{{ url_for('vendorverification.vendorverification_home') }}"
               >Vendor Verification</a
             >
           </li>
           <li>
-            <a href="{{ url_for('vendorcreate.itemsforSale')}}"> My Items </a>
+            <a href="{{ url_for('vendorcreate.vendorcreate_items_for_sale')}}"> My Items </a>
           </li>
           <li>
-            <a href="{{ url_for('vendor.vendorRefunds') }}"> Issues </a>
+            <a href="{{ url_for('vendor.vendor_refunds') }}"> Issues </a>
           </li>
           <li>
-            <a href="{{ url_for('vendor.vendorRatings') }}"> Ratings </a>
+            <a href="{{ url_for('vendor.vendor_ratings') }}"> Ratings </a>
           </li>
           <li>
-            <a href="{{ url_for('vendor.vendorOrders') }}"> OpenOrders </a>
+            <a href="{{ url_for('vendor.vendor_orders') }}"> OpenOrders </a>
           </li>
           <li>
             <a href="{{ url_for('main.notifications') }}"> Notifications </a>
@@ -90,21 +90,21 @@
         <ul>
           <li>
             <a
-              href="{{ url_for('admin.adminHome', username=current_user.username) }}"
+              href="{{ url_for('admin.admin_home', username=current_user.username) }}"
               >Admin home</a
             >
           </li>
           {% if user.admin_role == 10 %}
           <li>
-            <a href="{{ url_for('admin.setaccounttoAdmin') }}"
+            <a href="{{ url_for('admin.set_account_to_admin') }}"
               >Set Account to Admin</a
             >
           </li>
           <li>
-            <a href="{{ url_for('admin.addAchievement') }}">Achievements</a>
+            <a href="{{ url_for('admin.add_achievement') }}">Achievements</a>
           </li>
           <li>
-            <a href="{{ url_for('admin.addupdate') }}">Add Update</a>
+            <a href="{{ url_for('admin.add_update') }}">Add Update</a>
           </li>
           {% endif %}
         </ul>
@@ -120,7 +120,7 @@
         <b><div style="color: red">Danger Area</div></b>
         <ul>
           <li>
-            <a href="{{ url_for('auth.deleteaccount') }}"> Delete Account </a>
+            <a href="{{ url_for('auth.delete_account') }}"> Delete Account </a>
           </li>
         </ul>
       </div>

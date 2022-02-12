@@ -46,7 +46,7 @@
 
 <div class="row">
   <div class="col-12 linkcolor">
-    <a href="{{ url_for('service.customerservice_shipmentfailure') }}">
+    <a href="{{ url_for('customerservice.customerservice_shipmentfailure') }}">
       What if customer or vendor fails to meet these time limits?
     </a>
   </div>
@@ -71,12 +71,12 @@
 
   <tr>
     <td class="col-1 linkcolor bg-danger">
-      <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+      <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}">
         {{ order.id }}
       </a>
     </td>
     <td class="hidden-xs col-sm-2 linkcolor bg-danger" width="15%">
-      <a href="{{ url_for('profile.user',username=order.customer) }}">
+      <a href="{{ url_for('profile.profile_user',username=order.customer) }}">
         {{ order.customer }} ({{ order.customer_id|userrating }}) ({{
         order.customer_id|avguserrating }}
         <img
@@ -96,7 +96,7 @@
       {{ order.price|format_to_string_bch }} BCH
     </td>
     <td class="col-3 linkcolor bg-danger">
-      <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+      <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}">
         {% if order.request_return == 1 %} Return Address Needed {% endif %} {%
         if order.request_return == 2 %} Waiting on customer to mark as shipped
         {% endif %} {% if order.request_return == 3 %} Waiting on vendor to mark
@@ -134,12 +134,12 @@
   {% for order in disputed %}
   <tr>
     <td class="col-1 linkcolor bg-danger">
-      <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+      <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}">
         {{ order.id }}
       </a>
     </td>
     <td class="hidden-xs col-sm-2 linkcolor bg-danger" width="15%">
-      <a href="{{ url_for('profile.user',username=order.customer) }}">
+      <a href="{{ url_for('profile.profile_user',username=order.customer) }}">
         {{ order.customer }} ({{ order.customer_id|userrating }}) ({{
         order.customer_id|avguserrating }}<img
           src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
@@ -161,13 +161,13 @@
       {% if order.type == 1 %} {% if order.return_id == 0 and
       order.request_return >= 1%}
       <div class="linkcolor">
-        <a href="{{ url_for('vendor.addtempaddress', id=order.id) }}"
+        <a href="{{ url_for('vendor.vendor_add_temp_address', id=order.id) }}"
           >Add Return Address</a
         >
       </div>
 
       <div class="linkcolor">
-        <a href="{{ url_for('vendor.edittempaddress', id=order.id) }}"
+        <a href="{{ url_for('vendor.vendor_edit_temp_address', id=order.id) }}"
           >Edit Return Address</a
         >
       </div>

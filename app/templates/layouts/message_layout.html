@@ -23,37 +23,37 @@
       <div class="col-12 col-sm-4">
         <div class="classWithPad border" style="">
           <ul>
-            <a class="btn btn-warning" href="{{ url_for('message.messagecenter_Compose') }}" role="button">
+            <a class="btn btn-warning" href="{{ url_for('message.message_compose') }}" role="button">
               Compose
               <span class="fa fa- pencil" aria-hidden="true" style="font-size: 20px">
               </span>
             </a>
             <br /><br />
             <li class="linkcolor">
-              <a href="{{ url_for('message.messagecenter') }}" role="button">New Messages ({{ allmsgcount }})
+              <a href="{{ url_for('message.message_center') }}" role="button">New Messages ({{ allmsgcount }})
               </a>
             </li>
             <li class="linkcolor">
-              <a class="linkcolor" href="{{ url_for('message.messagecenter_oldmsgs') }}" role="button">Read Messages
+              <a class="linkcolor" href="{{ url_for('message.message_old_msgs') }}" role="button">Read Messages
                 ({{ oldmsgcount }})
               </a>
             </li>
 
             <li class="linkcolor">
-              <a href="{{ url_for('message.messagecenter_official') }}" role="button">
+              <a href="{{ url_for('message.message_official') }}" role="button">
                 Official ({{ officialmsgcount }})
               </a>
             </li>
 
             <li class="linkcolor">
-              <a href="{{ url_for('message.messagecenter_disputes') }}" role="button">
+              <a href="{{ url_for('message.message_disputes') }}" role="button">
                 Disputes ({{ disputesmsgcount }})
               </a>
             </li>
 
             <br /><br />
             <li class="linkcolor">
-              <a href="{{ url_for('message.messagecenter_Sent') }}" role="button">
+              <a href="{{ url_for('message.message_sent') }}" role="button">
                 Sent
               </a>
             </li>

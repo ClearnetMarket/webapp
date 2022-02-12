@@ -84,13 +84,13 @@
                             <p class="card-text">
                                 {% if userwallet_btc_cash.currentbalance == 0 %}
                                     <div class="col-md-12 linkcolororange">
-                                        <a href="{{ url_for('wallet_bch.home') }}">
+                                        <a href="{{ url_for('wallet_bch.bch_home') }}">
                                             BCH : 0.00 BTC
                                         </a>
                                     </div>
                                 {% else %}
                                     <div class="col-md-12 linkcolororange">
-                                        <a href="{{ url_for('wallet_bch.home') }}">
+                                        <a href="{{ url_for('wallet_bch.bch_home') }}">
                                             BCH:{{ userwallet_btc_cash.currentbalance|otherformatbtctostring }}
                                         </a>
                                     </div>
@@ -98,7 +98,7 @@
 
                             {% if userwallet_btc_cash.unconfirmed > 0 %}
                                 <div class="col-md-12 linkcolororange">
-                                    <a href="{{ url_for('wallet_bch.home') }}">
+                                    <a href="{{ url_for('wallet_bch.bch_home') }}">
                                         Unconfirmed: {{ userwallet_btc_cash.unconfirmed|otherformatbtctostring }}
                                     </a>
                                 </div>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="text-center" style="margin-top: 20px; margin-bottom: 10px;">
                                 <a class="btn btn-warning"
-                                   href="{{ url_for('wallet_bch.home') }}"
+                                   href="{{ url_for('wallet_bch.bch_home') }}"
                                    role="button">
                                     View Wallet
                                 </a>

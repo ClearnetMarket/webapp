@@ -27,7 +27,7 @@
                     <b>Status:</b><br>
                 {% endif %}
                 <strong>
-                    <a href="{{ url_for('service.helpwithissue_active', id=p.id) }}"> Issue id: #{{ p.id }} </a>
+                    <a href="{{ url_for('customerservice.helpwithissue_active', id=p.id) }}"> Issue id: #{{ p.id }} </a>
                     <br>
                     {{ moment(timestamp=p.timestamp, local=False).fromNow(refresh=True)  }}
                 </strong>
@@ -59,23 +59,8 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="col-12">Recaptcha</label>
+                 
 
-                            <div class="col-12 text-center">
-                                <img src="{{ url_for('static', filename='/recaptcha/' + randompicture)  }}" width="236px" height="48px" >
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-5">
-                        <div class="form-group">
-                            <div class="col-12">
-                                {{ render_field(form.recaptchaanswer, class="form-control", placeholder='Captcha Answer') }}
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-12 text-center">

@@ -1,34 +1,34 @@
 from app import db
-from app.classes.item import marketitem
+from app.classes.item import Item_MarketItem
 
 
-def relatedtoItem(id):
+def subq_related_to_item(id):
     item = db.session\
-        .query(marketitem)\
+        .query(Item_MarketItem)\
         .filter_by(id=id)\
         .first()
     # category 5
     relatedcategory = db.session \
-        .query(marketitem.item_title,
-               marketitem.string_auction_id,
-               marketitem.string_node_id,
-               marketitem.id,
-               marketitem.currency,
-               marketitem.image_one,
-               marketitem.price,
-               marketitem.review_count,
-               marketitem.item_rating,
-               marketitem.digital_currency_2,
-               marketitem.digital_currency_3,
+        .query(Item_MarketItem.item_title,
+               Item_MarketItem.string_auction_id,
+               Item_MarketItem.string_node_id,
+               Item_MarketItem.id,
+               Item_MarketItem.currency,
+               Item_MarketItem.image_one,
+               Item_MarketItem.price,
+               Item_MarketItem.review_count,
+               Item_MarketItem.item_rating,
+               Item_MarketItem.digital_currency_2,
+               Item_MarketItem.digital_currency_3,
                ) \
-        .filter(marketitem.category_id_0 == item.category_id_0) \
-        .filter(marketitem.online == 1) \
-        .group_by(marketitem.id) \
+        .filter(Item_MarketItem.category_id_0 == item.category_id_0) \
+        .filter(Item_MarketItem.online == 1) \
+        .group_by(Item_MarketItem.id) \
         .limit(10)
 
     return relatedcategory
 
 
 def itemsall():
-    item = db.session.query(marketitem).limit(20)
+    item = db.session.query(Item_MarketItem).limit(20)
     return item

@@ -22,7 +22,7 @@
     </div>
     <div id="comment_right">
         <div id="comment_topbar_date">{{ moment(timestamp=comment.timestamp, local=False).calendar()  }}</div>
-        <div id="comment_topbar_button"> <a class="btn btn-danger btnwhite" href="{{ url_for('message.messagecenter_delete_comment',id=comment.id) }}"role="button">
+        <div id="comment_topbar_button"> <a class="btn btn-danger btnwhite" href="{{ url_for('message.message_delete_comment',id=comment.id) }}"role="button">
             Delete
         </a></div>
     </div>

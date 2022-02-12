@@ -18,7 +18,7 @@
                  <div id="orderinfo_item" class="linkcolor">
                 <b>Customer:</b>
 
-                <a href="{{ url_for('profile.user',username=vendororder.customer) }}" >
+                <a href="{{ url_for('profile.profile_user',username=vendororder.customer) }}" >
                             {{ vendororder.customer }}
                             ({{ vendororder.customer_id|userrating }})
                             ({{ vendororder.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
@@ -76,7 +76,7 @@
     <div id="orderinfo_titleholder">
         <div id="orderinfo_titleholder_left"><h4>Shipping Info</h4></div>
         <div id="orderinfo_titleholder_right">
-            <a class="btn btn-warning" href="{{ url_for('service.customerserviceMessage') }}" role="button">Message Seller</a>
+            <a class="btn btn-warning" href="{{ url_for('customerservice.customerserviceMessage') }}" role="button">Message Seller</a>
 
         </div>
 

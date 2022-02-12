@@ -1,14 +1,14 @@
 from app import db
-from app.classes.achievements import UserAchievements, UserAchievements_recent
-from app.classes.auth import User
+from app.classes.achievements import Achievements_UserAchievements, Achievements_UserAchievementsRecent
+from app.classes.auth import Auth_User
 from datetime import datetime
 
 
 # e-X level awards
 def levelawards(user_id):
     now = datetime.utcnow()
-    user = db.session.query(User).filter_by(id=user_id).first()
-    usera = db.session.query(UserAchievements).filter_by(
+    user = db.session.query(Auth_User).filter_by(id=user_id).first()
+    usera = db.session.query(Achievements_UserAchievements).filter_by(
         user_id=user_id).first()
     if usera.level == 2:
         if usera.e1 != 1:
@@ -17,7 +17,7 @@ def levelawards(user_id):
             usera.e1 = 1
             usera.e1_date = now
 
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=4,
@@ -35,7 +35,7 @@ def levelawards(user_id):
             usera.e2 = 1
             usera.e2_date = now
             user.admin_role = 1
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=2,
@@ -53,7 +53,7 @@ def levelawards(user_id):
             # id = 3
             usera.e3 = 1
             usera.e3_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=3,
@@ -69,7 +69,7 @@ def levelawards(user_id):
             # id = 5
             usera.e4 = 1
             usera.e4_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=5,
@@ -87,7 +87,7 @@ def levelawards(user_id):
             # id = 6
             usera.e5 = 1
             usera.e5_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=6,
@@ -105,7 +105,7 @@ def levelawards(user_id):
             # id = 7
             usera.e6 = 1
             usera.e6_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=7,

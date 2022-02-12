@@ -1,8 +1,8 @@
 from app import db
 
 
-class shippingSecret(db.Model):
-    __tablename__ = 'shippingSecret'
+class Service_ShippingSecret(db.Model):
+    __tablename__ = 'shippingsecret'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -12,7 +12,7 @@ class shippingSecret(db.Model):
     orderid = db.Column(db.INTEGER)
 
 
-class Returns(db.Model):
+class Service_Returns(db.Model):
     __tablename__ = 'returns'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -27,7 +27,7 @@ class Returns(db.Model):
     message = db.Column(db.TEXT)
 
 
-class DefaultReturns(db.Model):
+class Service_DefaultReturns(db.Model):
     __tablename__ = 'defaultreturns'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -43,7 +43,7 @@ class DefaultReturns(db.Model):
     user_id = db.Column(db.INTEGER)
 
 
-class ReturnsTracking(db.Model):
+class Service_ReturnsTracking(db.Model):
     __tablename__ = 'returntracking'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -59,7 +59,7 @@ class ReturnsTracking(db.Model):
     othercarrier = db.Column(db.TEXT)
 
 
-class Tracking(db.Model):
+class Service_Tracking(db.Model):
     __tablename__ = 'tracking'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -76,7 +76,7 @@ class Tracking(db.Model):
     othercarrier3 = db.Column(db.TEXT)
 
 
-class updateLog(db.Model):
+class Service_UpdateLog(db.Model):
     __tablename__ = 'updatelog'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -86,7 +86,7 @@ class updateLog(db.Model):
     dateofupdate = db.Column(db.TIMESTAMP())
 
 
-class customerserviceitem(db.Model):
+class Service_CustomerServiceItem(db.Model):
     __tablename__ = 'customerserviceonitem'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -94,7 +94,7 @@ class customerserviceitem(db.Model):
     issue = db.Column(db.TEXT)
 
 
-class websitefeedback(db.Model):
+class Service_WebsiteFeedback(db.Model):
     __tablename__ = 'websitefeedback'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -107,7 +107,7 @@ class websitefeedback(db.Model):
     timestamp = db.Column(db.TIMESTAMP())
 
 
-class Issue(db.Model):
+class Service_Issue(db.Model):
     __tablename__ = 'issues'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

@@ -19,7 +19,7 @@
       <div id="userprofilebar_username">
         <div class="text-center linkcolor_topbar">
           <a
-            href="{{ url_for('profile.vendorprofile',username=user1.username) }}"
+            href="{{ url_for('profile.profile_vendor',username=user1.username) }}"
             >{{ user1.username }}</a
           >
         </div>
@@ -27,7 +27,7 @@
       {% else %}
       <div id="userprofilebar_username">
         <div class="text-center linkcolor_topbar">
-          <a href="{{ url_for('profile.user',username=user1.username) }}"
+          <a href="{{ url_for('profile.profile_user',username=user1.username) }}"
             >{{ user1.username }}</a
           >
         </div>

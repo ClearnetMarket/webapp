@@ -15,7 +15,7 @@
             </div>
         {% else %}
             <div class="linkcolor">
-            <a href="{{ url_for('profile.user', username=comment.author) }}">
+            <a href="{{ url_for('profile.profile_user', username=comment.author) }}">
                 {{ comment.author }}
             </a>
             </div>

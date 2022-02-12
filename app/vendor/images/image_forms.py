@@ -13,12 +13,12 @@ from app.common.functions import \
     itemlocation
 from app import UPLOADED_FILES_DEST_ITEM
 from app.classes.item import \
-    marketitem
+    Item_MarketItem
 
 
 def deleteimg_noredirect(id, img):
     try:
-        vendoritem = marketitem.query.get(id)
+        vendoritem = Item_MarketItem.query.get(id)
         if vendoritem:
             if vendoritem.vendor_id == current_user.id:
                 try:

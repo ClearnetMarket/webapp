@@ -1,75 +1,66 @@
-from app.common.decorators import \
-    ping_user, \
-    login_required, \
-    website_offline
-from flask import render_template, \
-    redirect, \
-    url_for, \
-    flash, \
-    request, \
-    jsonify
+
+from flask import render_template, redirect, url_for, flash, request, jsonify
 
 from flask_login import current_user
-from app.service import service
+from app.customerservice import customerservice
 from app import db
-
-# models
-from app.classes.achievements import \
-    UserAchievements, \
-    whichAch
-
-from app.classes.auth import User
-from app.classes.message import \
-    Chat
-from app.classes.service import \
-    websitefeedback, \
-    Issue
-from app.classes.profile import \
-    StatisticsUser, \
-    StatisticsVendor
-from app.classes.userdata import \
-    Feedback
-from app.classes.vendor import \
-    Orders
-from app.classes.models import \
-    btc_cash_Prices
-
-# End Models
-from app.service.forms import \
-    Feedback, \
-    issuewithItem, \
-    sendmessageForm, \
-    Chatform, \
-    feedbackonorderForm, \
-    adminhelpserviceform
 
 from datetime import datetime
 from sqlalchemy import or_
+from app.common.decorators import \
+    login_required, \
+    website_offline
+# models
+from app.classes.achievements import \
+    Achievements_UserAchievements, \
+    Achievements_WhichAch
+
+from app.classes.auth import Auth_User
+from app.classes.message import Message_Chat
+from app.classes.service import \
+    Service_WebsiteFeedback, \
+    Service_Issue
+from app.classes.profile import \
+    Profile_StatisticsUser, \
+    Profile_StatisticsVendor
+from app.classes.userdata import User_DataFeedback
+from app.classes.vendor import Vendor_Orders
+from app.classes.wallet_bch import Bch_Prices
+
+# End Models
+from app.customerservice.forms import \
+    issuewithItem, \
+    sendmessageForm, \
+    Chatform, \
+    Feedback, \
+    feedbackonorderForm, \
+    adminhelpserviceform
+
 from app.exppoints import exppoint
 from app.achs.a import Grassisgreeneronmyside
 
 
-@service.route('/')
+@customerservice.route('/')
 def customerserviceHome():
     if current_user.is_authenticated:
         # see if orders need to be returned or are disputed
         # customer only
         orders = db.session\
-            .query(Orders)\
-            .filter(Orders.customer == current_user.username)\
-            .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2)).order_by(Orders.age.desc())\
+            .query(Vendor_Orders)\
+            .filter(Vendor_Orders.customer == current_user.username)\
+            .filter(or_(Vendor_Orders.disputed_order == 1, Vendor_Orders.request_return == 2)).order_by(Vendor_Orders.age.desc())\
             .all()
         myorderscount = db.session\
-            .query(Orders)\
-            .filter(Orders.customer == current_user.username)\
-            .filter(or_(Orders.disputed_order == 1, Orders.request_return == 2)).order_by(Orders.age.desc())\
+            .query(Vendor_Orders)\
+            .filter(Vendor_Orders.customer == current_user.username)\
+            .filter(or_(Vendor_Orders.disputed_order == 1, Vendor_Orders.request_return == 2)).order_by(Vendor_Orders.age.desc())\
             .count()
 
         # See if user has any active issues for the sidebar
         post = db.session\
-            .query(Issue)\
-            .filter(Issue.author_id == current_user.id)\
-            .order_by(Issue.timestamp.desc())\
+            .query(Service_Issue)\
+            .filter(Service_Issue.author_id == current_user.id)\
+            .order_by(Service_Issue.timestamp.desc())\
             .limit(10)
         thepostcount = post.count()
     else:
@@ -84,18 +75,19 @@ def customerserviceHome():
                            thepostcount=thepostcount)
 
 
-@service.route('/feedback', methods=['GET', 'POST'])
+@customerservice.route('/feedback', methods=['GET', 'POST'])
 @website_offline
 @login_required
 def feedback():
     form = Feedback(request.form)
+    # TODO wa
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
     try:
         getcount = db.session\
-            .query(websitefeedback)\
+            .query(Service_WebsiteFeedback)\
             .filter_by(user_id=current_user.id)\
             .count()
     except Exception as e:
@@ -106,7 +98,7 @@ def feedback():
         if getcount >= 3:
             return redirect(url_for('index', username=current_user.username))
         else:
-            thefeedback = websitefeedback(
+            thefeedback = Service_WebsiteFeedback(
                 username=user.username,
                 user_id=user.id,
                 type=form.type.data,
@@ -126,7 +118,7 @@ def feedback():
                            form=form,)
 
 
-@service.route('/disputesandissues', methods=['GET', 'POST'])
+@customerservice.route('/disputesandissues', methods=['GET', 'POST'])
 @website_offline
 def customerservice_disputesquestions():
     try:
@@ -135,7 +127,7 @@ def customerservice_disputesquestions():
         return jsonify(result={"status": 200})
 
 
-@service.route('/customerbitcoin', methods=['GET', 'POST'])
+@customerservice.route('/customerbitcoin', methods=['GET', 'POST'])
 @website_offline
 def customerservice_bitcoin():
     try:
@@ -144,7 +136,7 @@ def customerservice_bitcoin():
         return jsonify(result={"status": 200})
 
 
-@service.route('/shipmentfailure')
+@customerservice.route('/shipmentfailure')
 @website_offline
 def customerservice_shipmentfailure():
     try:
@@ -153,7 +145,7 @@ def customerservice_shipmentfailure():
         return jsonify(result={"status": 200})
 
 
-@service.route('/cancelitem')
+@customerservice.route('/cancelitem')
 @website_offline
 def customerservice_cancelitem():
     try:
@@ -162,7 +154,7 @@ def customerservice_cancelitem():
         return jsonify(result={"status": 200})
 
 
-@service.route('/returns')
+@customerservice.route('/returns')
 @website_offline
 def customerservice_returnitem():
     try:
@@ -172,7 +164,7 @@ def customerservice_returnitem():
         return jsonify(result={"status": 200})
 
 
-@service.route('/notrecieved')
+@customerservice.route('/notrecieved')
 @website_offline
 def customerservice_notrecieved():
     try:
@@ -181,7 +173,7 @@ def customerservice_notrecieved():
         return jsonify(result={"status": 200})
 
 
-@service.route('/sellerfees')
+@customerservice.route('/sellerfees')
 @website_offline
 def customerservice_sellerfees():
     try:
@@ -190,7 +182,7 @@ def customerservice_sellerfees():
         return jsonify(result={"status": 200})
 
 
-@service.route('/forgotaccount')
+@customerservice.route('/forgotaccount')
 @website_offline
 def customerservice_forgotaccount():
     try:
@@ -199,7 +191,7 @@ def customerservice_forgotaccount():
         return jsonify(result={"status": 200})
 
 
-@service.route('/other')
+@customerservice.route('/other')
 @website_offline
 def customerservice_other():
     try:
@@ -208,7 +200,7 @@ def customerservice_other():
         return jsonify(result={"status": 200})
 
 
-@service.route('/customerdispute')
+@customerservice.route('/customerdispute')
 @website_offline
 @login_required
 def customerservice_dispute():
@@ -218,7 +210,7 @@ def customerservice_dispute():
         return jsonify(result={"status": 200})
 
 
-@service.route('/otherfees')
+@customerservice.route('/otherfees')
 @website_offline
 def customerservice_walletfees():
     try:
@@ -227,13 +219,14 @@ def customerservice_walletfees():
         return jsonify(result={"status": 200})
 
 
-@service.route('/item-help/<int:id>', methods=['GET', 'POST'])
+@customerservice.route('/item-help/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
 def helpwithitem(id):
     now = datetime.utcnow()
     issue = issuewithItem(request.form)
-    getitem = db.session.query(Orders).filter(Orders.id == id).first()
+    getitem = db.session.query(Vendor_Orders).filter(
+        Vendor_Orders.id == id).first()
 
     if getitem.customer_id == current_user.id:
         if request.method == 'POST' and issue.validate_on_submit():
@@ -248,12 +241,12 @@ def helpwithitem(id):
                 db.session.commit()
                 flash("Message has been sent.  A representative will be with you. "
                       " Check your notifications.", category="success")
-                return redirect(url_for('service.helpwithitem_active', id=getitem.id))
+                return redirect(url_for('customerservice.helpwithitem_active', id=getitem.id))
             except Exception as e:
                 print(str(e))
                 db.session.rollback()
                 flash("Form Error", category="danger")
-                return redirect(url_for('service.helpwithitem_active', id=getitem.id))
+                return redirect(url_for('customerservice.helpwithitem_active', id=getitem.id))
 
         return render_template('/service/helpwithitem.html',
                                issue=issue,
@@ -264,7 +257,7 @@ def helpwithitem(id):
         return redirect(url_for('index', username=current_user.username))
 
 
-@service.route('/redirect/<int:id>', methods=['GET', 'POST'])
+@customerservice.route('/redirect/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
 def find_item(id):
@@ -273,14 +266,14 @@ def find_item(id):
     :param id:
     :return:
     """
-    order = db.session.query(Orders).filter_by(id=id).first()
+    order = db.session.query(Vendor_Orders).filter_by(id=id).first()
     if order.type == 1:
-        return redirect(url_for('service.helpwithitem_active', id=order.id))
+        return redirect(url_for('customerservice.helpwithitem_active', id=order.id))
     else:
         return redirect(url_for('index', username=current_user.username))
 
 
-@service.route('/messagecustomerservice', methods=['GET', 'POST'])
+@customerservice.route('/messagecustomerservice', methods=['GET', 'POST'])
 @website_offline
 @login_required
 def customerserviceMessage():
@@ -293,25 +286,25 @@ def customerserviceMessage():
 
     # See if user has any active issues for the sidebar
     post = db.session\
-        .query(Issue)\
-        .filter(Issue.author_id == current_user.id)\
-        .order_by(Issue.timestamp.desc())\
+        .query(Service_Issue)\
+        .filter(Service_Issue.author_id == current_user.id)\
+        .order_by(Service_Issue.timestamp.desc())\
         .limit(10)
     thepostcount = post.count()
 
     if request.method == 'POST':
         if thepostcount <= 10:
             if form.submit.data and form.validate_on_submit():
-                addissue = Issue(author=current_user.username,
-                                 author_id=current_user.id,
-                                 timestamp=datetime.utcnow(),
-                                 admin=0,
-                                 status=0
-                                 )
+                addissue = Service_Issue(author=current_user.username,
+                                         author_id=current_user.id,
+                                         timestamp=datetime.utcnow(),
+                                         admin=0,
+                                         status=0
+                                         )
                 db.session.add(addissue)
                 db.session.flush()
 
-                post = Chat(
+                post = Message_Chat(
                     orderid=0,
                     author=current_user.username,
                     author_id=current_user.id,
@@ -326,15 +319,15 @@ def customerserviceMessage():
 
                 flash("Message sent.  A response will be given shortly",
                       category="success")
-                return redirect(url_for('service.customerserviceMessage',
+                return redirect(url_for('customerservice.customerserviceMessage',
                                         username=current_user.username))
             else:
                 flash("invalid Captcha", category="danger")
-                return redirect(url_for('service.customerserviceMessage',
+                return redirect(url_for('customerservice.customerserviceMessage',
                                         username=current_user.username))
         else:
             flash("Too many support issues", category="danger")
-            return redirect(url_for('service.customerserviceMessage',
+            return redirect(url_for('customerservice.customerserviceMessage',
                                     username=current_user.username))
 
     return render_template('/service/msgcustomerservice.html',
@@ -343,7 +336,7 @@ def customerserviceMessage():
                            )
 
 
-@service.route('/needhelpwithissue/<int:id>', methods=['GET', 'POST'])
+@customerservice.route('/needhelpwithissue/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
 def helpwithissue_active(id):
@@ -358,22 +351,22 @@ def helpwithissue_active(id):
     adminform = adminhelpserviceform(request.form)
     # query the issue
     theissue = db.session\
-        .query(Issue)\
+        .query(Service_Issue)\
         .filter_by(id=id)\
         .first()
     if theissue:
         # get the main chat message
         getchatmsg = db.session\
-            .query(Chat)\
-            .filter(Chat.issueid == theissue.id,
-                    Chat.orderid == 0,
-                    Chat.type == 0)\
+            .query(Message_Chat)\
+            .filter(Message_Chat.issueid == theissue.id,
+                    Message_Chat.orderid == 0,
+                    Message_Chat.type == 0)\
             .first()
 
         # set a morderator
         getmod = db.session\
-            .query(User)\
-            .filter(User.id == theissue.admin)\
+            .query(Auth_User)\
+            .filter(Auth_User.id == theissue.admin)\
             .first()
         if getmod is not None:
             moderator = getmod.username
@@ -385,10 +378,10 @@ def helpwithissue_active(id):
 
                 # Get chat messages
                 posts = db.session\
-                    .query(Chat)\
-                    .filter(Chat.issueid == theissue.id)\
-                    .order_by(Chat.timestamp.desc())\
-                    .filter(Chat.type == 0)
+                    .query(Message_Chat)\
+                    .filter(Message_Chat.issueid == theissue.id)\
+                    .order_by(Message_Chat.timestamp.desc())\
+                    .filter(Message_Chat.type == 0)
                 comments = posts.limit(50)
                 if request.method == 'POST':
                     # if user is the messanger or an admin
@@ -396,7 +389,7 @@ def helpwithissue_active(id):
                         # post the chat message of form validates
                         if postform.post.data and postform.validate_on_submit():
                             try:
-                                post = Chat(
+                                post = Message_Chat(
                                     orderid=id,
                                     author=current_user.username,
                                     author_id=current_user.id,
@@ -408,26 +401,26 @@ def helpwithissue_active(id):
                                 )
                                 db.session.add(post)
                                 db.session.commit()
-                                return redirect(url_for('service.helpwithissue_active',
+                                return redirect(url_for('customerservice.helpwithissue_active',
                                                         id=theissue.id))
                             except Exception as e:
 
                                 flash("Form Error", category="danger")
                                 db.session.rollback()
-                                return redirect(url_for('service.helpwithissue_active',
+                                return redirect(url_for('customerservice.helpwithissue_active',
                                                         id=theissue.id))
 
                         else:
                             flash("Form Error", category="danger")
                             db.session.rollback()
-                            return redirect(url_for('service.helpwithissue_active',
+                            return redirect(url_for('customerservice.helpwithissue_active',
                                                     id=theissue.id))
                     elif current_user.admin == 1:
 
                         # post the chat message of form validates
                         if postform.post.data:
                             try:
-                                post = Chat(
+                                post = Message_Chat(
                                     orderid=id,
                                     author=current_user.username,
                                     author_id=current_user.id,
@@ -439,13 +432,13 @@ def helpwithissue_active(id):
                                 )
                                 db.session.add(post)
                                 db.session.commit()
-                                return redirect(url_for('service.helpwithissue_active',
+                                return redirect(url_for('customerservice.helpwithissue_active',
                                                         id=theissue.id))
                             except Exception as e:
                                 print(str(e))
                                 flash("Form Error", category="danger")
                                 db.session.rollback()
-                                return redirect(url_for('service.helpwithissue_active',
+                                return redirect(url_for('customerservice.helpwithissue_active',
                                                         id=theissue.id))
                         elif adminform.becomeadmin.data:
                             theissue.admin = current_user.id
@@ -460,7 +453,7 @@ def helpwithissue_active(id):
                             db.session.commit()
                         else:
                             pass
-                        return redirect(url_for('service.helpwithissue_active',
+                        return redirect(url_for('customerservice.helpwithissue_active',
                                                 id=theissue.id))
                     else:
                         pass
@@ -487,7 +480,7 @@ def helpwithissue_active(id):
         return redirect(url_for('index'))
 
 
-@service.route('/needhelpwithitem/<int:id>', methods=['GET', 'POST'])
+@customerservice.route('/needhelpwithitem/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
 def helpwithitem_active(id):
@@ -498,32 +491,32 @@ def helpwithitem_active(id):
     postform = Chatform(request.form)
     # get the order
     order = db.session\
-        .query(Orders)\
+        .query(Vendor_Orders)\
         .filter_by(id=id)\
         .first()
     if current_user.id == order.customer_id or current_user.admin == 1:
 
-        # User
+        # Auth_User
         user = db.session\
-            .query(User)\
+            .query(Auth_User)\
             .filter_by(id=order.customer_id)\
             .first()
         usergetlevel = db.session\
-            .query(UserAchievements)\
+            .query(Achievements_UserAchievements)\
             .filter_by(username=user.username)\
             .first()
         userpictureid = str(usergetlevel.level)
         userstats = db.session\
-            .query(StatisticsUser)\
+            .query(Profile_StatisticsUser)\
             .filter_by(username=user.username)\
             .first()
         level = db.session\
-            .query(UserAchievements)\
+            .query(Achievements_UserAchievements)\
             .filter_by(username=user.username)\
             .first()
         width = int(level.experiencepoints / 10)
         userach = db.session\
-            .query(whichAch)\
+            .query(Achievements_WhichAch)\
             .filter_by(user_id=user.id)\
             .first()
         # vendor
@@ -535,54 +528,54 @@ def helpwithitem_active(id):
             vendorpictureid = 0
         else:
             vendor = db.session\
-                .query(User)\
+                .query(Auth_User)\
                 .filter_by(id=order.modid)\
                 .first()
 
             vendorstats = db.session\
-                .query(StatisticsVendor)\
+                .query(Profile_StatisticsVendor)\
                 .filter_by(vendorid=vendor.id)\
                 .first()
             vendorgetlevel = db.session\
-                .query(UserAchievements)\
+                .query(Achievements_UserAchievements)\
                 .filter_by(username=vendor.username)\
                 .first()
             vendorpictureid = str(vendorgetlevel.level)
             vendorach = db.session\
-                .query(whichAch)\
+                .query(Achievements_WhichAch)\
                 .filter_by(user_id=vendor.id)\
                 .first()
 
         # Page Queries
         # Get 20 buys for btc
-        posts = db.session.query(Chat)
-        posts = posts.filter(Chat.orderid == order.id)
-        posts = posts.order_by(Chat.timestamp.desc())
-        posts = posts.filter(Chat.type == order.type)
+        posts = db.session.query(Message_Chat)
+        posts = posts.filter(Message_Chat.orderid == order.id)
+        posts = posts.order_by(Message_Chat.timestamp.desc())
+        posts = posts.filter(Message_Chat.type == order.type)
         comments = posts.limit(50)
 
         btcprice = db.session\
-            .query(btc_cash_Prices)\
-            .filter(or_(btc_cash_Prices.currency_id == 1,
-                    btc_cash_Prices.currency_id == 30,
-                    btc_cash_Prices.currency_id == 17,
-                    btc_cash_Prices.currency_id == 23,
-                    btc_cash_Prices.currency_id == 30,
-                    btc_cash_Prices.currency_id == 6,
-                    btc_cash_Prices.currency_id == 4,
+            .query(Bch_Prices)\
+            .filter(or_(Bch_Prices.currency_id == 1,
+                    Bch_Prices.currency_id == 30,
+                    Bch_Prices.currency_id == 17,
+                    Bch_Prices.currency_id == 23,
+                    Bch_Prices.currency_id == 30,
+                    Bch_Prices.currency_id == 6,
+                    Bch_Prices.currency_id == 4,
                         ))\
-            .order_by(btc_cash_Prices.currency_id.asc())\
+            .order_by(Bch_Prices.currency_id.asc())\
             .all()
 
         btcprice_cashz = db.session\
-            .query(btc_cash_Prices)\
-            .filter(or_(btc_cash_Prices.currency_id == 1,
-                    btc_cash_Prices.currency_id == 30,
-                    btc_cash_Prices.currency_id == 17,
-                    btc_cash_Prices.currency_id == 23,
-                    btc_cash_Prices.currency_id == 30,
-                    btc_cash_Prices.currency_id == 6,
-                    btc_cash_Prices.currency_id == 4,
+            .query(Bch_Prices)\
+            .filter(or_(Bch_Prices.currency_id == 1,
+                    Bch_Prices.currency_id == 30,
+                    Bch_Prices.currency_id == 17,
+                    Bch_Prices.currency_id == 23,
+                    Bch_Prices.currency_id == 30,
+                    Bch_Prices.currency_id == 6,
+                    Bch_Prices.currency_id == 4,
                         ))\
 
         if request.method == 'POST':
@@ -591,7 +584,7 @@ def helpwithitem_active(id):
                 #
                 if postform.post.data and postform.validate_on_submit():
                     try:
-                        post = Chat(
+                        post = Message_Chat(
                             orderid=order.id,
                             author=current_user.username,
                             author_id=current_user.id,
@@ -602,17 +595,17 @@ def helpwithitem_active(id):
                         )
                         db.session.add(post)
                         db.session.commit()
-                        return redirect(url_for('service.helpwithitem_active', id=order.id))
+                        return redirect(url_for('customerservice.helpwithitem_active', id=order.id))
                     except Exception:
                         flash("Form Error", category="danger")
                         db.session.rollback()
-                        return redirect(url_for('service.helpwithitem_active', id=order.id))
+                        return redirect(url_for('customerservice.helpwithitem_active', id=order.id))
 
                 elif feedbackform.submitfeedback.data:
                     if feedbackform.validate_on_submit():
                         my_id = request.form.get("my_id", "")
                         getitemid = db.session.query(
-                            Orders).filter_by(id=my_id).first()
+                            Vendor_Orders).filter_by(id=my_id).first()
                         if getitemid.customer_id == current_user.id:
                             text_box_value_vendorrating = request.form.get(
                                 "vendorrating")
@@ -620,7 +613,7 @@ def helpwithitem_active(id):
                                 "item_rating")
                             if text_box_value_vendorrating and text_box_value_item_rating is not None:
                                 try:
-                                    feed = Feedback(
+                                    feed = User_DataFeedback(
                                         type=getitemid.type,
                                         sale_id=getitemid.id,
                                         vendorname=getitemid.vendor,
@@ -647,31 +640,31 @@ def helpwithitem_active(id):
                                     flash('Feedback submitted.  Exp Points Given for the feedback!.',
                                           'success')
 
-                                    return redirect(url_for('orders.ordershome', username=current_user.username))
+                                    return redirect(url_for('orders.orders_home', username=current_user.username))
                                 except Exception as e:
                                     print(str(e))
-                                    return redirect(url_for('service.helpwithitem_active', id=order.id))
+                                    return redirect(url_for('customerservice.helpwithitem_active', id=order.id))
 
                             else:
                                 flash(
                                     'Invalid Review. Please make sure you filled out '
                                     'the ratings and feedback(longer than 10 characters)',
                                     'danger')
-                                return redirect(url_for('orders.ordershome', username=current_user.username))
+                                return redirect(url_for('orders.orders_home', username=current_user.username))
                         else:
                             flash(
                                 'Invalid Review. Please make sure you filled out '
                                 'the ratings and feedback(longer than 10 characters)',
                                 'danger')
-                            return redirect(url_for('orders.ordershome', username=current_user.username))
+                            return redirect(url_for('orders.orders_home', username=current_user.username))
                     else:
                         flash(
                             'Invalid Review. Please make sure you'
                             ' filled out the ratings and feedback(longer than 10 characters)',
                             'danger')
-                        return redirect(url_for('orders.ordershome', username=current_user.username))
+                        return redirect(url_for('orders.orders_home', username=current_user.username))
                 else:
-                    return redirect(url_for('orders.ordershome', username=current_user.username))
+                    return redirect(url_for('orders.orders_home', username=current_user.username))
 
         return render_template('service/chatroom/helpwithitem.html',
                                user=user,

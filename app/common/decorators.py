@@ -2,12 +2,12 @@ from flask_login import current_user
 from flask import redirect, url_for, request
 from app import db
 from functools import wraps
-from app.classes.auth import User
-from app.classes.admin import websiteOffline
+from app.classes.auth import Auth_User
+from app.classes.admin import Admin_WebsiteOffline
 from datetime import datetime
 
 
-def ADMINaccount_required(f):
+def admin_account_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.admin == 0:
@@ -18,7 +18,7 @@ def ADMINaccount_required(f):
     return decorated_function
 
 
-def ADMINaccountlevel3_required(f):
+def admin_account_level_required_3(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.admin_role >= 3:
@@ -40,7 +40,7 @@ def ADMINaccountlevel4_required(f):
     return decorated_function
 
 
-def ADMINaccountlevel10_required(f):
+def admin_account_required_level_10(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.admin_role >= 10:
@@ -59,7 +59,8 @@ def ping_user(f):
             pass
         else:
             now = datetime.utcnow()
-            user = db.session.query(User).filter_by(username=current_user.username).first()
+            user = db.session.query(Auth_User).filter_by(
+                username=current_user.username).first()
             user.last_seen = now
             db.session.add(user)
             db.session.commit()
@@ -70,11 +71,11 @@ def ping_user(f):
 def website_offline(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        status = db.session.query(websiteOffline).filter_by(id=1).first()
+        status = db.session.query(Admin_WebsiteOffline).filter_by(id=1).first()
         if status.webstatus == 0:
             pass
         elif status.webstatus == 1:
-            return redirect(url_for('main.scheduledmaintenance'))
+            return redirect(url_for('main.scheduled_maintenance'))
         elif status.webstatus == 2:
             return redirect(url_for('main.offline'))
         elif status.webstatus == 3:

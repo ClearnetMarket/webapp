@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb" class="linkcolor">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ url_for('service.customerserviceHome') }}">Customer Service</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('customerservice.customerserviceHome') }}">Customer Service</a></li>
         </ol>
     </nav>
 
@@ -61,7 +61,7 @@
             </div>
         </div>
         <div class="col-12">
-            Your account management page is  <a href="{{ url_for('auth.myAccount', username=current_user.username) }}">here. </a>
+            Your account management page is  <a href="{{ url_for('auth.my_account', username=current_user.username) }}">here. </a>
         </div>
     </div>
 
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="col-12">
-            If you forgot your password, you can reset it by  <a href="{{ url_for('auth.myAccount', username=current_user.username) }}">here. </a>
+            If you forgot your password, you can reset it by  <a href="{{ url_for('auth.my_account', username=current_user.username) }}">here. </a>
         </div>
     </div>
 
@@ -134,7 +134,7 @@
             </div>
         </div>
         <div class="col-12">
-            We have implement a way to delete account or information <a href="{{ url_for('auth.myAccount', username=current_user.username) }}">here. </a>
+            We have implement a way to delete account or information <a href="{{ url_for('auth.my_account', username=current_user.username) }}">here. </a>
             EVERYTHING is deleted from your account, we dont secretly store your info after we delete it.  We have no need
             for information.
         </div>

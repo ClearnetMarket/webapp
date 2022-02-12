@@ -3,8 +3,10 @@ from flask_login import current_user
 from app.vendorcreate import vendorcreate
 import shutil
 import os
+import csv
 from app import UPLOADED_FILES_DEST, UPLOADED_FILES_DEST_ITEM
 from werkzeug.datastructures import CombinedMultiDict
+from werkzeug.utils import secure_filename
 from decimal import Decimal
 from app.search.searchfunction import headerfunctions_vendor
 from flask_paginate import Pagination, get_page_args
@@ -26,12 +28,12 @@ from app.vendorcreate.forms import \
     deactive, \
     UploadEbayForm
 # models
-from app.classes.auth import User
+from app.classes.auth import Auth_User
 
 from app.classes.item import \
-    marketitem
+    Item_MarketItem
 from app.classes.vendor import \
-    EbaySearchItem
+    Vendor_EbaySearchItem
 
 from app.classes.wallet_bch import *
 from app.vendor.images.image_forms import image1, image2, image3, image4, image5
@@ -41,7 +43,7 @@ from app.vendor.images.image_forms import image1, image2, image3, image4, image5
 @website_offline
 @login_required
 @vendoraccount_required
-def tradeOptions():
+def vendorcreate_sell_options():
     """
     Returns the page with buttons to post type of item/ad
     :return:
@@ -53,7 +55,7 @@ def tradeOptions():
 @website_offline
 @login_required
 @vendoraccount_required
-def itemsforSale():
+def vendorcreate_items_for_sale():
     """
     Provides the vendors item list.
     Checks for incorrect listings and turns them off accordingly.
@@ -80,8 +82,8 @@ def itemsforSale():
     per_page = 10
     # End Pagination
     # Query all the items related to the vendor
-    sale = db.session.query(marketitem).filter(marketitem.vendor_id == user.id).order_by(
-        marketitem.total_sold.desc(), marketitem.online.desc(), marketitem.id.desc())
+    sale = db.session.query(Item_MarketItem).filter(Item_MarketItem.vendor_id == user.id).order_by(
+        Item_MarketItem.total_sold.desc(), Item_MarketItem.online.desc(), Item_MarketItem.id.desc())
 
     forsale = sale.limit(per_page).offset(offset)
 
@@ -102,7 +104,7 @@ def itemsforSale():
 
                 intv = int(v)
                 specific_item = db.session\
-                    .query(marketitem)\
+                    .query(Item_MarketItem)\
                     .filter_by(id=intv)\
                     .first()
                 try:
@@ -212,7 +214,7 @@ def itemsforSale():
             flash(
                 "You are currently on vacation mode.  Cannot put items online", category="danger")
 
-    return render_template('/vendor/itemsforsale/vendorItemsforsale.html',
+    return render_template('/vendor/itemsforsale/vendoritemsforsale.html',
                            form=form,
                            forsale=forsale,
                            pagination=pagination,
@@ -228,7 +230,7 @@ def itemsforSale():
 @website_offline
 @login_required
 @vendoraccount_required
-def ebayimporter():
+def vendorcreate_ebay_importer():
     # variables
     now = datetime.utcnow()
     id_pic1 = id_generator_picture1()
@@ -238,16 +240,16 @@ def ebayimporter():
 
     # queries
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
     getalluploads = db.session\
-        .query(EbaySearchItem)\
+        .query(Vendor_EbaySearchItem)\
         .filter_by(user_id=current_user.id)\
-        .order_by(EbaySearchItem.dateadded.desc())\
+        .order_by(Vendor_EbaySearchItem.dateadded.desc())\
         .limit(100)
     getalluploadscount = db.session\
-        .query(EbaySearchItem)\
+        .query(Vendor_EbaySearchItem)\
         .filter_by(user_id=current_user.id)\
         .count()
 
@@ -308,7 +310,7 @@ def ebayimporter():
                                 else:
                                     protoscondition = 6
 
-                                newitem = EbaySearchItem(
+                                newitem = Vendor_EbaySearchItem(
                                     dateadded=now,
                                     user_id=current_user.id,
                                     itemebayid=ebayitemid,
@@ -325,29 +327,29 @@ def ebayimporter():
                             db.session.commit()
                             flash("Your auctions will be added within an hour.  If there are any issues,"
                                   "please report them to customer feedback.", category="success")
-                            return redirect(url_for('vendorcreate.ebayimporter'))
+                            return redirect(url_for('vendorcreate.vendorcreate_ebay_importer'))
                     else:
                         flash("Form Error. Only CSV's allowed.",
                               category="danger")
-                        return redirect(url_for('vendorcreate.ebayimporter'))
+                        return redirect(url_for('vendorcreate.vendorcreate_ebay_importer'))
                 else:
                     flash("Form Error. Only CSV's allowed.", category="danger")
-                    return redirect(url_for('vendorcreate.ebayimporter'))
+                    return redirect(url_for('vendorcreate.vendorcreate_ebay_importer'))
             else:
                 flash("Form Error. Only CSV's allowed.", category="danger")
-                return redirect(url_for('vendorcreate.ebayimporter'))
+                return redirect(url_for('vendorcreate.vendorcreate_ebay_importer'))
         elif form.delete.data:
             for f in getalluploads:
                 if f.user_id == current_user.id:
                     db.session.delete(f)
             db.session.commit()
             flash("Items deleted ", category="danger")
-            return redirect(url_for('vendorcreate.ebayimporter'))
+            return redirect(url_for('vendorcreate.vendorcreate_ebay_importer'))
         else:
             flash("Form Error. Only CSV's allowed.", category="danger")
-            return redirect(url_for('vendorcreate.ebayimporter'))
+            return redirect(url_for('vendorcreate.vendorcreate_ebay_importer'))
 
-    return render_template('/vendor/tools/ebayimporter.html',
+    return render_template('/vendor/tools/vendorcreate_ebay_importer.html',
                            form=form,
                            user=user,
                            now=now,
@@ -356,11 +358,11 @@ def ebayimporter():
                            )
 
 
-@vendorcreate.route('/vendor-edititem/<int:id>', methods=['GET', 'POST'])
+@vendorcreate.route('/vendor-vendorcreate_edit_item/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
 @vendoraccount_required
-def edititem(id):
+def vendorcreate_edit_item(id):
     """
     Edits a specific item given an id
     :param id:
@@ -368,12 +370,12 @@ def edititem(id):
     """
     now = datetime.utcnow()
     item = db.session\
-        .query(marketitem)\
+        .query(Item_MarketItem)\
         .filter_by(id=id)\
         .first()
     if item:
         user = db.session\
-            .query(User)\
+            .query(Auth_User)\
             .filter_by(id=current_user.id)\
             .first()
         if item.vendor_id == user.id:
@@ -690,7 +692,7 @@ def edititem(id):
                     db.session.commit()
 
                     flash(f"Updated: Item #{str(item.id)}", category="success")
-                    return redirect(url_for('vendorcreate.itemsforSale'))
+                    return redirect(url_for('vendorcreate.vendorcreate_items_for_sale'))
 
             return render_template('/vendor/itemsforsale/edititem.html',
                                    form=form,
@@ -707,7 +709,7 @@ def edititem(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def deleteItem(id):
+def vendorcreate_delete_item(id):
     """
     Delete all images and the item data from database
     :param id:
@@ -716,7 +718,7 @@ def deleteItem(id):
     ext_1 = '_225x.jpg'
     ext_2 = '_500x.jpg'
     file_extension1 = '.jpg'
-    item = marketitem.query.get(id)
+    item = Item_MarketItem.query.get(id)
     if item:
         if item.vendor_id == current_user.id:
             # gets the node for the folder
@@ -810,8 +812,8 @@ def deleteItem(id):
             db.session.commit()
 
         else:
-            return redirect(url_for('vendorcreate.itemsforSale', username=current_user.username))
-        return redirect(url_for('vendorcreate.itemsforSale', username=current_user.username))
+            return redirect(url_for('vendorcreate.vendorcreate_items_for_sale', username=current_user.username))
+        return redirect(url_for('vendorcreate.vendorcreate_items_for_sale', username=current_user.username))
     else:
         flash("Error", category="danger")
         return redirect(url_for('index'))
@@ -821,7 +823,7 @@ def deleteItem(id):
 @website_offline
 @login_required
 @vendoraccount_required
-def cloneitem(id):
+def vendorcreate_clone_item(id):
     """
     given an item id, this will create a new folder on storage, and recopy the data with a new id
     :param id:
@@ -830,18 +832,18 @@ def cloneitem(id):
     # get the vendor item to be copied
     now = datetime.utcnow()
     # get item we are cloning
-    vendoritem = marketitem.query.get(id)
+    vendoritem = Item_MarketItem.query.get(id)
 
     if vendoritem:
         if vendoritem.vendor_id == current_user.id:
             # make sure user doesnt have to many listings
             vendoritem_count = db.session\
-                .query(marketitem)\
+                .query(Item_MarketItem)\
                 .filter_by(vendor_id=current_user.id)\
                 .count()
             if vendoritem_count < 1000:
- 
-                item = marketitem(
+
+                item = Item_MarketItem(
                     string_node_id=vendoritem.string_node_id,
                     created=datetime.utcnow(),
                     vendor_name=current_user.username,
@@ -915,7 +917,6 @@ def cloneitem(id):
                 db.session.flush()
 
                 # IMAGES
-                # Make New image folder
                 # get location of node
                 getitemlocation = itemlocation(x=item.id)
                 # get directory of item to be closed
@@ -943,25 +944,24 @@ def cloneitem(id):
                 db.session.commit()
 
                 flash("Cloned New Item ", category="success")
-                return redirect(url_for('vendorcreate.itemsforSale'))
+                return redirect(url_for('vendorcreate.vendorcreate_items_for_sale'))
 
-            
             else:
                 flash("Maximum 100 items allowed per user. ", category="success")
-                return redirect(url_for('vendorcreate.itemsforSale'))
+                return redirect(url_for('vendorcreate.vendorcreate_items_for_sale'))
         else:
             flash("Error", category="danger")
-            return redirect(url_for('vendorcreate.itemsforSale'))
+            return redirect(url_for('vendorcreate.vendorcreate_items_for_sale'))
     else:
         flash("Error", category="danger")
-        return redirect(url_for('vendorcreate.itemsforSale'))
+        return redirect(url_for('vendorcreate.vendorcreate_items_for_sale'))
 
 
 @vendorcreate.route('/need-a-vacation/', methods=['GET', 'POST'])
 @website_offline
 @login_required
 @vendoraccount_required
-def vacation():
+def vendorcreate_vacation():
     """
     Vacation mode allows user to turn off all items instantly.  In the future
     add a message perhaps and keep items online
@@ -969,14 +969,14 @@ def vacation():
     """
     # Turn off all items, and remove users visibility
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
 
     # get physical items
     aitems = db.session\
-        .query(marketitem)\
-        .filter(marketitem.vendor_id == current_user.id)\
+        .query(Item_MarketItem)\
+        .filter(Item_MarketItem.vendor_id == current_user.id)\
         .all()
 
     if user.vacation == 0:
@@ -994,14 +994,14 @@ def vacation():
         db.session.add(user)
         flash("Vacation mode off.  You Can put items online", category="success")
     db.session.commit()
-    return redirect(url_for('auth.myAccount', username=current_user.username))
+    return redirect(url_for('auth.my_account', username=current_user.username))
 
 
 @vendorcreate.route('/deletepicture/<int:id>/<string:img>', methods=['GET', 'POST'])
 @website_offline
 @login_required
 @vendoraccount_required
-def deleteimg(id, img):
+def vendorcreate_delete_img(id, img):
     """
     gets specific id and image, it will delete on the server accordingly
     :param id:
@@ -1010,7 +1010,7 @@ def deleteimg(id, img):
     """
 
     item = db.session\
-        .query(marketitem)\
+        .query(Item_MarketItem)\
         .filter_by(id=id)\
         .first()
     if item:
@@ -1039,7 +1039,7 @@ def deleteimg(id, img):
                     item.image_one = '0'
                     db.session.add(item)
                     db.session.commit()
-                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                    return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
                 elif item.image_two == img:
                     os.remove(file0)
                     os.remove(file1)
@@ -1047,7 +1047,7 @@ def deleteimg(id, img):
                     item.image_two = '0'
                     db.session.add(item)
                     db.session.commit()
-                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                    return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
                 elif xitem.image_three3 == img:
                     os.remove(file0)
                     os.remove(file1)
@@ -1055,7 +1055,7 @@ def deleteimg(id, img):
                     item.image_three = '0'
                     db.session.add(item)
                     db.session.commit()
-                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                    return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
                 elif item.image_four == img:
                     os.remove(file0)
                     os.remove(file1)
@@ -1063,7 +1063,7 @@ def deleteimg(id, img):
                     item.image_four = '0'
                     db.session.add(item)
                     db.session.commit()
-                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                    return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
                 elif item.image_five == img:
                     os.remove(file0)
                     os.remove(file1)
@@ -1071,25 +1071,25 @@ def deleteimg(id, img):
                     item.image_five = '0'
                     db.session.add(item)
                     db.session.commit()
-                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                    return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
                 else:
                     flash("No Matching Images", category="danger")
-                    return redirect(url_for('vendorcreate.edititem', id=item.id))
+                    return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
             else:
                 print("down 1")
                 flash("Incorrect Image Size", category="danger")
-                return redirect(url_for('vendorcreate.edititem', id=item.id))
+                return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
         else:
             flash("Incorrect user.", category="danger")
-            return redirect(url_for('vendorcreate.edititem', id=item.id))
+            return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
     else:
         flash("Error", category="danger")
-        return redirect(url_for('vendorcreate.edititem', id=item.id))
+        return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
 
 
 def deleteimg_noredirect(id, img):
     try:
-        vendoritem = marketitem.query.get(id)
+        vendoritem = Item_MarketItem.query.get(id)
         if vendoritem:
             if vendoritem.vendor_id == current_user.id:
                 try:

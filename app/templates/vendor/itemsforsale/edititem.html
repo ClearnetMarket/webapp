@@ -5,7 +5,7 @@
 <nav aria-label="breadcrumb" class="linkcolor">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-        <li class="breadcrumb-item"><a href="{{ url_for('vendorcreate.itemsforSale') }}">My Items</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('vendorcreate.vendorcreate_items_for_sale') }}">My Items</a></li>
     </ol>
 </nav>
 
@@ -381,7 +381,7 @@
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_one) }}" role="button">
+                                href="{{ url_for('vendorcreate.vendorcreate_delete_img',id=item.id, img=item.image_one) }}" role="button">
                                 Delete Image
                             </a>
                         </div>
@@ -414,7 +414,7 @@
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_two) }}"
+                                href="{{ url_for('vendorcreate.vendorcreate_delete_img',id=item.id, img=item.image_two) }}"
                                 role="button">Delete Image</a></div>
                     </div>
                 </div>
@@ -446,7 +446,7 @@
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" 
                             type="submit"
-                            href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_three) }}"
+                            href="{{ url_for('vendorcreate.vendorcreate_delete_img',id=item.id, img=item.image_three) }}"
                             role="button">Delete Image
                             </a>
                         </div>
@@ -479,7 +479,7 @@
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_four) }}" role="button">Delete Image
+                                href="{{ url_for('vendorcreate.vendorcreate_delete_img',id=item.id, img=item.image_four) }}" role="button">Delete Image
                             </a>
                         </div>
                     </div>
@@ -513,7 +513,7 @@
                         </div>
                         <div id="imageLabelbutton">
                             <a class="btn btn-danger" type="submit"
-                                href="{{ url_for('vendorcreate.deleteimg',id=item.id, img=item.image_five) }}" role="button">Delete Image
+                                href="{{ url_for('vendorcreate.vendorcreate_delete_img',id=item.id, img=item.image_five) }}" role="button">Delete Image
                             </a>
                         </div>
                     </div>

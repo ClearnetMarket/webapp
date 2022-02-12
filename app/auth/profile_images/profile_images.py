@@ -6,15 +6,15 @@ from werkzeug.utils import secure_filename
 import os
 from app.common.functions import id_generator_picture1
 
-from app.classes.auth import User
+from app.classes.auth import Auth_User
 from app.common.functions import mkdir_p, userimagelocation
 
-        
+
 def deleteprofileimage(id, img, type):
     if current_user.id == id:
         user = db.session \
-            .query(User)\
-            .filter(User.id == id)\
+            .query(Auth_User)\
+            .filter(Auth_User.id == id)\
             .first()
         user_id = str(id)
         # img name in database
@@ -22,8 +22,10 @@ def deleteprofileimage(id, img, type):
         # remove extension and jpg
         userimg2 = str(img) + '_125x.jpg'
         usernodelocation = str(user.usernode)
-        file0 = os.path.join(UPLOADED_FILES_DEST_USER, usernodelocation, user_id, userimg1)
-        file1 = os.path.join(UPLOADED_FILES_DEST_USER, usernodelocation, user_id, userimg2)
+        file0 = os.path.join(UPLOADED_FILES_DEST_USER,
+                             usernodelocation, user_id, userimg1)
+        file1 = os.path.join(UPLOADED_FILES_DEST_USER,
+                             usernodelocation, user_id, userimg2)
         try:
             os.remove(file0)
             os.remove(file1)
@@ -49,7 +51,8 @@ def image1(formdata, directoryifitemlisting, user):
     # make a directory
     mkdir_p(path=directoryifitemlisting)
     # delete profile image type 0 since we dont change name
-    deleteprofileimage(id=current_user.id, img=current_user.profileimage, type=0)
+    deleteprofileimage(id=current_user.id,
+                       img=current_user.profileimage, type=0)
     # secure the filename
     filename = secure_filename(formdata.filename)
     # saves it to location
@@ -79,4 +82,3 @@ def image1(formdata, directoryifitemlisting, user):
     # change image size
     imagespider(base_path=directoryifitemlisting)
     return db_entry
-

@@ -1,7 +1,7 @@
 from app import db
 
 
-class clearnetFee(db.Model):
+class Admin_ClearnetFee(db.Model):
     __tablename__ = 'fees'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -10,7 +10,7 @@ class clearnetFee(db.Model):
     itempurchase = db.Column(db.DECIMAL(20, 2))
 
 
-class clearnetprofit_btc(db.Model):
+class Admin_ClearnetProfitBtc(db.Model):
     __tablename__ = 'account_profit_btc'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -22,7 +22,7 @@ class clearnetprofit_btc(db.Model):
     total = db.Column(db.DECIMAL(20, 8))
 
 
-class clearnetprofit_btccash(db.Model):
+class Admin_ClearnetProfitBCH(db.Model):
     __tablename__ = 'account_profit_btccash'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -34,7 +34,7 @@ class clearnetprofit_btccash(db.Model):
     total = db.Column(db.DECIMAL(20, 8))
 
 
-class clearnetfeeholdings(db.Model):
+class Admin_ClearnetFeeHoldings(db.Model):
     __tablename__ = 'account_fee_holdings_btc'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -45,7 +45,7 @@ class clearnetfeeholdings(db.Model):
     total = db.Column(db.DECIMAL(20, 8))
 
 
-class clearnetfeeholdings_btccash(db.Model):
+class Admin_ClearnetFeeHoldingsBCH(db.Model):
     __tablename__ = 'account_fee_holdings_btc_cash'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -56,7 +56,7 @@ class clearnetfeeholdings_btccash(db.Model):
     total = db.Column(db.DECIMAL(20, 8))
 
 
-class clearnetholdings(db.Model):
+class Admin_ClearnetHoldings(db.Model):
     __tablename__ = 'account_clearnetholdings_btc'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -68,7 +68,7 @@ class clearnetholdings(db.Model):
     total = db.Column(db.DECIMAL(20, 8))
 
 
-class clearnetholdings_btccash(db.Model):
+class Admin_ClearnetHoldingsBCH(db.Model):
     __tablename__ = 'account_clearnetholdings_btc_cash'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -80,17 +80,7 @@ class clearnetholdings_btccash(db.Model):
     total = db.Column(db.DECIMAL(20, 8))
 
 
-class Recaptcha(db.Model):
-    __tablename__ = 'recaptcha'
-    __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
-    image = db.Column(db.INTEGER)
-    answer = db.Column(db.TEXT)
-
-
-class websiteOffline(db.Model):
+class Admin_WebsiteOffline(db.Model):
     __tablename__ = 'websiteoffline'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -99,7 +89,7 @@ class websiteOffline(db.Model):
     webstatus = db.Column(db.INTEGER)
 
 
-class flagged(db.Model):
+class Admin_Flagged(db.Model):
     __tablename__ = 'flagged'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

@@ -30,17 +30,17 @@ itembonus = 0
 
 def exppoint(user, price, type, quantity, currency):
     from app import db
-    from app.classes.profile import exptable
-    from app.classes.achievements import UserAchievements
-    from app.common.functions import btc_cash_convertlocaltobtc, btc_cash_converttolocal
+    from app.classes.profile import Profile_Exptable
+    from app.classes.achievements import Achievements_UserAchievements
+    from app.common.functions import convert_local_to_bch, convert_to_local_bch
     from decimal import Decimal
     from datetime import datetime
     from app.achs.e import levelawards
 
     now = datetime.utcnow()
     # get current user stats
-    getuser = db.session.query(UserAchievements)
-    getuser = getuser.filter(UserAchievements.user_id == user)
+    getuser = db.session.query(Achievements_UserAchievements)
+    getuser = getuser.filter(Achievements_UserAchievements.user_id == user)
     guser = getuser.first()
     # current user points
 
@@ -73,15 +73,15 @@ def exppoint(user, price, type, quantity, currency):
     # get user exp table
     if currency == 0:
         # convert btc to usd
-        y = btc_cash_converttolocal(amount=price, currency=1)
+        y = convert_to_local_bch(amount=price, currency=1)
     elif currency == 1:
         # no converting
         y = price
     else:
         # convert to btc then to usd
-        x = btc_cash_convertlocaltobtc(amount=price, currency=currency)
+        x = convert_local_to_bch(amount=price, currency=currency)
         # convert to usd
-        y = btc_cash_converttolocal(amount=Decimal(x), currency=1)
+        y = convert_to_local_bch(amount=Decimal(x), currency=1)
 
     # If they sold or bought something
     if type == 1:
@@ -123,7 +123,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.level = guser.level + levels_up
         exp = int(points + adjusted + itembonus)
 
-        exptot = exptable(
+        exptot = Profile_Exptable(
             user_id=user,
             type=1,
             amount=exp,
@@ -159,7 +159,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
 
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=2,
             amount=exp,
@@ -194,7 +194,7 @@ def exppoint(user, price, type, quantity, currency):
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=3,
             amount=exp,
@@ -232,7 +232,7 @@ def exppoint(user, price, type, quantity, currency):
         db.session.flush()
         if guser.experiencepoints < 0:
             guser.experiencepoints = 0
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=6,
             amount=exp,
@@ -267,7 +267,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
 
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=7,
             amount=exp,
@@ -283,7 +283,7 @@ def exppoint(user, price, type, quantity, currency):
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=4,
             amount=exp,
@@ -299,7 +299,7 @@ def exppoint(user, price, type, quantity, currency):
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=5,
             amount=exp,
@@ -316,7 +316,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
 
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=8,
             amount=exp,
@@ -333,7 +333,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
 
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=9,
             amount=exp,
@@ -351,7 +351,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
 
-        exp = exptable(
+        exp = Profile_Exptable(
             user_id=user,
             type=10,
             amount=exp,
@@ -398,7 +398,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
         exp = int(points + adjusted + itembonus)
-        exptot = exptable(
+        exptot = Profile_Exptable(
             user_id=user,
             type=11,
             amount=exp,
@@ -447,7 +447,7 @@ def exppoint(user, price, type, quantity, currency):
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
         exp = int(points + adjusted + btcbonus)
-        exptot = exptable(
+        exptot = Profile_Exptable(
             user_id=user,
             type=15,
             amount=exp,
@@ -494,7 +494,7 @@ def exppoint(user, price, type, quantity, currency):
         exp = int(points + adjusted + digbonus)
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
-        exptot = exptable(
+        exptot = Profile_Exptable(
             user_id=user,
             type=20,
             amount=exp,

@@ -14,16 +14,16 @@
         <div class="col-md-2">
           {% if current_user.is_authenticated %} {% if customerdisputes > 0 %}
           <div class="linkcolororange">
-            <a href="{{ url_for('service.customerserviceHome') }}">
+            <a href="{{ url_for('customerservice.customerserviceHome') }}">
               CustomerService({{ customerdisputes }})
             </a>
           </div>
           {% else %}
-          <a href="{{ url_for('service.customerserviceHome') }}">
+          <a href="{{ url_for('customerservice.customerserviceHome') }}">
             Customer Service
           </a>
           {% endif %} {% else %}
-          <a href="{{ url_for('service.customerserviceHome') }}">
+          <a href="{{ url_for('customerservice.customerserviceHome') }}">
             Customer Service
           </a>
           {% endif %}
@@ -32,26 +32,26 @@
         <div class="col-md-2">
           {% if current_user.is_authenticated %} {% if allmsgcount >= 1 %}
           <div class="linkcolororange">
-            <a href="{{ url_for('message.messagecenter') }}"
+            <a href="{{ url_for('message.message_center') }}"
               >Messages({{ allmsgcount }})
             </a>
           </div>
           {% else %}
-          <a href="{{ url_for('message.messagecenter') }}">Messages </a>
+          <a href="{{ url_for('message.message_center') }}">Messages </a>
           {% endif %} {% else %}
-          <a href="{{ url_for('message.messagecenter') }}">Messages </a>
+          <a href="{{ url_for('message.message_center') }}">Messages </a>
           {% endif %}
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-2">
           {% if current_user.is_authenticated %}
           <a
-            href="{{ url_for('auth.myAccount', username=current_user.username) }}"
+            href="{{ url_for('auth.my_account', username=current_user.username) }}"
           >
             My Account
           </a>
           {% else %}
-          <a href="{{ url_for('service.customerserviceHome') }}"
+          <a href="{{ url_for('customerservice.customerserviceHome') }}"
             >Help & Contact</a
           >
           {% endif %}
@@ -60,9 +60,9 @@
         <div class="col-md-2">
           {% if current_user.is_authenticated %} {% if
           current_user.vendor_account == 0 %} {% else %}
-          <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
+          <a href="{{ url_for('vendor.vendor_become_vendor') }}">Post Item</a>
           {% endif %} {% else %}
-          <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
+          <a href="{{ url_for('vendor.vendor_become_vendor') }}">Post Item</a>
           {% endif %}
         </div>
       </div>
@@ -97,7 +97,7 @@
       <div class="row h-50">
         {% if current_user.is_authenticated %}
         <div class="col-md-12">
-          <a href="{{ url_for('profile.user', username=current_user.username) }}" >
+          <a href="{{ url_for('profile.profile_user', username=current_user.username) }}" >
             {{ current_user.username }}
           </a>
         </div>
@@ -112,12 +112,12 @@
       </div>
       <div class="row h-50">
         <div class="col-md-6">
-          <a href="{{ url_for('orders.ordershome',username=current_user.username) }}" >
+          <a href="{{ url_for('orders.orders_home',username=current_user.username) }}" >
             <b>Orders</b>
           </a>
         </div>
         <div class="col-md-6">
-          <a href="{{ url_for('checkout.shoppingcart') }}">
+          <a href="{{ url_for('checkout.checkout_shopping_cart') }}">
             <b>{{ tot }} items</b>
           </a>
         </div>

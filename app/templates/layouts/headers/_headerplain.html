@@ -41,7 +41,7 @@ text-decoration: none;
         <ul class="navbar-nav mb-2 mb-lg-0">
           {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.myAccount', username=current_user.username) }}">
+            <a class="nav-link" href="{{ url_for('auth.my_account', username=current_user.username) }}">
               My Account
             </a>
           </li>
@@ -58,11 +58,11 @@ text-decoration: none;
             <ul class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
               {% if current_user.is_authenticated %}
               <li>
-                <a class="dropdown-item" href="{{ url_for('auth.myAccount', username=current_user.username) }}">
+                <a class="dropdown-item" href="{{ url_for('auth.my_account', username=current_user.username) }}">
                   My Account</a>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ url_for('orders.ordershome') }}">Orders</a>
+                <a class="dropdown-item" href="{{ url_for('orders.orders_home') }}">Orders</a>
               </li>
 
               <li>

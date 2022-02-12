@@ -1,6 +1,6 @@
 <div id="last_seen">
 
-    <div id="last_seen_text"><a href="{{ url_for('profile.user',username=vendor.username) }}">{{ vendor.username }}</a></div>
+    <div id="last_seen_text"><a href="{{ url_for('profile.profile_user',username=vendor.username) }}">{{ vendor.username }}</a></div>
 
     {% if vendor.id|lastseen  == 1%}
     <div id="last_seen_globe">1</div>

@@ -1,5 +1,5 @@
 from app import db
-from app.classes.achievements import UserAchievements, UserAchievements_recent
+from app.classes.achievements import Achievements_UserAchievements, Achievements_UserAchievementsRecent
 from datetime import datetime
 
 
@@ -8,17 +8,17 @@ def first1000users(user_id):
     pass
 
 
-def becomevendor(user_id):
+def vendor_become_vendor(user_id):
     now = datetime.utcnow()
     usera = db.session \
-        .query(UserAchievements) \
+        .query(Achievements_UserAchievements) \
         .filter_by(user_id=user_id) \
         .first()
     if usera.v1 != 1:
         # 11
         usera.v1 = 1
         usera.v1_date = now
-        addit = UserAchievements_recent(
+        addit = Achievements_UserAchievementsRecent(
             user_id=usera.user_id,
             username=usera.username,
             ach_id=11,

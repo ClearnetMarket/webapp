@@ -94,31 +94,31 @@
         {% endif %}
         <!--sale-->
         {% if note.type == 1 %} You have a new order. Order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %} {% if note.type == 111 %} Order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         Has Been Finalized and marked as recieved {% endif %} {% if note.type ==
         112 %} Your order has been successful. Order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %}
         <!--message-->
         {% if note.type == 2 %}
-        <a href="{{ url_for('message.messagecenter') }}">You have a new message</a>
+        <a href="{{ url_for('message.message_center') }}">You have a new message</a>
         {% endif %}
         <!--Feedback-->
         {% if note.type == 3 %} You have received Feedback for order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %}
         <!--dispute-->
         {% if note.type == 4 %} You have received a dispute on order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %}
         <!--return-->
         {% if note.type == 5 %} A return has been requested for order#<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         {% endif %} {% if note.type == 55 %} Customer has added tracking for
         return on order#
-        <a href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">
+        <a href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">
           {{ note.salenumber }}
         </a>
         {% endif %}
@@ -127,12 +127,12 @@
         {% endif %}
         <!--Cancelled Order-->
         {% if note.type == 7 %} Order#
-        <a href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+        <a href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         has been cancelled
         {% endif %}
         <!-- successful return-->
         {% if note.type == 8 %} Item #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         has been successfully returned.
         {% endif %}
         <!-- sold out-->
@@ -142,25 +142,25 @@
 
         <!-- Digital Trade-->
         {% if note.type == 10 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         has been started.
         {% endif %}
 
         <!-- Cancelled Digital Trade-->
         {% if note.type == 11 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         has been cancelled.
         {% endif %}
 
         <!-- Success Digital Trade-->
         {% if note.type == 12 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         has been finalized.
         {% endif %}
 
         <!-- Dispute Digital Trade-->
         {% if note.type == 13 %} Trade #<a
-          href="{{ url_for('vendor.viewOrder', id=note.salenumber) }}">{{ note.salenumber }}</a>
+          href="{{ url_for('vendor.vendor_orders_view_specific', id=note.salenumber) }}">{{ note.salenumber }}</a>
         has been disputed.
         {% endif %}
 

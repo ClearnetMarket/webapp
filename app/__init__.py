@@ -239,8 +239,8 @@ def teardown_appcontext(response_or_exc):
 
 @login_manager.user_loader
 def load_user(user_id):
-    from app.classes.auth import User
-    x = db.session.query(User).filter(User.id == int(user_id)).first()
+    from app.classes.auth import Auth_User
+    x = db.session.query(Auth_User).filter(Auth_User.id == int(user_id)).first()
     return x
 
 
@@ -266,8 +266,8 @@ app.register_blueprint(search_blueprint, url_prefix='/search')
 from .item import item as item_blueprint
 app.register_blueprint(item_blueprint, url_prefix='/item')
 
-from .service import service as service_blueprint
-app.register_blueprint(service_blueprint, url_prefix='/service')
+from .customerservice import customerservice as customerservice_blueprint
+app.register_blueprint(customerservice_blueprint, url_prefix='/customer-service')
 
 from .category import category as category_blueprint
 app.register_blueprint(category_blueprint, url_prefix='/category')

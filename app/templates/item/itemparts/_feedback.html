@@ -281,7 +281,7 @@
 
                         <img src="{{feed.author_id|profilepicture }}" width="125px" height="125px" class="img-rounded">
                         <div class="review-block-name linkcolor">
-                            <a href="{{ url_for('profile.user',username=feed.customername) }}">
+                            <a href="{{ url_for('profile.profile_user',username=feed.customername) }}">
                                 {{ feed.customername }}
                             </a>
                         </div>

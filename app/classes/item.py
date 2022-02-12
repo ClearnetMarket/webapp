@@ -1,16 +1,7 @@
 from app import db
 
 
-class Categories(db.Model):
-    __tablename__ = 'category'
-    __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
-    name = db.Column(db.TEXT)
-
-
-class ItemtoDelete(db.Model):
+class Item_ItemtoDelete(db.Model):
     __tablename__ = 'itemtodelete'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -19,7 +10,7 @@ class ItemtoDelete(db.Model):
     itemid = db.Column(db.Integer)
 
 
-class ShoppingCart(db.Model):
+class Item_CheckoutShoppingCart(db.Model):
     __tablename__ = 'shoppingcart'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -65,7 +56,7 @@ class ShoppingCart(db.Model):
     final_price = db.Column(db.DECIMAL(20, 8))
 
 
-class ShoppingCartTotal(db.Model):
+class Item_ShoppingCartTotal(db.Model):
     __tablename__ = 'shoppingcarttotal'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -86,7 +77,7 @@ class ShoppingCartTotal(db.Model):
     btc_off = db.Column(db.DECIMAL(20, 8))
 
 
-class marketitem(db.Model):
+class Item_MarketItem(db.Model):
     __tablename__ = 'marketitem'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -171,7 +162,7 @@ class marketitem(db.Model):
     digital_currency_2 = db.Column(db.INTEGER)
     digital_currency_3 = db.Column(db.INTEGER)
 
-    # categories
+    # Category_Categories
     category_name_0 = db.Column(db.String(140))
     category_id_0 = db.Column(db.Integer)
 
@@ -183,19 +174,7 @@ class marketitem(db.Model):
         return 'marketitem %s' % self.id
 
     def __repr__(self):
-        return '<User %r>' % self.username
-
-
-class Cats(db.Model):
-    __tablename__ = 'cats'
-    __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", "extend_existing": True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True, nullable=False)
-    catid0 = db.Column(db.Integer)
-    catid0 = db.Column(db.Integer)
-    catname0 = db.Column(db.TEXT)
-    formname = db.Column(db.TEXT)
+        return '<Auth_User %r>' % self.username
 
 
 db.configure_mappers()

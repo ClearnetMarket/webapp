@@ -5,7 +5,7 @@
 
 
     <div class="col-12 col-sm-12 col-md-4"><!-- END Image -->
-        <a href="{{ url_for('item.itemforsale', id=item.id) }}">
+        <a href="{{ url_for('item.item_for_sale', id=item.id) }}">
 
             {% if item.image_one != '0' %}
                 <img src="{{ url_for('userdata.media_file',
@@ -19,7 +19,7 @@
 
     <div class="col-6 col-sm-6 col-md-4 linkcolor"><!--Middle -->
 
-        <a href="{{ url_for('item.itemforsale', id=item.id) }}">
+        <a href="{{ url_for('item.item_for_sale', id=item.id) }}">
             <b>   {{ item.item_title |truncate(100) }} </b>
         </a><br>
 
@@ -120,7 +120,7 @@
                 </div><br>
             {% endif %}
         {% endif %}
-        <a href="{{ url_for('item.itemforsale', id=item.id) }}">
+        <a href="{{ url_for('item.item_for_sale', id=item.id) }}">
             <button type="button" class="btn btn-warning">View Item</button>
         </a><br>
 

@@ -1,7 +1,7 @@
 from app import db
 
 
-class PromotedItem(db.Model):
+class Promoted_Item(db.Model):
     __tablename__ = 'category'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

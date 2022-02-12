@@ -16,7 +16,7 @@
     <div id="trade_orderbox_title" class="linkcolor">
         <h4><a href="{{ url_for('digital.digitaltrade',id=order.item_id) }}" >{{ order.title }}</a></h4>
     </div>
- <div id="trade_orderbox_info" class="linkcolor"><b>Order id:</b> #<a href="{{ url_for('vendor.viewOrder', id=order.id) }}">{{ order.id }}</a></div>
+ <div id="trade_orderbox_info" class="linkcolor"><b>Order id:</b> #<a href="{{ url_for('vendor.vendor_orders_view_specific', id=order.id) }}">{{ order.id }}</a></div>
         <div id="trade_orderbox_info"><b>Trade type:</b>
             {% if order.type == 1 %}
                 Physical Item

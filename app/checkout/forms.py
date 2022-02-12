@@ -3,8 +3,9 @@ from wtforms import SubmitField, TextAreaField, StringField
 from wtforms.validators import Regexp, Length, DataRequired, optional
 from wtforms_sqlalchemy.fields import QuerySelectField
 from app.auth.validation import general
-from app.classes.models import Query_Currencylist
+from app.classes.models import Query_CurrencyList
 from app.auth.validation import usernames
+
 
 class shoppingcartForm(FlaskForm):
 
@@ -12,7 +13,7 @@ class shoppingcartForm(FlaskForm):
     update = SubmitField()
     delete = SubmitField()
     gotocheckout = SubmitField()
-    currency_selection = QuerySelectField(query_factory=lambda: Query_Currencylist.query.all(),
+    currency_selection = QuerySelectField(query_factory=lambda: Query_CurrencyList.query.all(),
                                           get_label='text',
                                           validators=[DataRequired(message='Currency is required')])
 

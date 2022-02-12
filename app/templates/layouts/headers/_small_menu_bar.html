@@ -5,19 +5,19 @@
     <div class="col-12 linkcolor">
         <ul>
             <li>
-                <a href="{{ url_for('service.customerserviceHome') }}">
+                <a href="{{ url_for('customerservice.customerserviceHome') }}">
                     Customer Service
                 </a>
             </li>
             <li>
                 {% if allmsgcount >= 1 %}
                 <div class="linkcolororange">
-                    <a href="{{ url_for('message.messagecenter') }}">
+                    <a href="{{ url_for('message.message_center') }}">
                         Messages({{ allmsgcount }})
                     </a>
                 </div>
                 {% else %}
-                <a href="{{ url_for('message.messagecenter') }}">
+                <a href="{{ url_for('message.message_center') }}">
                     Messages
                 </a>
                 {% endif %}
@@ -25,26 +25,26 @@
             <li>
                 {% if current_user.is_authenticated %}
                 {% if current_user.vendor_account == 0 %}
-                <a href="{{ url_for('vendor.becomevendor') }}">
+                <a href="{{ url_for('vendor.vendor_become_vendor') }}">
                     Post Item
                 </a>
                 {% else %}
-                <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
+                <a href="{{ url_for('vendor.vendor_become_vendor') }}">Post Item</a>
                 {% endif %}
                 {% else %}
-                <a href="{{ url_for('vendor.becomevendor') }}">Post Item</a>
+                <a href="{{ url_for('vendor.vendor_become_vendor') }}">Post Item</a>
                 {% endif %}
             </li>
             <li>
                 My Wallets
             </li>
             <li>
-                <a href="{{ url_for('orders.ordershome', username=current_user.username) }}">
+                <a href="{{ url_for('orders.orders_home', username=current_user.username) }}">
                     Orders
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('checkout.shoppingcart') }}">
+                <a href="{{ url_for('checkout.checkout_shopping_cart') }}">
                     {{ tot }} items
                 </a>
             </li>

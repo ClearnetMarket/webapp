@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField, TextAreaField, SelectField
+from wtforms import StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length, Regexp
 from app.common.query import feedbacklist
-from app.classes.service import customerserviceitem
+from app.classes.service import Service_CustomerServiceItem
 from wtforms_sqlalchemy.fields import QuerySelectField
 from flask import flash
 from app.auth.validation import general
@@ -13,8 +13,10 @@ class issuewithItem(FlaskForm):
                                           Regexp(general),
                                           Length(1, 250)
                                           ])
-    subject = QuerySelectField(query_factory=lambda: customerserviceitem.query.all(), get_label='issue')
+    subject = QuerySelectField(
+        query_factory=lambda: Service_CustomerServiceItem.query.all(), get_label='issue')
     submit = SubmitField()
+
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
 
@@ -64,11 +66,11 @@ class adminhelpserviceform(FlaskForm):
 
 
 class Feedback(FlaskForm):
-    type = SelectField('Feedback Type',choices=feedbacklist(),
+    type = SelectField('Feedback Type', choices=feedbacklist(),
                        validators=[DataRequired()])
     message2 = TextAreaField('Message', validators=[DataRequired(),
                                                     Regexp(general),
-                                                    Length(1, 150),])
+                                                    Length(1, 150), ])
 
     recaptchaanswer = StringField(validators=[DataRequired()])
 
@@ -78,7 +80,7 @@ class Feedback(FlaskForm):
         FlaskForm.__init__(self, *args, **kwargs)
 
     def validate(self, *args, **kwargs):
-        if 1 < len(self.message2.data)  <= 2500:
+        if 1 < len(self.message2.data) <= 2500:
             return True
         else:
             flash("Message needed")
@@ -87,9 +89,9 @@ class Feedback(FlaskForm):
 
 class sendmessageForm(FlaskForm):
     body1 = TextAreaField(validators=[DataRequired(message='Body is Required'),
-                                     Length(1, 2500),
-                                     Regexp(general)
-                                     ])
+                                      Length(1, 2500),
+                                      Regexp(general)
+                                      ])
 
     recaptchaanswer = StringField('', validators=[
         DataRequired()])

@@ -9,7 +9,7 @@ from wtforms import\
 from wtforms.validators import DataRequired, Length
 from wtforms_sqlalchemy.fields import QuerySelectField
 from app.common.query import achievementcategory, achievementvalue, admin_role
-from app.classes.models import Query_shard
+from app.classes.models import Query_Shard
 
 
 class changeUserForm(FlaskForm):
@@ -31,7 +31,7 @@ class changeUserForm(FlaskForm):
 
     # both
     difftradingpartners = IntegerField()
-    changeuser = SubmitField('')
+    change_user = SubmitField('')
 
 
 class changeitemForm(FlaskForm):
@@ -73,7 +73,7 @@ class addupdateform(FlaskForm):
     submit = SubmitField('')
 
 
-class addachievement(FlaskForm):
+class add_achievement(FlaskForm):
     achid = StringField()
 
     title = StringField(validators=[
@@ -139,7 +139,7 @@ class Userform(FlaskForm):
     lockwallet = SubmitField()
     unlockwallet = SubmitField()
     selectshard = QuerySelectField(
-        query_factory=lambda: Query_shard.query.all(), get_label='text')
+        query_factory=lambda: Query_Shard.query.all(), get_label='text')
     selectshardsubmit = SubmitField()
 
 

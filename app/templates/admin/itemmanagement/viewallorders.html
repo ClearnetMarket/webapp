@@ -31,12 +31,12 @@
             {% for order in ordernew %}
                 <tr>
                     <td class="col-1 linkcolor">
-                        <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+                        <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >
                             {{ order.id }}
                         </a>
                     </td>
                     <td class="hidden-xs col-sm-1 linkcolor">
-                        <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                        <a href="{{ url_for('profile.profile_user',username=order.customer) }}" >
                             {{ order.customer }}
                             ({{ order.customer_id|userrating }})
                             ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
@@ -44,7 +44,7 @@
                     </td>
 
                     <td class="hidden-xs hidden-sm col-md-1 linkcolor">
-                        <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">{{ order.title }}</a>
+                        <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}">{{ order.title }}</a>
                     </td>
                     <td class="col-1 linkcolor" >
                         {{ order.quantity }}
@@ -60,8 +60,8 @@
                     </td>
 
                     <td class="col-1 btnwhite">
-                        <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject',id=order.id) }}" role="button">Reject</a>
-                        <a class="btn btn-primary" href="{{ url_for('vendor.vendorOrders_accept',id=order.id) }}" role="button">Accept</a>
+                        <a class="btn btn-danger" href="{{ url_for('vendor.vendor_orders_reject',id=order.id) }}" role="button">Reject</a>
+                        <a class="btn btn-primary" href="{{ url_for('vendor.vendor_orders_accept',id=order.id) }}" role="button">Accept</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -116,12 +116,12 @@
                 {% if order.request_cancel == 0 %}
                     <tr>
                         <td class="col-1 linkcolor">
-                            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+                            <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >
                                 {{ order.id }}
                             </a>
                         </td>
                         <td class="hidden-xs col-sm-2 linkcolor">
-                            <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                            <a href="{{ url_for('profile.profile_user',username=order.customer) }}" >
                                 {{ order.customer }}
                                 ({{ order.customer_id|userrating }})
                                 ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
@@ -129,7 +129,7 @@
                         </td>
 
                         <td class="col-md-4 linkcolor">
-                            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a>
+                            <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >{{ order.title }}</a>
                         </td>
 
                         <td class="hidden-xs col-sm-1 linkcolor">
@@ -151,9 +151,9 @@
 
                         <td class="col-1 btnwhite">
                             <div id="tablebuttons">
-                                <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject',id=order.id) }}" role="button">Reject</a><br>
-                                <a class="btn btn-primary" href="{{ url_for('vendor.vendorOrders_send',id=order.id) }}" role="button">Mark as Sent</a><br>
-                                <a class="btn btn-success" href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add Tracking</a><br>
+                                <a class="btn btn-danger" href="{{ url_for('vendor.vendor_orders_reject',id=order.id) }}" role="button">Reject</a><br>
+                                <a class="btn btn-primary" href="{{ url_for('vendor.vendor_orders_send',id=order.id) }}" role="button">Mark as Sent</a><br>
+                                <a class="btn btn-success" href="{{ url_for('vendor.vendor_orders_add_tracking',id=order.id) }}" role="button">Add Tracking</a><br>
                             </div>
                         </td>
                     </tr>
@@ -161,26 +161,26 @@
                     <tr class="bg-danger">
                         <td class="col-1 linkcolor">{{ order.id }}</td>
                         <td class="col-1 linkcolor">
-                            <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                            <a href="{{ url_for('profile.profile_user',username=order.customer) }}" >
                                 {{ order.customer }}
                                 ({{ order.customer_id|userrating }})
                                 ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
                             </a>
                         </td>
-                        <td class="col-1 linkcolor"><a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a></td>
+                        <td class="col-1 linkcolor"><a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >{{ order.title }}</a></td>
                         <td class="col-1 linkcolor">{{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}</td>
                         <td class="col-1 linkcolor">
                             {{ order.quantity }}
                         </td>
                         <td class="col-1 linkcolor">{{ order.price|formatbtctostring }} BTC</td>
                         <td class="col-1 linkcolor"><b>Customer wants <br>to cancel<br>
-                            <a href="{{ url_for('vendor.vendorOrders_reasonforcancel',id=order.id) }}">Reason why</a></b>
+                            <a href="{{ url_for('vendor.vendor_orders_reason_for_cancel',id=order.id) }}">Reason why</a></b>
                         </td>
                         <td class="col-1 bg-danger" >
                             <div id="tablebuttons">
-                                <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_reject',id=order.id) }}" role="button">Reject</a><br>
-                                <a class="btn btn-primary" href="{{ url_for('vendor.vendorOrders_send',id=order.id) }}" role="button">Mark as Sent</a><br>
-                                <a class="btn btn-success" href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add Tracking</a>
+                                <a class="btn btn-danger" href="{{ url_for('vendor.vendor_orders_reject',id=order.id) }}" role="button">Reject</a><br>
+                                <a class="btn btn-primary" href="{{ url_for('vendor.vendor_orders_send',id=order.id) }}" role="button">Mark as Sent</a><br>
+                                <a class="btn btn-success" href="{{ url_for('vendor.vendor_orders_add_tracking',id=order.id) }}" role="button">Add Tracking</a>
                             </div>
                         </td>
                     </tr>
@@ -241,19 +241,19 @@
                 {% if order.request_return == 0 %}
                     <tr>
                         <td class="col-1 linkcolor">
-                            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+                            <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >
                                 {{ order.id }}
                             </a>
                         </td>
                         <td class="hidden-xs col-sm-2 linkcolor">
-                            <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                            <a href="{{ url_for('profile.profile_user',username=order.customer) }}" >
                                 {{ order.customer }}
                                 ({{order.customer_id|userrating }})
                                 ({{ order.customer_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)
                             </a>
                         </td>
                         <td class="hidden-xs hidden-sm col-md-2 linkcolor">
-                            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a>
+                            <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >{{ order.title }}</a>
                         </td>
                         <td class="hidden-xs col-sm-1 linkcolor">
                             {{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}
@@ -266,8 +266,8 @@
                         </td>
                         <td class="col-1 btnwhite">
 
-                            <a class="btn btn-danger" href="{{ url_for('vendor.vendorOrders_cancelandrefund',id=order.id) }}" role="button">Cancel and Refund</a>
-                            <a class="btn btn-success" href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add/Edit Tracking</a>
+                            <a class="btn btn-danger" href="{{ url_for('vendor.vendor_orders_cancel_and_refund',id=order.id) }}" role="button">Cancel and Refund</a>
+                            <a class="btn btn-success" href="{{ url_for('vendor.vendor_orders_add_tracking',id=order.id) }}" role="button">Add/Edit Tracking</a>
 
                         </td>
                     </tr>
@@ -278,7 +278,7 @@
                             {{ order.id }}
                         </td>
                         <td class="linkcolor hidden-xs col-sm-2">
-                            <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                            <a href="{{ url_for('profile.profile_user',username=order.customer) }}" >
                                 {{ order.customer }}
                                 ({{ order.customer_id|userrating }})
                                 ({{ order.customer_id|avguserrating }}
@@ -286,7 +286,7 @@
                             </a>
                         </td>
                         <td class=" linkcolor hidden-xs hidden-sm col-md-2">
-                            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >{{ order.title }}</a>
+                            <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >{{ order.title }}</a>
                         </td>
                         <td class=" linkcolor hidden-xs col-sm-1">
                             {{ moment(timestamp=order.age, local=False).fromNow(refresh=True)  }}
@@ -298,18 +298,18 @@
                             <td class=" linkcolor col-3"><b>Customer is returning item<br>
                                 {% else %}
                             <td class="linkcolor col-3"><b>Customer wants <br>to cancel<br>
-                                <a href="{{ url_for('vendor.vendorOrders_reasonforcancel',id=order.id) }}">Reason why</a></b>
+                                <a href="{{ url_for('vendor.vendor_orders_reason_for_cancel',id=order.id) }}">Reason why</a></b>
                             </td>
                         {% endif %}
 
                         <td class=" col-1 linkcolor">
                             {% if order.request_return == 0 %}
-                                <a href="{{ url_for('vendor.vendorOrders_addtracking',id=order.id) }}" role="button">Add/Edit Tracking</a>
+                                <a href="{{ url_for('vendor.vendor_orders_add_tracking',id=order.id) }}" role="button">Add/Edit Tracking</a>
                             {% elif order.request_return == 1 %}
-                                <a  href="{{ url_for('vendor.addtempaddress', id=order.id) }}" role="button">Return Address Needed</a>
+                                <a  href="{{ url_for('vendor.vendor_add_temp_address', id=order.id) }}" role="button">Return Address Needed</a>
                             {% elif order.request_return == 2 %}
                             {% elif order.request_return == 3 %}
-                                <a  href="{{ url_for('vendor.vendorOrders_recievereturn',id=order.id) }}" role="button">Recieved Return</a>
+                                <a  href="{{ url_for('vendor.vendor_returns_orders_recieve',id=order.id) }}" role="button">Recieved Return</a>
                             {% else %}
 
                             {% endif %}
@@ -364,12 +364,12 @@
             {% for order in completed %}
                 <tr>
                     <td class="col-1 linkcolor">
-                        <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+                        <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >
                             {{ order.id }}
                         </a>
                     </td>
                     <td class="col-2 linkcolor">
-                        <a href="{{ url_for('profile.user',username=order.customer) }}" >
+                        <a href="{{ url_for('profile.profile_user',username=order.customer) }}" >
                             {{ order.customer }}
                             ({{order.customer_id|userrating }})
                             ({{ order.customer_id|avguserrating }}
@@ -378,7 +378,7 @@
                         </a>
                     </td>
                     <td class="hidden-xs hidden-sm col-md-2 linkcolor">
-                        <a href="{{ url_for('vendor.viewOrder',id=order.id) }}" >
+                        <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}" >
                             {{ order.title }}
                         </a>
                     </td>
@@ -391,7 +391,7 @@
 
                     <td class="col-3 btnwhite">
                         {% if order.userfeedback == 0 %}
-                            <a class="btn btn-primary" href="{{ url_for('vendor.vendorOrders_leavereviewforuser',id=order.id) }}"
+                            <a class="btn btn-primary" href="{{ url_for('vendor.vendor_orders_leave_review_for_user',id=order.id) }}"
                                role="button">Leave User Review
                             </a>
                         {% endif %}

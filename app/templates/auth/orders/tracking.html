@@ -4,14 +4,14 @@
 
     <ol class="breadcrumb linkcolor">
         <li><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="{{ url_for('orders.ordershome') }}">Orders</a></li>
+        <li><a href="{{ url_for('orders.orders_home') }}">Orders</a></li>
     </ol>
     <div class="row">
         <div class="col-12 col-sm-4 border linkcolor" style="padding-bottom: 10px;"><!--left side -->
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-10">
-                    <a  href="{{ url_for('item.itemforsale', id=order.item_id) }}">
+                    <a  href="{{ url_for('item.item_for_sale', id=order.item_id) }}">
                         <h3>{{ order.title}}</h3>
                     </a>
                 </div>
@@ -30,7 +30,7 @@
             <hr style="color: black; width:90%; margin-left: 0px;">
 
             <b>Vendor:</b>
-            <a href="{{ url_for('profile.user',username=order.vendor) }}" >
+            <a href="{{ url_for('profile.profile_user',username=order.vendor) }}" >
                 {{ order.vendor }}
                 ({{ order.vendor_id|avgvendorrating }}
                 <img src="{{ url_for('static', filename='/images/stars/1s.png') }}"

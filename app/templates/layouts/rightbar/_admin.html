@@ -1,5 +1,5 @@
 {% if user.admin == 1 %}
     <div class="col-12 pt-5 pb-5 bg-danger">
-        <a href="{{ url_for('admin.adminHome', username=user.username) }}" role="button">Admin Home</a>
+        <a href="{{ url_for('admin.admin_home', username=user.username) }}" role="button">Admin Home</a>
     </div>
 {% endif %}

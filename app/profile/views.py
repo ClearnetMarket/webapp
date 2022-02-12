@@ -3,32 +3,19 @@ from flask_login import current_user
 from app.profile import profile
 from app import db
 # models
-from app.classes.auth import User
+from app.classes.auth import Auth_User
 from app.classes.achievements import \
-    UserAchievements, \
-    whichAch, \
-    UserAchievements_recent
-
-from app.classes.item import \
-    marketitem
-
+    Achievements_UserAchievementsRecent
+from app.classes.item import Item_MarketItem
 from app.classes.profile import \
-    Userreviews, \
-    exptable, \
-    StatisticsUser, \
-    StatisticsVendor
+    Profile_Userreviews, \
+    Profile_StatisticsUser, \
+    Profile_StatisticsVendor
 
-from app.classes.userdata import \
-    Feedback
+from app.classes.userdata import User_DataFeedback
 
-
-from app.classes.wallet_bch import \
-    BchWallet
-
-from datetime import \
-    datetime
-from app.common.functions import \
-    floating_decimals
+from datetime import  datetime
+from app.common.functions import floating_decimals
 
 from flask_paginate import Pagination, get_page_args
 from sqlalchemy.sql import func
@@ -38,11 +25,11 @@ from app.common.decorators import website_offline
 
 @profile.route('/<string:username>', methods=['GET', 'POST'])
 @website_offline
-def frontpage(username):
+def profile_frontpage(username):
     now = datetime.utcnow()
 
     if username != 'Guest':
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(Auth_User).filter_by(username=username).first()
         if user:
             user1, \
                 user1pictureid, \
@@ -63,9 +50,9 @@ def frontpage(username):
                 user2 = profilebar(user_id1=user.id, user_id2=0)
 
             user_recent_ach = db.session\
-                .query(UserAchievements_recent) \
+                .query(Achievements_UserAchievementsRecent) \
                 .filter_by(user_id=user.id) \
-                .order_by(UserAchievements_recent.achievement_date.desc()) \
+                .order_by(Achievements_UserAchievementsRecent.achievement_date.desc()) \
                 .limit(10)
 
             return render_template('profile/overview.html',
@@ -91,7 +78,7 @@ def frontpage(username):
 
 @profile.route('/c/<string:username>', methods=['GET'])
 @website_offline
-def user(username):
+def profile_user(username):
     page, per_page, offset = get_page_args()
     # PEr Page tells how many search results pages
     inner_window = 5  # search bar at bottom used for .. lots of pages
@@ -99,7 +86,7 @@ def user(username):
     per_page = 20
     now = datetime.utcnow()
 
-    user = db.session.query(User).filter_by(username=username).first()
+    user = db.session.query(Auth_User).filter_by(username=username).first()
     if current_user.is_authenticated:
         user1, \
             user1pictureid, \
@@ -120,14 +107,14 @@ def user(username):
             user2 = profilebar(user_id1=user.id, user_id2=0)
 
         user_recent_ach = db.session\
-            .query(UserAchievements_recent) \
+            .query(Achievements_UserAchievementsRecent) \
             .filter_by(user_id=user.id) \
-            .order_by(UserAchievements_recent.achievement_date.desc()) \
+            .order_by(Achievements_UserAchievementsRecent.achievement_date.desc()) \
             .limit(10)
 
         # stats
         stats = db.session\
-            .query(StatisticsUser)\
+            .query(Profile_StatisticsUser)\
             .filter_by(username=user.username)\
             .first()
 
@@ -135,9 +122,9 @@ def user(username):
 
         # User reviews
         getratings = db.session\
-            .query(Userreviews)\
-            .filter(Userreviews.customer == user.username)\
-            .order_by(Userreviews.dateofreview.desc())
+            .query(Profile_Userreviews)\
+            .filter(Profile_Userreviews.customer == user.username)\
+            .order_by(Profile_Userreviews.dateofreview.desc())
 
         usercount = getratings.count()
         userreview = getratings.limit(per_page).offset(offset)
@@ -176,10 +163,10 @@ def user(username):
 
 @profile.route('/v/<string:username>', methods=['GET', 'POST'])
 @website_offline
-def vendorprofile(username):
+def profile_vendor(username):
     now = datetime.utcnow()
     # vendor
-    user = db.session.query(User).filter_by(username=username).first()
+    user = db.session.query(Auth_User).filter_by(username=username).first()
     if user:
         if user.vendor_account == 1:
             search = False
@@ -195,7 +182,7 @@ def vendorprofile(username):
 
             # vendorwallet = db.session.query(BtcWallet).filter_by(user_id=vendor.id).first()
             vendorstats = db.session\
-                .query(StatisticsVendor)\
+                .query(Profile_StatisticsVendor)\
                 .filter_by(vendorid=user.id)\
                 .first()
 
@@ -218,9 +205,9 @@ def vendorprofile(username):
                 user2 = profilebar(user_id1=user.id, user_id2=0)
 
             user_recent_ach = db.session\
-                .query(UserAchievements_recent) \
+                .query(Achievements_UserAchievementsRecent) \
                 .filter_by(user_id=user.id) \
-                .order_by(UserAchievements_recent.achievement_date.desc()) \
+                .order_by(Achievements_UserAchievementsRecent.achievement_date.desc()) \
                 .limit(10)
 
             # GEt started time
@@ -228,9 +215,9 @@ def vendorprofile(username):
             started = vendorstats.startedselling.strftime("%m/%d/%y")
 
             ratingsall = db.session\
-                .query(Feedback)\
+                .query(User_DataFeedback)\
                 .filter_by(vendorid=user.id)\
-                .order_by(Feedback.timestamp.desc())
+                .order_by(User_DataFeedback.timestamp.desc())
             ratingscount = ratingsall.count()
             ratings = ratingsall.limit(per_page).offset(offset)
 
@@ -245,15 +232,17 @@ def vendorprofile(username):
                                                 outer_window=outer_window)
 
             getavgitem = db.session.query(
-                func.avg(Feedback.item_rating).label("avgitem"))
-            getavgitem = getavgitem.filter(Feedback.vendorid == user.id)
+                func.avg(User_DataFeedback.item_rating).label("avgitem"))
+            getavgitem = getavgitem.filter(
+                User_DataFeedback.vendorid == user.id)
             gitem = getavgitem.all()
             itemscore = str((gitem[0][0]))[:4]
             if itemscore == 'None':
                 itemscore = 0
             getavgvendor = db.session.query(
-                func.avg(Feedback.vendorrating).label("avgvendor"))
-            getavgvendor = getavgvendor.filter(Feedback.vendorid == user.id)
+                func.avg(User_DataFeedback.vendorrating).label("avgvendor"))
+            getavgvendor = getavgvendor.filter(
+                User_DataFeedback.vendorid == user.id)
             gvendor = getavgvendor.all()
             vendorscore = str((gvendor[0][0]))[:4]
             if vendorscore == 'None':
@@ -281,7 +270,7 @@ def vendorprofile(username):
                                    )
         else:
             flash("This user isnt a vendor", category="danger")
-            return redirect(url_for('profile.frontpage', username=user.username))
+            return redirect(url_for('profile.profile_frontpage', username=user.username))
     else:
         flash("This user doesnt exist", category="danger")
         return redirect(url_for('index'))
@@ -289,10 +278,10 @@ def vendorprofile(username):
 
 @profile.route('/store/<username>', methods=['GET', 'POST'])
 @website_offline
-def vendorStore(username):
+def profile_vendor_store(username):
     now = datetime.utcnow()
     # vendor
-    user = db.session.query(User).filter_by(username=username).first()
+    user = db.session.query(Auth_User).filter_by(username=username).first()
     if user:
         if user.vendor_account == 1:
             user1, \
@@ -315,37 +304,37 @@ def vendorStore(username):
 
             # get users top market items
             getitems = db.session\
-                .query(marketitem) \
-                .filter(marketitem.vendor_id == user.id, marketitem.online == 1) \
-                .order_by(marketitem.total_sold.desc()) \
+                .query(Item_MarketItem) \
+                .filter(Item_MarketItem.vendor_id == user.id, Item_MarketItem.online == 1) \
+                .order_by(Item_MarketItem.total_sold.desc()) \
                 .limit(3)
 
             # get users newest market items
             getnewitems = db.session\
-                .query(marketitem) \
-                .filter(marketitem.vendor_id == user.id, marketitem.online == 1) \
-                .order_by(marketitem.created.desc()) \
+                .query(Item_MarketItem) \
+                .filter(Item_MarketItem.vendor_id == user.id, Item_MarketItem.online == 1) \
+                .order_by(Item_MarketItem.created.desc()) \
                 .limit(3)
             getitemscount = db.session\
-                .query(marketitem)\
-                .filter(marketitem.vendor_id == user.id)\
+                .query(Item_MarketItem)\
+                .filter(Item_MarketItem.vendor_id == user.id)\
                 .count()
 
             # # Get user Store
             # # market item queries
-            # # join subcategories for the marketitem
-            # allcategory = db.session.query(func.count(marketitem.category_id_0).label("catcount"),
-            #                                Cats.catname0,
-            #                                Cats.id,
-            #                                Cats.id.label("itemnumber"))
-            # allcategory = allcategory.join(Cats.catid0)
-            # allcategory = allcategory.filter(marketitem.subcategory == Cats.id)
-            # allcategory = allcategory.filter(marketitem.vendor_id == vendor.id)
-            # allcategory = allcategory.filter(marketitem.online == 1)
-            # allcategory = allcategory.group_by(Cats.catname0, Cats.id)
+            # # join subcategories for the Item_MarketItem
+            # allcategory = db.session.query(func.count(Item_MarketItem.category_id_0).label("catcount"),
+            #                                CategoryCats.catname0,
+            #                                CategoryCats.id,
+            #                                CategoryCats.id.label("itemnumber"))
+            # allcategory = allcategory.join(CategoryCats.catid0)
+            # allcategory = allcategory.filter(Item_MarketItem.subcategory == CategoryCats.id)
+            # allcategory = allcategory.filter(Item_MarketItem.vendor_id == vendor.id)
+            # allcategory = allcategory.filter(Item_MarketItem.online == 1)
+            # allcategory = allcategory.group_by(CategoryCats.catname0, CategoryCats.id)
             # allcat = allcategory.all()
 
-            return render_template('/profile/vendorstore/storeHomepage.html',
+            return render_template('/profile/profile_vendor_store/storeHomepage.html',
                                    now=now,
                                    getitems=getitems,
                                    getnewitems=getnewitems,
@@ -362,7 +351,7 @@ def vendorStore(username):
                                    )
         else:
             flash("This user isnt a vendor", category="danger")
-            return redirect(url_for('profile.frontpage', username=user.username))
+            return redirect(url_for('profile.profile_frontpage', username=user.username))
     else:
         flash("This user doesnt exist", category="danger")
         return redirect(url_for('index'))

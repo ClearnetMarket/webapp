@@ -128,7 +128,7 @@ current_user.is_authenticated %} {% if current_user.vendor_account ==1 %}
     <td class="hidden-sm hidden-xs col-md-2">
       <a
         class="btn btn-primary"
-        href="{{ url_for('vendor.vendorviewspecificfeedback',id=rate.id) }}"
+        href="{{ url_for('vendor.vendor_feddback_view_specific',id=rate.id) }}"
         role="button"
         >View Feedback</a
       >

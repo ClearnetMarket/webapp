@@ -1,5 +1,5 @@
 from app import db
-from app.classes.achievements import UserAchievements, UserAchievements_recent
+from app.classes.achievements import Achievements_UserAchievements, Achievements_UserAchievementsRecent
 from datetime import datetime
 
 
@@ -7,7 +7,7 @@ from datetime import datetime
 # id=20
 def firstpurchase(user_id):
     usera = db.session \
-        .query(UserAchievements) \
+        .query(Achievements_UserAchievements) \
         .filter_by(user_id=user_id) \
         .first()
     now = datetime.utcnow()
@@ -16,7 +16,7 @@ def firstpurchase(user_id):
         usera.c2_date = now
         db.session.add(usera)
         db.session.commit()
-        addit = UserAchievements_recent(
+        addit = Achievements_UserAchievementsRecent(
             user_id=usera.user_id,
             username=usera.username,
             ach_id=20,
@@ -34,14 +34,14 @@ def firstpurchase(user_id):
 
 def firsttrade_customer(user_id):
     usera = db.session \
-        .query(UserAchievements) \
+        .query(Achievements_UserAchievements) \
         .filter_by(user_id=user_id) \
         .first()
     now = datetime.utcnow()
     if usera.c3 != 1:
         usera.c3 = 1
         usera.c3_date = now
-        addit = UserAchievements_recent(
+        addit = Achievements_UserAchievementsRecent(
             user_id=usera.user_id,
             username=usera.username,
             ach_id=19,
@@ -58,7 +58,7 @@ def firsttrade_customer(user_id):
 # customer awards
 # id=32-35
 def howmanytrades_customer(user_id, number):
-    usera = db.session.query(UserAchievements).filter_by(
+    usera = db.session.query(Achievements_UserAchievements).filter_by(
         user_id=user_id).first()
     now = datetime.utcnow()
     if number >= 10:
@@ -66,7 +66,7 @@ def howmanytrades_customer(user_id, number):
         if usera.c9 != 1:
             usera.c9 = 1
             usera.c9_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=32,
@@ -85,7 +85,7 @@ def howmanytrades_customer(user_id, number):
         if usera.c10 != 1:
             usera.c10 = 1
             usera.c10_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=33,
@@ -104,7 +104,7 @@ def howmanytrades_customer(user_id, number):
         if usera.c11 != 1:
             usera.c11 = 1
             usera.c11_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=34,
@@ -123,7 +123,7 @@ def howmanytrades_customer(user_id, number):
         if usera.c12 != 1:
             usera.c12 = 1
             usera.c12_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=34,
@@ -143,7 +143,7 @@ def howmanytrades_customer(user_id, number):
 
 
 def howmanyitemsbought_customer(user_id, number):
-    usera = db.session.query(UserAchievements).filter_by(
+    usera = db.session.query(Achievements_UserAchievements).filter_by(
         user_id=user_id).first()
     now = datetime.utcnow()
     if number >= 10:
@@ -151,7 +151,7 @@ def howmanyitemsbought_customer(user_id, number):
         if usera.c4 != 1:
             usera.c4 = 1
             usera.c4_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=21,
@@ -170,7 +170,7 @@ def howmanyitemsbought_customer(user_id, number):
         if usera.c5 != 1:
             usera.c5 = 1
             usera.c5_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=22,
@@ -190,7 +190,7 @@ def howmanyitemsbought_customer(user_id, number):
         if usera.c6 != 1:
             usera.c6 = 1
             usera.c6_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=23,
@@ -210,7 +210,7 @@ def howmanyitemsbought_customer(user_id, number):
         if usera.c7 != 1:
             usera.c7 = 1
             usera.c7_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=24,
@@ -230,7 +230,7 @@ def howmanyitemsbought_customer(user_id, number):
         if usera.c8 != 1:
             usera.c8 = 1
             usera.c8_date = now
-            addit = UserAchievements_recent(
+            addit = Achievements_UserAchievementsRecent(
                 user_id=usera.user_id,
                 username=usera.username,
                 ach_id=25,

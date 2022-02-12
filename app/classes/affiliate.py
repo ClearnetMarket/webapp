@@ -2,7 +2,7 @@
 from app import db
 
 
-class Orders(db.Model):
+class Affiliate_Orders(db.Model):
     __tablename__ = 'orders'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", "extend_existing": True}
@@ -68,7 +68,7 @@ class Orders(db.Model):
     affiliate_discount_btc_cash = db.Column(db.DECIMAL(20, 8))
 
 
-class AffiliateOverview(db.Model):
+class Affiliate_Overview(db.Model):
     __tablename__ = 'affiliate_overview'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -91,7 +91,7 @@ class AffiliateOverview(db.Model):
     promocode = db.Column(db.TEXT)
 
 
-class AffiliateStats(db.Model):
+class Affiliate_Stats(db.Model):
     __tablename__ = 'affiliate_stats'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -114,7 +114,7 @@ class AffiliateStats(db.Model):
     promocode = db.Column(db.TEXT)
 
 
-class AffiliateId(db.Model):
+class Affiliate_Id(db.Model):
     __tablename__ = 'affiliate_ids'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

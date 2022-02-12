@@ -22,7 +22,7 @@ from app.vendorcreateitem.forms import \
 
 # models
 from app.classes.item import \
-    marketitem
+    Item_MarketItem
 from app.classes.wallet_bch import *
 
 # images
@@ -88,7 +88,7 @@ def create_item_info():
                 category_name_0 = ''
 
             # create image of item in database
-            item = marketitem(
+            item = Item_MarketItem(
                 string_node_id=1,
                 category_name_0=category_name_0,
                 category_id_0=cat0,
@@ -187,8 +187,8 @@ def create_item_images(itemid):
     form = CreateItemImages(CombinedMultiDict((request.files, request.form)))
 
     item = db.session \
-        .query(marketitem) \
-        .filter(marketitem.id == itemid, marketitem.vendor_id == current_user.id) \
+        .query(Item_MarketItem) \
+        .filter(Item_MarketItem.id == itemid, Item_MarketItem.vendor_id == current_user.id) \
         .first_or_404()
 
     if request.method == 'POST':
@@ -242,8 +242,8 @@ def create_item_description(itemid):
     form = CreateInfoDescription()
 
     item = db.session \
-        .query(marketitem) \
-        .filter(marketitem.id == itemid, marketitem.vendor_id == current_user.id) \
+        .query(Item_MarketItem) \
+        .filter(Item_MarketItem.id == itemid, Item_MarketItem.vendor_id == current_user.id) \
         .first_or_404()
     # item = 0 creating item       item = 1 editing item
 
@@ -288,8 +288,8 @@ def create_item_shipping(itemid):
         (request.files, request.form)))
 
     item = db.session \
-        .query(marketitem) \
-        .filter(marketitem.id == itemid, marketitem.vendor_id == current_user.id) \
+        .query(Item_MarketItem) \
+        .filter(Item_MarketItem.id == itemid, Item_MarketItem.vendor_id == current_user.id) \
         .first_or_404()
 
     if request.method == 'POST' and current_user.vendor_account == 1:
@@ -454,7 +454,7 @@ def create_item_shipping(itemid):
             db.session.commit()
 
             flash("Created New Item ", category="success")
-            return redirect(url_for('vendorcreate.itemsforSale', itemid=item.id))
+            return redirect(url_for('vendorcreate.vendorcreate_items_for_sale', itemid=item.id))
         else:
             flash(form.errors)
             return redirect(url_for('vendorcreateitem.create_item_shipping', itemid=item.id))

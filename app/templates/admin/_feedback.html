@@ -18,7 +18,7 @@
 
     <div id="comment_comment">{{ comment.comment }}</div>
     <div id="comment_buttons">
-        <a class="btn btn-danger btnwhite" href="{{ url_for('message.messagecenter_delete_comment',id=comment.id) }}"role="button">
+        <a class="btn btn-danger btnwhite" href="{{ url_for('message.message_delete_comment',id=comment.id) }}"role="button">
             Delete
         </a>
 

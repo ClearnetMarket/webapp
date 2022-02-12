@@ -2,7 +2,7 @@ from app import db
 from datetime import datetime
 
 
-class Notifications(db.Model):
+class Message_Notifications(db.Model):
     __tablename__ = 'notifications'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -16,7 +16,7 @@ class Notifications(db.Model):
     read = db.Column(db.INTEGER)
 
 
-class Chat(db.Model):
+class Message_Chat(db.Model):
     __tablename__ = 'chat'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -31,7 +31,7 @@ class Chat(db.Model):
     issueid = db.Column(db.INTEGER)
 
 
-class Post(db.Model):
+class Message_Post(db.Model):
     __tablename__ = 'post'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -40,7 +40,7 @@ class Post(db.Model):
                           default=datetime.utcnow())
 
 
-class PostUser(db.Model):
+class Message_PostUser(db.Model):
     __tablename__ = 'postuser'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -68,7 +68,7 @@ class PostUser(db.Model):
     username = db.Column(db.TEXT)
 
 
-class Comment(db.Model):
+class Message_Comment(db.Model):
     __tablename__ = 'comment'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

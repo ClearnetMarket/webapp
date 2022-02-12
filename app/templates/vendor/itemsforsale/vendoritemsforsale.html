@@ -26,7 +26,7 @@
 
 <div class="row">
     <div class="col-12 text-center mb-2">
-        <a class="btn btn-warning" href="{{ url_for('vendorcreate.tradeOptions', username=current_user.username) }}"
+        <a class="btn btn-warning" href="{{ url_for('vendorcreate.vendorcreate_sell_options', username=current_user.username) }}"
             role="button">Post an item</a>
     </div>
 </div>
@@ -44,10 +44,10 @@
             {{ render_field(form.submitcheckbox, class="btn btn-primary", value="Turn on/off Listings" ) }}
         </div>
         <div class="col-12 col-sm-4 text-right linkcolor">
-            <a href="{{ url_for('vendorcreate.ebayimporter') }}">Ebay Bulk Importer</a>
+            <a href="{{ url_for('vendorcreate.vendorcreate_ebay_importer') }}">Ebay Bulk Importer</a>
         </div>
         <div class="col-12 col-sm-3 text-right linkcolor">
-            <a href="{{ url_for('promote.promotehome') }}" role="button">Manage Promotions</a>
+            <a href="{{ url_for('promote.promote_home') }}" role="button">Manage Promotions</a>
         </div>
     </div>
 
@@ -83,7 +83,7 @@
                 {% endif %}
             </td>
             <td class="col-3 linkcolor">
-                <a href="{{ url_for('item.itemforsale',id=item.id) }}">
+                <a href="{{ url_for('item.item_for_sale',id=item.id) }}">
                     <div style="font-size: 20px">{{ item.item_title }}</div>
                 </a>
                 {% if item.online == 0 %}
@@ -148,19 +148,19 @@
 
             <td class="col-3 btnwhite">
                 <!-- edit -->
-                <a class="btn btn-primary btn-sm" href="{{ url_for('vendorcreate.edititem', id=item.id) }}"
+                <a class="btn btn-primary btn-sm" href="{{ url_for('vendorcreate.vendorcreate_edit_item', id=item.id) }}"
                     role="button">Edit</a>
                 <!-- clone -->
-                <a class="btn btn-primary btn-sm" href="{{ url_for('vendorcreate.cloneitem', id=item.id) }}"
+                <a class="btn btn-primary btn-sm" href="{{ url_for('vendorcreate.vendorcreate_clone_item', id=item.id) }}"
                     role="button">Clone</a>
                 <br />
                 <!-- delete -->
-                <a class="btn btn-danger btn-sm" href="{{ url_for('vendorcreate.deleteItem',id=item.id) }}"
+                <a class="btn btn-danger btn-sm" href="{{ url_for('vendorcreate.vendorcreate_delete_item',id=item.id) }}"
                     role="button">Delete</a>
                 <br />
                 <!-- Promote an Item -->
                 {% if item.ad_item == 0 %}
-                <a class="btn btn-success btn-sm" href="{{ url_for('promote.promoteitem',itemid=item.id) }}"
+                <a class="btn btn-success btn-sm" href="{{ url_for('promote.promote_item',itemid=item.id) }}"
                     role="button">
                     Promote
                 </a>

@@ -1,5 +1,5 @@
 from app import db
-from app.classes.achievements import UserAchievements, UserAchievements_recent
+from app.classes.achievements import Achievements_UserAchievements, Achievements_UserAchievementsRecent
 
 from datetime import datetime
 
@@ -7,13 +7,13 @@ from datetime import datetime
 
 
 def likemoneyinthebank(user_id):
-    usera = db.session.query(UserAchievements).filter_by(
+    usera = db.session.query(Achievements_UserAchievements).filter_by(
         user_id=user_id).first()
     now = datetime.utcnow()
     if usera.b1 != 1:
         usera.b1 = 1
         usera.b1_date = now
-        addit = UserAchievements_recent(
+        addit = Achievements_UserAchievementsRecent(
             user_id=usera.user_id,
             username=usera.username,
             ach_id=14,
@@ -30,13 +30,13 @@ def likemoneyinthebank(user_id):
 
 
 def withdrawl(user_id):
-    usera = db.session.query(UserAchievements).filter_by(
+    usera = db.session.query(Achievements_UserAchievements).filter_by(
         user_id=user_id).first()
     now = datetime.utcnow()
     if usera.b2 != 1:
         usera.b2 = 1
         usera.b2_date = now
-        addit = UserAchievements_recent(
+        addit = Achievements_UserAchievementsRecent(
             user_id=usera.user_id,
             username=usera.username,
             ach_id=18,

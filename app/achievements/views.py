@@ -12,20 +12,21 @@ from app.common.decorators import \
     website_offline, \
     login_required
 from app.common.functions import floating_decimals
-from app.classes.profile import exptable
+from app.classes.profile import Profile_Exptable
 # forms
 from app.auth.forms import achselectForm
 # models
-from app.classes.auth import User
+from app.classes.auth import Auth_User
 from app.classes.achievements import \
-    UserAchievements, \
-    whichAch, \
-    UserAchievements_recent, Achievements
+    Achievements_UserAchievements, \
+    Achievements_WhichAch, \
+    Achievements_UserAchievementsRecent, Achievements
 from app.classes.profile import \
-    StatisticsUser, \
-    StatisticsVendor
+    Profile_StatisticsUser, \
+    Profile_StatisticsVendor
 from app.classes.wallet_bch import \
-    BchWallet
+    Bch_Wallet
+
 
 def row2dict(row):
     d = {}
@@ -53,206 +54,206 @@ def row2dict(row):
     size = len(x)
     return x, size
 
+
 @achievements.route('/profile-achievements-all/<username>', methods=['GET'])
 @website_offline
 @login_required
 def profile_achs(username):
     if request.method == 'GET':
- 
-            user = db.session\
-                .query(User)\
-                .filter_by(username=username)\
-                .first()
-            title = user.username + "'s Achievements"
-            usergetlevel = db.session\
-                .query(UserAchievements)\
-                .filter_by(username=user.username)\
-                .first()
-            userpictureid = str(usergetlevel.level)
-            userwallet = db.session\
-                .query(BchWallet)\
-                .filter_by(user_id=user.id)\
-                .first()
-            userstats = db.session\
-                .query(StatisticsUser)\
-                .filter_by(username=user.username)\
-                .first()
-            level = db.session\
-                .query(UserAchievements)\
-                .first()
-            nextlevel = level.level + 1
-            userach = db.session\
-                .query(whichAch)\
-                .filter_by(user_id=user.id)\
-                .first()
-            user_recent_ach = db.session\
-                .query(UserAchievements_recent)\
-                .filter_by(user_id=user.id)\
-                .order_by(UserAchievements_recent.achievement_date.desc())\
-                .limit(10)
 
-            if 1 <= level.level <= 3:
-                user1widthh = (level.experiencepoints / 300) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 4 <= level.level <= 7:
-                user1widthh = (level.experiencepoints / 500) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 8 <= level.level <= 10:
-                user1widthh = (level.experiencepoints / 1000) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 11 <= level.level <= 14:
-                user1widthh = (level.experiencepoints / 1500) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 16 <= level.level <= 20:
-                user1widthh = (level.experiencepoints / 2000) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 21 <= level.level <= 25:
-                user1widthh = (level.experiencepoints / 2250) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 26 <= level.level <= 30:
-                user1widthh = (level.experiencepoints / 2500) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 26 <= level.level <= 30:
-                user1widthh = (level.experiencepoints / 3000) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 26 <= level.level <= 30:
-                user1widthh = (level.experiencepoints / 4000) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 30 <= level.level <= 50:
-                user1widthh = (level.experiencepoints / 5000) * 100
-                width = floating_decimals(user1widthh, 0)
-            elif 51 <= level.level <= 100:
-                user1widthh = (level.experiencepoints / 10000) * 100
-                width = floating_decimals(user1widthh, 0)
-            else:
-                user1widthh = (level.experiencepoints / 1000) * 100
-                width = floating_decimals(user1widthh, 0)
+        user = db.session\
+            .query(Auth_User)\
+            .filter_by(username=username)\
+            .first()
+        title = user.username + "'s Achievements"
+        usergetlevel = db.session\
+            .query(Achievements_UserAchievements)\
+            .filter_by(username=user.username)\
+            .first()
+        userpictureid = str(usergetlevel.level)
+        userwallet = db.session\
+            .query(Bch_Wallet)\
+            .filter_by(user_id=user.id)\
+            .first()
+        userstats = db.session\
+            .query(Profile_StatisticsUser)\
+            .filter_by(username=user.username)\
+            .first()
+        level = db.session\
+            .query(Achievements_UserAchievements)\
+            .first()
+        nextlevel = level.level + 1
+        userach = db.session\
+            .query(Achievements_WhichAch)\
+            .filter_by(user_id=user.id)\
+            .first()
+        user_recent_ach = db.session\
+            .query(Achievements_UserAchievementsRecent)\
+            .filter_by(user_id=user.id)\
+            .order_by(Achievements_UserAchievementsRecent.achievement_date.desc())\
+            .limit(10)
 
-            # getuser exp table
-            userexp = db.session\
-                .query(exptable)\
-                .filter(user.id == exptable.user_id)\
-                .order_by(exptable.timestamp.desc())
-            exp = userexp.limit(10)
-            expcount = userexp.count()
-            return render_template('/profile/userachievements/achievementsall.html',
-                                title=title,
-                                user=user,
-                                width=width,
-                                level=level,
-                                usergetlevel=usergetlevel,
-                                userpictureid=userpictureid,
-                                userwallet=userwallet,
-                                userstats=userstats,
-                                exp=exp, expcount=expcount,
-                                userach=userach,
-                                nextlevel=nextlevel,
-                                user_recent_ach=user_recent_ach
-                                )
+        if 1 <= level.level <= 3:
+            user1widthh = (level.experiencepoints / 300) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 4 <= level.level <= 7:
+            user1widthh = (level.experiencepoints / 500) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 8 <= level.level <= 10:
+            user1widthh = (level.experiencepoints / 1000) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 11 <= level.level <= 14:
+            user1widthh = (level.experiencepoints / 1500) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 16 <= level.level <= 20:
+            user1widthh = (level.experiencepoints / 2000) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 21 <= level.level <= 25:
+            user1widthh = (level.experiencepoints / 2250) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 26 <= level.level <= 30:
+            user1widthh = (level.experiencepoints / 2500) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 26 <= level.level <= 30:
+            user1widthh = (level.experiencepoints / 3000) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 26 <= level.level <= 30:
+            user1widthh = (level.experiencepoints / 4000) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 30 <= level.level <= 50:
+            user1widthh = (level.experiencepoints / 5000) * 100
+            width = floating_decimals(user1widthh, 0)
+        elif 51 <= level.level <= 100:
+            user1widthh = (level.experiencepoints / 10000) * 100
+            width = floating_decimals(user1widthh, 0)
+        else:
+            user1widthh = (level.experiencepoints / 1000) * 100
+            width = floating_decimals(user1widthh, 0)
+
+        # getuser exp table
+        userexp = db.session\
+            .query(Profile_Exptable)\
+            .filter(user.id == Profile_Exptable.user_id)\
+            .order_by(Profile_Exptable.timestamp.desc())
+        exp = userexp.limit(10)
+        expcount = userexp.count()
+        return render_template('/profile/userachievements/achievementsall.html',
+                               title=title,
+                               user=user,
+                               width=width,
+                               level=level,
+                               usergetlevel=usergetlevel,
+                               userpictureid=userpictureid,
+                               userwallet=userwallet,
+                               userstats=userstats,
+                               exp=exp, expcount=expcount,
+                               userach=userach,
+                               nextlevel=nextlevel,
+                               user_recent_ach=user_recent_ach
+                               )
+
 
 @achievements.route('/profile-achievements-coin/<username>', methods=['GET'])
 @website_offline
 def profile_achievements_coin(username):
     if request.method == 'GET':
 
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(Auth_User).filter_by(username=username).first()
         title = user.username + "'s Achievements"
 
         x, size = row2dict(row=db.session.query(
-            UserAchievements).filter_by(user_id=user.id).first())
+            Achievements_UserAchievements).filter_by(user_id=user.id).first())
 
         return render_template('/profile/userachievements/achievementscoin.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            user=user
-                            )
+                               x=x,
+                               size=size,
+                               title=title,
+                               user=user
+                               )
 
 
 @achievements.route('/profile-achievements-common/<username>', methods=['GET'])
 @website_offline
 def profile_achievements_common(username):
     if request.method == 'GET':
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(Auth_User).filter_by(username=username).first()
         title = user.username + "'s Achievements"
 
-
-        x, size = row2dict(row=db.session.query(UserAchievements).filter_by(user_id=user.id).first())
+        x, size = row2dict(row=db.session.query(
+            Achievements_UserAchievements).filter_by(user_id=user.id).first())
         return render_template('/profile/userachievements/achievementscommon.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            user=user
-                            )
+                               x=x,
+                               size=size,
+                               title=title,
+                               user=user
+                               )
 
 
 @achievements.route('/profile-achievements-experience/<username>', methods=['GET'])
 @website_offline
 def profile_achievements_experience(username):
     if request.method == 'GET':
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(Auth_User).filter_by(username=username).first()
         title = user.username + "'s Achievements"
 
         x, size = row2dict(row=db.session.query(
-            UserAchievements).filter_by(user_id=user.id).first())
+            Achievements_UserAchievements).filter_by(user_id=user.id).first())
         return render_template('/profile/userachievements/achievementsExperience.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            user=user
-                            )
+                               x=x,
+                               size=size,
+                               title=title,
+                               user=user
+                               )
 
 
 @achievements.route('/profile-auth-achievements-unique/<username>', methods=['GET'])
 @website_offline
 def profile_achievements_unique(username):
     if request.method == 'GET':
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(Auth_User).filter_by(username=username).first()
         title = user.username + "'s Achievements"
 
         x, size = row2dict(row=db.session.query(
-            UserAchievements).filter_by(user_id=user.id).first())
+            Achievements_UserAchievements).filter_by(user_id=user.id).first())
         return render_template('/profile/userachievements/achievementsunique.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            user=user
-                            )
+                               x=x,
+                               size=size,
+                               title=title,
+                               user=user
+                               )
 
 
 @achievements.route('/profile-achievements-customer/<username>', methods=['GET'])
 @website_offline
 def profile_achievements_customer(username):
     if request.method == 'GET':
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(Auth_User).filter_by(username=username).first()
         title = user.username + "'s Achievements"
 
-
-
         x, size = row2dict(row=db.session.query(
-            UserAchievements).filter_by(user_id=user.id).first())
+            Achievements_UserAchievements).filter_by(user_id=user.id).first())
         return render_template('/profile/userachievements/achievementscustomer.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            user=user
-                            )
+                               x=x,
+                               size=size,
+                               title=title,
+                               user=user
+                               )
 
 
 @achievements.route('/profile-achievements-vendor/<username>', methods=['GET'])
 @website_offline
 def profile_achievements_vendor(username):
     if request.method == 'GET':
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(Auth_User).filter_by(username=username).first()
         title = user.username + "'s Achievements"
         x, size = row2dict(row=db.session.query(
-            UserAchievements).filter_by(user_id=user.id).first())
+            Achievements_UserAchievements).filter_by(user_id=user.id).first())
         return render_template('/profile/userachievements/achievementsvendor.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            user=user
-                           )
+                               x=x,
+                               size=size,
+                               title=title,
+                               user=user
+                               )
 
 
 @achievements.route('/profile-allachievements', methods=['GET'])
@@ -264,37 +265,37 @@ def profile_allachievements_main_home():
             .order_by(Achievements.dateadded.desc())\
             .all()
         return render_template('/achievements/achievementsall.html',
-                            title=title,
-                            achievements=achievements,
-                            )
+                               title=title,
+                               achievements=achievements,
+                               )
 
 
 @achievements.route('/profile-achievementscommon', methods=['GET'])
 def profile_achievements_common_home():
-    if request.method == 'GET':    
+    if request.method == 'GET':
         title = "Common Achievements"
         achievements = db.session\
             .query(Achievements)\
             .filter_by(category=1)\
             .all()
         return render_template('/achievements/achievementscommon.html',
-                            title=title,
-                            achievements=achievements,
-                            )
+                               title=title,
+                               achievements=achievements,
+                               )
 
 
 @achievements.route('/profile-achievementsExperience', methods=['GET'])
 def profile_achievements_experience_home():
-    if request.method == 'GET':    
+    if request.method == 'GET':
         title = "Experience Achievements"
         achievements = db.session\
             .query(Achievements)\
             .filter_by(category=2)\
             .all()
         return render_template('/achievements/achievementsExperience.html',
-                            title=title,
-                            achievements=achievements,
-                            )
+                               title=title,
+                               achievements=achievements,
+                               )
 
 
 @achievements.route('/all-achievementsCustmer', methods=['GET'])
@@ -306,54 +307,54 @@ def achievements_customer_home():
             .filter_by(category=3)\
             .all()
         return render_template('/achievements/achievementscustomer.html',
-                            title=title,
-                            achievements=achievements,
-                            )
+                               title=title,
+                               achievements=achievements,
+                               )
 
 
 @achievements.route('/all-achievementsVendor', methods=['GET'])
 def achievements_vendor_home():
     if request.method == 'GET':
-    
+
         title = "Vendor Achievements"
         achievements = db.session\
             .query(Achievements)\
             .filter_by(category=4)\
             .all()
         return render_template('/achievements/achievementsvendor.html',
-                            title=title,
-                            achievements=achievements,
-                            )
+                               title=title,
+                               achievements=achievements,
+                               )
 
 
 @achievements.route('/all-achievements/coin', methods=['GET'])
 def achievements_coin_home():
     if request.method == 'GET':
-    
+
         title = "Coin Achievements"
         achievements = db.session\
             .query(Achievements)\
             .filter_by(category=5)\
             .all()
         return render_template('/achievements/achievementscoin.html',
-                            title=title,
-                            achievements=achievements,
-                            )
+                               title=title,
+                               achievements=achievements,
+                               )
 
 
 @achievements.route('/all-achievements/unique', methods=['GET'])
 def achievements_unique_home():
     if request.method == 'GET':
-    
+
         title = "Unique Achievements"
         achievements = db.session\
             .query(Achievements)\
             .filter_by(category=6)\
             .all()
         return render_template('/achievements/achievementsunique.html',
-                            title=title,
-                            achievements=achievements,
-                            )
+                               title=title,
+                               achievements=achievements,
+                               )
 
 
 @achievements.route('/allachievements/all', methods=['GET'])
@@ -362,14 +363,14 @@ def achievements_all_home():
     if request.method == 'GET':
         title = current_user.username + "'s Achievements"
         x, size = row2dict(row=db.session
-                        .query(UserAchievements)
-                        .filter_by(user_id=current_user.id)
-                        .first())
+                           .query(Achievements_UserAchievements)
+                           .filter_by(user_id=current_user.id)
+                           .first())
         return render_template('/auth/userachievements/achievementsall.html',
-                            x=x,
-                            size=size,
-                            title=title
-                            )
+                               x=x,
+                               size=size,
+                               title=title
+                               )
 
 
 @achievements.route('/auth-achievements-coin/', methods=['GET'])
@@ -378,15 +379,15 @@ def auth_achievements_coin():
     if request.method == 'GET':
         title = current_user.username + "'s Achievements"
         x, size = row2dict(row=db.session
-                        .query(UserAchievements)
-                        .filter_by(user_id=current_user.id)
-                        .first())
+                           .query(Achievements_UserAchievements)
+                           .filter_by(user_id=current_user.id)
+                           .first())
 
         return render_template('/auth/userachievements/achievementscoin.html',
-                            x=x,
-                            size=size,
-                            title=title
-                            )
+                               x=x,
+                               size=size,
+                               title=title
+                               )
 
 
 @achievements.route('/auth-achievements-common/', methods=['GET'])
@@ -397,32 +398,32 @@ def auth_achievements_common():
         title = current_user.username + "'s Achievements"
 
         x, size = row2dict(row=db.session
-                        .query(UserAchievements)
-                        .filter_by(user_id=current_user.id)
-                        .first())
+                           .query(Achievements_UserAchievements)
+                           .filter_by(user_id=current_user.id)
+                           .first())
         return render_template('/auth/userachievements/achievementscommon.html',
-                            x=x,
-                            size=size,
-                            title=title
-                            )
+                               x=x,
+                               size=size,
+                               title=title
+                               )
 
 
 @achievements.route('/auth-achievements-experience/', methods=['GET'])
 @website_offline
 def auth_achievements_experience():
     if request.method == 'GET':
-        
+
         title = current_user.username + "'s Achievements"
 
         x, size = row2dict(row=db.session
-                        .query(UserAchievements)
-                        .filter_by(user_id=current_user.id)
-                        .first())
+                           .query(Achievements_UserAchievements)
+                           .filter_by(user_id=current_user.id)
+                           .first())
         return render_template('/auth/userachievements/achievementsExperience.html',
-                            x=x,
-                            size=size,
-                            title=title
-                            )
+                               x=x,
+                               size=size,
+                               title=title
+                               )
 
 
 @achievements.route('/auth-achievements-unique/', methods=['GET'])
@@ -432,32 +433,32 @@ def auth_achievements_unique():
 
         title = current_user.username + "'s Achievements"
         x, size = row2dict(row=db.session
-                        .query(UserAchievements)
-                        .filter_by(user_id=current_user.id)
-                        .first())
+                           .query(Achievements_UserAchievements)
+                           .filter_by(user_id=current_user.id)
+                           .first())
         return render_template('/auth/userachievements/achievementsunique.html',
-                            x=x,
-                            size=size,
-                            title=title
-                            )
+                               x=x,
+                               size=size,
+                               title=title
+                               )
 
 
 @achievements.route('/auth-achievements-customer/', methods=['GET'])
 @website_offline
 def auth_achievements_customer():
     if request.method == 'GET':
-    
+
         title = current_user.username + "'s Achievements"
 
         x, size = row2dict(row=db.session
-                        .query(UserAchievements)
-                        .filter_by(user_id=current_user.id)
-                        .first())
+                           .query(Achievements_UserAchievements)
+                           .filter_by(user_id=current_user.id)
+                           .first())
         return render_template('/auth/userachievements/achievementscustomer.html',
-                            x=x,
-                            size=size,
-                            title=title
-                            )
+                               x=x,
+                               size=size,
+                               title=title
+                               )
 
 
 @achievements.route('/auth-achievements-vendor/', methods=['GET'])
@@ -468,14 +469,14 @@ def auth_achievements_vendor():
         title = current_user.username + "'s Achievements"
 
         x, size = row2dict(row=db.session
-                        .query(UserAchievements)
-                        .filter_by(user_id=current_user.id)
-                        .first())
+                           .query(Achievements_UserAchievements)
+                           .filter_by(user_id=current_user.id)
+                           .first())
         return render_template('/auth/userachievements/achievementsvendor.html',
-                            x=x,
-                            size=size,
-                            title=title
-                            )
+                               x=x,
+                               size=size,
+                               title=title
+                               )
 
 
 @achievements.route('/select-user-achievements/', methods=['GET', 'POST'])
@@ -486,23 +487,23 @@ def selectuserachs():
         title = "My Achievements"
         form = achselectForm()
         now = datetime.utcnow()
-        specificach = db.session.query(whichAch).filter_by(
+        specificach = db.session.query(Achievements_WhichAch).filter_by(
             user_id=current_user.id).first()
         if current_user.vendor_account == 0:
-            user = db.session.query(User).filter_by(
+            user = db.session.query(Auth_User).filter_by(
                 username=current_user.username).first()
-            usergetlevel = db.session.query(UserAchievements).filter_by(
+            usergetlevel = db.session.query(Achievements_UserAchievements).filter_by(
                 username=user.username).first()
             userpictureid = str(usergetlevel.level)
             userwallet = db.session.query(
-                BchWallet).filter_by(user_id=user.id).first()
-            userstats = db.session.query(StatisticsUser).filter_by(
+                Bch_Wallet).filter_by(user_id=user.id).first()
+            userstats = db.session.query(Profile_StatisticsUser).filter_by(
                 username=user.username).first()
 
-            level = db.session.query(UserAchievements).filter_by(
+            level = db.session.query(Achievements_UserAchievements).filter_by(
                 username=user.username).first()
             width = int(level.experiencepoints / 10)
-            userach = db.session.query(whichAch).filter_by(
+            userach = db.session.query(Achievements_WhichAch).filter_by(
                 user_id=current_user.id).first()
             vendor = 0
             vendorwallet = 0
@@ -513,24 +514,24 @@ def selectuserachs():
         else:
             # vendor
             vendor = db.session\
-                .query(User)\
+                .query(Auth_User)\
                 .filter_by(id=current_user.id)\
                 .first()
             vendorwallet = db.session\
-                .query(BchWallet)\
+                .query(Bch_Wallet)\
                 .filter_by(user_id=vendor.id)\
                 .first()
             vendorstats = db.session\
-                .query(StatisticsVendor)\
+                .query(Profile_StatisticsVendor)\
                 .filter_by(vendorid=vendor.id)\
                 .first()
             vendorgetlevel = db.session\
-                .query(UserAchievements)\
+                .query(Achievements_UserAchievements)\
                 .filter_by(username=vendor.username)\
                 .first()
             vendorpictureid = str(vendorgetlevel.level)
             vendorach = db.session\
-                .query(whichAch)\
+                .query(Achievements_WhichAch)\
                 .filter_by(user_id=current_user.id)\
                 .first()
 
@@ -544,29 +545,30 @@ def selectuserachs():
             level = 0
             width = 0
 
-        x, size = row2dict(row=db.session.query(UserAchievements).filter_by(user_id=current_user.id).first())
+        x, size = row2dict(row=db.session.query(
+            Achievements_UserAchievements).filter_by(user_id=current_user.id).first())
         return render_template('/auth/userachievements/achievementscustomize.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            form=form,
-                            specificach=specificach,
-                            user=user,
-                            now=now,
-                            usergetlevel=usergetlevel,
-                            userpictureid=userpictureid,
-                            userwallet=userwallet,
-                            userstats=userstats,
-                            width=width,
-                            level=level,
-                            vendor=vendor,
-                            vendorwallet=vendorwallet,
-                            vendorstats=vendorstats,
-                            vendorgetlevel=vendorgetlevel,
-                            vendorpictureid=vendorpictureid,
-                            userach=userach,
-                            vendorach=vendorach
-                            )
+                               x=x,
+                               size=size,
+                               title=title,
+                               form=form,
+                               specificach=specificach,
+                               user=user,
+                               now=now,
+                               usergetlevel=usergetlevel,
+                               userpictureid=userpictureid,
+                               userwallet=userwallet,
+                               userstats=userstats,
+                               width=width,
+                               level=level,
+                               vendor=vendor,
+                               vendorwallet=vendorwallet,
+                               vendorstats=vendorstats,
+                               vendorgetlevel=vendorgetlevel,
+                               vendorpictureid=vendorpictureid,
+                               userach=userach,
+                               vendorach=vendorach
+                               )
 
     if request.method == "POST":
         if form.selectone.data:
@@ -698,24 +700,24 @@ def selectuserachs():
             pass
 
         return render_template('/auth/userachievements/achievementscustomize.html',
-                            x=x,
-                            size=size,
-                            title=title,
-                            form=form,
-                            specificach=specificach,
-                            user=user,
-                            now=now,
-                            usergetlevel=usergetlevel,
-                            userpictureid=userpictureid,
-                            userwallet=userwallet,
-                            userstats=userstats,
-                            width=width,
-                            level=level,
-                            vendor=vendor,
-                            vendorwallet=vendorwallet,
-                            vendorstats=vendorstats,
-                            vendorgetlevel=vendorgetlevel,
-                            vendorpictureid=vendorpictureid,
-                            userach=userach,
-                            vendorach=vendorach
-                            )
+                               x=x,
+                               size=size,
+                               title=title,
+                               form=form,
+                               specificach=specificach,
+                               user=user,
+                               now=now,
+                               usergetlevel=usergetlevel,
+                               userpictureid=userpictureid,
+                               userwallet=userwallet,
+                               userstats=userstats,
+                               width=width,
+                               level=level,
+                               vendor=vendor,
+                               vendorwallet=vendorwallet,
+                               vendorstats=vendorstats,
+                               vendorgetlevel=vendorgetlevel,
+                               vendorpictureid=vendorpictureid,
+                               userach=userach,
+                               vendorach=vendorach
+                               )

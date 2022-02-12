@@ -1,6 +1,7 @@
 import os
 from app import db
-from app.classes.models import btc_cash_Prices, Query_margin
+from app.classes.models import Query_Margin
+from app.classes.wallet_bch import Bch_Prices
 import random
 import string
 from decimal import Decimal
@@ -178,10 +179,10 @@ def id_generator_picture5(size=30, chars=string.ascii_uppercase + string.digits)
 #
 
 
-def priceaftermargin_btccash(margin, currency):
-    getcurrentprice = db.session.query(btc_cash_Prices) \
+def price_after_margin_bch(margin, currency):
+    getcurrentprice = db.session.query(Bch_Prices) \
         .filter_by(currency_id=currency).first()
-    marginq = db.session.query(Query_margin).filter_by(id=margin).first()
+    marginq = db.session.query(Query_Margin).filter_by(id=margin).first()
     margin1 = marginq.value
 
     bt = getcurrentprice.price
@@ -198,8 +199,8 @@ def priceaftermargin_btccash(margin, currency):
         return c
 
 
-def btc_cash_converttolocal(amount, currency):
-    getcurrentprice = db.session.query(btc_cash_Prices) \
+def convert_to_local_bch(amount, currency):
+    getcurrentprice = db.session.query(Bch_Prices) \
         .filter_by(currency_id=currency).first()
 
     bt = getcurrentprice.price
@@ -208,8 +209,9 @@ def btc_cash_converttolocal(amount, currency):
     return c
 
 
-def btc_cash_convertlocaltobtc(amount, currency):
-    getcurrentprice = db.session.query(btc_cash_Prices).filter_by(currency_id=currency).first()
+def convert_local_to_bch(amount, currency):
+    getcurrentprice = db.session.query(
+        Bch_Prices).filter_by(currency_id=currency).first()
     bt = getcurrentprice.price
     z = Decimal(amount) / Decimal(bt)
     c = floating_decimals(z, 8)

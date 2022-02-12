@@ -1,7 +1,7 @@
 from app import db
 
 
-class whichAch(db.Model):
+class Achievements_WhichAch(db.Model):
     __tablename__ = 'whichAch'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -21,7 +21,7 @@ class whichAch(db.Model):
     ach5_cat = db.Column(db.TEXT)
 
 
-class UserAchievements_recent(db.Model):
+class Achievements_UserAchievementsRecent(db.Model):
     __tablename__ = 'userachievements_recent'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -35,7 +35,7 @@ class UserAchievements_recent(db.Model):
     viewed = db.Column(db.INTEGER)
 
 
-class UserAchievements(db.Model):
+class Achievements_UserAchievements(db.Model):
     __tablename__ = 'userachievements'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

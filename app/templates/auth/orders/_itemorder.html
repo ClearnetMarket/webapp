@@ -23,7 +23,7 @@
 
 <div class="card-header linkcolor">
         <div class="col-md-4">
-            <b>Order ID: #<a href="{{ url_for('vendor.viewOrder', id=order.id) }}">{{ order.id }}</a></b>
+            <b>Order ID: #<a href="{{ url_for('vendor.vendor_orders_view_specific', id=order.id) }}">{{ order.id }}</a></b>
         </div>
         <div class="col-md-4">
             <b> Ordered on:</b> {{ moment(timestamp=order.age, local=False).format('L')  }}<br>
@@ -36,7 +36,7 @@
 <div class="row">
     <!-- small title -->
     <div class="col-12 d-sm-none linkcolor" style="font-size: 17px;">
-        <a href="{{ url_for('item.itemforsale',id=order.item_id) }}" >
+        <a href="{{ url_for('item.item_for_sale',id=order.item_id) }}" >
             {{ order.title|truncate(50) }}
         </a>
         <br>
@@ -55,14 +55,14 @@
     <div class="col-12 col-sm-4 col-md-6 linkcolor ">
 
         <div class="d-none d-sm-block" style="font-size: 17px;">
-            <a href="{{ url_for('item.itemforsale',id=order.item_id) }}" >
+            <a href="{{ url_for('item.item_for_sale',id=order.item_id) }}" >
                 {{ order.title|truncate(50) }}
             </a><br>
         </div>
 
 
         <b>Vendor:</b>
-        <a href="{{ url_for('profile.vendorprofile', username=order.vendor) }}">
+        <a href="{{ url_for('profile.profile_vendor', username=order.vendor) }}">
             {{ order.vendor }}
             ({{ order.vendor_id|avgvendorrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="20px" height="20px";>)
             ({{ order.vendor_id|vendorratingcount }})
@@ -164,9 +164,9 @@
     <!--END SECOND COLUMN-->
     <!--THIRD COLUMN-->
     <div class="col-12 col-sm-3 col-md-3 btnwhite card text-left">
-        <a class="btn btn-warning btn-sm w-100 mb-2 mt-1"  href="{{ url_for('item.buyitagain', id=order.item_id) }}" role="button">Buy It Again</a>
+        <a class="btn btn-warning btn-sm w-100 mb-2 mt-1"  href="{{ url_for('item.buy_it_again', id=order.item_id) }}" role="button">Buy It Again</a>
         <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('orders.ordershome_viewtracking', id=order.id) }}" role="button">View Tracking</a>
-        <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('service.helpwithitem', id=order.id) }}" role="button">Customer Service</a>
+        <a class="btn btn-primary btn-sm w-100 mb-2 mt-1" href="{{ url_for('customerservice.helpwithitem', id=order.id) }}" role="button">Customer Service</a>
 
         {% if order.new_order == 1%}
             <a class="btn btn-danger btn-sm w-100 mb-2 mt-1" href="{{ url_for('orders.ordershome_cancelorder', id=order.id) }}" role="button">Cancel Order</a>
@@ -195,7 +195,7 @@
                 {% if order.request_return == 0 %}
                     {% if order.return_allowed == 1 %}
                         {% if order.return_by > now %}
-                            <a class="btn btn-danger" href="{{ url_for('auth.customerOrders_return', id=order.id) }}"
+                            <a class="btn btn-danger" href="{{ url_for('auth.orders_customer_return', id=order.id) }}"
                                role="button">Return Item </a>
                         {% endif %}
                     {% endif %}
@@ -204,7 +204,7 @@
         {%  endif %}
 
         {% if order.request_return >= 1  %}
-            <a class="btn btn-danger" href="{{ url_for('auth.customerOrders_returninstructions', id=order.id) }}"
+            <a class="btn btn-danger" href="{{ url_for('auth.orders_customer_return_instructions', id=order.id) }}"
                role="button">View Return</a>
         {%  endif %}
 

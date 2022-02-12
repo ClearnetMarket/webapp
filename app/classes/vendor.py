@@ -1,7 +1,7 @@
 from app import db
 
 
-class Orders(db.Model):
+class Vendor_Orders(db.Model):
     __tablename__ = 'orders'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -63,7 +63,7 @@ class Orders(db.Model):
     affiliate_discount_btc_cash = db.Column(db.DECIMAL(20, 8))
 
 
-class notshipping(db.Model):
+class Vendor_NotShipping(db.Model):
     __tablename__ = 'notshipping'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -72,7 +72,7 @@ class notshipping(db.Model):
     name = db.Column(db.TEXT)
 
 
-class vendorVerification(db.Model):
+class Vendor_VendorVerification(db.Model):
     __tablename__ = 'vendorverification'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -83,7 +83,7 @@ class vendorVerification(db.Model):
     amount = db.Column(db.DECIMAL(20, 8))
 
 
-class Duration(db.Model):
+class Vendor_Duration(db.Model):
     __tablename__ = 'durations'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -92,7 +92,7 @@ class Duration(db.Model):
     displaytime = db.Column(db.TEXT)
 
 
-class EbaySearchItem(db.Model):
+class Vendor_EbaySearchItem(db.Model):
     __tablename__ = 'ebayitem'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

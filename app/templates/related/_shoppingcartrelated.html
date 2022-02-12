@@ -6,7 +6,7 @@
             {% for item in itemsinrelated %}
                 <div id="item_relevant_listings_itemholder">
                 <div id="simpleitem_image">
-                     <a href="{{ url_for('item.itemforsale', id=item.id) }}">
+                     <a href="{{ url_for('item.item_for_sale', id=item.id) }}">
                     <img src="{{ url_for('userdata.media_file',
 
                     filename=( item.string_node_id + item.string_auction_id + item.image_one + "_225x.jpg")) }}">

@@ -2,15 +2,15 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, IntegerField, BooleanField
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Length, Optional
-from app.classes.models import Categories, Country
-
+from app.classes.models import Query_Country
+from app.classes.category import Category_Categories
 
 def searchside():
-    return Categories.query.filter(Categories.id != 1000, Categories.id != 100).order_by(Categories.id.asc()).all()
+    return Category_Categories.query.filter(Category_Categories.id != 1000, Category_Categories.id != 100).order_by(Category_Categories.id.asc()).all()
 
 
 def searchside_default():
-    return Categories.query.filter(Categories.id == 1).first()
+    return Category_Categories.query.filter(Category_Categories.id == 1).first()
 
 
 class searchForm(FlaskForm):
@@ -55,7 +55,7 @@ class sortResults(FlaskForm):
                  ]
     )
 
-    destination_country_one = QuerySelectField(query_factory=lambda: Country.query.all(),
+    destination_country_one = QuerySelectField(query_factory=lambda: Query_Country.query.all(),
                                                get_label='name',
                                                validators=[Optional()])
     # payment methods

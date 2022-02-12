@@ -49,7 +49,7 @@
                                      {{ t.commentbtc }}
                                 {% else %}
 
-                                    <a href="{{ url_for('vendor.viewOrder', id =t.commentbtc) }}">Order# {{ t.commentbtc }}</a><br>
+                                    <a href="{{ url_for('vendor.vendor_orders_view_specific', id =t.commentbtc) }}">Order# {{ t.commentbtc }}</a><br>
                                 {% endif %}
 
                             {% else %}
@@ -62,7 +62,7 @@
                                  {% if "Vendor" in t.commentbtc %}
                                      {{ t.commentbtc }}
                                  {% else %}
-                                <a href="{{ url_for('vendor.viewOrder', id =t.commentbtc) }}">Order# {{ t.commentbtc }}</a><br>
+                                <a href="{{ url_for('vendor.vendor_orders_view_specific', id =t.commentbtc) }}">Order# {{ t.commentbtc }}</a><br>
                                  {% endif %}
 
                             {% else %}

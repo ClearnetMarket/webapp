@@ -1,7 +1,7 @@
 from app import db
 
 
-class Userreviews(db.Model):
+class Profile_Userreviews(db.Model):
     __tablename__ = 'userreviews'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -14,7 +14,7 @@ class Userreviews(db.Model):
     rating = db.Column(db.INTEGER)
 
 
-class Feedbackcomments(db.Model):
+class Profile_FeedbackComments(db.Model):
     __tablename__ = 'feedbackcomments'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -26,7 +26,7 @@ class Feedbackcomments(db.Model):
     sale_id = db.Column(db.Integer)
 
 
-class exptable(db.Model):
+class Profile_Exptable(db.Model):
     __tablename__ = 'exptable'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -38,7 +38,7 @@ class exptable(db.Model):
     timestamp = db.Column(db.TIMESTAMP())
 
 
-class StatisticsVendor(db.Model):
+class Profile_StatisticsVendor(db.Model):
     __tablename__ = 'statsvendor'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -62,7 +62,7 @@ class StatisticsVendor(db.Model):
     totalusdmade = db.Column(db.DECIMAL(20, 2))
 
 
-class StatisticsUser(db.Model):
+class Profile_StatisticsUser(db.Model):
     __tablename__ = 'statsuserr'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

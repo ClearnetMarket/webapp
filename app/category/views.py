@@ -1,41 +1,29 @@
-from flask import \
-    render_template,\
-    redirect,\
-    url_for,\
-    request, \
-    flash
-from app import db
-from sqlalchemy import\
-    or_
+from flask import render_template, redirect, url_for, request, flash
+from sqlalchemy import or_
 from flask_paginate import\
     Pagination,\
     get_page_args
+from app.category import category
+from app import db
 # models
-from app.classes.item import \
-    marketitem
-from app.classes.models import \
-    btc_cash_Prices
-from app.classes.category import Categories
+from app.classes.item import Item_MarketItem
+from app.classes.wallet_bch import Bch_Prices
+from app.classes.category import Category_Categories
 # end models
-
-from app.category import\
-    category
 from app.search.forms import\
     searchForm,\
     sortResults
-
 from app.search.searchfunction import\
     headerfunctions
 from datetime import\
     datetime
 from app.common.decorators import \
-    website_offline,\
-    ping_user
+    website_offline
 
 
 @category.route('/category/<int:maincatid>', methods=['GET', 'POST'])
 @website_offline
-def viewcategory(maincatid):
+def view_category(maincatid):
     now = datetime.utcnow()
     # forms
     formsearch = searchForm()
@@ -52,23 +40,23 @@ def viewcategory(maincatid):
         unconfirmed, \
         customerdisputes = headerfunctions()
     get_cats = db.session\
-        .query(Categories)\
-        .filter(Categories.id != 1000, Categories.id != 0)\
-        .order_by(Categories.name.asc())\
+        .query(Category_Categories)\
+        .filter(Category_Categories.id != 1000, Category_Categories.id != 0)\
+        .order_by(Category_Categories.name.asc())\
         .all()
     # Currency Prices
     try:
         btc_cash_price = db.session\
-            .query(btc_cash_Prices)\
-            .filter(or_(btc_cash_Prices.currency_id == 1,
-                        btc_cash_Prices.currency_id == 30,
-                        btc_cash_Prices.currency_id == 17,
-                        btc_cash_Prices.currency_id == 23,
-                        btc_cash_Prices.currency_id == 30,
-                        btc_cash_Prices.currency_id == 6,
-                        btc_cash_Prices.currency_id == 4,
+            .query(Bch_Prices)\
+            .filter(or_(Bch_Prices.currency_id == 1,
+                        Bch_Prices.currency_id == 30,
+                        Bch_Prices.currency_id == 17,
+                        Bch_Prices.currency_id == 23,
+                        Bch_Prices.currency_id == 30,
+                        Bch_Prices.currency_id == 6,
+                        Bch_Prices.currency_id == 4,
                         ))\
-            .order_by(btc_cash_Prices.currency_id.asc())\
+            .order_by(Bch_Prices.currency_id.asc())\
             .all()
     except Exception as e:
         btc_cash_price = 0
@@ -95,26 +83,26 @@ def viewcategory(maincatid):
 
     # PROMOTED
     promoteditems = db.session\
-        .query(marketitem)\
-        .filter(marketitem.online == 1)\
-        .filter(marketitem.ad_item is True)\
-        .filter(marketitem.ad_item_level == 1)\
-        .order_by(marketitem.total_sold.desc())\
+        .query(Item_MarketItem)\
+        .filter(Item_MarketItem.online == 1)\
+        .filter(Item_MarketItem.ad_item is True)\
+        .filter(Item_MarketItem.ad_item_level == 1)\
+        .order_by(Item_MarketItem.total_sold.desc())\
         .limit(4)
     # END PROMOTED
 
     # get the category
     getcategory = db.session\
-        .query(Categories)\
-        .filter(Categories.id == maincatid)\
+        .query(Category_Categories)\
+        .filter(Category_Categories.id == maincatid)\
         .first()
 
     # Main Page search
     try:
         itemfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.category_id_0 == maincatid)\
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.category_id_0 == maincatid)\
             .limit(per_page).offset(offset)
 
         pagination = Pagination(page=page,
@@ -188,8 +176,8 @@ def viewcategory(maincatid):
             ##
 
             itemfull = db.session\
-                .query(marketitem)\
-                .filter(marketitem.online == 1)
+                .query(Item_MarketItem)\
+                .filter(Item_MarketItem.online == 1)
 
             # FILTERS
             # Price Filter
@@ -199,14 +187,15 @@ def viewcategory(maincatid):
                 itemfull = itemfull
 
             else:
-                itemfull = itemfull.filter(lowprice <= marketitem.price)\
-                    .filter(marketitem.price <= highprice)
+                itemfull = itemfull.filter(lowprice <= Item_MarketItem.price)\
+                    .filter(Item_MarketItem.price <= highprice)
 
             # btc Filter
             if btc_sort == 0:
                 itemfull = itemfull
             elif btc_sort == 1:
-                itemfull = itemfull.filter(marketitem.digital_currency_2 == 1)
+                itemfull = itemfull.filter(
+                    Item_MarketItem.digital_currency_2 == 1)
             else:
                 itemfull = itemfull
 
@@ -214,7 +203,8 @@ def viewcategory(maincatid):
             if btccash_sort == 0:
                 itemfull = itemfull
             elif btccash_sort == 1:
-                itemfull = itemfull.filter(marketitem.digital_currency_3 == 1)
+                itemfull = itemfull.filter(
+                    Item_MarketItem.digital_currency_3 == 1)
             else:
                 itemfull = itemfull
 
@@ -222,7 +212,7 @@ def viewcategory(maincatid):
             if shipping_boolean == 0:
                 itemfull = itemfull
             elif shipping_boolean == 1:
-                itemfull = itemfull.filter(marketitem.shipping_free == 1)
+                itemfull = itemfull.filter(Item_MarketItem.shipping_free == 1)
             else:
                 itemfull = itemfull
             # END FILTERS
@@ -234,18 +224,18 @@ def viewcategory(maincatid):
             # PRICE highest first
             ##
             elif sortresults.sortCategory.data == '1':
-                itemfull = itemfull.order_by(marketitem.price.desc())
+                itemfull = itemfull.order_by(Item_MarketItem.price.desc())
             ###
             # PRICE lowest first
             ##
             elif sortresults.sortCategory.data == '2':
-                itemfull = itemfull.order_by(marketitem.price.asc())
+                itemfull = itemfull.order_by(Item_MarketItem.price.asc())
 
             ###
             # top selling/traded
             ##
             elif sortresults.sortCategory.data == '3':
-                itemfull = itemfull.order_by(marketitem.total_sold.desc())
+                itemfull = itemfull.order_by(Item_MarketItem.total_sold.desc())
 
             else:
                 flash(sortresults.sortCategory.data, category="danger")

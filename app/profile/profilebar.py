@@ -1,10 +1,10 @@
 from app import db
-from app.classes.auth import User
-from app.classes.achievements import UserAchievements, whichAch
-from app.userdata.views import StatisticsVendor, StatisticsUser
+from app.classes.auth import Auth_User
+from app.classes.achievements import Achievements_UserAchievements, Achievements_WhichAch
+from app.userdata.views import Profile_StatisticsVendor, Profile_StatisticsUser
 
 from app.common.functions import floating_decimals
-from app.classes.wallet_bch import BchWallet
+from app.classes.wallet_bch import Bch_Wallet
 
 
 def profilebar(user_id1, user_id2):
@@ -27,15 +27,15 @@ def profilebar(user_id1, user_id2):
     global user2vendorstats
 
     if user_id1:
-        user1 = db.session.query(User).filter_by(id=user_id1).first()
-        user1getlevel = db.session.query(UserAchievements).filter_by(
+        user1 = db.session.query(Auth_User).filter_by(id=user_id1).first()
+        user1getlevel = db.session.query(Achievements_UserAchievements).filter_by(
             username=user1.username).first()
         user1pictureid = str(user1getlevel.level)
-        user1stats = db.session.query(StatisticsUser).filter_by(
+        user1stats = db.session.query(Profile_StatisticsUser).filter_by(
             username=user1.username).first()
         user1wallet = db.session.query(
-            BchWallet).filter_by(user_id=user1.id).first()
-        user1level = db.session.query(UserAchievements).filter_by(
+            Bch_Wallet).filter_by(user_id=user1.id).first()
+        user1level = db.session.query(Achievements_UserAchievements).filter_by(
             username=user1.username).first()
 
         if 1 <= user1level.level <= 3:
@@ -75,33 +75,34 @@ def profilebar(user_id1, user_id2):
             user1widthh = (user1level.experiencepoints / 1000)*100
             user1width = floating_decimals(user1widthh, 0)
 
-        user1ach = db.session.query(whichAch).filter_by(
+        user1ach = db.session.query(Achievements_WhichAch).filter_by(
             user_id=user1.id).first()
         if user1.vendor_account == 1:
             user1vendorstats = db.session.query(
-                StatisticsVendor).filter_by(username=user1.username).first()
+                Profile_StatisticsVendor).filter_by(username=user1.username).first()
         else:
             user1vendorstats = 0
     else:
         user1 = 0
 
     if user_id2 != 0:
-        user2 = db.session.query(User).filter_by(id=user_id2).first()
-        user2getlevel = db.session.query(UserAchievements).filter_by(
+        user2 = db.session.query(Auth_User).filter_by(id=user_id2).first()
+        user2getlevel = db.session.query(Achievements_UserAchievements).filter_by(
             username=user2.username).first()
         user2pictureid = str(user2getlevel.level)
-        user2stats = db.session.query(StatisticsUser).filter_by(
+        user2stats = db.session.query(Profile_StatisticsUser).filter_by(
             username=user2.username).first()
-        user2wallet = db.session.query(
-            BtcWallet).filter_by(user_id=user2.id).first()
-        user2level = db.session.query(UserAchievements).filter_by(
+        user2wallet = db.session.query(BtcWallet).filter_by(
+            user_id=user2.id).first()  # TODO BTC WALLET
+
+        user2level = db.session.query(Achievements_UserAchievements).filter_by(
             username=user2.username).first()
         user2width = int(user2level.experiencepoints / 10)
-        user2ach = db.session.query(whichAch).filter_by(
+        user2ach = db.session.query(Achievements_WhichAch).filter_by(
             user_id=user2.id).first()
         if user2.vendor_account == 1:
             user2vendorstats = db.session.query(
-                StatisticsVendor).filter_by(username=user2.username).first()
+                Profile_StatisticsVendor).filter_by(username=user2.username).first()
         else:
             user2vendorstats = 0
     else:

@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb" class="linkcolor">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ url_for('checkout.shoppingcart') }}">Shopping Cart</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('checkout.checkout_shopping_cart') }}">Shopping Cart</a></li>
         </ol>
     </nav>
 
@@ -116,7 +116,7 @@
                             <div class="col-12 col-sm-5 col-md-5">
                                 <div class="row" style="padding: 10px"><!---Title -->
                                     <div class="col-12 linkcolor" style="font-size:20px;">
-                                        <a href="{{ url_for('item.itemforsale', id=sale.item_id) }}">
+                                        <a href="{{ url_for('item.item_for_sale', id=sale.item_id) }}">
                                             <b>{{ sale.title_of_item }}</b>
                                         </a>
                                     </div>
@@ -826,8 +826,8 @@
                                     <b> {{ sale.price_of_item|convert_local_to_bch_filter(currency=sale.currency) }} BCH</b>
                                 </td>
                                 <td class="col-2">
-                                    <a class="btn btn-danger" href="{{ url_for('item.deletecartitem', id=sale.id) }}" role="button">Delete</a>
-                                    <a class="btn btn-primary" href="{{ url_for('item.movecartitem', id=sale.id) }}" role="button">Move to cart</a>
+                                    <a class="btn btn-danger" href="{{ url_for('item.delete_cart_item', id=sale.id) }}" role="button">Delete</a>
+                                    <a class="btn btn-primary" href="{{ url_for('item.checkout_move_cart_item', id=sale.id) }}" role="button">Move to cart</a>
                                 </td>
 
                             </tr>

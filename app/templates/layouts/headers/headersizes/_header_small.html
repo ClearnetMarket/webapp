@@ -6,7 +6,7 @@
     <div class="col-12 mt-1 mb-5">
       {% if current_user.is_authenticated %}
       <div class="col-md-12">
-        <a href="{{ url_for('profile.user', username=current_user.username) }}">
+        <a href="{{ url_for('profile.profile_user', username=current_user.username) }}">
           {{ current_user.username }}
         </a>
       </div>

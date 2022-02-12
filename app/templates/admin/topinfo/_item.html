@@ -11,14 +11,14 @@
     </div>
 
     <div id="middleboxorder" class="linkcolor">
-        <div id="ordertitle"><a href="{{ url_for('item.itemforsale',id=order.item_id) }}" >
+        <div id="ordertitle"><a href="{{ url_for('item.item_for_sale',id=order.item_id) }}" >
             <h4>{{ order.title }}</h4>
         </a>
         </div>
         <div id="middlebox_leftorright">
             <div id="middlebox_left">
                         <div id="trade_orderbox_info">
-                        <b>Order id: #<a href="{{ url_for('vendor.viewOrder', id=order.id) }}">{{ order.id }}</a></b>
+                        <b>Order id: #<a href="{{ url_for('vendor.vendor_orders_view_specific', id=order.id) }}">{{ order.id }}</a></b>
 
             </div>
                 <div id="order_soldby"><b>Vendor:</b> {{ order.vendor }}</div>

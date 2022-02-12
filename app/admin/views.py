@@ -4,7 +4,7 @@ from app.admin import admin
 from app import db
 
 from app.admin.forms import \
-    addachievement, \
+    add_achievement, \
     settoAdmin, \
     addupdateform, \
     Chatform, \
@@ -16,44 +16,45 @@ from app.admin.forms import \
     changeUserForm
 
 from app.wallet_bch.wallet_btccash_work import\
-    btc_cash_send_coin_to_user_as_admin, \
-    btc_cash_takeCointoUser_asAdmin
+    btc_cash_send_coin_to_user_as_admin
 # models
 from app.classes.auth import \
-    User
+    Auth_User
 
 from app.classes.achievements import \
     Achievements, \
-    UserAchievements, \
-    whichAch
+    Achievements_UserAchievements, \
+    Achievements_WhichAch
 
 from app.classes.admin import \
-    clearnetprofit_btc, \
-    flagged
+    Admin_ClearnetProfitBtc, \
+    Admin_Flagged
 
 from app.classes.item import \
-    marketitem
+    Item_MarketItem
 
 from app.classes.message import \
-    Chat, \
-    PostUser, \
-    Comment
+    Message_Chat, \
+    Message_PostUser, \
+    Message_Comment
 
 from app.classes.profile import \
-    Userreviews, \
-    StatisticsUser, \
-    StatisticsVendor
+    Profile_Userreviews, \
+    Profile_StatisticsUser, \
+    Profile_StatisticsVendor
 
 from app.classes.service import \
-    shippingSecret, \
-    websitefeedback, \
-    updateLog, Tracking, Issue
+    Service_ShippingSecret, \
+    Service_WebsiteFeedback, \
+    Service_UpdateLog, \
+    Service_Tracking, \
+    Service_Issue
 
 from app.classes.userdata import \
-    Feedback
+    User_DataFeedback
 
 from app.classes.vendor import \
-    Orders
+    Vendor_Orders
 
 # end models
 from app.notification import notification
@@ -70,10 +71,10 @@ from datetime import datetime, timedelta
 from flask_paginate import Pagination, get_page_args
 
 from app.common.decorators import \
-    ADMINaccount_required, \
-    ADMINaccountlevel10_required, \
+    admin_account_required, \
+    admin_account_required_level_10, \
     login_required, \
-    ADMINaccountlevel3_required, \
+    admin_account_level_required_3, \
     ping_user, \
     website_offline
 
@@ -81,9 +82,9 @@ from app.common.decorators import \
 @admin.route('/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def adminHome():
+@admin_account_required
+@admin_account_level_required_3
+def admin_home():
     now = datetime.utcnow()
     form = searchadminForm(request.form)
 
@@ -93,71 +94,73 @@ def adminHome():
         else:
             pass
 
-    # User
-    user = db.session.query(User).filter_by(
+    # Auth_User
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
-    usergetlevel = db.session.query(UserAchievements).filter_by(
+    usergetlevel = db.session.query(Achievements_UserAchievements).filter_by(
         username=user.username).first()
     userpictureid = str(usergetlevel.level)
-    userstats = db.session.query(StatisticsUser).filter_by(
+    userstats = db.session.query(Profile_StatisticsUser).filter_by(
         username=user.username).first()
 
-    level = db.session.query(UserAchievements).filter_by(
+    level = db.session.query(Achievements_UserAchievements).filter_by(
         username=user.username).first()
     width = int(level.experiencepoints / 10)
-    userach = db.session.query(whichAch).filter_by(user_id=user.id).first()
+    userach = db.session.query(Achievements_WhichAch).filter_by(
+        user_id=user.id).first()
 
     # get orders mods are currently working on
-    modsorders = db.session.query(Orders)
-    modsorders = modsorders.filter(Orders.disputed_order == 1)
-    modsorders = modsorders.filter(Orders.modid == user.id)
-    modsorders = modsorders.order_by(Orders.disputedtimer.desc())
+    modsorders = db.session.query(Vendor_Orders)
+    modsorders = modsorders.filter(Vendor_Orders.disputed_order == 1)
+    modsorders = modsorders.filter(Vendor_Orders.modid == user.id)
+    modsorders = modsorders.order_by(Vendor_Orders.disputedtimer.desc())
     modorders = modsorders.all()
     modorderscount = modsorders.count()
 
     # get disputes items
-    disputesitem = db.session.query(Orders)
-    disputesitem = disputesitem.filter(Orders.disputed_order == 1)
-    disputesitem = disputesitem.filter(Orders.type == 1)
-    disputesitem = disputesitem.filter(Orders.modid == 0)
-    disputesitem = disputesitem.order_by(Orders.disputedtimer.desc())
+    disputesitem = db.session.query(Vendor_Orders)
+    disputesitem = disputesitem.filter(Vendor_Orders.disputed_order == 1)
+    disputesitem = disputesitem.filter(Vendor_Orders.type == 1)
+    disputesitem = disputesitem.filter(Vendor_Orders.modid == 0)
+    disputesitem = disputesitem.order_by(Vendor_Orders.disputedtimer.desc())
     itemdisputes = disputesitem.limit(20)
     countitemdisputes = disputesitem.count()
 
     # get customer help/messages
-    allmsgs_mod = db.session.query(Issue)
-    allmsgs_mod = allmsgs_mod.filter(Issue.status == 0)
+    allmsgs_mod = db.session.query(Service_Issue)
+    allmsgs_mod = allmsgs_mod.filter(Service_Issue.status == 0)
     msgs_mod = allmsgs_mod.limit(10)
     msgs_mod_count = allmsgs_mod.count()
 
-    # get flagged items
-    items = db.session.query(flagged)
-    items = items.order_by(flagged.howmany.desc())
+    # get Flagged items
+    items = db.session.query(Admin_Flagged)
+    items = items.order_by(Admin_Flagged.howmany.desc())
     item = items.all()
     countitem = items.count()
 
     # get msgs mods are currently working on
-    my_mod = db.session.query(PostUser)
-    my_mod = my_mod.filter(PostUser.official == 1)
-    my_mod = my_mod.filter(PostUser.user_id == 0)
-    my_mod = my_mod.filter(PostUser.modid == current_user.id)
+    my_mod = db.session.query(Message_PostUser)
+    my_mod = my_mod.filter(Message_PostUser.official == 1)
+    my_mod = my_mod.filter(Message_PostUser.user_id == 0)
+    my_mod = my_mod.filter(Message_PostUser.modid == current_user.id)
     currentmod_mod = my_mod.limit(10)
     currentmod_count = my_mod.count()
 
-    allfeedback = db.session.query(websitefeedback)
-    allfeedback = allfeedback.order_by(websitefeedback.timestamp.desc())
+    allfeedback = db.session.query(Service_WebsiteFeedback)
+    allfeedback = allfeedback.order_by(
+        Service_WebsiteFeedback.timestamp.desc())
     feedback = allfeedback.all()
 
     if request.method == 'POST':
 
         if form.finduser.data:
-            return redirect(url_for('admin.admin_viewuser', username=form.searchbar.data))
+            return redirect(url_for('admin.admin_view_user', username=form.searchbar.data))
         if form.findorder.data:
-            return redirect(url_for('admin.admin_vieworder', id=form.searchbar.data))
+            return redirect(url_for('admin.admin_view_order', id=form.searchbar.data))
         if form.finditem.data:
-            return redirect(url_for('admin.admin_viewitem', id=form.searchbar.data))
+            return redirect(url_for('admin.admin_view_item', id=form.searchbar.data))
         if form.change_usersearch.data:
-            return redirect(url_for('admin.changeuser', username=form.changeuser_searchbar.data))
+            return redirect(url_for('admin.change_user', username=form.changeuser_searchbar.data))
         else:
             pass
 
@@ -187,10 +190,10 @@ def adminHome():
                            )
 
 
-@admin.route('/changeitem/', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def changeitem():
+@admin.route('/change_item/', methods=['GET', 'POST'])
+@admin_account_required
+@admin_account_required_level_10
+def change_item():
     form = changeitemForm(request.form)
     if current_user.is_authenticated:
         if current_user.admin == 0:
@@ -201,11 +204,11 @@ def changeitem():
     if request.method == 'POST':
         if current_user.admin == 1:
             if form.finditem.data:
-                getitem = db.session.query(marketitem).filter_by(
+                getitem = db.session.query(Item_MarketItem).filter_by(
                     id=form.searchbar.data).first()
                 if getitem:
                     try:
-                        addfeed = Feedback(
+                        addfeed = User_DataFeedback(
                             customername='eddwinn',
                             sale_id=0,
                             vendorname=getitem.vendor_name,
@@ -224,7 +227,7 @@ def changeitem():
                         db.session.commit()
 
                         # increase vendor stats
-                        getvendor = db.session.query(StatisticsVendor).filter_by(
+                        getvendor = db.session.query(Profile_StatisticsVendor).filter_by(
                             vendorid=getitem.vendor_id).first()
                         x = getvendor.totalsales
                         y = x + 1
@@ -242,26 +245,26 @@ def changeitem():
                         db.session.add(getvendor)
                         db.session.commit()
                         flash("Item Updated", category="success")
-                        return redirect(url_for('admin.changeitem'))
+                        return redirect(url_for('admin.change_item'))
                     except Exception as e:
                         db.session.rollback()
                         flash("error: " + str(e), category="danger")
-                        return redirect(url_for('admin.changeitem'))
+                        return redirect(url_for('admin.change_item'))
                 else:
                     flash("No item with that id", category="danger")
-                    return redirect(url_for('admin.changeitem'))
+                    return redirect(url_for('admin.change_item'))
             else:
                 pass
 
-    return render_template('admin/god/changeitem.html',
+    return render_template('admin/god/change_item.html',
                            form=form
                            )
 
 
-@admin.route('/changeuser/<username>', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def changeuser(username):
+@admin.route('/change_user/<username>', methods=['GET', 'POST'])
+@admin_account_required
+@admin_account_required_level_10
+def change_user(username):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
@@ -269,9 +272,9 @@ def changeuser(username):
             pass
 
     getstatscustomer = db.session.query(
-        StatisticsUser).filter_by(username=username).first()
+        Profile_StatisticsUser).filter_by(username=username).first()
     getstatsvendor = db.session.query(
-        StatisticsVendor).filter_by(username=username).first()
+        Profile_StatisticsVendor).filter_by(username=username).first()
     form = changeUserForm(
         customer_totalitemsbought=getstatscustomer.totalitemsbought,
         customer_totalreviews=getstatscustomer.totalreviews,
@@ -312,18 +315,17 @@ def changeuser(username):
 
                 db.session.commit()
                 flash("Stats Updated", category="success")
-                return redirect(url_for('admin.changeuser', username=username))
+                return redirect(url_for('admin.change_user', username=username))
             else:
                 flash("No user with that name", category="danger")
-                return redirect(url_for('admin.changeuser', username=username))
+                return redirect(url_for('admin.change_user', username=username))
         else:
             flash("Error", category="danger")
             return redirect(url_for('index', username=username))
     else:
-
         pass
 
-    return render_template('admin/god/changeuser.html',
+    return render_template('admin/god/change_user.html',
                            form=form,
                            getstatscustomer=getstatscustomer,
                            getstatsvendor=getstatsvendor,
@@ -334,8 +336,8 @@ def changeuser(username):
 @admin.route('/add-update/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-def addupdate():
+@admin_account_required
+def add_update():
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
@@ -344,11 +346,11 @@ def addupdate():
     now = datetime.utcnow()
     updateform = addupdateform(request.form)
     title = 'Add an update'
-    user = db.session.query(User).filter_by(
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
     if request.method == 'POST':
         if user.admin == 1:
-            addanupdate = updateLog(
+            addanupdate = Service_UpdateLog(
                 header=updateform.title.data,
                 body=updateform.description.data,
                 dateofupdate=datetime.utcnow()
@@ -356,32 +358,32 @@ def addupdate():
             db.session.add(addanupdate)
             db.session.commit()
             flash("Added Update", category="success")
-            return redirect(url_for('admin.addupdate'))
+            return redirect(url_for('admin.add_update'))
         else:
             flash("user not admin account", category="success")
-    return render_template('admin/adddata/addupdate.html', user=user, now=now, updateform=updateform, title=title)
+    return render_template('admin/adddata/add_update.html', user=user, now=now, updateform=updateform, title=title)
 
 
 @admin.route('/account-management/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def setaccounttoAdmin():
+@admin_account_required
+@admin_account_required_level_10
+def set_account_to_admin():
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
     title = 'Admin Role'
-    user = db.session.query(User).filter_by(
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
     adminform = settoAdmin(request.form)
 
-    adminaccounts = db.session.query(User).filter_by(admin=1).all()
+    adminaccounts = db.session.query(Auth_User).filter_by(admin=1).all()
     if request.method == 'POST':
         if user.admin_role >= 5:
-            finduser = db.session.query(User).filter_by(
+            finduser = db.session.query(Auth_User).filter_by(
                 username=adminform.username.data).first()
             if finduser:
                 finduser.admin = 1,
@@ -389,7 +391,7 @@ def setaccounttoAdmin():
 
                 db.session.add(finduser)
                 db.session.commit()
-                return redirect(url_for('admin.setaccounttoAdmin'))
+                return redirect(url_for('admin.set_account_to_admin'))
             else:
                 flash("cant find username", category="danger")
         else:
@@ -404,17 +406,17 @@ def setaccounttoAdmin():
 @admin.route('/add-achievement/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def addAchievement():
+@admin_account_required
+@admin_account_required_level_10
+def add_achievement():
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
-    achievementform = addachievement(request.form)
+    achievementform = add_achievement(request.form)
     title = 'Make a new Achievement'
-    user = db.session.query(User).filter_by(
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
     if request.method == 'POST':
         if user.admin == 1:
@@ -433,7 +435,7 @@ def addAchievement():
             db.session.add(addach)
             db.session.commit()
             flash("Achievement Added", category="success")
-            return redirect(url_for('admin.addAchievement'))
+            return redirect(url_for('admin.add_achievement'))
         else:
             flash("user not admin account", category="success")
     return render_template('admin/adddata/achievement.html',
@@ -445,8 +447,8 @@ def addAchievement():
 @admin.route('/dispute/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-@ADMINaccountlevel3_required
+@admin_account_required
+@admin_account_level_required_3
 def dispute(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
@@ -456,52 +458,55 @@ def dispute(id):
     now = datetime.utcnow()
     postform = Chatform(request.form)
     disputeform = Disputeform(request.form)
-    mod = db.session.query(User).filter_by(
+    mod = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
     if current_user.is_authenticated:
         if mod.admin != 1:
             return redirect(url_for('index'))
 
-    order = db.session.query(Orders).filter(Orders.id == id).first()
+    order = db.session.query(Vendor_Orders).filter(
+        Vendor_Orders.id == id).first()
 
-    posts = db.session.query(Chat)
-    posts = posts.filter(Chat.orderid == order.id)
-    posts = posts.filter(Chat.type == order.type)
-    posts = posts.order_by(Chat.timestamp.desc())
+    posts = db.session.query(Message_Chat)
+    posts = posts.filter(Message_Chat.orderid == order.id)
+    posts = posts.filter(Message_Chat.type == order.type)
+    posts = posts.order_by(Message_Chat.timestamp.desc())
     comments = posts.limit(50)
 
-    # User
-    user = db.session.query(User).filter_by(id=order.customer_id).first()
-    usergetlevel = db.session.query(UserAchievements).filter_by(
+    # Auth_User
+    user = db.session.query(Auth_User).filter_by(id=order.customer_id).first()
+    usergetlevel = db.session.query(Achievements_UserAchievements).filter_by(
         username=user.username).first()
     userpictureid = str(usergetlevel.level)
-    userstats = db.session.query(StatisticsUser).filter_by(
+    userstats = db.session.query(Profile_StatisticsUser).filter_by(
         username=user.username).first()
-    level = db.session.query(UserAchievements).filter_by(
+    level = db.session.query(Achievements_UserAchievements).filter_by(
         username=user.username).first()
     width = int(level.experiencepoints / 10)
-    userreviews = db.session.query(Userreviews).filter(
-        user.id == Userreviews.customer_id).limit(25)
-    userach = db.session.query(whichAch).filter_by(user_id=user.id).first()
+    userreviews = db.session.query(Profile_Userreviews).filter(
+        user.id == Profile_Userreviews.customer_id).limit(25)
+    userach = db.session.query(Achievements_WhichAch).filter_by(
+        user_id=user.id).first()
 
     # vendor
-    vendor = db.session.query(User).filter_by(id=order.vendor_id).first()
+    vendor = db.session.query(Auth_User).filter_by(id=order.vendor_id).first()
     vendorstats = db.session.query(
-        StatisticsVendor).filter_by(vendorid=vendor.id).first()
-    vendorgetlevel = db.session.query(UserAchievements).filter_by(
+        Profile_StatisticsVendor).filter_by(vendorid=vendor.id).first()
+    vendorgetlevel = db.session.query(Achievements_UserAchievements).filter_by(
         username=vendor.username).first()
     vendorpictureid = str(vendorgetlevel.level)
-    vendorach = db.session.query(whichAch).filter_by(user_id=vendor.id).first()
+    vendorach = db.session.query(Achievements_WhichAch).filter_by(
+        user_id=vendor.id).first()
     # vendorreviews
-    vendorreviews = db.session.query(Feedback).filter(
-        vendor.id == Feedback.vendorid).limit(25)
+    vendorreviews = db.session.query(User_DataFeedback).filter(
+        vendor.id == User_DataFeedback.vendorid).limit(25)
 
     if request.method == 'POST':
         if postform.post.data:
             # if they admin is chatting
             if order.type == 1:
                 try:
-                    post = Chat(
+                    post = Message_Chat(
                         orderid=order.id,
                         author=current_user.username,
                         author_id=current_user.id,
@@ -811,7 +816,7 @@ def dispute(id):
                 db.session.add(order)
                 db.session.commit()
             else:
-                return redirect(url_for('admin.adminHome'))
+                return redirect(url_for('admin.admin_home'))
 
             flash("Added 48 hours", category="danger")
             return redirect(url_for('admin.dispute', id=id))
@@ -832,11 +837,11 @@ def dispute(id):
             return redirect(url_for('admin.dispute', id=id))
 
         if disputeform.abortorder.data:
-            item = db.session.query(Orders).filter_by(id=id).first()
+            item = db.session.query(Vendor_Orders).filter_by(id=id).first()
             msg = db.session.query(
-                shippingSecret).filter_by(orderid=id).first()
+                Service_ShippingSecret).filter_by(orderid=id).first()
             gettracking = db.session.query(
-                Tracking).filter_by(sale_id=id).first()
+                Service_Tracking).filter_by(sale_id=id).first()
             if item.completed == 0:
                 try:
                     item.cancelled = 1
@@ -895,7 +900,7 @@ def dispute(id):
                     "Error. Order completed already..Might be trying to get scammed....", category="danger")
                 return redirect(url_for('admin.dispute', id=id))
         else:
-            return redirect(url_for('admin.adminHome'))
+            return redirect(url_for('admin.admin_home'))
 
     return render_template('admin/dispute.html',
                            user=user, now=now,
@@ -922,8 +927,8 @@ def dispute(id):
 @admin.route('/msg/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-@ADMINaccountlevel3_required
+@admin_account_required
+@admin_account_level_required_3
 def messenger(id):
 
     if current_user.is_authenticated:
@@ -934,44 +939,46 @@ def messenger(id):
     now = datetime.utcnow()
 
     postform = Chatform(request.form)
-    # User
+    # Auth_User
 
     # themsg
-    msg = db.session.query(PostUser)
+    msg = db.session.query(Message_PostUser)
     msg = msg.filter_by(id=id).first()
 
     # comments
-    comments = db.session.query(Comment)
-    comments = comments.filter(Comment.post_id == msg.postid)
-    comments = comments.order_by(Comment.timestamp.desc())
+    comments = db.session.query(Message_Comment)
+    comments = comments.filter(Message_Comment.post_id == msg.postid)
+    comments = comments.order_by(Message_Comment.timestamp.desc())
     comments = comments.all()
 
     # user
-    user = db.session.query(User).filter_by(
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
-    usergetlevel = db.session.query(UserAchievements).filter_by(
+    usergetlevel = db.session.query(Achievements_UserAchievements).filter_by(
         username=user.username).first()
     userpictureid = str(usergetlevel.level)
-    userstats = db.session.query(StatisticsUser).filter_by(
+    userstats = db.session.query(Profile_StatisticsUser).filter_by(
         username=user.username).first()
-    level = db.session.query(UserAchievements).filter_by(
+    level = db.session.query(Achievements_UserAchievements).filter_by(
         username=user.username).first()
     width = int(level.experiencepoints / 10)
-    userach = db.session.query(whichAch).filter_by(user_id=user.id).first()
+    userach = db.session.query(Achievements_WhichAch).filter_by(
+        user_id=user.id).first()
 
     # vendor
-    vendor = db.session.query(User).filter_by(id=msg.author_id).first()
+    vendor = db.session.query(Auth_User).filter_by(id=msg.author_id).first()
     vendorstats = db.session.query(
-        StatisticsVendor).filter_by(vendorid=vendor.id).first()
-    vendorgetlevel = db.session.query(UserAchievements).filter_by(
+        Profile_StatisticsVendor).filter_by(vendorid=vendor.id).first()
+    vendorgetlevel = db.session.query(Achievements_UserAchievements).filter_by(
         username=vendor.username).first()
     vendorpictureid = str(vendorgetlevel.level)
-    vendorach = db.session.query(whichAch).filter_by(user_id=vendor.id).first()
+    vendorach = db.session.query(Achievements_WhichAch).filter_by(
+        user_id=vendor.id).first()
 
     if request.method == 'POST':
         if user.admin == 1:
             if postform.post.data:
-                post = Comment(
+                post = Message_Comment(
                     author_id=current_user.id,
                     author=current_user.username,
                     timestamp=datetime.utcnow(),
@@ -982,8 +989,8 @@ def messenger(id):
                 db.session.add(post)
                 db.session.commit()
 
-                getpost = db.session.query(PostUser)
-                getpost = getpost.filter(PostUser.postid == msg.postid)
+                getpost = db.session.query(Message_PostUser)
+                getpost = getpost.filter(Message_PostUser.postid == msg.postid)
                 getallposts = getpost.all()
 
                 for f in getallposts:
@@ -1017,103 +1024,105 @@ def messenger(id):
 @admin.route('/dispute/becomeadmin/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def order_becomeadmin(id):
+@admin_account_required
+@admin_account_required_level_10
+def order_become_admin(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
-    getorder = db.session.query(Orders).filter_by(id=id).first()
+    getorder = db.session.query(Vendor_Orders).filter_by(id=id).first()
     getorder.modid = current_user.id
     db.session.add(getorder)
     db.session.commit()
-    return redirect(url_for('admin.adminHome', username=current_user.username))
+    return redirect(url_for('admin.admin_home', username=current_user.username))
 
 
 @admin.route('/msg/becomeadmin/<int:id>', methods=['GET', 'POST'])
 @website_offline
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def msg_dispute_becomeadmin(id):
+@admin_account_required
+@admin_account_level_required_3
+def msg_dispute_become_admin(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
-    getpost = db.session.query(PostUser).filter_by(id=id).first()
+    getpost = db.session.query(Message_PostUser).filter_by(id=id).first()
     getpost.modid = current_user.id
     db.session.add(getpost)
     db.session.commit()
-    return redirect(url_for('admin.adminHome', username=current_user.username))
+    return redirect(url_for('admin.admin_home', username=current_user.username))
 
 
 @admin.route('/msg/settlemsg/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccountlevel3_required
+@admin_account_level_required_3
 def msg_dispute_settle(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
-    getpost = db.session.query(PostUser).filter_by(id=id).first()
+    getpost = db.session.query(Message_PostUser).filter_by(id=id).first()
     getpost.official = 0
     db.session.add(getpost)
     db.session.commit()
-    return redirect(url_for('admin.adminHome', username=current_user.username))
+    return redirect(url_for('admin.admin_home', username=current_user.username))
 
 
 @admin.route('/msg/delete/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccountlevel3_required
+@admin_account_level_required_3
 def msg_delete(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
-    getpost = db.session.query(PostUser).filter_by(id=id).first()
+    getpost = db.session.query(Message_PostUser).filter_by(id=id).first()
     db.session.delete(getpost)
     db.session.commit()
-    comments = db.session.query(Comment).filter(Comment.post_id == id).all()
+    comments = db.session.query(Message_Comment).filter(
+        Message_Comment.post_id == id).all()
     if comments:
         for f in comments:
             db.session.delete(f)
             db.session.commit()
-    return redirect(url_for('admin.adminHome', username=current_user.username))
+    return redirect(url_for('admin.admin_home', username=current_user.username))
 
 
 @admin.route('/feedback/delete/<int:id>', methods=['GET', 'POST'])
 @website_offline
-@ADMINaccount_required
-@ADMINaccountlevel3_required
+@admin_account_required
+@admin_account_level_required_3
 def feedback_delete(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
-    getpost = db.session.query(websitefeedback).filter_by(id=id).first()
+    getpost = db.session.query(
+        Service_WebsiteFeedback).filter_by(id=id).first()
     db.session.delete(getpost)
     db.session.commit()
-    return redirect(url_for('admin.adminHome', username=current_user.username))
+    return redirect(url_for('admin.admin_home', username=current_user.username))
 
 
 @admin.route('/clearnetprofit/', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def admin_clearnetprofit():
+@admin_account_required
+@admin_account_required_level_10
+def admin_clearnet_profit():
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
     now = datetime.utcnow()
-    user = db.session.query(User).filter_by(id=current_user.id).first()
+    user = db.session.query(Auth_User).filter_by(id=current_user.id).first()
     if user.admin_role > 5:
         # pagination
         search = False
@@ -1127,9 +1136,9 @@ def admin_clearnetprofit():
         per_page = 1000
         # Get Transaction history
 
-        transactfull = db.session.query(clearnetprofit_btc)
+        transactfull = db.session.query(Admin_ClearnetProfitBtc)
         transactfull = transactfull.order_by(
-            clearnetprofit_btc.timestamp.desc())
+            Admin_ClearnetProfitBtc.timestamp.desc())
 
         transactcount = transactfull.count()
         profita = transactfull.limit(per_page).offset(offset)
@@ -1154,43 +1163,43 @@ def admin_clearnetprofit():
         return redirect(url_for('index'))
 
 
-@admin.route('/viewflaggeditems/', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def viewflaggeditems():
+@admin.route('/view_flagged_items/', methods=['GET', 'POST'])
+@admin_account_required
+@admin_account_level_required_3
+def view_flagged_items():
 
-    items = db.session.query(flagged)
-    items = items.order_by(flagged.howmany.desc())
+    items = db.session.query(Admin_Flagged)
+    items = items.order_by(Admin_Flagged.howmany.desc())
     item = items.all()
     countitem = items.count()
-    return render_template('admin/viewflaggeditems.html',
+    return render_template('admin/view_flagged_items.html',
                            item=item,
                            countitem=countitem
                            )
 
 
-@admin.route('/removeflags/<int:id>', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def removeflags(id):
+@admin.route('/remove_flags/<int:id>', methods=['GET', 'POST'])
+@admin_account_required
+@admin_account_level_required_3
+def remove_flags(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
-    getflaggeditem = db.session.query(flagged).filter_by(id=id).first()
+    getflaggeditem = db.session.query(Admin_Flagged).filter_by(id=id).first()
     db.session.delete(getflaggeditem)
     db.session.commit()
     flash("Flags Deleted", category="warning")
-    return redirect(url_for('admin.viewflaggeditems'))
+    return redirect(url_for('admin.view_flagged_items'))
 
 
 @admin.route('/deletevendoritem/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def deleteItem(id):
+@admin_account_required
+@admin_account_level_required_3
+def vendorcreate_delete_item(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
@@ -1238,7 +1247,7 @@ def deleteItem(id):
 
     global pathtofile5
     global file_extension5
-    item = marketitem.query.get(id)
+    item = Item_MarketItem.query.get(id)
 
     try:
         specific_folder = str(item.id)
@@ -1425,16 +1434,16 @@ def deleteItem(id):
         db.session.delete(item)
         db.session.commit()
         flash("Item Deleted", category="success")
-        return redirect(url_for('admin.viewflaggeditems'))
+        return redirect(url_for('admin.view_flagged_items'))
     except Exception:
         flash("Error", category="danger")
-        return redirect(url_for('admin.viewflaggeditems'))
+        return redirect(url_for('admin.view_flagged_items'))
 
 
 @admin.route('/admin/viewuser/<username>', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def admin_viewuser(username):
+@admin_account_required
+@admin_account_level_required_3
+def admin_view_user(username):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
@@ -1455,14 +1464,15 @@ def admin_viewuser(username):
     per_page = 10
     # End Pagination
 
-    user = db.session.query(User).filter_by(username=username).first()
+    user = db.session.query(Auth_User).filter_by(username=username).first()
     if user is not None:
         userwallet = db.session.query().filter_by(user_id=user.id).first()
 
         # Get Transaction history
-        transactfull = db.session.query(TransactionsBch)
-        transactfull = transactfull.filter(TransactionsBch.user_id == user.id)
-        transactfull = transactfull.order_by(TransactionsBch.id.desc())
+        transactfull = db.session.query(Bch_WalletTransactions)
+        transactfull = transactfull.filter(
+            Bch_WalletTransactions.user_id == user.id)
+        transactfull = transactfull.order_by(Bch_WalletTransactions.id.desc())
         transactcount = transactfull.count()
         transact = transactfull.limit(per_page).offset(offset)
 
@@ -1518,13 +1528,13 @@ def admin_viewuser(username):
                                )
     else:
         flash("User doesnt exist. Check spelling", category="danger")
-        return redirect(url_for('admin.adminHome'))
+        return redirect(url_for('admin.admin_home'))
 
 
 @admin.route('/admin/movemoney', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def admin_movemoney():
+@admin_account_required
+@admin_account_required_level_10
+def admin_move_money():
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
@@ -1534,8 +1544,9 @@ def admin_movemoney():
     form = adminsendMoney()
     now = datetime.utcnow()
 
-    user = db.session.query(User).filter_by(id=current_user.id).first()
-    userwallet = db.session.query(BchWallet).filter_by(user_id=user.id).first()
+    user = db.session.query(Auth_User).filter_by(id=current_user.id).first()
+    userwallet = db.session.query(
+        Bch_Wallet).filter_by(user_id=user.id).first()
 
     if request.method == 'POST':
         if user.admin == 1:
@@ -1543,8 +1554,8 @@ def admin_movemoney():
             description = form.description.data
             amount = form.amount.data
 
-            finduser = db.session.query(User).filter(
-                User.username == sendto).first()
+            finduser = db.session.query(Auth_User).filter(
+                Auth_User.username == sendto).first()
             if finduser:
                 theuser = finduser.id
                 theusername = str(finduser.username)
@@ -1556,7 +1567,7 @@ def admin_movemoney():
                             amount=amount, comment=description, user_id=theuser)
                         flash("Money sent to: " + theusername + " with user id: " + theuser_id,
                               category="success")
-                        return redirect(url_for('admin.admin_movemoney'))
+                        return redirect(url_for('admin.admin_move_money'))
                     else:
                         return redirect(url_for('index', username=current_user.username))
                 else:
@@ -1566,7 +1577,7 @@ def admin_movemoney():
 
                 flash("User doesnt exist",
                       category="danger")
-                return redirect(url_for('admin.admin_movemoney'))
+                return redirect(url_for('admin.admin_move_money'))
     return render_template('admin/god/movemoney.html',
                            user=user,
                            now=now,
@@ -1577,9 +1588,9 @@ def admin_movemoney():
 
 
 @admin.route('/admin/movemoneyfromuser', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel10_required
-def admin_movemoney_fromuser():
+@admin_account_required
+@admin_account_required_level_10
+def admin_move_money_from_user():
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
@@ -1589,8 +1600,9 @@ def admin_movemoney_fromuser():
     form = adminsendMoney()
     now = datetime.utcnow()
 
-    user = db.session.query(User).filter_by(id=current_user.id).first()
-    userwallet = db.session.query(BchWallet).filter_by(user_id=user.id).first()
+    user = db.session.query(Auth_User).filter_by(id=current_user.id).first()
+    userwallet = db.session.query(
+        Bch_Wallet).filter_by(user_id=user.id).first()
 
     if request.method == 'POST':
         if user.admin == 1:
@@ -1598,8 +1610,8 @@ def admin_movemoney_fromuser():
             description = form.description.data
             amount = form.amount.data
 
-            finduser = db.session.query(User).filter(
-                User.username == sendto).first()
+            finduser = db.session.query(Auth_User).filter(
+                Auth_User.username == sendto).first()
             if finduser:
                 theuser = finduser.id
                 theusername = str(finduser.username)
@@ -1613,7 +1625,7 @@ def admin_movemoney_fromuser():
 
                         flash("Money taken from : " + theusername + " with user id: " + theuser_id,
                               category="success")
-                        return redirect(url_for('admin.admin_movemoney_fromuser'))
+                        return redirect(url_for('admin.admin_move_money_from_user'))
                     else:
                         return redirect(url_for('index', username=current_user.username))
                 else:
@@ -1621,7 +1633,7 @@ def admin_movemoney_fromuser():
             else:
                 flash("User doesnt exist",
                       category="danger")
-                return redirect(url_for('admin.admin_movemoney_fromuser'))
+                return redirect(url_for('admin.admin_move_money_from_user'))
 
     return render_template('admin/god/movemoney.html',
                            user=user,
@@ -1633,51 +1645,52 @@ def admin_movemoney_fromuser():
 
 
 @admin.route('/admin/viewitem/<int:id>', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def admin_viewitem(id):
+@admin_account_required
+@admin_account_level_required_3
+def admin_view_item(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
     now = datetime.utcnow()
-    user = db.session.query(User).filter_by(
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
-    getitem = db.session.query(marketitem).filter_by(id=id).first()
+    getitem = db.session.query(Item_MarketItem).filter_by(id=id).first()
     return render_template('admin/viewid/viewitem.html',
                            user=user, now=now,
                            getitem=getitem)
 
 
-@admin.route('/vieworder/<int:id>', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def admin_vieworder(id):
+@admin.route('/vendor_orders_view_specific/<int:id>', methods=['GET', 'POST'])
+@admin_account_required
+@admin_account_level_required_3
+def admin_view_order(id):
     if current_user.is_authenticated:
         if current_user.admin == 0:
             return redirect(url_for('index'))
         else:
             pass
     now = datetime.utcnow()
-    user = db.session.query(User).filter_by(
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
-    order = db.session.query(Orders).filter_by(id=id).first()
+    order = db.session.query(Vendor_Orders).filter_by(id=id).first()
     if order is None:
 
         flash("Order has been deleted.", category="success")
         return redirect(url_for('index', username=current_user.username))
 
-    item = db.session.query(marketitem).filter(
-        marketitem.id == order.item_id).first()
+    item = db.session.query(Item_MarketItem).filter(
+        Item_MarketItem.id == order.item_id).first()
 
-    transactfull = db.session.query(TransactionsBch)
-    transactfull = transactfull.filter(TransactionsBch.commentbtc == str(id))
-    transactfull = transactfull.order_by(TransactionsBch.timeoft.asc())
+    transactfull = db.session.query(Bch_WalletTransactions)
+    transactfull = transactfull.filter(
+        Bch_WalletTransactions.commentbtc == str(id))
+    transactfull = transactfull.order_by(Bch_WalletTransactions.timeoft.asc())
     transactcount = transactfull.count()
     transact = transactfull.all()
 
-    return render_template('admin/viewid/vieworder.html',
+    return render_template('admin/viewid/vendor_orders_view_specific.html',
                            user=user, now=now,
                            order=order,
                            item=item,
@@ -1685,9 +1698,9 @@ def admin_vieworder(id):
 
 
 @admin.route('/viewadminorders', methods=['GET', 'POST'])
-@ADMINaccount_required
-@ADMINaccountlevel3_required
-def admin_viewallorders():
+@admin_account_required
+@admin_account_level_required_3
+def admin_view_all_orders():
 
     search = False
     q = request.args.get('q')
@@ -1699,11 +1712,11 @@ def admin_viewallorders():
     outer_window = 5  # search bar at bottom used for .. lots of pages
     per_page = 10
 
-    ordernew1 = db.session.query(Orders).filter(Orders.new_order == 1,
-                                                Orders.completed == 0,
-                                                Orders.type == 1
-                                                )
-    ordernew1 = ordernew1.order_by(Orders.id.desc())
+    ordernew1 = db.session.query(Vendor_Orders).filter(Vendor_Orders.new_order == 1,
+                                                       Vendor_Orders.completed == 0,
+                                                       Vendor_Orders.type == 1
+                                                       )
+    ordernew1 = ordernew1.order_by(Vendor_Orders.id.desc())
     ordernew = ordernew1.limit(per_page).offset(offset)
     ordernewcount = ordernew1.count()
 
@@ -1717,12 +1730,12 @@ def admin_viewallorders():
                                     inner_window=inner_window,
                                     outer_window=outer_window)
 
-    orderaccepted1 = db.session.query(Orders).filter(Orders.accepted_order == 1,
-                                                     Orders.completed == 0,
-                                                     Orders.type == 1
-                                                     )
+    orderaccepted1 = db.session.query(Vendor_Orders).filter(Vendor_Orders.accepted_order == 1,
+                                                            Vendor_Orders.completed == 0,
+                                                            Vendor_Orders.type == 1
+                                                            )
 
-    orderaccepted1 = orderaccepted1.order_by(Orders.id.desc())
+    orderaccepted1 = orderaccepted1.order_by(Vendor_Orders.id.desc())
     orderaccepted = orderaccepted1.limit(per_page).offset(offset)
     orderacceptedcount = orderaccepted1.count()
     paginationorderaccepted = Pagination(page=page,
@@ -1735,12 +1748,12 @@ def admin_viewallorders():
                                          inner_window=inner_window,
                                          outer_window=outer_window)
 
-    orderwaiting1 = db.session.query(Orders).filter(Orders.waiting_order == 1,
-                                                    Orders.completed == 0,
-                                                    Orders.type == 1
-                                                    )
+    orderwaiting1 = db.session.query(Vendor_Orders).filter(Vendor_Orders.waiting_order == 1,
+                                                           Vendor_Orders.completed == 0,
+                                                           Vendor_Orders.type == 1
+                                                           )
 
-    orderwaiting1 = orderwaiting1.order_by(Orders.id.desc())
+    orderwaiting1 = orderwaiting1.order_by(Vendor_Orders.id.desc())
     orderwaiting = orderwaiting1.limit(per_page).offset(offset)
     orderwaitingcount = orderwaiting1.count()
     paginationorderwaiting = Pagination(page=page,
@@ -1753,11 +1766,11 @@ def admin_viewallorders():
                                         inner_window=inner_window,
                                         outer_window=outer_window)
 
-    completed1 = db.session.query(Orders).filter(Orders.completed == 1,
-                                                 Orders.type == 1
-                                                 )
+    completed1 = db.session.query(Vendor_Orders).filter(Vendor_Orders.completed == 1,
+                                                        Vendor_Orders.type == 1
+                                                        )
 
-    completed1 = completed1.order_by(Orders.id.desc())
+    completed1 = completed1.order_by(Vendor_Orders.id.desc())
     completed = completed1.limit(per_page).offset(offset)
     completedcount = completed1.count()
     paginationcompleted = Pagination(page=page,

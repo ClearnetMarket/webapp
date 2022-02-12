@@ -1,39 +1,30 @@
-from flask import \
-    render_template, \
-    redirect, \
-    url_for, \
-    g, \
-    session, \
-    flash, \
-    Response, \
-    send_from_directory
-
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from app.main import main
 from app import db, app, UPLOADED_FILES_DEST
+
 from flask_paginate import Pagination, get_page_args
 
 from flask import request
 # models
-from app.classes.auth import User
+from app.classes.auth import Auth_User
 from app.classes.achievements import \
-    Achievements, \
-    UserAchievements_recent
+    Achievements_UserAchievementsRecent
 
 from app.classes.affiliate import \
-    AffiliateOverview, \
-    AffiliateStats
+    Affiliate_Overview, \
+    Affiliate_Stats
 from app.classes.item import \
-    marketitem
-from app.classes.category import Categories
+    Item_MarketItem
+from app.classes.category import Category_Categories
 from app.classes.message import \
-    Notifications
+    Message_Notifications
 
 from app.classes.vendor import \
-    Orders
+    Vendor_Orders
 
-from app.classes.models import \
-    btc_cash_Prices
+from app.classes.wallet_bch import \
+    Bch_Prices
 
 # End Models
 from app.profile.profilebar import profilebar
@@ -41,12 +32,12 @@ from app.profile.profilebar import profilebar
 from app.auth.forms import searchForm
 from app.search.searchfunction import headerfunctions_vendor, headerfunctions
 from datetime import timedelta, datetime
-from app.common.functions import btc_cash_convertlocaltobtc
+from app.common.functions import convert_local_to_bch
 import os
 from decimal import Decimal
 from sqlalchemy.sql.expression import func
-from app.common.decorators import website_offline, \
-    ping_user, \
+from app.common.decorators import \
+    website_offline, \
     login_required
 
 
@@ -87,13 +78,13 @@ def index():
         customerdisputes = headerfunctions()
 
     btc_cash_price = db.session\
-        .query(btc_cash_Prices)\
+        .query(Bch_Prices)\
         .all()
 
     get_cats = db.session\
-        .query(Categories)\
-        .filter(Categories.id != 1000, Categories.id != 0)\
-        .order_by(Categories.name.asc())\
+        .query(Category_Categories)\
+        .filter(Category_Categories.id != 1000, Category_Categories.id != 0)\
+        .order_by(Category_Categories.name.asc())\
         .all()
 
     if current_user.is_authenticated:
@@ -117,21 +108,21 @@ def index():
             user2 = profilebar(user_id1=user.id, user_id2=0)
 
         user_recent_ach = db.session\
-            .query(UserAchievements_recent) \
+            .query(Achievements_UserAchievementsRecent) \
             .filter_by(user_id=user.id) \
-            .order_by(UserAchievements_recent.achievement_date.desc()) \
+            .order_by(Achievements_UserAchievementsRecent.achievement_date.desc()) \
             .limit(10)
 
         if current_user.affiliate_account != 0:
             try:
                 # users promo overview
                 userpromooverview = db.session\
-                    .query(AffiliateOverview)\
+                    .query(Affiliate_Overview)\
                     .filter_by(user_id=current_user.id)\
                     .first()
                 # users promo stats
                 userpromostats = db.session\
-                    .query(AffiliateStats)\
+                    .query(Affiliate_Stats)\
                     .filter_by(user_id=current_user.id)\
                     .first()
             except Exception:
@@ -144,9 +135,9 @@ def index():
         try:
             # Get Vendor needs return address
             ordersifreturnvendor = db.session\
-                .query(Orders)\
-                .filter(Orders.vendor_id == current_user.id)\
-                .filter(Orders.request_return == 1)
+                .query(Vendor_Orders)\
+                .filter(Vendor_Orders.vendor_id == current_user.id)\
+                .filter(Vendor_Orders.request_return == 1)
             returnneededvendoraddress = ordersifreturnvendor.count()
         except Exception:
             returnneededvendoraddress = None
@@ -154,9 +145,9 @@ def index():
         try:
             # Get Vendor needs mark as returned
             ordersifreturnvendor = db.session\
-                .query(Orders)\
-                .filter(Orders.vendor_id == current_user.id)\
-                .filter(Orders.request_return == 3)\
+                .query(Vendor_Orders)\
+                .filter(Vendor_Orders.vendor_id == current_user.id)\
+                .filter(Vendor_Orders.request_return == 3)\
                 .count()
         except Exception:
             ordersifreturnvendor = None
@@ -164,7 +155,7 @@ def index():
         # flash new achievements
         try:
             user_recent_achievements = db.session\
-                .query(UserAchievements_recent)\
+                .query(Achievements_UserAchievementsRecent)\
                 .filter_by(user_id=current_user.id, viewed=0)\
                 .limit(10)
             if user_recent_achievements:
@@ -179,36 +170,36 @@ def index():
 
         # Newest Items
         todayfeaturedfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.image_one != '')\
-            .order_by(marketitem.created.desc())
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.image_one != '')\
+            .order_by(Item_MarketItem.created.desc())
         todayfeatured = todayfeaturedfull.limit(5)
         tfcount = todayfeaturedfull.count()
         # best sellers
         bestsellersfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.image_one != '')\
-            .order_by(marketitem.total_sold.desc())
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.image_one != '')\
+            .order_by(Item_MarketItem.total_sold.desc())
         bestsellers = bestsellersfull.limit(5)
         bestsellerscount = bestsellersfull.count()
         # Electronics
         electronicsfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.image_one != '')\
-            .filter(marketitem.category_id_0 == 9)\
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.image_one != '')\
+            .filter(Item_MarketItem.category_id_0 == 9)\
             .order_by(func.random())
         Electronics = electronicsfull.limit(5)
         Electronicscount = electronicsfull.count()
         # PROMOTED
         additemfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.image_one != "")\
-            .filter(marketitem.ad_item is True)\
-            .filter(marketitem.ad_item_level == 2)\
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.image_one != "")\
+            .filter(Item_MarketItem.ad_item is True)\
+            .filter(Item_MarketItem.ad_item_level == 2)\
             .order_by(func.random())
         promoteditems = additemfull.limit(45)
         promoteditemscount = additemfull.count()
@@ -216,34 +207,34 @@ def index():
     else:
         # Newest Items
         todayfeaturedfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.image_one != '')\
-            .order_by(marketitem.created.desc())
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.image_one != '')\
+            .order_by(Item_MarketItem.created.desc())
         todayfeatured = todayfeaturedfull.limit(5)
         tfcount = todayfeaturedfull.count()
         # best sellers
         bestsellersfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.image_one != '')\
-            .order_by(marketitem.total_sold.desc())
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.image_one != '')\
+            .order_by(Item_MarketItem.total_sold.desc())
         bestsellers = bestsellersfull.limit(5)
         bestsellerscount = bestsellersfull.count()
         # Electronics
         electronicsfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.category_id_0 == 9)\
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.category_id_0 == 9)\
             .order_by(func.random())
         Electronics = electronicsfull.limit(5)
         Electronicscount = electronicsfull.count()
         # PROMOTED
         additemfull = db.session\
-            .query(marketitem)\
-            .filter(marketitem.online == 1)\
-            .filter(marketitem.ad_item is True)\
-            .filter(marketitem.ad_item_level == 2)\
+            .query(Item_MarketItem)\
+            .filter(Item_MarketItem.online == 1)\
+            .filter(Item_MarketItem.ad_item is True)\
+            .filter(Item_MarketItem.ad_item_level == 2)\
             .order_by(func.random())
         promoteditems = additemfull.limit(5)
         promoteditemscount = additemfull.count()
@@ -275,7 +266,7 @@ def index():
                 return redirect(url_for('index'))
             if formsearch.searchString.data == '':
                 formsearch.searchString.data = cat
-            return redirect(url_for('search.searchMaster',
+            return redirect(url_for('search.search_master',
                                     searchterm=formsearch.searchString.data,
                                     function=cat,
                                     ))
@@ -346,7 +337,7 @@ def notifications():
         = headerfunctions_vendor()
     delormarkasread = topbuttonForm()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
     # Pagination
@@ -357,9 +348,9 @@ def notifications():
     outer_window = 1  # search bar at bottom used for .. lots of pages
 
     getnotes = db.session\
-        .query(Notifications)\
-        .filter(Notifications.user_id == user.id)\
-        .order_by(Notifications.timestamp.desc())
+        .query(Message_Notifications)\
+        .filter(Message_Notifications.user_id == user.id)\
+        .order_by(Message_Notifications.timestamp.desc())
 
     notifications = getnotes.limit(per_page).offset(offset)
     pagination = Pagination(page=page,
@@ -376,7 +367,7 @@ def notifications():
         for v in request.form.getlist('checkit'):
             if delormarkasread.delete.data:
                 specific_note = db.session.query(
-                    Notifications).filter_by(id=v).first()
+                    Message_Notifications).filter_by(id=v).first()
                 if specific_note:
                     if specific_note.user_id == current_user.id:
                         db.session.delete(specific_note)
@@ -385,7 +376,7 @@ def notifications():
 
             elif delormarkasread.markasread.data:
                 specific_note = db.session.query(
-                    Notifications).filter_by(id=v).first()
+                    Message_Notifications).filter_by(id=v).first()
                 if specific_note.user_id == current_user.id:
                     if specific_note.read == 1:
                         specific_note.read = 0
@@ -408,9 +399,9 @@ def notifications():
                            )
 
 
-@main.route('/termsofservice', methods=['GET', 'POST'])
+@main.route('/terms_of_service', methods=['GET', 'POST'])
 @website_offline
-def termsofservice():
+def terms_of_service():
     return render_template('/tos.html')
 
 
@@ -426,9 +417,9 @@ def privacy():
     return render_template('/privacy.html')
 
 
-@main.route('/bugbounty', methods=['GET', 'POST'])
-def bugbounty():
-    return render_template('/general/bugbounty.html')
+@main.route('/bug_bounty', methods=['GET', 'POST'])
+def bug_bounty():
+    return render_template('/general/bug_bounty.html')
 
 
 @main.route('/clearnetdown')
@@ -444,7 +435,7 @@ def busy():
 
 
 @main.route('/clearnetmaitenance')
-def scheduledmaintenance():
+def scheduled_maintenance():
     ##status = 1
     return render_template('/errors/schmait.html')
 
@@ -452,11 +443,11 @@ def scheduledmaintenance():
 @main.route('/levels')
 @website_offline
 def levels():
-    hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
+    hundred = convert_local_to_bch(amount=100, currency=0)
+    twofity = convert_local_to_bch(amount=250, currency=0)
+    fivehundred = convert_local_to_bch(amount=500, currency=0)
+    thousand = convert_local_to_bch(amount=1000, currency=0)
+    twentyfivehundred = convert_local_to_bch(amount=2500, currency=0)
 
     hundred = Decimal(hundred)
     twofity = Decimal(twofity)
@@ -475,7 +466,7 @@ def levels():
 
 @main.route('/banned')
 @website_offline
-def whybanned():
+def why_banned():
     return render_template('/general/bannedandwhy.html')
 
 
@@ -494,7 +485,7 @@ def frontpage(username):
 
     if username != 'Guest':
         user = db.session\
-            .query(User)\
+            .query(Auth_User)\
             .filter_by(username=username)\
             .first()
         if user:
@@ -517,9 +508,9 @@ def frontpage(username):
                 user2 = profilebar(user_id1=user.id, user_id2=0)
 
             user_recent_ach = db.session\
-                .query(UserAchievements_recent)\
+                .query(Achievements_UserAchievementsRecent)\
                 .filter_by(user_id=user.id)\
-                .order_by(UserAchievements_recent.achievement_date.desc())\
+                .order_by(Achievements_UserAchievementsRecent.achievement_date.desc())\
                 .limit(10)
 
             return render_template('profile/overview.html',

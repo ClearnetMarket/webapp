@@ -4,7 +4,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
     <li class="breadcrumb-item">
-      <a href="{{ url_for('admin.adminHome') }}">Admin Home</a>
+      <a href="{{ url_for('admin.admin_home') }}">Admin Home</a>
     </li>
   </ol>
 </nav>
@@ -25,7 +25,7 @@
 </form>
 <div class="row">
   <div class="col-12 linkcolor">
-    <a href="{{ url_for('admin.admin_viewallorders') }}">View All Orders</a>
+    <a href="{{ url_for('admin.admin_view_all_orders') }}">View All Orders</a>
   </div>
 </div>
 
@@ -35,7 +35,7 @@
   <ul>
     <li>
       <a
-        href="{{ url_for('admin.admin_clearnetprofit',
+        href="{{ url_for('admin.admin_clearnet_profit',
                             username=current_user.username) }}"
         >Profit
       </a>
@@ -43,17 +43,17 @@
   </ul>
   <ul>
     <li>
-      <a href="{{ url_for('admin.admin_movemoney') }}">Move Funds to user</a>
+      <a href="{{ url_for('admin.admin_move_money') }}">Move Funds to user</a>
     </li>
     <li>
-      <a href="{{ url_for('admin.admin_movemoney_fromuser') }}"
+      <a href="{{ url_for('admin.admin_move_money_from_user') }}"
         >Take funds from user</a
       >
     </li>
   </ul>
   <ul>
     <li>
-      <a href="{{ url_for('admin.changeitem') }}">Change item stats</a>
+      <a href="{{ url_for('admin.change_item') }}">Change item stats</a>
     </li>
   </ul>
   <h5>Change user</h5>
@@ -107,7 +107,7 @@
     <td class="linkcolor col-2">{{ item.id }}</td>
 
     <td class="linkcolor col-2">
-      <a href="{{ url_for('profile.user',username=item.vendor) }}">
+      <a href="{{ url_for('profile.profile_user',username=item.vendor) }}">
         {{ item.vendor }} ({{ item.vendor_id|vendorratingcount }}) ({{
         item.vendor_id|avgvendorrating }}<img
           src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
@@ -118,7 +118,7 @@
     </td>
 
     <td class="linkcolor col-2">
-      <a href="{{ url_for('profile.user',username=item.customer) }}">
+      <a href="{{ url_for('profile.profile_user',username=item.customer) }}">
         {{ item.customer }} ({{ item.customer_id|userrating }}) ({{
         item.customer_id|avguserrating }}<img
           src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"
@@ -138,7 +138,7 @@
     <td class="btnwhite col-2">
       <a
         class="btn btn-warning"
-        href="{{ url_for('admin.order_becomeadmin', id=item.id) }}"
+        href="{{ url_for('admin.order_become_admin', id=item.id) }}"
         role="button"
         >Become Admin</a
       >
@@ -179,7 +179,7 @@
     <td class="btnwhite col-2">
       <a
         class="btn btn-warning"
-        href="{{ url_for('service.helpwithissue_active',
+        href="{{ url_for('customerservice.helpwithissue_active',
                                 id=item.id) }}"
         role="button"
         >View</a
@@ -240,7 +240,7 @@
   {% if feedback %} {% for comment in feedback %}
   <tr class="graybg">
     <td class="linkcolor col-2">
-      <a href="{{ url_for('profile.user', username=comment.username) }}">
+      <a href="{{ url_for('profile.profile_user', username=comment.username) }}">
         {{ comment.username }} ({{ comment.user_id|userrating }}) ({{
         comment.user_id|avguserrating }}<img
           src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}"

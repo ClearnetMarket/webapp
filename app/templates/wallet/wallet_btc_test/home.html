@@ -147,15 +147,15 @@
       </div>
       {% endif %} {% endif %} {% elif t.category == 4 %} {% if t.orderid %}
       Transaction -
-      <a href="{{ url_for('vendor.viewOrder', id =t.orderid) }}"
+      <a href="{{ url_for('vendor.vendor_orders_view_specific', id =t.orderid) }}"
         >Order# {{ t.orderid }}</a
       ><br />
       {% endif %} {% elif t.category == 5 %} {% if t.orderid %} Transaction -
-      <a href="{{ url_for('vendor.viewOrder', id =t.orderid) }}"
+      <a href="{{ url_for('vendor.vendor_orders_view_specific', id =t.orderid) }}"
         >Order# {{ t.orderid }}</a
       ><br />
       {% endif %} {% elif t.category == 6 %} {% if t.orderid %} Profit -
-      <a href="{{ url_for('vendor.viewOrder', id =t.orderid) }}"
+      <a href="{{ url_for('vendor.vendor_orders_view_specific', id =t.orderid) }}"
         >Order# {{ t.orderid }}</a
       ><br />
       {% endif %} {% elif t.category == 7 %} {% if t.commentbtc %} {{

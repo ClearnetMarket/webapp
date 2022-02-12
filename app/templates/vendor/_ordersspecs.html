@@ -18,12 +18,12 @@
     <div class="col-12 col-sm-5 linkcolor">
         <!--Market Item -->
         {% if order.type == 1 %}
-            <a href="{{ url_for('item.itemforsale', id=order.item_id) }}">
+            <a href="{{ url_for('item.item_for_sale', id=order.item_id) }}">
                 <h4>{{ order.title }}</h4>
             </a>
             <br>
             <b>Customer:</b>
-            <a href="{{ url_for('profile.user',username=order.customer) }}">
+            <a href="{{ url_for('profile.profile_user',username=order.customer) }}">
                 {{ order.customer }}
                 ({{ order.customer_id|userrating }})
                 ({{ order.customer_id|avguserrating }}
@@ -31,7 +31,7 @@
             </a>
             <br>
             <b>Order id#:</b>
-            <a href="{{ url_for('vendor.viewOrder',id=order.id) }}">
+            <a href="{{ url_for('vendor.vendor_orders_view_specific',id=order.id) }}">
                 {{ order.id }}
             </a>
             <br>

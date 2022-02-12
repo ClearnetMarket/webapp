@@ -12,7 +12,7 @@
         <div class="row">
 
             <div class="col-12" style="height:275px;">
-                <a href="{{ url_for('item.itemforsale', id=item.id) }}">
+                <a href="{{ url_for('item.item_for_sale', id=item.id) }}">
                     <img src="{{ url_for('userdata.media_file',
                         filename=( item.string_node_id + item.string_auction_id + item.image_one + "_225x.jpg")) }}"
                          class="relevantlisting">

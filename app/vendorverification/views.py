@@ -10,7 +10,7 @@ from app.common.decorators import \
     website_offline, \
     login_required, \
     vendoraccount_required
-from app.common.functions import btc_cash_convertlocaltobtc
+from app.common.functions import convert_local_to_bch
 
 # forms
 from app.vendorverification.forms import \
@@ -18,11 +18,11 @@ from app.vendorverification.forms import \
     ConfirmCancel
 
 # models
-from app.classes.achievements import UserAchievements
-from app.classes.auth import User
+from app.classes.achievements import Achievements_UserAchievements
+from app.classes.auth import Auth_User
 from app.classes.vendor import \
-    Orders, \
-    vendorVerification
+    Vendor_Orders, \
+    Vendor_VendorVerification
 from app.classes.wallet_bch import *
 
 from app.wallet_bch.wallet_btccash_work import \
@@ -34,59 +34,59 @@ from app.wallet_bch.wallet_btccash_work import \
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorverificationhome():
+def vendorverification_home():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
 
     seeifvendoropenorder = db.session\
-        .query(Orders)\
-        .filter(Orders.released == 0, Orders.completed == 0)\
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.released == 0, Vendor_Orders.completed == 0)\
         .first()
 
     if seeifvendoropenorder is None:
         allow = 1
     else:
         allow = 0
-    hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
+    hundred = convert_local_to_bch(amount=100, currency=0)
+    twofity = convert_local_to_bch(amount=250, currency=0)
+    fivehundred = convert_local_to_bch(amount=500, currency=0)
+    thousand = convert_local_to_bch(amount=1000, currency=0)
+    twentyfivehundred = convert_local_to_bch(amount=2500, currency=0)
 
     if request.method == 'POST':
         if form.cancel.data:
             if allow == 1:
 
-                return redirect(url_for('vendorverification.vendorverificationcancel'))
+                return redirect(url_for('vendorverification.vendorverification_cancel'))
             else:
                 flash("Cannot Cancel yur verification", category="danger")
         if getverify.vendor_level == 0:
             if form.levelzero.data:
                 flash(
                     "You can become verified at a later time. Its optional..", category="success")
-                return redirect(url_for('vendorcreate.tradeOptions'))
+                return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
             elif form.levelone.data:
-                return redirect(url_for('vendorverification.vendorverification_confirm_level1'))
+                return redirect(url_for('vendorverification.vendorverification_confirm_level_1'))
             elif form.leveltwo.data:
-                return redirect(url_for('vendorverification.vendorverification_confirm_level2'))
+                return redirect(url_for('vendorverification.vendorverification_confirm_level_2'))
             elif form.levelthree.data:
-                return redirect(url_for('vendorverification.vendorverification_confirm_level3'))
+                return redirect(url_for('vendorverification.vendorverification_confirm_level_3'))
             elif form.levelfour.data:
-                return redirect(url_for('vendorverification.vendorverification_confirm_level4'))
+                return redirect(url_for('vendorverification.vendorverification_confirm_level_4'))
             elif form.levelfive.data:
-                return redirect(url_for('vendorverification.vendorverification_confirm_level5'))
+                return redirect(url_for('vendorverification.vendorverification_confirm_level_5'))
             else:
                 pass
         else:
-            return redirect(url_for('vendor.upgradevendorverification'))
+            return redirect(url_for('vendor.vendorverification_upgrade_vendor_verification'))
 
     return render_template('/vendor/verification/verification.html',
                            form=form,
@@ -106,35 +106,35 @@ def vendorverificationhome():
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorverificationcancel():
+def vendorverification_cancel():
     now = datetime.utcnow()
     form = ConfirmCancel()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
     user1getlevel = db.session\
-        .query(UserAchievements)\
+        .query(Achievements_UserAchievements)\
         .filter_by(username=user.username)\
         .first()
     user1pictureid = str(user1getlevel.level)
     seeifvendoropenorder = db.session\
-        .query(Orders)\
-        .filter(Orders.released == 0, Orders.completed == 0)\
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.released == 0, Vendor_Orders.completed == 0)\
         .first()
     if seeifvendoropenorder is None:
         allow = 1
     else:
         allow = 0
-    hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
+    hundred = convert_local_to_bch(amount=100, currency=0)
+    twofity = convert_local_to_bch(amount=250, currency=0)
+    fivehundred = convert_local_to_bch(amount=500, currency=0)
+    thousand = convert_local_to_bch(amount=1000, currency=0)
+    twentyfivehundred = convert_local_to_bch(amount=2500, currency=0)
 
     if request.method == 'POST':
         if getverify.vendor_level != 0:
@@ -152,14 +152,14 @@ def vendorverificationcancel():
 
                     flash("Trust level removed, account refunded",
                           category="success")
-                    return redirect(url_for('vendorcreate.tradeOptions'))
+                    return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                 else:
                     flash("Cannot Cancel yur verification", category="danger")
-                    return redirect(url_for('vendorverification.vendorverificationhome'))
+                    return redirect(url_for('vendorverification.vendorverification_home'))
             else:
-                return redirect(url_for('vendorverification.vendorverificationhome'))
+                return redirect(url_for('vendorverification.vendorverification_home'))
         else:
-            return redirect(url_for('vendorverification.vendorverificationhome'))
+            return redirect(url_for('vendorverification.vendorverification_home'))
 
     return render_template('/vendor/verification/confirmcancel.html',
                            form=form,
@@ -180,26 +180,26 @@ def vendorverificationcancel():
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorverification_confirm_level1():
+def vendorverification_confirm_level_1():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
 
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
 
-        hundred = btc_cash_convertlocaltobtc(amount=100, currency=0)
+        hundred = convert_local_to_bch(amount=100, currency=0)
         Decimalhundred = Decimal(hundred)
 
         if request.method == 'POST':
@@ -218,16 +218,16 @@ def vendorverification_confirm_level1():
                     db.session.commit()
                     flash("You are now a trust level 1 vendor. "
                           "The BTC has been deducted from your account", category="success")
-                    return redirect(url_for('vendorcreate.tradeOptions'))
+                    return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                 else:
                     # user doesnt have 100$
                     flash(
                         "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                    return redirect(url_for('vendorverification.vendorverificationhome'))
+                    return redirect(url_for('vendorverification.vendorverification_home'))
             else:
                 flash(
                     "You can become verified at a later time. Its optional..", category="success")
-                return redirect(url_for('vendorcreate.tradeOptions'))
+                return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
 
         return render_template('/vendor/verification/confirmverification_level1.html',
                                form=form,
@@ -245,26 +245,26 @@ def vendorverification_confirm_level1():
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorverification_confirm_level2():
+def vendorverification_confirm_level_2():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=current_user.id)\
             .first()
 
         useramount = userwallet.currentbalance
 
-        twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
+        twofity = convert_local_to_bch(amount=250, currency=0)
         Decimaltwofity = Decimal(twofity)
 
         if request.method == 'POST':
@@ -283,16 +283,16 @@ def vendorverification_confirm_level2():
                     db.session.commit()
                     flash("You are now a trust level 2 vendor. "
                           "The BTC has been deducted from your account", category="success")
-                    return redirect(url_for('vendorcreate.tradeOptions'))
+                    return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                 else:
                     # user doesnt have 250$
                     flash(
                         "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                    return redirect(url_for('vendorverification.vendorverificationhome'))
+                    return redirect(url_for('vendorverification.vendorverification_home'))
             else:
                 flash(
                     "You can become verified at a later time. Its optional..", category="success")
-                return redirect(url_for('vendorcreate.tradeOptions'))
+                return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
 
         return render_template('/vendor/verification/confirmverification_level2.html',
                                form=form,
@@ -310,26 +310,26 @@ def vendorverification_confirm_level2():
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorverification_confirm_level3():
+def vendorverification_confirm_level_3():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
 
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
 
-        fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
+        fivehundred = convert_local_to_bch(amount=500, currency=0)
         Decimalfivehundred = Decimal(fivehundred)
 
         if request.method == 'POST':
@@ -348,16 +348,16 @@ def vendorverification_confirm_level3():
                     flash("You are now a trust level 3 vendor. "
                           "The BTC has been deducted from your account",
                           category="success")
-                    return redirect(url_for('vendorcreate.tradeOptions'))
+                    return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                 else:
                     # user doesnt have 500$
                     flash(
                         "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                    return redirect(url_for('vendorverification.vendorverificationhome'))
+                    return redirect(url_for('vendorverification.vendorverification_home'))
             else:
                 flash(
                     "You can become verified at a later time. Its optional..", category="success")
-                return redirect(url_for('vendorcreate.tradeOptions'))
+                return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
 
         return render_template('/vendor/verification/confirmverification_level3.html',
                                form=form,
@@ -375,25 +375,25 @@ def vendorverification_confirm_level3():
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorverification_confirm_level4():
+def vendorverification_confirm_level_4():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
 
-        thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
+        thousand = convert_local_to_bch(amount=1000, currency=0)
         Decimalthousand = Decimal(thousand)
 
         if request.method == 'POST':
@@ -411,12 +411,12 @@ def vendorverification_confirm_level4():
                 flash("You are now a trust level 4 vendor."
                       " The BTC has been deducted from your account",
                       category="success")
-                return redirect(url_for('vendorcreate.tradeOptions'))
+                return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
             else:
                 # user doesnt have 1000$
                 flash("You do not have enough bitcoin in your wallet_btc.",
                       category="danger")
-                return redirect(url_for('vendorverification.vendorverificationhome'))
+                return redirect(url_for('vendorverification.vendorverification_home'))
 
         return render_template('/vendor/verification/confirmverification_level4.html',
                                form=form,
@@ -434,25 +434,25 @@ def vendorverification_confirm_level4():
 @website_offline
 @login_required
 @vendoraccount_required
-def vendorverification_confirm_level5():
+def vendorverification_confirm_level_5():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
     if user.vendor_account == 1 and getverify.vendor_level == 0:
         userwallet = db.session\
-            .query(BchWallet)\
+            .query(Bch_Wallet)\
             .filter_by(user_id=current_user.id)\
             .first()
         useramount = userwallet.currentbalance
 
-        twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
+        twentyfivehundred = convert_local_to_bch(amount=2500, currency=0)
         Decimaltwentyfivehundred = Decimal(twentyfivehundred)
 
         if request.method == 'POST':
@@ -471,16 +471,16 @@ def vendorverification_confirm_level5():
                     flash("You are now a trust level 5 vendor. "
                           "The BTC has been deducted from your account",
                           category="success")
-                    return redirect(url_for('vendorcreate.tradeOptions'))
+                    return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                 else:
                     # user doesnt have 2500$
                     flash(
                         "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                    return redirect(url_for('vendorverification.vendorverificationhome'))
+                    return redirect(url_for('vendorverification.vendorverification_home'))
             else:
                 flash(
                     "You can become verified at a later time. Its optional..", category="success")
-                return redirect(url_for('vendorcreate.tradeOptions'))
+                return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
 
         return render_template('/vendor/verification/confirmverification_level5.html',
                                form=form,
@@ -499,28 +499,28 @@ def vendorverification_confirm_level5():
 @website_offline
 @login_required
 @vendoraccount_required
-def upgradevendorverification():
+def vendorverification_upgrade_vendor_verification():
     now = datetime.utcnow()
     form = vendorVerify()
     getverify = db.session\
-        .query(vendorVerification)\
+        .query(Vendor_VendorVerification)\
         .filter_by(vendor_id=current_user.id)\
         .first()
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(id=current_user.id)\
         .first()
 
     userwallet = db.session\
-        .query(BchWallet)\
+        .query(Bch_Wallet)\
         .filter_by(user_id=current_user.id)\
         .first()
     useramount = userwallet.currentbalance
 
-    twofity = btc_cash_convertlocaltobtc(amount=250, currency=0)
-    fivehundred = btc_cash_convertlocaltobtc(amount=500, currency=0)
-    thousand = btc_cash_convertlocaltobtc(amount=1000, currency=0)
-    twentyfivehundred = btc_cash_convertlocaltobtc(amount=2500, currency=0)
+    twofity = convert_local_to_bch(amount=250, currency=0)
+    fivehundred = convert_local_to_bch(amount=500, currency=0)
+    thousand = convert_local_to_bch(amount=1000, currency=0)
+    twentyfivehundred = convert_local_to_bch(amount=2500, currency=0)
 
     Decimaltwofity = Decimal(twofity)
     Decimalfivehundred = Decimal(fivehundred)
@@ -548,12 +548,12 @@ def upgradevendorverification():
                         flash("You are now a trust level 2 vendor. "
                               "The BTC has been deducted from your account",
                               category="success")
-                        return redirect(url_for('vendorcreate.tradeOptions'))
+                        return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                     else:
                         # user doesnt have 250$
                         flash(
                             "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                        return redirect(url_for('vendorverification.vendorverificationhome'))
+                        return redirect(url_for('vendorverification.vendorverification_home'))
 
             elif form.levelthree.data:
                 if getverify.vendor_level == 1 \
@@ -573,12 +573,12 @@ def upgradevendorverification():
                         flash("You are now a trust level 3 vendor. "
                               "The BTC has been deducted from your account",
                               category="success")
-                        return redirect(url_for('vendorcreate.tradeOptions'))
+                        return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                     else:
                         # user doesnt have 500$
                         flash(
                             "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                        return redirect(url_for('vendorverification.vendorverificationhome'))
+                        return redirect(url_for('vendorverification.vendorverification_home'))
 
             elif form.levelfour.data:
                 if getverify.vendor_level == 1 \
@@ -599,12 +599,12 @@ def upgradevendorverification():
                         flash("You are now a trust level 4 vendor."
                               " The BTC has been deducted from your account",
                               category="success")
-                        return redirect(url_for('vendorcreate.tradeOptions'))
+                        return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                     else:
                         # user doesnt have 1000$
                         flash(
                             "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                        return redirect(url_for('vendorverification.vendorverificationhome'))
+                        return redirect(url_for('vendorverification.vendorverification_home'))
             elif form.levelfive.data:
                 if getverify.vendor_level == 1 \
                         or getverify.vendor_level == 2 \
@@ -625,18 +625,18 @@ def upgradevendorverification():
                         flash("You are now a trust level 5 vendor."
                               " The BTC has been deducted from your account",
                               category="success")
-                        return redirect(url_for('vendorcreate.tradeOptions'))
+                        return redirect(url_for('vendorcreate.vendorcreate_sell_options'))
                     else:
                         # user doesnt have $
                         flash(
                             "You do not have enough bitcoin in your wallet_btc.", category="danger")
-                        return redirect(url_for('vendorverification.vendorverificationhome'))
+                        return redirect(url_for('vendorverification.vendorverification_home'))
             else:
                 flash("Form Error", category="danger")
-                return redirect(url_for('vendorverification.vendorverificationhome'))
+                return redirect(url_for('vendorverification.vendorverification_home'))
         else:
             flash("Form Error", category="danger")
-            return redirect(url_for('vendorverification.vendorverificationhome'))
+            return redirect(url_for('vendorverification.vendorverification_home'))
     return render_template('/vendor/verification/upgradeverification.html',
                            form=form,
                            user=user,

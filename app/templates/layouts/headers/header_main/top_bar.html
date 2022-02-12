@@ -96,12 +96,12 @@
                         <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
                             {% if current_user.is_authenticated %}
                             {% if current_user.vendor_account == 0 %}
-                            <a href="{{ url_for('vendor.becomevendor') }}">
+                            <a href="{{ url_for('vendor.vendor_become_vendor') }}">
                                 <i class="bi bi-upload"></i>
                                 Become Vendor
                             </a>
                             {% else %}
-                            <a href="{{ url_for('vendorcreate.tradeOptions') }}">
+                            <a href="{{ url_for('vendorcreate.vendorcreate_sell_options') }}">
                                 <i class="bi bi-upload"></i>
                                 Post Item
                             </a>
@@ -114,7 +114,7 @@
                             {% endif %}
                         </div>
                         <div class="col-auto float-end sidebar_top_right border_gray_right p-2 linkcolor_topb">
-                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i
+                            <a href="{{ url_for('auth.my_account', username=current_user.username) }}"><i
                                     class="bi bi-person-circle"></i> Account</a>
                         </div>
 
@@ -146,7 +146,7 @@
                             <a href="{{ url_for('main.about') }}"><i class="bi bi-upload"></i> Post Item</a>
                         </div>
                         <div class="col-3  sidebar_top_right border_gray_right  p-2 linkcolor_topb border_gray_bottom">
-                            <a href="{{ url_for('auth.myAccount', username=current_user.username) }}"><i
+                            <a href="{{ url_for('auth.my_account', username=current_user.username) }}"><i
                                     class="bi bi-person-circle"></i> Account</a>
                         </div>
                         {% if current_user.is_authenticated %}
@@ -162,7 +162,7 @@
                         {% else %}
                         {% endif %}
                         <div class="col-3  sidebar_top_right border_gray_right  p-2 linkcolor_topb border_gray_bottom">
-                            <a href="{{ url_for('checkout.shoppingcart') }}"><i class="bi bi-cart"></i> Checkout</a>
+                            <a href="{{ url_for('checkout.checkout_shopping_cart') }}"><i class="bi bi-cart"></i> Checkout</a>
                         </div>
                     </div>
                 </div>

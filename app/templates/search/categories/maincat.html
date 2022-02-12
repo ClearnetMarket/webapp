@@ -11,7 +11,7 @@
 
         <div class="hidden-xs col-sm-2 linkcolor" style="margin-top: 25px; border-right: 1px solid black;"> <!--sidebar -->
             {% for subcat in getcats %}
-                <a href="{{ url_for('category.viewcategory',maincatid = categoryid, categoryid=subcat.catid1) }}">
+                <a href="{{ url_for('category.view_category',maincatid = categoryid, categoryid=subcat.catid1) }}">
                 <h5>{{ subcat.catname1 }}</h5>
                 </a>
                 <br>

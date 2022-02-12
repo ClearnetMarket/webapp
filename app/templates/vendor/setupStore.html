@@ -16,13 +16,13 @@
             {% if store.vacation == 0 %}
 
 
-                  <a class="btn btn-danger btnwhite" href="{{ url_for('vendor.vacation', username=current_user.username) }}">
+                  <a class="btn btn-danger btnwhite" href="{{ url_for('vendor.vendorcreate_vacation', username=current_user.username) }}">
                 Vacation Mode On
                 </a>
 
             {% else %}
 
-                <a class="btn btn-primary btnwhite" href="{{ url_for('vendor.vacation', username=current_user.username) }}">
+                <a class="btn btn-primary btnwhite" href="{{ url_for('vendor.vendorcreate_vacation', username=current_user.username) }}">
                 Vacation Mode Off
                 </a>
 
@@ -33,31 +33,31 @@
 
                 <hr>
                 <div id="vendor_holder_overview" class="linkcolor">
-                    <a href="{{ url_for('profile.user', username=current_user.username) }}">
+                    <a href="{{ url_for('profile.profile_user', username=current_user.username) }}">
                         Overview
                         </a>
                 </div>
                 <div id="vendor_holder_itemsforsale" class="linkcolor">
-                    <a href="{{ url_for('vendorcreate.itemsforSale') }}">
+                    <a href="{{ url_for('vendorcreate.vendorcreate_items_for_sale') }}">
                         My Items
                     </a>
                 </div>
 
                 {% if issues == 0 %}
                  <div id="vendor_holder_refunds" class="linkcolor">
-                     <a href="{{ url_for('vendor.vendorRefunds') }}">
+                     <a href="{{ url_for('vendor.vendor_refunds') }}">
                          Returns/Disputes
                      </a>
                  </div>
                  {% else %}
                     <div id="vendor_holder_refunds" class="linkcolororange">
-                        <a href="{{ url_for('vendor.vendorRefunds') }}">
+                        <a href="{{ url_for('vendor.vendor_refunds') }}">
                            Returns/Disputes ({{ issues }})
                         </a>
                     </div>
                  {% endif %}
                 <div id="vendor_holder_ratings" class="linkcolor">
-                    <a href="{{ url_for('vendor.vendorRatings') }}">
+                    <a href="{{ url_for('vendor.vendor_ratings') }}">
                         Ratings
                     </a>
                 </div>
@@ -68,14 +68,14 @@
                 </div>
                     {% if order == 0 %}
                         <div id="vendor_holder_orders" class="linkcolor">
-                            <a href="{{ url_for('vendor.vendorOrders') }}">
+                            <a href="{{ url_for('vendor.vendor_orders') }}">
                                 Orders
                             </a>
                         </div>
 
                     {% else %}
                         <div id="vendor_holder_orders" class="linkcolororange">
-                            <a href="{{ url_for('vendor.vendorOrders') }}">
+                            <a href="{{ url_for('vendor.vendor_orders') }}">
                                 Orders({{ order }})
                             </a>
                         </div>

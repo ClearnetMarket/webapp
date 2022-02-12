@@ -1,27 +1,21 @@
-from app import db
-from datetime import datetime
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
-
-from flask import request
-
 from app.affiliate import affiliate
+from app import db
 
-
+from datetime import datetime
 # forms
 from app.affiliate.forms import \
     AffiliateSignup, \
     AffiliateCode
 
 # models
-from app.classes.affiliate import Orders
-from app.classes.auth import User
+from app.classes.affiliate import Affiliate_Orders
+from app.classes.auth import Auth_User
 
-from app.classes.affiliate import AffiliateOverview, \
-    AffiliateStats, \
-    AffiliateId
-
-# END models
+from app.classes.affiliate import Affiliate_Overview, \
+    Affiliate_Stats, \
+    Affiliate_Id
 
 from app.common.decorators import \
     website_offline, \
@@ -37,10 +31,10 @@ def aff_overview():
 @affiliate.route('/signup', methods=['GET', 'POST'])
 @login_required
 @website_offline
-def aff_becomeaff():
+def aff_become_aff():
     now = datetime.utcnow()
     vendorsignupForm = AffiliateSignup()
-    user = db.session.query(User).filter_by(
+    user = db.session.query(Auth_User).filter_by(
         username=current_user.username).first()
 
     if request.method == 'POST':
@@ -49,7 +43,7 @@ def aff_becomeaff():
             if user.username == vendorsignupForm.username.data:
                 if vendorsignupForm.agreement.data is True:
 
-                    affaccount_overview = AffiliateOverview(
+                    affaccount_overview = Affiliate_Overview(
                         user_id=user.id,
                         buyerdiscount=2.5,
                         buyerdiscount_time=now,
@@ -59,7 +53,7 @@ def aff_becomeaff():
                         aff_link_2='',
                     )
 
-                    affaccount_stats = AffiliateStats(
+                    affaccount_stats = Affiliate_Stats(
                         user_id=user.id,
                         promocode='',
                         totalitemsordered=0,
@@ -81,13 +75,13 @@ def aff_becomeaff():
                     return redirect(url_for('affiliate.aff_home'))
                 else:
                     flash("Please accept the agreement", category="danger")
-                    return redirect(url_for('affiliate.aff_becomeaff'))
+                    return redirect(url_for('affiliate.aff_become_aff'))
             else:
                 flash("invalid username", category="danger")
-                return redirect(url_for('affiliate.aff_becomeaff'))
+                return redirect(url_for('affiliate.aff_become_aff'))
         else:
             flash(vendorsignupForm.errors, category="danger")
-            return redirect(url_for('affiliate.aff_becomeaff'))
+            return redirect(url_for('affiliate.aff_become_aff'))
 
     return render_template('/affiliate/homecontent/becomeaff.html',
                            vendorsignupForm=vendorsignupForm)
@@ -102,18 +96,18 @@ def aff_home():
 
     # users promo overview
     userpromooverview = db.session.query(
-        AffiliateOverview).filter_by(user_id=current_user.id).first()
+        Affiliate_Overview).filter_by(user_id=current_user.id).first()
     # users promo stats
-    userpromostats = db.session.query(AffiliateStats).filter_by(
+    userpromostats = db.session.query(Affiliate_Stats).filter_by(
         user_id=current_user.id).first()
     # users promo code
 
-    userpromocode = db.session.query(AffiliateId).filter_by(
+    userpromocode = db.session.query(Affiliate_Id).filter_by(
         user_id=current_user.id).first()
     if userpromocode is not None:
         # get last 20 affiliates orders..
-        latest_affiliates = db.session.query(Orders).filter(
-            Orders.affiliate_code == userpromocode.promocode).order_by(Orders.id.desc()).limit(20)
+        latest_affiliates = db.session.query(Affiliate_Orders).filter(
+            Affiliate_Orders.affiliate_code == userpromocode.promocode).order_by(Affiliate_Orders.id.desc()).limit(20)
     else:
         latest_affiliates = None
 
@@ -121,10 +115,10 @@ def aff_home():
         if promocodeform.submit.data:
             if promocodeform.validate_on_submit():
                 if userpromocode is None:
-                    seeifpromoexists = db.session.query(AffiliateId).filter_by(
+                    seeifpromoexists = db.session.query(Affiliate_Id).filter_by(
                         promocode=promocodeform.thecode.data).first()
                     if seeifpromoexists is None:
-                        newpromocode = AffiliateId(
+                        newpromocode = Affiliate_Id(
                             user_id=current_user.id,
                             promocode=promocodeform.thecode.data)
 

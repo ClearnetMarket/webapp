@@ -22,8 +22,8 @@
             <div id="message_text">{{ post.body }}</div>
         </div>
         <div id="message_date"><div class="text-right">{{ moment(timestamp=post.timestamp, local=False).format('L')  }}<br>
-            <a class="btn btn-primary" href="{{ url_for('message.post',id=post.id) }}" role="button">View</a>
-            <a class="btn btn-primary" href="{{ url_for('message.post',id=post.id) }}" role="button">Reply</a>
+            <a class="btn btn-primary" href="{{ url_for('message.message_post',id=post.id) }}" role="button">View</a>
+            <a class="btn btn-primary" href="{{ url_for('message.message_post',id=post.id) }}" role="button">Reply</a>
             <a class="btn btn-danger" href="{{ url_for('message.messagecenter_delete',id=post.id) }}" role="button">Delete</a>
         </div></div>
 

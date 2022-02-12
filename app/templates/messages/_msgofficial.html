@@ -9,7 +9,7 @@
 	                            <b>{{ post.author_id|username }}</b>
 							</div>
 							<div class="col-12 col-sm-6 linkcolor">
-	                            <a href="{{ url_for('message.post',id=post.postid) }}"> <b>Subject: </b>{{ post.subject }}</a>
+	                            <a href="{{ url_for('message.message_post',id=post.postid) }}"> <b>Subject: </b>{{ post.subject }}</a>
 							</div>
 							<div class="col-12 col-sm-2 linkcolor">
 	                            {{ moment(timestamp=post.timestamp, local=False).format('L')  }}

@@ -11,23 +11,23 @@ from app.common.functions import mkdir_p, userimagelocation
 from app.achs.v import becamevendor
 from app.achs.a import newbie
 from app.classes.vendor import \
-    vendorVerification
+    Vendor_VendorVerification
 from app.classes.userdata import \
-    userHistory
-from app.classes.models import WordSeeds
+    User_DataHistory
+from app.classes.models import Query_CategoryCats
 from app.classes.profile import \
-    StatisticsUser, \
-    StatisticsVendor
+    Profile_StatisticsUser, \
+    Profile_StatisticsVendor
 from app.classes.item import \
-    ShoppingCartTotal, \
-    ShoppingCart
+    Item_ShoppingCartTotal, \
+    Item_CheckoutShoppingCart
 from app.classes.achievements import \
-    UserAchievements, \
-    whichAch
+    Achievements_UserAchievements, \
+    Achievements_WhichAch
 from app.classes.auth import \
-    User, \
-    UserFees, \
-    AccountSeedWords
+    Auth_User, \
+    Auth_UserFees, \
+    Auth_AccountSeedWords
 from app.auth.forms import LoginForm, \
     RegistrationForm, \
     CheckSeed, \
@@ -35,11 +35,11 @@ from app.auth.forms import LoginForm, \
     myaccount_form_factory, \
     VacationForm, \
     vendorSignup, \
-    ConfirmSeed, \
+    confirm_seed, \
     ChangePinForm, \
     Deleteaccountform
 from app.classes.wallet_bch import \
-    BchWallet
+    Bch_Wallet
 from app.common.decorators import \
     website_offline, \
     login_required
@@ -69,13 +69,13 @@ def login():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = db.session\
-                .query(User)\
+                .query(Auth_User)\
                 .filter_by(username=form.username.data)\
                 .first()
             if user:
                 if user.confirmed == 1:
                     if user is not None:
-                        if User.decryptpassword(pwdhash=user.password_hash, password=form.password_hash.data):
+                        if Auth_User.decryptpassword(pwdhash=user.password_hash, password=form.password_hash.data):
                             if user.locked == 0:
                                 login_user(user)
                                 current_user.is_authenticated()
@@ -111,7 +111,7 @@ def login():
                         return redirect(url_for('auth.login'))
                 else:
                     flash("Account was not confirmed with seed", category="danger")
-                    return redirect(url_for('auth.confirmseed'))
+                    return redirect(url_for('auth.confirm_seed'))
             else:
                 flash("Please retry username/password", category="danger")
                 return redirect(url_for('auth.login'))
@@ -131,15 +131,15 @@ def register():
     if request.method == 'POST' and form.validate_on_submit():
 
         now = datetime.utcnow()
-        cryptedpwd = User.cryptpassword(password=form.password.data)
-        cryptedpin = User.cryptpassword(password=form.walletpin.data)
+        cryptedpwd = Auth_User.cryptpassword(password=form.password.data)
+        cryptedpin = Auth_User.cryptpassword(password=form.walletpin.data)
         namefull = form.country.data
         name = namefull.numericcode
         currencyfull = form.currency.data
         cur = currencyfull.code
 
         # add user to db
-        new_user = User(
+        new_user = Auth_User(
             username=form.username.data,
             email='',
             password_hash=cryptedpwd,
@@ -172,7 +172,7 @@ def register():
         db.session.flush()
 
         # create user stats
-        stats = StatisticsUser(
+        stats = Profile_StatisticsUser(
             username=new_user.username,
             totalitemsbought=0,
             totalbtcspent=0,
@@ -192,7 +192,7 @@ def register():
         )
 
         # create which achs they pick
-        achselect = whichAch(
+        achselect = Achievements_WhichAch(
             user_id=new_user.id,
             ach1='0',
             ach2='0',
@@ -207,7 +207,7 @@ def register():
         )
 
         # create users achs
-        ach = UserAchievements(
+        ach = Achievements_UserAchievements(
             user_id=new_user.id,
             username=new_user.username,
             experiencepoints=0,
@@ -215,7 +215,7 @@ def register():
         )
 
         # create browser history
-        browserhistory = userHistory(
+        browserhistory = User_DataHistory(
             user_id=new_user.id,
             recentcat1=1,
             recentcat1date=now,
@@ -229,8 +229,8 @@ def register():
             recentcat5date=now,
         )
 
-        # create shoppingcart for user
-        newcart = ShoppingCartTotal(
+        # create checkout_shopping_cart for user
+        newcart = Item_ShoppingCartTotal(
             customer=new_user.id,
             btc_cash_sumofitem=0,
             btc_cash_price=0,
@@ -240,12 +240,12 @@ def register():
             btc_cash_off=0,
         )
 
-        setfees = UserFees(user_id=new_user.id,
-                           buyerfee=0,
-                           buyerfee_time=now,
-                           vendorfee=2,
-                           vendorfee_time=now,
-                           )
+        setfees = Auth_UserFees(user_id=new_user.id,
+                                buyerfee=0,
+                                buyerfee_time=now,
+                                vendorfee=2,
+                                vendorfee_time=now,
+                                )
 
         db.session.add(setfees)
         strid = str(new_user.id)
@@ -281,22 +281,22 @@ def register():
         db.session.commit()
 
         flash("Successfully Registered", category="success")
-        return redirect(url_for('auth.createaccountseed'))
+        return redirect(url_for('auth.create_account_seed'))
 
     return render_template('/auth/register.html', form=form)
 
 
 @auth.route('/accountseed', methods=["GET"])
 @login_required
-def createaccountseed():
+def create_account_seed():
 
     # get the current user
-    user = db.session.query(User).filter_by(id=current_user.id).first()
+    user = db.session.query(Auth_User).filter_by(id=current_user.id).first()
 
     # see if user seed created..
     userseed = db.session \
-        .query(AccountSeedWords) \
-        .filter(user.id == AccountSeedWords.user_id) \
+        .query(Auth_AccountSeedWords) \
+        .filter(user.id == Auth_AccountSeedWords.user_id) \
         .first()
 
     if request.method == 'GET':
@@ -305,7 +305,7 @@ def createaccountseed():
             word_list = []
 
             get_words = db.session.query(
-                WordSeeds).order_by(func.random()).limit(6)
+                Query_CategoryCats).order_by(func.random()).limit(6)
             for f in get_words:
                 word_list.append(f.text)
                 print(f.text)
@@ -316,14 +316,14 @@ def createaccountseed():
             word04 = str(word_list[4]).lower()
             word05 = str(word_list[5]).lower()
 
-            addseedtodb = AccountSeedWords(user_id=user.id,
-                                           word00=word00,
-                                           word01=word01,
-                                           word02=word02,
-                                           word03=word03,
-                                           word04=word04,
-                                           word05=word05,
-                                           )
+            addseedtodb = Auth_AccountSeedWords(user_id=user.id,
+                                                word00=word00,
+                                                word01=word01,
+                                                word02=word02,
+                                                word03=word03,
+                                                word04=word04,
+                                                word05=word05,
+                                                )
             db.session.add(addseedtodb)
             db.session.commit()
 
@@ -348,14 +348,14 @@ def createaccountseed():
 @auth.route('/accountseedconfirm', methods=["GET", "POST"])
 @website_offline
 @login_required
-def confirmseed():
+def confirm_seed():
 
-    form = ConfirmSeed()
+    form = confirm_seed()
 
     # get the user
     user = db.session\
-        .query(User)\
-        .filter(current_user.id == User.id)\
+        .query(Auth_User)\
+        .filter(current_user.id == Auth_User.id)\
         .first()
 
     if user.confirmed == 1:
@@ -363,8 +363,8 @@ def confirmseed():
         return redirect(url_for('index'))
     if request.method == 'POST':
         # get the users seed
-        userseed = db.session.query(AccountSeedWords) \
-            .filter(user.id == AccountSeedWords.user_id)\
+        userseed = db.session.query(Auth_AccountSeedWords) \
+            .filter(user.id == Auth_AccountSeedWords.user_id)\
             .first()
 
         w00 = form.seedanswer0.data
@@ -390,21 +390,21 @@ def confirmseed():
             return redirect(url_for('index'))
         else:
             flash("Incorrect Seed Entry", category="danger")
-            return redirect(url_for('auth.confirmseed'))
+            return redirect(url_for('auth.confirm_seed'))
 
     if request.method == 'GET':
-        return render_template('/auth/confirmseed.html', form=form)
+        return render_template('/auth/confirm_seed.html', form=form)
 
 
 @auth.route('/my-account/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def myAccount():
+def my_account():
     now = datetime.utcnow()
     title = 'My Account'
 
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
 
@@ -420,13 +420,13 @@ def myAccount():
     if request.method == 'POST':
 
         if vacform.Vacation.data:
-            return redirect(url_for('vendorcreate.vacation', username=current_user.username))
+            return redirect(url_for('vendorcreate.vendorcreate_vacation', username=current_user.username))
 
         if form.delete.data:
             # type 1 = make database have user-unknown
             deleteprofileimage(id=user.id, img=user.profileimage, type=1)
             # deleted profile image
-            return redirect(url_for('auth.myAccount', username=current_user.username))
+            return redirect(url_for('auth.my_account', username=current_user.username))
 
         if form.submit.data and form.validate_on_submit():
             # gets user location on server
@@ -446,10 +446,10 @@ def myAccount():
             db.session.add(user)
             db.session.commit()
             flash("Information Updated", category="success")
-            return redirect(url_for('auth.myAccount', username=current_user.username))
+            return redirect(url_for('auth.my_account', username=current_user.username))
         else:
             flash("Form Error", category="danger")
-            return redirect(url_for('auth.myAccount', username=current_user.username))
+            return redirect(url_for('auth.my_account', username=current_user.username))
     return render_template('auth/account/myaccount.html',
                            title=title,
                            form=form,
@@ -461,12 +461,12 @@ def myAccount():
 @auth.route('/vendor-signup', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def setupAccount():
+def setup_account():
     now = datetime.utcnow()
     form = vendorSignup(request.form)
     user = db.session \
-        .query(User) \
-        .filter(User.id == current_user.id) \
+        .query(Auth_User) \
+        .filter(Auth_User.id == current_user.id) \
         .first()
 
     if request.method == 'POST':
@@ -477,7 +477,7 @@ def setupAccount():
                     user.vendor_account = 1,
                     user.sellingfrom = form.country.data
 
-                    stats = StatisticsVendor(
+                    stats = Profile_StatisticsVendor(
                         username=user.username,
                         vendorid=user.id,
                         totalsales=0,
@@ -496,7 +496,7 @@ def setupAccount():
                         totalusdmade=0,
                     )
 
-                    addverify = vendorVerification(
+                    addverify = Vendor_VendorVerification(
                         vendor_id=user.id,
                         vendor_level=0,
                         timestamp=now,
@@ -512,32 +512,32 @@ def setupAccount():
                     db.session.commit()
                     flash("Welcome fellow crypto lover.  Here you can get vendor verification.  Its optional!",
                           category="success")
-                    return redirect(url_for('vendorverification.vendorverificationhome'))
+                    return redirect(url_for('vendorverification.vendorverification_home'))
                 else:
                     flash("Please accept the agreement", category="danger")
-                    return redirect(url_for('auth.setupAccount'))
+                    return redirect(url_for('auth.setup_account'))
             else:
                 flash("invalid username", category="danger")
-                return redirect(url_for('auth.setupAccount'))
+                return redirect(url_for('auth.setup_account'))
         else:
             flash(form.errors, category="danger")
-            return redirect(url_for('auth.setupAccount'))
+            return redirect(url_for('auth.setup_account'))
 
-    return render_template('/auth/account/setupAccount.html', form=form)
+    return render_template('/auth/account/setup_account.html', form=form)
 
 
 @auth.route('/lost-password', methods=['GET', 'POST'])
-def retrievepassword():
+def retrieve_password():
 
     form = CheckSeed()
     if request.method == 'POST':
         if form.validate_on_submit():
             # get the user based off of form
-            user = db.session.query(User).filter_by(
+            user = db.session.query(Auth_User).filter_by(
                 username=form.username.data).first()
             # match the seed to the user
-            userseed = db.session.query(AccountSeedWords) \
-                .filter(user.id == AccountSeedWords.user_id).first()
+            userseed = db.session.query(Auth_AccountSeedWords) \
+                .filter(user.id == Auth_AccountSeedWords.user_id).first()
 
             w00 = form.seedanswer0.data
             w01 = form.seedanswer1.data
@@ -563,10 +563,10 @@ def retrievepassword():
                 current_user.is_active()
 
                 flash("Account Confirmed.", category="success")
-                return redirect(url_for('auth.changepassword'))
+                return redirect(url_for('auth.change_password'))
             else:
                 flash("Incorrect Seed Entry", category="danger")
-                return redirect(url_for('auth.retrievepassword'))
+                return redirect(url_for('auth.retrieve_password'))
 
     return render_template('/auth/security/lostPassword.html',
                            form=form
@@ -575,14 +575,15 @@ def retrievepassword():
 
 @auth.route('/change-password', methods=['GET', 'POST'])
 @login_required
-def changepassword():
+def change_password():
 
     form = ChangePasswordForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            user = User.query.filter_by(id=current_user.id).first()
-            user = User.query.filter_by(id=current_user.id).first()
-            cryptedpwd = User.cryptpassword(password=form.newpasswordtwo.data)
+            user = Auth_User.query.filter_by(id=current_user.id).first()
+            user = Auth_User.query.filter_by(id=current_user.id).first()
+            cryptedpwd = Auth_User.cryptpassword(
+                password=form.newpasswordtwo.data)
 
             user.password_hash = cryptedpwd
             user.passwordpinallowed = 0
@@ -600,16 +601,16 @@ def changepassword():
 
 @auth.route('/lost-pin', methods=['GET', 'POST'])
 @website_offline
-def retrievepin():
+def retrieve_pin():
     form = CheckSeed()
     if request.method == 'POST':
         if form.validate_on_submit():
             # get the user based off of form
-            user = db.session.query(User).filter_by(
+            user = db.session.query(Auth_User).filter_by(
                 username=form.username.data).first()
             # match the seed to the user
-            userseed = db.session.query(AccountSeedWords) \
-                .filter(user.id == AccountSeedWords.user_id).first()
+            userseed = db.session.query(Auth_AccountSeedWords) \
+                .filter(user.id == Auth_AccountSeedWords.user_id).first()
 
             w00 = form.seedanswer0.data
             w01 = form.seedanswer1.data
@@ -630,10 +631,10 @@ def retrievepin():
                 db.session.commit()
 
                 flash("Account Confirmed.", category="danger")
-                return redirect(url_for('auth.changepin'))
+                return redirect(url_for('auth.change_pin'))
             else:
                 flash("Incorrect Seed Entry", category="danger")
-                return redirect(url_for('auth.retrievepin'))
+                return redirect(url_for('auth.retrieve_pin'))
 
     return render_template('/auth/security/lostpinsubmit.html',
                            form=form
@@ -642,12 +643,12 @@ def retrievepin():
 
 @auth.route('/change-pin', methods=['GET', 'POST'])
 @website_offline
-def changepin():
+def change_pin():
     form = ChangePinForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            user = User.query.filter_by(id=current_user.id).first()
-            cryptedpwd = User.cryptpassword(password=form.newpin2.data)
+            user = Auth_User.query.filter_by(id=current_user.id).first()
+            cryptedpwd = Auth_User.cryptpassword(password=form.newpin2.data)
             user.wallet_pin = cryptedpwd
             user.passwordpinallowed = 0
             db.session.add(user)
@@ -657,67 +658,67 @@ def changepin():
         else:
             flash('Invalid form.  Pin must be 4 digits and match!',
                   category="danger")
-            return redirect(url_for('auth.changepin'))
+            return redirect(url_for('auth.change_pin'))
     return render_template('/auth/security/resetpin.html',
                            form=form
                            )
 
 
-@auth.route('/deleteaccount', methods=['GET', 'POST'])
+@auth.route('/delete_account', methods=['GET', 'POST'])
 @website_offline
-def deleteaccount():
+def delete_account():
 
     title = "DELETE ACCOUNT"
     form = Deleteaccountform()
     # get the user
-    user = db.session.query(User).filter_by(id=current_user.id).first()
+    user = db.session.query(Auth_User).filter_by(id=current_user.id).first()
     # get his wallets
     # get btc wallet
     # get btccash wallet
-    userbtccash = db.session.query(BchWallet) \
-        .filter(user.id == BchWallet.user_id).first()
+    userbtccash = db.session.query(Bch_Wallet) \
+        .filter(user.id == Bch_Wallet.user_id).first()
 
     if request.method == 'POST':
         if form.validate_on_submit():
             if userbtccash.currentbalance > 0:
                 flash("Cannot Delete Account with BCH coins in the wallet.",
                       category="danger")
-                return redirect(url_for('auth.deleteaccount'))
+                return redirect(url_for('auth.delete_account'))
             else:
                 # query everything related to user first
 
                 # get the seed
-                userseed = db.session.query(AccountSeedWords) \
-                    .filter(user.id == AccountSeedWords.user_id).first()
+                userseed = db.session.query(Auth_AccountSeedWords) \
+                    .filter(user.id == Auth_AccountSeedWords.user_id).first()
                 # get user stats
-                userstats = db.session.query(StatisticsUser) \
-                    .filter(user.id == StatisticsUser.user_id).first()
+                userstats = db.session.query(Profile_StatisticsUser) \
+                    .filter(user.id == Profile_StatisticsUser.user_id).first()
                 # get achievements
-                userachs = db.session.query(whichAch) \
-                    .filter(user.id == whichAch.user_id).first()
+                userachs = db.session.query(Achievements_WhichAch) \
+                    .filter(user.id == Achievements_WhichAch.user_id).first()
                 # get exp
-                userexp = db.session.query(UserAchievements) \
-                    .filter(user.id == UserAchievements.user_id).first()
+                userexp = db.session.query(Achievements_UserAchievements) \
+                    .filter(user.id == Achievements_UserAchievements.user_id).first()
                 # get browser history
-                userbrowser = db.session.query(userHistory) \
-                    .filter(user.id == userHistory.user_id).first()
+                userbrowser = db.session.query(User_DataHistory) \
+                    .filter(user.id == User_DataHistory.user_id).first()
                 # get shopping cart total
-                usercarttotal = db.session.query(ShoppingCartTotal) \
-                    .filter(user.id == ShoppingCartTotal.customer).first()
+                usercarttotal = db.session.query(Item_ShoppingCartTotal) \
+                    .filter(user.id == Item_ShoppingCartTotal.customer).first()
                 # get shopping cart total
-                usercart = db.session.query(ShoppingCart) \
-                    .filter(user.id == ShoppingCart.customer_id).first()
+                usercart = db.session.query(Item_CheckoutShoppingCart) \
+                    .filter(user.id == Item_CheckoutShoppingCart.customer_id).first()
                 if usercart is None:
                     usercartfound = 0
                 else:
                     usercartfound = 1
 
                 # get btccash wallet
-                userbtccash = db.session.query(BchWallet) \
-                    .filter(user.id == BchWallet.user_id).first()
+                userbtccash = db.session.query(Bch_Wallet) \
+                    .filter(user.id == Bch_Wallet.user_id).first()
                 # get user fees
-                userfees = db.session.query(UserFees) \
-                    .filter(user.id == AccountSeedWords.user_id).first()
+                userfees = db.session.query(Auth_UserFees) \
+                    .filter(user.id == Auth_AccountSeedWords.user_id).first()
 
                 # see if seed matches the account
                 w00 = form.seedanswer0.data
@@ -769,9 +770,9 @@ def deleteaccount():
                     return redirect(url_for('index'))
         else:
             flash('Invalid form.  Seed doesnt match', category="danger")
-            return redirect(url_for('auth.changepin'))
+            return redirect(url_for('auth.change_pin'))
 
-    return render_template('/auth/security/deleteaccount.html',
+    return render_template('/auth/security/delete_account.html',
                            form=form,
                            user=user,
                            title=title

@@ -1,38 +1,33 @@
-from flask import \
-    render_template, \
-    redirect, \
-    url_for, \
-    flash, \
-    request
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from app.checkout import checkout
 from app import db
+
 from datetime import datetime, timedelta
 from decimal import Decimal
 import calendar
 # models
-from app.classes.models import \
-    btc_cash_Prices
+from app.classes.wallet_bch import Bch_Prices
 
-from app.classes.auth import User, UserFees
+from app.classes.auth import Auth_User, Auth_UserFees
 
 from app.classes.item import \
-    marketitem, \
-    ShoppingCart, \
-    ShoppingCartTotal
+    Item_MarketItem, \
+    Item_CheckoutShoppingCart, \
+    Item_ShoppingCartTotal
 
 from app.classes.service import \
-    shippingSecret
+    Service_ShippingSecret
 
 from app.classes.vendor import \
-    Orders
+    Vendor_Orders
 
 from app.classes.wallet_bch import \
-    BchWallet
+    Bch_Wallet
 
 from app.classes.affiliate import \
-    AffiliateOverview, \
-    AffiliateStats
+    Affiliate_Overview, \
+    Affiliate_Stats
 # endmodels
 # forms
 from app.checkout.forms import \
@@ -42,9 +37,8 @@ from app.checkout.forms import \
     promoandgiftform, \
     shoppingcartForm
 # endforms
-from app.subq.related import relatedtoItem
-from app.common.functions import \
-    btc_cash_convertlocaltobtc
+from app.subq.related import subq_related_to_item
+from app.common.functions import convert_local_to_bch
 from app.common.decorators import \
     ping_user, \
     website_offline, \
@@ -54,7 +48,7 @@ from app.wallet_bch.wallet_btccash_work import btc_cash_sendCointoEscrow
 
 from app.common.functions import \
     floating_decimals, \
-    btc_cash_convertlocaltobtc
+    convert_local_to_bch
 
 
 from app.notification import notification
@@ -62,79 +56,79 @@ from app.notification import notification
 from app.achs.c import firstpurchase
 from app.achs.v import firstsale
 from app.userdata.views import \
-    differenttradingpartners_user, \
-    differenttradingpartners_vendor
+    userdata_different_trading_partners_user, \
+    userdata_different_trading_partners_vendor
 
 
 @checkout.route('/movefornow/<int:id>', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def movecartitem(id):
+def checkout_move_cart_item(id):
     try:
-        theitem = ShoppingCart.query.get(id)
+        theitem = Item_CheckoutShoppingCart.query.get(id)
         if theitem:
             if theitem.customer_id == current_user.id:
                 getcart = db.session\
-                    .query(ShoppingCart)\
-                    .filter(current_user.id == ShoppingCart.customer_id)\
-                    .filter(ShoppingCart.savedforlater == 0)
+                    .query(Item_CheckoutShoppingCart)\
+                    .filter(current_user.id == Item_CheckoutShoppingCart.customer_id)\
+                    .filter(Item_CheckoutShoppingCart.savedforlater == 0)
                 cartamount = getcart.count()
                 if int(cartamount) > 5:
                     theitem.savedforlater = 1
                     db.session.add(theitem)
                     db.session.commit()
                     flash("Cart is full", category="danger")
-                    return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
                 else:
                     theitem.savedforlater = 0
                     db.session.add(theitem)
                     db.session.commit()
                     flash("Items moved to cart", category="success")
-                    return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
             else:
                 flash("Invalid Cart", category="danger")
-                return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
         else:
             flash("Item is not available.", category="success")
             return redirect(url_for('index', username=current_user.username))
     except Exception:
         flash("Cart Error", category="danger")
-        return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+        return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
 
 
 @checkout.route('/cart', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def shoppingcart():
+def checkout_shopping_cart():
     now = datetime.utcnow()
     form = shoppingcartForm(request.form)
 
     # Total cart
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
     cart = db.session\
-        .query(ShoppingCart)\
-        .filter(ShoppingCart.customer == current_user.username,
-                ShoppingCart.savedforlater == 0)\
+        .query(Item_CheckoutShoppingCart)\
+        .filter(Item_CheckoutShoppingCart.customer == current_user.username,
+                Item_CheckoutShoppingCart.savedforlater == 0)\
         .all()
     gettotalcart = db.session\
-        .query(ShoppingCartTotal)\
+        .query(Item_ShoppingCartTotal)\
         .filter_by(customer=user.id)\
         .first()
 
     # see if orders previous..delete them
     user_orders = db.session\
-        .query(Orders)\
-        .filter(Orders.customer_id == user.id)\
-        .filter(Orders.type == 1)\
-        .filter(Orders.incart == 1)\
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.customer_id == user.id)\
+        .filter(Vendor_Orders.type == 1)\
+        .filter(Vendor_Orders.incart == 1)\
         .all()
 
     # see if msg
     msg = db.session\
-        .query(shippingSecret)\
+        .query(Service_ShippingSecret)\
         .filter_by(user_id=user.id, orderid=0)\
         .first()
     if msg:
@@ -146,8 +140,8 @@ def shoppingcart():
     # Saved for later cart
     try:
         cartsaved = db.session\
-            .query(ShoppingCart)\
-            .filter(ShoppingCart.customer == user.username, ShoppingCart.savedforlater == 1)\
+            .query(Item_CheckoutShoppingCart)\
+            .filter(Item_CheckoutShoppingCart.customer == user.username, Item_CheckoutShoppingCart.savedforlater == 1)\
             .all()
     except Exception:
         cartsaved = 0
@@ -159,7 +153,7 @@ def shoppingcart():
     BTC_CASH_pricelist = []
     BTC_CASH_shipping_pricelist = []
     btc_cash_wallet = db.session\
-        .query(BchWallet)\
+        .query(Bch_Wallet)\
         .filter_by(user_id=user.id)\
         .first()
 
@@ -168,15 +162,15 @@ def shoppingcart():
         # see if still exists
         try:
             getitem = db.session\
-                .query(marketitem)\
-                .filter(marketitem.id == i.item_id)\
+                .query(Item_MarketItem)\
+                .filter(Item_MarketItem.id == i.item_id)\
                 .first()
         except Exception as e:
             flash(i.title_of_item +
                   " is not available.It has been removed from your cart", category="success")
             db.session.delete(i)
             db.session.commit()
-            return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+            return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
 
         # image
         try:
@@ -186,7 +180,7 @@ def shoppingcart():
                   " is not available.  It has been removed from your cart", category="success")
             db.session.delete(i)
             db.session.commit()
-            return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+            return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
         try:
             i.image_of_item = getitem.image_one
         except Exception as e:
@@ -200,7 +194,7 @@ def shoppingcart():
                   " is not available.  It has been removed from your cart", category="success")
             db.session.delete(i)
             db.session.commit()
-            return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+            return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
 
         # supply
         try:
@@ -210,13 +204,13 @@ def shoppingcart():
                       category="success")
                 db.session.delete(i)
                 db.session.commit()
-                return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
         except Exception as e:
             flash(i.title_of_item +
                   " is not available.  It has been removed from your cart", category="success")
             db.session.delete(i)
             db.session.commit()
-            return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+            return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
 
         # shipping
         try:
@@ -225,7 +219,7 @@ def shoppingcart():
                       ": Doesnt have a shipping method", category="danger")
                 db.session.delete(i)
                 db.session.commit()
-                return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
         except Exception:
             return redirect(url_for('index', username=current_user.username))
 
@@ -274,8 +268,8 @@ def shoppingcart():
 
         # get price
         getcurrentprice = db.session\
-            .query(btc_cash_Prices)\
-            .filter(btc_cash_Prices.currency_id == i.currency)\
+            .query(Bch_Prices)\
+            .filter(Bch_Prices.currency_id == i.currency)\
             .first()
 
         btc_cash_bt = getcurrentprice.price
@@ -301,8 +295,8 @@ def shoppingcart():
             shipprice = Decimal(getitem.shipping_price_2)
 
             # convert it to btc cash
-            btc_cash_shiprice1 = Decimal(btc_cash_convertlocaltobtc(amount=shipprice,
-                                                                    currency=getitem.currency))
+            btc_cash_shiprice1 = Decimal(convert_local_to_bch(amount=shipprice,
+                                                              currency=getitem.currency))
 
             # get it formatted correctly
             btc_cash_shipprice2 = (floating_decimals(btc_cash_shiprice1, 8))
@@ -328,8 +322,8 @@ def shoppingcart():
             # get shipping price local currency
             shipprice = Decimal(getitem.shipping_price_3)
             # convert it to btc cash
-            btc_cash_shiprice1 = (btc_cash_convertlocaltobtc(amount=shipprice,
-                                                             currency=getitem.currency))
+            btc_cash_shiprice1 = (convert_local_to_bch(amount=shipprice,
+                                                       currency=getitem.currency))
             # get it formatted correctly
             btc_cash_shipprice2 = (floating_decimals(btc_cash_shiprice1, 8))
             # times the shipping price times quantity
@@ -355,11 +349,11 @@ def shoppingcart():
                 btc_cash_shipprice2 = 0
                 i.selected_shipping_description = 0
             elif i.shipping_two == 1:
-                btc_cash_shipprice2 = btc_cash_convertlocaltobtc(
+                btc_cash_shipprice2 = convert_local_to_bch(
                     amount=i.shipping_price_2, currency=i.currency)
                 i.selected_shipping_description = i.shipping_info_2
             elif i.shipping_two == 1:
-                btc_cash_shipprice2 = btc_cash_convertlocaltobtc(
+                btc_cash_shipprice2 = convert_local_to_bch(
                     amount=i.shipping_price_3, currency=i.currency)
                 i.selected_shipping_description = i.shipping_info_3
             else:
@@ -407,11 +401,11 @@ def shoppingcart():
     # gets queries of related subcategory..if not enough will do main category
     # related to first item only currently
     cart1 = db.session\
-        .query(ShoppingCart)\
-        .filter(ShoppingCart.customer_id == user.id, ShoppingCart.savedforlater == 0)\
+        .query(Item_CheckoutShoppingCart)\
+        .filter(Item_CheckoutShoppingCart.customer_id == user.id, Item_CheckoutShoppingCart.savedforlater == 0)\
         .first()
     if cart1 is not None:
-        itemsinrelated = relatedtoItem(id=cart1.item_id)
+        itemsinrelated = subq_related_to_item(id=cart1.item_id)
         relatedcount = itemsinrelated.count()
         related1 = 1
     else:
@@ -421,8 +415,8 @@ def shoppingcart():
 
     # get price
     getcurrentprice = db.session\
-        .query(btc_cash_Prices) \
-        .filter(btc_cash_Prices.currency_id == current_user.currency) \
+        .query(Bch_Prices) \
+        .filter(Bch_Prices.currency_id == current_user.currency) \
         .first()
 
     db.session.commit()
@@ -432,7 +426,7 @@ def shoppingcart():
             if form.update.data:
                 if gettotalcart.btcprice == 0 and gettotalcart.btc_cash_price == 0:
                     flash("No Items in your Shopping Cart.", category="danger")
-                    return redirect(url_for('checkout.shoppingcart', username=user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
                 else:
                     for y in cart:
                         # get to see whats checked
@@ -474,12 +468,12 @@ def shoppingcart():
                             # check to see if they picked a shipping method
                             if int(y.id) == int(valueincheckbox):
                                 # see if item exists and check its shipping
-                                markett = db.session.query(marketitem) \
-                                    .filter(y.item_id == marketitem.id).first()
+                                markett = db.session.query(Item_MarketItem) \
+                                    .filter(y.item_id == Item_MarketItem.id).first()
                                 if int(markett.item_count) < int(newquant):
                                     flash("Vendor does not have that much",
                                           category="danger")
-                                    return redirect(url_for('checkout.shoppingcart', username=user.username))
+                                    return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
                                 else:
                                     y.quantity_of_item = newquant
                                     y.selected_currency = thecurrency
@@ -489,15 +483,15 @@ def shoppingcart():
                                     else:
                                         flash(
                                             "Please select a shipping method.", category="danger")
-                                        return redirect(url_for('checkout.shoppingcart', username=user.username))
+                                        return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
                                     db.session.add(y)
                                     db.session.commit()
-                    return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
 
             elif form.delete.data:
                 if gettotalcart.btcprice == 0 and gettotalcart.btc_cash_price == 0:
                     flash("No Items in your Shopping Cart.", category="danger")
-                    return redirect(url_for('checkout.shoppingcart', username=user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
                 else:
                     for itemtobedeleted in cart:
                         try:
@@ -512,19 +506,19 @@ def shoppingcart():
                             pass
                         else:
                             # match item checked to cart
-                            cartitem = db.session.query(ShoppingCart).filter_by(
+                            cartitem = db.session.query(Item_CheckoutShoppingCart).filter_by(
                                 id=valueincheckbox).first()
                             # if owner
                             if cartitem.customer == current_user.username:
                                 # delete it
                                 db.session.delete(cartitem)
                                 db.session.commit()
-                    return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
 
             elif form.saveforlater.data:
                 if gettotalcart.btcprice == 0 and gettotalcart.btc_cash_price == 0:
                     flash("No Items in your Shopping Cart.", category="danger")
-                    return redirect(url_for('checkout.shoppingcart', username=user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
                 else:
                     for y in cart:
                         try:
@@ -537,29 +531,29 @@ def shoppingcart():
                         if valueincheckbox == 0:
                             pass
                         else:
-                            cartitem = db.session.query(ShoppingCart).filter_by(
+                            cartitem = db.session.query(Item_CheckoutShoppingCart).filter_by(
                                 id=valueincheckbox).first()
                             if cartitem.customer == current_user.username:
                                 cartitem.savedforlater = 1
 
                                 db.session.add(cartitem)
                                 db.session.commit()
-                    return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
 
             elif form.gotocheckout.data:
                 if gettotalcart.btcprice == 0 and gettotalcart.total_btc_cash_price == 0:
                     flash("No Items in your Shopping Cart.", category="danger")
-                    return redirect(url_for('checkout.shoppingcart', username=user.username))
+                    return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
                 else:
                     for k in cart:
                         if k.selected_currency == 3:
                             # get price
-                            getcurrentprice = db.session.query(btc_cash_Prices) \
-                                .filter(btc_cash_Prices.currency_id == k.currency).first()
+                            getcurrentprice = db.session.query(Bch_Prices) \
+                                .filter(Bch_Prices.currency_id == k.currency).first()
                         elif k.selected_currency == 2:
                             # get price
-                            getcurrentprice = db.session.query(btc_cash_Prices) \
-                                .filter(btc_cash_Prices.currency_id == k.currency).first()
+                            getcurrentprice = db.session.query(Bch_Prices) \
+                                .filter(Bch_Prices.currency_id == k.currency).first()
                         else:
                             pass
                         priceofeach = Decimal(
@@ -568,15 +562,15 @@ def shoppingcart():
                         # # get the vendor fee currently
                         # #get the vendor match to userfees
                         getvendor = k.vendor_id
-                        sellerfee = db.session.query(UserFees).filter(
-                            UserFees.user_id == getvendor).first()
+                        sellerfee = db.session.query(Auth_UserFees).filter(
+                            Auth_UserFees.user_id == getvendor).first()
                         physicalitemfee = sellerfee.vendorfee
                         dbfeetopercent = (floating_decimals(
                             (physicalitemfee/100), 8))
                         fee = (floating_decimals(
                             (dbfeetopercent * k.final_price), 8))
                         # addfee to main amount requested
-                        order = Orders(
+                        order = Vendor_Orders(
                             type=1,
                             vendor='',
                             vendor_id=0,
@@ -640,12 +634,12 @@ def shoppingcart():
 
             else:
                 flash("Invalid form", category="danger")
-                return redirect(url_for('checkout.shoppingcart', username=current_user.username))
+                return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
         except Exception as e:
             db.session.rollback()
             flash("Invalid Forms", category="danger")
-            return redirect(url_for('checkout.shoppingcart', username=current_user.username))
-    return render_template('/item/shoppingcart.html',
+            return redirect(url_for('checkout.checkout_shopping_cart', username=current_user.username))
+    return render_template('/item/checkout_shopping_cart.html',
                            cart=cart,
                            cartsaved=cartsaved,
                            gettotalcart=gettotalcart,
@@ -658,8 +652,6 @@ def shoppingcart():
 
 
 checkout.route('/checkout', methods=['GET', 'POST'])
-
-
 @website_offline
 @login_required
 def checkout():
@@ -672,30 +664,30 @@ def checkout():
     promocodesadded = []
     # get user and car
     user = db.session\
-        .query(User)\
+        .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
 
     gettotalcart = db.session\
-        .query(ShoppingCartTotal)\
+        .query(Item_ShoppingCartTotal)\
         .filter_by(customer=user.id)\
         .first()
 
     # turn back if issue
     if gettotalcart.btc_sumofitem == 0 and gettotalcart.btc_cash_sumofitem == 0:
         flash("No Items in your Shopping Cart.", category="danger")
-        return redirect(url_for('checkout.shoppingcart', username=user.username))
+        return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
     if datetime.utcnow() >= user.shopping_timer:
         flash("Time ran out.  Please try again.", category="danger")
-        return redirect(url_for('checkout.shoppingcart', username=user.username))
+        return redirect(url_for('checkout.checkout_shopping_cart', username=user.username))
 
     # see if user has the Coin
     btc_cash_wallet = db.session\
-        .query(BchWallet)\
+        .query(Bch_Wallet)\
         .filter_by(user_id=user.id)\
         .first()
     gettotalcart = db.session\
-        .query(ShoppingCartTotal)\
+        .query(Item_ShoppingCartTotal)\
         .filter_by(customer=user.id)\
         .first()
 
@@ -706,16 +698,16 @@ def checkout():
 
     # queries
     cart = db.session\
-        .query(ShoppingCart)\
-        .filter(ShoppingCart.customer == current_user.username, ShoppingCart.savedforlater == 0)\
+        .query(Item_CheckoutShoppingCart)\
+        .filter(Item_CheckoutShoppingCart.customer == current_user.username, Item_CheckoutShoppingCart.savedforlater == 0)\
         .all()
 
     # get the orders
     orders = db.session\
-        .query(Orders)\
-        .filter(Orders.customer_id == user.id)\
-        .filter(Orders.type == 1).filter(Orders.incart == 1)\
-        .group_by(Orders.id.asc())\
+        .query(Vendor_Orders)\
+        .filter(Vendor_Orders.customer_id == user.id)\
+        .filter(Vendor_Orders.type == 1).filter(Vendor_Orders.incart == 1)\
+        .group_by(Vendor_Orders.id.asc())\
         .all()
 
     # see if promo code was added
@@ -728,7 +720,7 @@ def checkout():
         promocodewasadded = 1
 
     # get the message
-    msg = db.session.query(shippingSecret).filter_by(
+    msg = db.session.query(Service_ShippingSecret).filter_by(
         user_id=user.id, orderid=0).first()
     if msg:
         secretmsg = 0
@@ -744,25 +736,25 @@ def checkout():
             # security to see if cart is empty
             if gettotalcart.btcprice == 0 and gettotalcart.btc_cash_price == 0:
                 flash("No Items in your Shopping Cart.", category="danger")
-                return redirect(url_for('checkout.shoppingcart'))
+                return redirect(url_for('checkout.checkout_shopping_cart'))
             if datetime.utcnow() >= user.shopping_timer:
                 flash("Time ran out.  Please try again", category="danger")
-                return redirect(url_for('checkout.shoppingcart'))
+                return redirect(url_for('checkout.checkout_shopping_cart'))
 
             # user added an address
             if secretinfo.custommsgbtn.data:
                 # check to see if time ran out
                 if gettotalcart.btcprice == 0 and gettotalcart.btc_cash_price == 0:
                     flash("No Items in your Shopping Cart.", category="danger")
-                    return redirect(url_for('checkout.shoppingcart'))
+                    return redirect(url_for('checkout.checkout_shopping_cart'))
                 elif datetime.utcnow() >= user.shopping_timer:
                     flash("Time ran out.  Please try again", category="danger")
-                    return redirect(url_for('checkout.shoppingcart'))
+                    return redirect(url_for('checkout.checkout_shopping_cart'))
                 else:
                     if secretinfo.validate_on_submit():
                         try:
                             z = secretinfo.privatemsg.data
-                            addmsg = shippingSecret(
+                            addmsg = Service_ShippingSecret(
                                 user_id=current_user.id,
                                 txtmsg=str(z),
                                 timestamp=datetime.utcnow(),
@@ -773,7 +765,7 @@ def checkout():
                             return redirect(url_for('item.checkout'))
                         except Exception:
                             db.session.rollback()
-                            return redirect(url_for('checkout.shoppingcart'))
+                            return redirect(url_for('checkout.checkout_shopping_cart'))
                     else:
                         flash("Private Message form error. "
                               "10-2500 characters long required. No special characters allowed.",
@@ -785,11 +777,11 @@ def checkout():
                 # check to see if cart items
                 if gettotalcart.btcprice == 0 and gettotalcart.btc_cash_price == 0:
                     flash("No Items in your Shopping Cart.", category="danger")
-                    return redirect(url_for('checkout.shoppingcart'))
+                    return redirect(url_for('checkout.checkout_shopping_cart'))
                 # check to see if timer ran out
                 elif datetime.utcnow() >= user.shopping_timer:
                     flash("Time ran out.  Please try again", category="danger")
-                    return redirect(url_for('checkout.shoppingcart'))
+                    return redirect(url_for('checkout.checkout_shopping_cart'))
                 else:
                     db.session.delete(msg)
                     db.session.commit()
@@ -803,13 +795,13 @@ def checkout():
                     enteredcode = promogift.promocode.data
 
                     thepromo = db.session \
-                        .query(AffiliateOverview) \
-                        .filter(AffiliateOverview.promocode == enteredcode) \
+                        .query(Affiliate_Overview) \
+                        .filter(Affiliate_Overview.promocode == enteredcode) \
                         .first()
                     if thepromo is not None:
                         thepromostats = db.session\
-                            .query(AffiliateStats)\
-                            .filter(AffiliateStats.user_id == thepromo.user_id)\
+                            .query(Affiliate_Stats)\
+                            .filter(Affiliate_Stats.user_id == thepromo.user_id)\
                             .first()
                         if thepromo.user_id != current_user.id:
                             if thepromostats is not None:
@@ -953,16 +945,16 @@ def checkout():
                 if gettotalcart.btcprice == 0 and gettotalcart.btc_cash_price == 0:
                     order = None
                     flash("No Items in your Shopping Cart.", category="danger")
-                    return redirect(url_for('checkout.shoppingcart'))
+                    return redirect(url_for('checkout.checkout_shopping_cart'))
                 # check to see if time still
                 elif datetime.utcnow() >= user.shopping_timer:
                     order = None
                     flash("Time ran out.  Please try again", category="danger")
-                    return redirect(url_for('checkout.shoppingcart'))
+                    return redirect(url_for('checkout.checkout_shopping_cart'))
                 else:
                     # add security here before proceeding
                     userwallet_btc_cash = db.session\
-                        .query(BchWallet)\
+                        .query(Bch_Wallet)\
                         .filter_by(user_id=user.id)\
                         .first()
 
@@ -987,7 +979,7 @@ def checkout():
                         # get specific item being purchased
                         try:
                             getitem = db.session\
-                                .query(marketitem) \
+                                .query(Item_MarketItem) \
                                 .filter_by(id=specificitemincart.item_id) \
                                 .first()
                         except Exception:
@@ -1012,12 +1004,12 @@ def checkout():
                         getitem.item_count = newquantleft
 
                         # add diff trading partners
-                        differenttradingpartners_user(user_id=specificitemincart.customer_id,
-                                                      otherid=specificitemincart.vendor_id)
+                        userdata_different_trading_partners_user(user_id=specificitemincart.customer_id,
+                                                                 otherid=specificitemincart.vendor_id)
 
                         # add diff trading partners
-                        differenttradingpartners_vendor(user_id=specificitemincart.vendor_id,
-                                                        otherid=specificitemincart.customer_id)
+                        userdata_different_trading_partners_vendor(user_id=specificitemincart.vendor_id,
+                                                                   otherid=specificitemincart.customer_id)
 
                         # notify vendor
                         notification(type=1,
@@ -1052,7 +1044,7 @@ def checkout():
                         firstsale(user_id=specificitemincart.vendor_id)
 
                         # add a message for each order
-                        addmsg = shippingSecret(
+                        addmsg = Service_ShippingSecret(
                             user_id=current_user.id,
                             txtmsg=msg.txtmsg,
                             timestamp=datetime.utcnow(),
@@ -1081,14 +1073,14 @@ def checkout():
                 # delete and clear everything
                 # query for users message
                 oldmsg = db.session\
-                    .query(shippingSecret)\
+                    .query(Service_ShippingSecret)\
                     .filter_by(user_id=user.id, orderid=0)\
                     .first()
                 db.session.delete(oldmsg)
 
                 # clear user shoppingcarttotal
                 gettotalcart = db.session \
-                    .query(ShoppingCartTotal) \
+                    .query(Item_ShoppingCartTotal) \
                     .filter_by(customer=user.id) \
                     .first()
                 gettotalcart.totalbtcprice = 0
@@ -1110,7 +1102,7 @@ def checkout():
 
                 db.session.commit()
                 flash("Successful Order.", category="success")
-                return redirect(url_for('orders.ordershome'))
+                return redirect(url_for('orders.orders_home'))
 
         # not specific form information made
         else:

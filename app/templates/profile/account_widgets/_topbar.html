@@ -1,19 +1,19 @@
 
 <div class="row blue btnwhite pt-2" style="min-height: 50px;font-size: 15px;">
     <div class="col-2">
-        <a href="{{ url_for('profile.frontpage',username=user.username) }}">{{ user.username }}</a>
+        <a href="{{ url_for('profile.profile_frontpage',username=user.username) }}">{{ user.username }}</a>
     </div>
     {% if user.vendor_account == 1 %}
         <div class="col-2">
-            <a href="{{ url_for('profile.vendorStore',username=user.username) }}">Store</a>
+            <a href="{{ url_for('profile.profile_vendor_store',username=user.username) }}">Store</a>
         </div>
         <div class="col-2">
-            <a href="{{ url_for('profile.vendorprofile',username=user.username) }}">Vendor </a>
+            <a href="{{ url_for('profile.profile_vendor',username=user.username) }}">Vendor </a>
         </div>
     {% else %}
     {% endif %}
     <div class="col-2">
-        <a href="{{ url_for('profile.user',username=user.username) }}">Customer </a>
+        <a href="{{ url_for('profile.profile_user',username=user.username) }}">Customer </a>
     </div>
     <div class="col-2">
         <a href="{{ url_for('achievements.profile_achs',username=user.username) }}" class="active">Achievements</a>

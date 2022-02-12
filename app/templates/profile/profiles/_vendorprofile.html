@@ -7,7 +7,7 @@
   <!--username-->
   <div class="col-sm-12 text-center">
     <div class="linkcolor_topbar">
-      <a href="{{ url_for('profile.vendorprofile',username=vendor.username) }}"
+      <a href="{{ url_for('profile.profile_vendor',username=vendor.username) }}"
         >{{ vendor.username }}</a
       >
     </div>
@@ -46,7 +46,7 @@
   <div class="col-sm-12 text-center">
     <a
       class="btn btn-warning btnwhite"
-      href="{{ url_for('message.messagecenter_Compose_specificperson', person=vendor.username) }}"
+      href="{{ url_for('message.message_compose_specific_person', person=vendor.username) }}"
       role="button"
       >Send Message</a
     >

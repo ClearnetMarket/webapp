@@ -16,7 +16,7 @@
                             Moderator - {{ comment.author_id|username }}
                         </div>
                     {% else %}
-                        <div class="comment-author linkcolor"><a href="{{ url_for('profile.user', username=comment.author) }}">
+                        <div class="comment-author linkcolor"><a href="{{ url_for('profile.profile_user', username=comment.author) }}">
                             {{ comment.author }}</a>
                         </div>
                     {% endif %}

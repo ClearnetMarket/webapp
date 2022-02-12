@@ -3,24 +3,21 @@ from wtforms import SubmitField
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired
 
-from app.classes.models import QueryAdType
+from app.classes.models import Query_AdType
 
 
 def add_promo_form_factory(item):
     class VendorCreatePromo(FlaskForm):
         if item == 0:
-            promotype = QuerySelectField(query_factory=lambda: QueryAdType.query.all(),
+            promotype = QuerySelectField(query_factory=lambda: Query_AdType.query.all(),
                                          get_label='text',
                                          validators=[DataRequired(message='Type is Required')])
-
-
 
         else:
-            promotype = QuerySelectField(query_factory=lambda: QueryAdType.query.all(),
-                                         default=lambda: QueryAdType.query.filter_by().first(),
+            promotype = QuerySelectField(query_factory=lambda: Query_AdType.query.all(),
+                                         default=lambda: Query_AdType.query.filter_by().first(),
                                          get_label='text',
                                          validators=[DataRequired(message='Type is Required')])
-
 
         submit = SubmitField()
 

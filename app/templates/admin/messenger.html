@@ -5,7 +5,7 @@
 
 <ol class="breadcrumb linkcolor">
   <li><a href="{{ url_for('index') }}">Home</a></li>
-  <li><a href="{{ url_for('admin.adminHome') }}">Admin Home</a></li>
+  <li><a href="{{ url_for('admin.admin_home') }}">Admin Home</a></li>
 </ol>
 <div class="row graybg border">
 
@@ -13,7 +13,7 @@
 
 		<div class="col-4 linkcolor">
 	    <b>
-	        <a href="{{ url_for('profile.user',username=msg.username) }}" >
+	        <a href="{{ url_for('profile.profile_user',username=msg.username) }}" >
 	             {{ msg.username }}
 	            ({{ msg.author_id|userrating }})
 	            ({{ msg.author_id|avguserrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px";>)

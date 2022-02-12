@@ -25,7 +25,7 @@
                         </td>
 
                         <td class="linkcolor col-4">
-                            <a href="{{ url_for('profile.user',username=i.vendorname) }}" >
+                            <a href="{{ url_for('profile.profile_user',username=i.vendorname) }}" >
                                 {{ i.vendorname }}
                                 ({{ i.user_id|vendorratingcount }})
                                 ({{ i.user_id|avgvendorrating }}<img src="{{ url_for('static', filename='/images/stars/1s.png'  )  }}" width="15px" height="15px">)
@@ -35,7 +35,7 @@
                         <td class="linkcolor col-5">
                             {% if i.typeitem == 1 %}
 
-                            <a href="{{ url_for('item.itemforsale',id=i.listingid) }}" >
+                            <a href="{{ url_for('item.item_for_sale',id=i.listingid) }}" >
                             {{ i.listingtitle }}
 
                             </a>
@@ -53,13 +53,13 @@
 
                         <td class="btnwhite col-2">
                             {% if i.typeitem == 1 %}
-                            <a class="btn btn-danger" href="{{ url_for('admin.deleteItem', id=i.listingid) }}" role="button">Delete Item</a>
-                            <a class="btn btn-warning" href="{{ url_for('admin.removeflags', id=i.id) }}" role="button">Remove Flags</a>
+                            <a class="btn btn-danger" href="{{ url_for('admin.vendorcreate_delete_item', id=i.listingid) }}" role="button">Delete Item</a>
+                            <a class="btn btn-warning" href="{{ url_for('admin.remove_flags', id=i.id) }}" role="button">Remove Flags</a>
                             {% elif i.typeitem == 2 %}
-                                <a class="btn btn-warning" href="{{ url_for('admin.removeflags', id=i.id) }}" role="button">Remove Flags</a>
+                                <a class="btn btn-warning" href="{{ url_for('admin.remove_flags', id=i.id) }}" role="button">Remove Flags</a>
                                 <a class="btn btn-danger" href="{{ url_for('admin.deleteTrade', id=i.listingid) }}" role="button">Delete Item</a>
                             {% elif i.typeitem == 3 %}
-                                <a class="btn btn-warning" href="{{ url_for('admin.removeflags', id=i.id) }}" role="button">Remove Flags</a>
+                                <a class="btn btn-warning" href="{{ url_for('admin.remove_flags', id=i.id) }}" role="button">Remove Flags</a>
                             {% else %}
                             {% endif %}
                         </td>

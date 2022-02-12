@@ -7,7 +7,7 @@ from app import db, login_manager
 from datetime import datetime
 
 
-class UserFees(db.Model):
+class Auth_UserFees(db.Model):
     __tablename__ = 'userfees'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -21,7 +21,7 @@ class UserFees(db.Model):
     vendorfee_time = db.Column(db.TIMESTAMP())
 
 
-class AccountSeedWords(db.Model):
+class Auth_AccountSeedWords(db.Model):
     __tablename__ = 'AccountSeedWords'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -38,7 +38,7 @@ class AccountSeedWords(db.Model):
     wordstring = db.Column(db.TEXT)
 
 
-class User(UserMixin, db.Model):
+class Auth_User(UserMixin, db.Model):
     __tablename__ = 'users'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -175,7 +175,7 @@ class User(UserMixin, db.Model):
             data = s.loads(token)
         except:
             return None
-        return User.query.get(data['id'])
+        return Auth_User.query.get(data['id'])
 
 
 class AnonymousUser(AnonymousUserMixin):

@@ -4,7 +4,7 @@
   <!--username-->
   <div class="col-12 text-center">
     <div class="linkcolor_topbar">
-      <a href="{{ url_for('profile.vendorprofile',username=vendor.username) }}">{{ vendor.username }}</a>
+      <a href="{{ url_for('profile.profile_vendor',username=vendor.username) }}">{{ vendor.username }}</a>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
   {% if current_user.id == vendor.id%} {% else %}
   <div class="col-12 text-center mt-3 mb-3">
     <b>
-      <a href="{{ url_for('message.messagecenter_Compose_specificperson', person=vendor.username) }}">
+      <a href="{{ url_for('message.message_compose_specific_person', person=vendor.username) }}">
         Send Message
       </a>
     </b>

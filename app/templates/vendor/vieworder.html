@@ -87,9 +87,9 @@
         <div class="row">
             <div class="col-12 text-right">
                 {% if current_user.id == order.customer_id %}
-                    <a class="btn btn-warning" href="{{ url_for('message.messagecenter_Compose_specificperson', person=order.vendor) }}" role="button">Message Vendor</a>
+                    <a class="btn btn-warning" href="{{ url_for('message.message_compose_specific_person', person=order.vendor) }}" role="button">Message Vendor</a>
                 {% else %}
-                    <a class="btn btn-warning" href="{{ url_for('message.messagecenter_Compose_specificperson', person=order.customer) }}" role="button">Message Buyer</a>
+                    <a class="btn btn-warning" href="{{ url_for('message.message_compose_specific_person', person=order.customer) }}" role="button">Message Buyer</a>
                 {% endif %}
             </div>
         </div>
@@ -593,7 +593,7 @@
                         {% if current_user.id == order.vendor_id %}<!-- right side-->
                             <div class="text-center"> <h4>Mark as Recieved</h4></div>
                             <div class="col-12 col-sm-6 text-center">
-                                <a class="btn btn-warning" href="{{ url_for('vendor.vendorOrders_recievereturn',id=order.id) }}"
+                                <a class="btn btn-warning" href="{{ url_for('vendor.vendor_returns_orders_recieve',id=order.id) }}"
                                    role="button">Recieved Return
                                 </a>
                             </div>

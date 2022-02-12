@@ -2,7 +2,7 @@
 
 
 <div class="text-center">
-    <a href="{{ url_for('item.itemforsale', id=item.id) }}">
+    <a href="{{ url_for('item.item_for_sale', id=item.id) }}">
         <img src="{{ url_for('userdata.media_file',
             filename=(
             item.string_node_id +item.string_auction_id + item.image_one + "_225x.jpg")) }}" class="boximage">
@@ -97,7 +97,7 @@
 </div>
 
 <div class="text-center linkcolor">
-    <a href="{{ url_for('profile.user',username=item.vendor_name) }}">
+    <a href="{{ url_for('profile.profile_user',username=item.vendor_name) }}">
         {{ item.vendor_name }}
     </a>
 
@@ -106,5 +106,5 @@
 </div>
 
 <div class="text-center">
-    <a class="btn btn-primary" href="{{ url_for('item.itemforsale', id=item.id) }}" role="button">View</a>
+    <a class="btn btn-primary" href="{{ url_for('item.item_for_sale', id=item.id) }}" role="button">View</a>
 </div>
