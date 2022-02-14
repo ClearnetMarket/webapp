@@ -2,6 +2,6 @@
 
 from flask import Blueprint
 
-orders = Blueprint('orders', __name__)
+wallet_xmr = Blueprint('wallet_xmr', __name__)
 
 from . import views

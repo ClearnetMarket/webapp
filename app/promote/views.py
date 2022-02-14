@@ -1,15 +1,14 @@
-from flask import render_template, \
-    redirect, \
-    url_for, \
-    flash, \
-    request
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from app.promote import promote
 from app import db
+from decimal import Decimal
+from datetime import datetime
 from app.common.decorators import \
     login_required, \
     website_offline, \
     vendoraccount_required
+from app.common.functions import convert_local_to_bch
 
 # models
 from app.classes.item import Item_MarketItem
@@ -25,10 +24,7 @@ from app.promote.forms import \
 from app.wallet_bch.wallet_btccash_work import sendcoinforad
 
 # general imports
-from datetime import datetime
-from decimal import Decimal
 
-from app.common.functions import convert_local_to_bch
 
 
 @promote.route('/', methods=['GET', 'POST'])

@@ -3,23 +3,22 @@ from app.userdata import userdata
 from app import UPLOADED_FILES_DEST_ITEM, UPLOADED_FILES_DEST_USER
 from flask import send_from_directory
 from app import db
+
+from decimal import Decimal
 # models
 from app.classes.auth import Auth_User
+from datetime import datetime
 
 from app.classes.profile import \
     Profile_StatisticsUser, \
     Profile_StatisticsVendor
 
-from app.classes.affiliate import \
-    Affiliate_Stats
+from app.classes.affiliate import Affiliate_Stats
 
 # End Models
-
 from app.achs.c import howmanyitemsbought_customer, howmanytrades_customer
 from app.achs.v import howmanyitemssold_vendor, howmanytrades_vendor
 from app.common.functions import mkdir_p,  convert_to_local_bch, userimagelocation
-from datetime import datetime
-from decimal import Decimal
 
 now = datetime.utcnow()
 
@@ -34,7 +33,8 @@ def media_file(filename):
     Returns:
         returns url link
     """
-
+   
+    
     return send_from_directory(UPLOADED_FILES_DEST_ITEM, filename, as_attachment=False)
 
 

@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from app.orders import orders
-from app import db, UPLOADED_FILES_DEST
+from app import db
 
 from flask_paginate import Pagination, get_page_args
 from datetime import datetime
@@ -27,7 +27,6 @@ from app.wallet_bch.wallet_btccash_work import \
     btc_cash_sendcointoaffiliate, \
     btc_cash_sendCointoUser
 from app.common.decorators import \
-    ping_user, \
     website_offline, \
     login_required
 
@@ -58,7 +57,6 @@ from app.classes.vendor import \
     Vendor_Orders
 from app.classes.wallet_bch import Bch_Prices
 
-
 @orders.route('/orders', methods=['GET', 'POST'])
 @website_offline
 @login_required
@@ -75,7 +73,7 @@ def orders_home():
     feedbackform = feedbackonorderForm(request.form)
     formsearch = searchForm()
 
-    get_cats = db.session\
+    get_cats = db.session \
         .query(Category_Categories)\
         .filter(Category_Categories.id != 1000, Category_Categories.id != 0)\
         .order_by(Category_Categories.name.asc())\
@@ -120,6 +118,7 @@ def orders_home():
                             outer_window=outer_window)
 
     if request.method == 'POST':
+        
         if formsearch.validate_on_submit():
             # cats
             categoryfull = formsearch.category.data
@@ -502,7 +501,7 @@ def orders_cancel_order(id):
 @website_offline
 @login_required
 def orders_mark_as_recieved(id):
-
+    
     now = datetime.utcnow()
     try:
         getorder = db.session.query(Vendor_Orders).filter_by(id=id).first()

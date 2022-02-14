@@ -16,7 +16,6 @@ def profilebar(user_id1, user_id2):
     global user1width
     global user1ach
     global user1vendorstats
-
     global user2
     global user2pictureid
     global user2stats
@@ -80,6 +79,7 @@ def profilebar(user_id1, user_id2):
         if user1.vendor_account == 1:
             user1vendorstats = db.session.query(
                 Profile_StatisticsVendor).filter_by(username=user1.username).first()
+                
         else:
             user1vendorstats = 0
     else:
@@ -87,8 +87,10 @@ def profilebar(user_id1, user_id2):
 
     if user_id2 != 0:
         user2 = db.session.query(Auth_User).filter_by(id=user_id2).first()
-        user2getlevel = db.session.query(Achievements_UserAchievements).filter_by(
-            username=user2.username).first()
+        user2getlevel = db.session\
+            .query(Achievements_UserAchievements)\
+            .filter_by(username=user2.username)\
+            .first()
         user2pictureid = str(user2getlevel.level)
         user2stats = db.session.query(Profile_StatisticsUser).filter_by(
             username=user2.username).first()

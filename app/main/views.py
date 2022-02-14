@@ -62,7 +62,7 @@ def static_from_root():
 @app.route('/index', methods=['GET', 'POST'])
 @website_offline
 def index():
-
+    
     now = datetime.utcnow()
     # forms
     formsearch = searchForm()
@@ -340,6 +340,7 @@ def notifications():
         .query(Auth_User)\
         .filter_by(username=current_user.username)\
         .first()
+
     # Pagination
     search = False
     page, per_page, offset = get_page_args()

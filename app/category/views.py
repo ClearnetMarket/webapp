@@ -96,7 +96,7 @@ def view_category(maincatid):
         .query(Category_Categories)\
         .filter(Category_Categories.id == maincatid)\
         .first()
-
+    g = db.session
     # Main Page search
     try:
         itemfull = db.session\

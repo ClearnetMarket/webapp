@@ -9,7 +9,6 @@ from app.exppoints import exppoint
 from app.common.decorators import \
     website_offline, \
     login_required, \
-    ping_user, \
     vendoraccount_required
 
 # forms
@@ -40,8 +39,7 @@ from app.auth.forms import becomeavendor
 # models
 from app.classes.auth import Auth_User
 
-from app.classes.item import \
-    Item_MarketItem
+from app.classes.item import Item_MarketItem
 
 from app.classes.profile import \
     Profile_Userreviews, \
@@ -90,6 +88,7 @@ def vendor_orders_accept(id):
                     item.new_order = 0
                     item.accepted_order = 1
                     item.age = datetime.utcnow()
+                    item.age
                     db.session.add(item)
                     db.session.commit()
                     flash("Order Accepted", category="success")
@@ -946,8 +945,7 @@ def vendor_add_temp_address(id):
                              quantity=order.quantity, currency=order.currency)
 
                     db.session.commit()
-                    flash("Cancelled and refunded. Order#" +
-                          str(order.id), category="success")
+                    flash(f"Cancelled and refunded. Order# {order.id}", category="success")
                     return redirect(url_for('vendor.vendor_refunds', username=current_user.username))
                 else:
                     flash("Error", category="danger")
@@ -1012,8 +1010,7 @@ def vendor_edit_temp_address(id):
 
         db.session.add(returnaddress)
         db.session.commit()
-        flash("Return address added for Order#" +
-              str(order.id), category="success")
+        flash(f"Return address added for Order# {order.id}", category="success")
         return redirect(url_for('vendor.vendor_refunds', username=current_user.username))
 
     return render_template('/vendor/vendor_orders_view_specific.html',  form=form,

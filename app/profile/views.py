@@ -2,6 +2,10 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from app.profile import profile
 from app import db
+
+from datetime import datetime
+from flask_paginate import Pagination, get_page_args
+from sqlalchemy.sql import func
 # models
 from app.classes.auth import Auth_User
 from app.classes.achievements import \
@@ -13,12 +17,6 @@ from app.classes.profile import \
     Profile_StatisticsVendor
 
 from app.classes.userdata import User_DataFeedback
-
-from datetime import  datetime
-from app.common.functions import floating_decimals
-
-from flask_paginate import Pagination, get_page_args
-from sqlalchemy.sql import func
 from app.profile.profilebar import profilebar
 from app.common.decorators import website_offline
 
@@ -167,6 +165,7 @@ def profile_vendor(username):
     now = datetime.utcnow()
     # vendor
     user = db.session.query(Auth_User).filter_by(username=username).first()
+
     if user:
         if user.vendor_account == 1:
             search = False

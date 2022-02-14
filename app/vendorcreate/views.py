@@ -85,6 +85,7 @@ def vendorcreate_items_for_sale():
     sale = db.session.query(Item_MarketItem).filter(Item_MarketItem.vendor_id == user.id).order_by(
         Item_MarketItem.total_sold.desc(), Item_MarketItem.online.desc(), Item_MarketItem.id.desc())
 
+
     forsale = sale.limit(per_page).offset(offset)
 
     pagination = Pagination(page=page,
@@ -829,8 +830,6 @@ def vendorcreate_clone_item(id):
     :param id:
     :return:
     """
-    # get the vendor item to be copied
-    now = datetime.utcnow()
     # get item we are cloning
     vendoritem = Item_MarketItem.query.get(id)
 
@@ -1093,6 +1092,10 @@ def deleteimg_noredirect(id, img):
         if vendoritem:
             if vendoritem.vendor_id == current_user.id:
                 try:
+                    item = db.session\
+                        .query(Item_MarketItem)\
+                        .filter_by(id=id)\
+                        .first()
                     # get folder for item id
                     specific_folder = str(item.id)
                     # get node location

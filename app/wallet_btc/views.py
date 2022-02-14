@@ -4,33 +4,26 @@ from flask import \
     url_for, \
     flash, \
     request
-from app import db
+from app.wallet_btc import wallet_btc
 
-from app.wallet_bch import\
-    wallet_bch
-from app.wallet_bch.wallet_btccash_work import\
-    btc_cash_sendCoin
+from app import db
+from app.wallet_btc.wallet_btc_work import btc_sendCoin
 
 # models
-from app.classes.auth import \
-    Auth_User
+from app.classes.auth import Auth_User
 
-from app.classes.wallet_bch import \
-    Bch_WalletTransactions,\
-    Bch_Wallet,\
-    Bch_WalletFee
+from app.classes.wallet_btc import \
+    Btc_WalletTransactions,\
+    Btc_Wallet,\
+    Btc_WalletFee
 
 # end models
-from app.wallet_bch.forms import\
-    walletSendcoin
-from datetime import \
-    datetime
-from app.common.functions import\
-    floating_decimals
+from app.wallet_btc.forms import walletSendcoin
+from datetime import datetime
+from app.common.functions import floating_decimals
 from app.common.decorators import\
     website_offline,\
     login_required
-
 from app.achs.b import\
     likemoneyinthebank,\
     withdrawl
@@ -46,10 +39,10 @@ from app.profile.profilebar import\
     profilebar
 
 
-@wallet_bch.route('/', methods=['GET', 'POST'])
+@wallet_btc.route('/', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def bch_home():
+def btc_home():
     now = datetime.utcnow()
     title = "Overview"
 
@@ -84,9 +77,9 @@ def bch_home():
 
     # Get Transaction history
     transactfull = db.session\
-        .query(Bch_WalletTransactions)\
-        .filter(Bch_WalletTransactions.user_id == current_user.id)\
-        .order_by(Bch_WalletTransactions.id.desc())
+        .query(Btc_WalletTransactions)\
+        .filter(Btc_WalletTransactions.user_id == current_user.id)\
+        .order_by(Btc_WalletTransactions.id.desc())
     transactcount = transactfull.count()
     transact = transactfull.limit(per_page).offset(offset)
 
@@ -102,17 +95,16 @@ def bch_home():
 
     try:
         wallet = db.session\
-            .query(Bch_Wallet)\
+            .query(Btc_Wallet)\
             .filter_by(user_id=current_user.id)\
             .first()
         if wallet.currentbalance > 0:
             likemoneyinthebank(user_id=current_user.id)
             db.session.commit()
     except Exception as e:
-        print(str(e))
         return redirect(url_for('auth.login', next=request.url))
 
-    return render_template('/wallet/wallet_bch/home.html',
+    return render_template('/wallet/wallet_btc/home.html',
                            now=now,
                            title=title,
                            transact=transact,
@@ -139,10 +131,10 @@ def bch_home():
                            )
 
 
-@wallet_bch.route('/bch-send', methods=['GET', 'POST'])
+@wallet_btc.route('/btc-send', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def bch_send():
+def btc_send():
     now = datetime.utcnow()
     title = "Send"
     form = walletSendcoin(request.form)
@@ -167,20 +159,22 @@ def bch_send():
 
     # Get wallet_btc
     wallet = db.session\
-        .query(Bch_Wallet)\
+        .query(Btc_Wallet)\
         .filter_by(user_id=current_user.id)\
         .first()
     # get walletfee
     walletthefee = db.session\
-        .query(Bch_WalletFee)\
+        .query(Btc_WalletFee)\
         .filter_by(id=1)\
         .first()
-    wfee = Decimal(walletthefee.bch)
+    wfee = Decimal(walletthefee.btc)
 
     if request.method == "POST":
 
         if form.validate_on_submit() and current_user.dispute == 0:
-            if Auth_User.decryptpassword(pwdhash=current_user.wallet_pin, password=form.pin.data):
+            if Auth_User.decryptpassword(pwdhash=current_user.wallet_pin, 
+                                         password=form.pin.data):
+                
                 sendto = form.sendto.data
                 comment = form.description.data
                 amount = form.amount.data
@@ -188,12 +182,13 @@ def bch_send():
                 # test wallet_btc stuff for security
                 walbal = Decimal(wallet.currentbalance)
                 amount2withfee = Decimal(amount) + Decimal(wfee)
+                
                 # greater than amount with fee
                 if floating_decimals(walbal, 8) >= floating_decimals(amount2withfee, 8):
                     # greater than fee
                     if Decimal(amount) > Decimal(wfee):
                         # add to wallet_btc work
-                        btc_cash_sendCoin(
+                        btc_sendCoin(
                             user_id=current_user.id,
                             sendto=sendto,
                             amount=amount,
@@ -203,14 +198,13 @@ def bch_send():
                         withdrawl(user_id=current_user.id)
                         db.session.commit()
                         flash(f"Bitcoin Sent: {str(sendto)}", category="success")
-                        return redirect(url_for('wallet_bch.bch_send'))
+                        return redirect(url_for('wallet_btc.btc_send'))
                     else:
                         flash(f"Cannot withdraw amount less than wallet_btc fee: {str(wfee)}", category="danger")
-                        return redirect(url_for('wallet_bch.bch_send'))
+                        return redirect(url_for('wallet_btc.btc_send'))
                 else:
-                    flash(
-                        "Cannot withdraw more than your balance including fee", category="danger")
-                    return redirect(url_for('wallet_bch.bch_send'))
+                    flash("Cannot withdraw more than your balance including fee", category="danger")
+                    return redirect(url_for('wallet_btc.btc_send'))
             else:
                 flash("Invalid Pin. Account will be locked with 5 failed attempts.", category="danger")
                 x = int(current_user.fails)
@@ -226,9 +220,9 @@ def bch_send():
                     return redirect(url_for('auth.login'))
                 else:
                     db.session.commit()
-                    return redirect(url_for('wallet_bch.bch_send'))
+                    return redirect(url_for('wallet_btc.btc_send'))
 
-    return render_template('/wallet/wallet_bch/send.html',
+    return render_template('/wallet/wallet_btc/send.html',
                            now=now,
                            title=title,
                            form=form,
@@ -254,10 +248,10 @@ def bch_send():
                            )
 
 
-@wallet_bch.route('/bch-receive', methods=['GET', 'POST'])
+@wallet_btc.route('/btc-receive', methods=['GET', 'POST'])
 @website_offline
 @login_required
-def bch_receive():
+def btc_receive():
     now = datetime.utcnow()
     title = "Receive"
 
@@ -280,11 +274,11 @@ def bch_receive():
         user2 = profilebar(user_id1=current_user.id, user_id2=0)
 
     wallet = db.session\
-        .query(Bch_Wallet)\
+        .query(Btc_Wallet)\
         .filter_by(user_id=current_user.id)\
         .first()
 
-    return render_template('/wallet/wallet_bch/receive.html',
+    return render_template('/wallet/wallet_btc/receive.html',
                            now=now,
                            title=title,
                            wallet=wallet,

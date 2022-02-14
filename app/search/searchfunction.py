@@ -11,6 +11,8 @@ def headerfunctions():
     from app.classes.wallet_bch import Bch_Wallet
     from sqlalchemy.sql import func, or_
     from decimal import Decimal
+    
+    
     if current_user.is_authenticated:
         user = db.session.query(Auth_User).filter_by(
             username=current_user.username).first()

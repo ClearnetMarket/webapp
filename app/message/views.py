@@ -29,11 +29,12 @@ from app.common.decorators import login_required, ping_user
 @message.route('/message_center', methods=['GET', 'POST'])
 @login_required
 def message_center():
+    
     now = datetime.utcnow()
     aform = allActionForm(request.form)
     delormarkasread = topbuttonForm()
     title = 'Messages'
-
+    
     # sidebar stuff
     # Get New messages count
     newmsg = db.session\
@@ -41,7 +42,7 @@ def message_center():
         .filter(Message_PostUser.user_id == current_user.id)\
         .filter(Message_PostUser.unread == 1)
     allmsgcount = newmsg.count()
-
+    
     # get read msg count
     oldmsg = db.session\
         .query(Message_PostUser)\

@@ -33,8 +33,8 @@ def notification(type, username, user_id, salenumber, bitcoin):
         type=type,
         username=username,
         user_id=user_id,
-        salenumber=salenumber,
-        bitcoin=bitcoin,
+        sale_number=salenumber,
+        crypto_amount=bitcoin,
         read=1,
         timestamp=now,
     )
