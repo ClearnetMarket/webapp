@@ -1,13 +1,13 @@
 from flask_login import current_user, logout_user, login_user
 from app import db, UPLOADED_FILES_DEST_USER
 from app.auth.profile_images.profile_image_resizer import imagespider
-from flask import redirect, url_for, flash
+from flask import redirect, url_for
 from werkzeug.utils import secure_filename
 import os
 from app.common.functions import id_generator_picture1
 
 from app.classes.auth import Auth_User
-from app.common.functions import mkdir_p, userimagelocation
+from app.common.functions import mkdir_p
 
 
 def deleteprofileimage(id, img, type):

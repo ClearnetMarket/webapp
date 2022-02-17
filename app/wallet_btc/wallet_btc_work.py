@@ -2,25 +2,22 @@ from app import db
 from app.common.functions import floating_decimals
 from app.notification import notification
 from app.wallet_btc.wallet_btc_addtransaction import btc_addtransaction
-from app.wallet_btc.wallet_btc_security import checkbalance
+from app.wallet_btc.wallet_btc_security import btc_check_balance
 from decimal import Decimal
 import datetime
 # models
 from app.classes.auth import Auth_User
-
-from app.classes.admin import Admin_ClearnetProfitBtc,Admin_ClearnetHoldingsBtc
-
+from app.classes.admin import Admin_ClearnetProfitBtc, Admin_ClearnetHoldingsBtc
 from app.classes.wallet_btc import \
     Btc_Unconfirmed, \
     Btc_Wallet, \
     Btc_WalletAddresses, \
     Btc_WalletFee, \
     Btc_WalletWork
-
 # end models
 
 
-def btc_walletstatus(user_id):
+def btc_wallet_status(user_id):
     """
     This function checks status opf the wallet
     :param user_id:
@@ -60,7 +57,7 @@ def btc_walletstatus(user_id):
 
 def btc_create_wallet(user_id):
     """
-    This function creates the wallet for bitcoin and puts its first address there
+    This function creates the wallet for bitcoin and puts  first address there
     if wallet exists it adds an address to wallet
     :param user_id:
     :return:
@@ -140,7 +137,7 @@ def btc_create_wallet(user_id):
         db.session.add(getnewaddress)
 
 
-def btc_sendCoin(user_id, sendto, amount, comment):
+def btc_send_coin(user_id, sendto, amount, comment):
     """
     Add work order to send off site
     :param user_id:
@@ -149,13 +146,13 @@ def btc_sendCoin(user_id, sendto, amount, comment):
     :param comment:
     :return:
     """
-    timestamp = datetime.utcnow()
+    timestamp = datetime.datetime.utcnow()
     getwallet = db.session\
         .query(Btc_WalletFee)\
         .filter_by(id=1)\
         .first()
     walletfee = getwallet.btc
-    a = checkbalance(user_id=user_id, amount=amount)
+    a = btc_check_balance(user_id=user_id, amount=amount)
     if a == 1:
 
         strcomment = str(comment)
@@ -203,7 +200,7 @@ def btc_sendCoin(user_id, sendto, amount, comment):
         )
 
 
-def btc_sendCointoEscrow(amount, comment, user_id):
+def btc_send_coin_to_escrow(amount, comment, user_id):
     """
     # TO clearnet_webapp Wallet
     # this function will move the coin to clearnets wallet_btc from a user
@@ -212,7 +209,7 @@ def btc_sendCointoEscrow(amount, comment, user_id):
     :param user_id:
     :return:
     """
-    a = checkbalance(user_id=user_id, amount=amount)
+    a = btc_check_balance(user_id=user_id, amount=amount)
     if a == 1:
         try:
             type_transaction = 4
@@ -234,7 +231,6 @@ def btc_sendCointoEscrow(amount, comment, user_id):
                                     )
 
         except Exception as e:
-            print(str(e))
             notification(
                 type=34,
                 username='',
@@ -244,7 +240,6 @@ def btc_sendCointoEscrow(amount, comment, user_id):
             )
 
     else:
-        print("a equals", a)
         notification(
             type=34,
             username='',
@@ -287,7 +282,7 @@ def btc_send_coin_to_user_as_admin(amount, comment, user_id):
                             )
 
 
-def btc_takeCointoUser_asAdmin(amount, comment, user_id):
+def btc_take_coin_to_user_as_admin(amount, comment, user_id):
     """
     # TO User
     # this function will move the coin from clearnets wallet_btc to a user as an admin
@@ -327,13 +322,13 @@ def btc_takeCointoUser_asAdmin(amount, comment, user_id):
     newamount = floating_decimals(currentamount, 8) + floating_decimals(a, 8)
     prof = Admin_ClearnetProfitBtc(
         amount=amount,
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.datetime.utcnow(),
         total=newamount
     )
     db.session.add(prof)
 
 
-def sendcoinforad(amount, user_id, comment):
+def btc_send_coin_for_ad(amount, user_id, comment):
     """
     # TO clearnet_webapp
     # this function will move the coin from vendor to clearnet holdings.
@@ -343,10 +338,10 @@ def sendcoinforad(amount, user_id, comment):
     :param comment:
     :return:
     """
-    a = checkbalance(user_id=user_id, amount=amount)
+    a = btc_check_balance(user_id=user_id, amount=amount)
     if a == 1:
         type_transaction = 9
-        now = datetime.utcnow()
+        now = datetime.datetime.utcnow()
         user = db.session\
             .query(Auth_User)\
             .filter(Auth_User.id == user_id)\
@@ -393,7 +388,7 @@ def sendcoinforad(amount, user_id, comment):
         db.session.add(holdingsaccount)
 
 
-def btc_sendCointoHoldings(amount, user_id, comment):
+def btc_send_coin_to_holdings(amount, user_id, comment):
     """
     # TO clearnet_webapp
     # this function will move the coin from vendor to clearnet holdings. 
@@ -403,10 +398,10 @@ def btc_sendCointoHoldings(amount, user_id, comment):
     :param comment:
     :return:
     """
-    a = checkbalance(user_id=user_id, amount=amount)
+    a = btc_check_balance(user_id=user_id, amount=amount)
     if a == 1:
         type_transaction = 7
-        now = datetime.utcnow()
+        now = datetime.datetime.utcnow()
         user = db.session\
             .query(Auth_User)\
             .filter(Auth_User.id == user_id)\
@@ -452,7 +447,7 @@ def btc_sendCointoHoldings(amount, user_id, comment):
         db.session.add(holdingsaccount)
 
 
-def btc_sendCoinfromHoldings(amount, user_id, comment):
+def btc_send_coin_from_holdings(amount, user_id, comment):
     """
     # TO clearnet_webapp
     # this function will move the coin from holdings back to vendor. 
@@ -464,7 +459,7 @@ def btc_sendCoinfromHoldings(amount, user_id, comment):
     """
 
     type_transaction = 8
-    now = datetime.utcnow()
+    now = datetime.datetime.utcnow()
     user = db.session\
         .query(Auth_User)\
         .filter(Auth_User.id == user_id)\
@@ -510,7 +505,7 @@ def btc_sendCoinfromHoldings(amount, user_id, comment):
     db.session.add(holdingsaccount)
 
 
-def btc_sendCointoclearnet(amount, comment, shard):
+def btc_send_coin_to_clearnet(amount, comment, shard):
     """
     # TO clearnet_webapp
     # this function will move the coin from clearnets escrow to profit account
@@ -522,7 +517,7 @@ def btc_sendCointoclearnet(amount, comment, shard):
     """
 
     type_transaction = 6
-    now = datetime.utcnow()
+    now = datetime.datetime.utcnow()
     oid = int(comment)
     a = Decimal(amount)
 
@@ -552,7 +547,7 @@ def btc_sendCointoclearnet(amount, comment, shard):
     )
     
     
-def btc_sendCointoUser(amount, comment, user_id):
+def btc_send_coin_to_user(amount, comment, user_id):
     """
     # to User
     # this function will move the coin from clearnets wallet_btc to a user
@@ -586,14 +581,15 @@ def btc_sendCointoUser(amount, comment, user_id):
                             )
 
 
-def btc_sendcointoaffiliate(amount, comment, user_id):
+def btc_send_coin_to_affiliate(amount, comment, user_id):
     """
     # TO clearnet 
     # this function will move the coin from clearnets escrow to profit account
     # no balance necessary
     :param amount:
+    :param user_id:
     :param comment:
-    :param shard:
+
     :return:
     """
 

@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Length,  Regexp, Optional
 from app.common.validation import btcamount, general, onlynumbers, bitcoin
 
 
-class WalletSendcoin(FlaskForm):
+class BtcWalletSendCoin(FlaskForm):
     sendto = StringField(validators=[DataRequired(),
                                      Length(24, 44,
                                             message='BTC address length is incorrect'),

@@ -39,12 +39,13 @@ def exppoint(user, price, type, quantity, currency):
 
     now = datetime.utcnow()
     # get current user stats
-    getuser = db.session.query(Achievements_UserAchievements)
-    getuser = getuser.filter(Achievements_UserAchievements.user_id == user)
-    guser = getuser.first()
+    guser = db.session\
+        .query(Achievements_UserAchievements)\
+        .filter(Achievements_UserAchievements.user_id == user)\
+        .first()
     # current user points
 
-    currentPoints = guser.experiencepoints
+    current_points = guser.experiencepoints
     if 1 <= guser.level <= 3:
         experienceperlevel = 300
     elif 4 <= guser.level <= 7:
@@ -116,7 +117,7 @@ def exppoint(user, price, type, quantity, currency):
                              whole=standardpricefactor)
         adjusted = bonus(percent=percent)
         points = points_sale
-        addpoints = int((currentPoints + points + adjusted + itembonus))
+        addpoints = int((current_points + points + adjusted + itembonus))
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
 
         guser.experiencepoints = exp_to_next
@@ -153,7 +154,7 @@ def exppoint(user, price, type, quantity, currency):
                 return adjustment
 
         adjusted = adjrating(quantity=quantity)
-        addpoints = int((currentPoints + adjusted))
+        addpoints = int((current_points + adjusted))
         exp = adjusted
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -189,7 +190,7 @@ def exppoint(user, price, type, quantity, currency):
                 return adjustment
 
         adjusted = adjrating(quantity=quantity)
-        addpoints = int((currentPoints + points_review + adjusted))
+        addpoints = int((current_points + points_review + adjusted))
         exp = points_review + adjusted
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -223,7 +224,7 @@ def exppoint(user, price, type, quantity, currency):
                 return adjustment
 
         adjusted = adjrating(quantity=quantity)
-        addpoints = int((currentPoints + points_review + adjusted))
+        addpoints = int((current_points + points_review + adjusted))
         exp = points_review + adjusted
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -261,7 +262,7 @@ def exppoint(user, price, type, quantity, currency):
                 return adjustment
 
         adjusted = adjrating(quantity=quantity)
-        addpoints = int((currentPoints + points_review + adjusted))
+        addpoints = int((current_points + points_review + adjusted))
         exp = points_review + adjusted
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -278,7 +279,7 @@ def exppoint(user, price, type, quantity, currency):
 
     # website feedback
     elif type == 4:
-        addpoints = int((currentPoints + points_feedback))
+        addpoints = int((current_points + points_feedback))
         exp = points_feedback
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -294,7 +295,7 @@ def exppoint(user, price, type, quantity, currency):
 
     # Bonus marked as recieved
     elif type == 5:
-        addpoints = int((currentPoints + points_recieveditem))
+        addpoints = int((current_points + points_recieveditem))
         exp = points_recieveditem
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -310,7 +311,7 @@ def exppoint(user, price, type, quantity, currency):
 
     # user cancelled
     elif type == 8:
-        addpoints = int((currentPoints + points_usercancel))
+        addpoints = int((current_points + points_usercancel))
         exp = points_usercancel
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -327,7 +328,7 @@ def exppoint(user, price, type, quantity, currency):
 
     # vendor cancelled
     elif type == 9:
-        addpoints = int((currentPoints + points_vendorcancel))
+        addpoints = int((current_points + points_vendorcancel))
         exp = points_vendorcancel
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -345,7 +346,7 @@ def exppoint(user, price, type, quantity, currency):
 
     # user returned item
     elif type == 10:
-        addpoints = int((currentPoints + points_return))
+        addpoints = int((current_points + points_return))
         exp = points_return
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
@@ -393,7 +394,7 @@ def exppoint(user, price, type, quantity, currency):
         percent = percentage(percent=(amountspent), whole=standardpricefactor)
         adjusted = bonus(percent=percent)
         points = points_sale
-        addpoints = int((currentPoints + points + adjusted + itembonus))
+        addpoints = int((current_points + points + adjusted + itembonus))
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         guser.experiencepoints = exp_to_next
         guser.level = guser.level + levels_up
@@ -441,7 +442,7 @@ def exppoint(user, price, type, quantity, currency):
                              whole=standardpricefactor_btc)
         adjusted = bonus(percent=percent)
         points = points_trade
-        addpoints = int((currentPoints + points + adjusted + btcbonus))
+        addpoints = int((current_points + points + adjusted + btcbonus))
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
 
         guser.experiencepoints = exp_to_next
@@ -489,7 +490,7 @@ def exppoint(user, price, type, quantity, currency):
                              whole=standardpricefactor)
         adjusted = bonus(percent=percent)
         points = points_sale
-        addpoints = int((currentPoints + points + adjusted + digbonus))
+        addpoints = int((current_points + points + adjusted + digbonus))
         levels_up, exp_to_next = divmod(addpoints, experienceperlevel)
         exp = int(points + adjusted + digbonus)
         guser.experiencepoints = exp_to_next

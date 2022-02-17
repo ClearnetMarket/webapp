@@ -4,12 +4,10 @@ from decimal import Decimal
 
 @app.template_filter('btctousd')
 def btctousd(coinamount):
-
-    from app.classes.wallet_btc import BtcPrices
+    from app.classes.wallet_btc import Btc_Prices
     from app import db
 
-    getcurrentprice = db.session.query(BtcPrices).get(1)
-
+    getcurrentprice = db.session.query(Btc_Prices).get(1)
     bt = (Decimal(getcurrentprice.price) * coinamount)
     formatteddollar = '{0:.2f}'.format(bt)
     return formatteddollar
@@ -17,11 +15,13 @@ def btctousd(coinamount):
 
 @app.template_filter('btcprice')
 def btcprice(price, currency):
-
-    from app.classes.wallet_btc import BtcPrices
+    from app.classes.wallet_btc import Btc_Prices
     from app import db
-    getcurrentprice = db.session.query(BtcPrices) \
-        .filter_by(id=currency).first()
+    
+    getcurrentprice = db.session\
+        .query(Btc_Prices)\
+        .filter_by(id=currency)\
+        .first()
     bt = getcurrentprice.price
     z = Decimal(price) / Decimal(bt)
     c = '{0:.8f}'.format(z)
@@ -29,12 +29,14 @@ def btcprice(price, currency):
 
 
 @app.template_filter('currencyformat')
-def currencyformat(id):
-
+def currencyformat(currencysymbol):
     from app import db
-    from app.classes.wallet_btc import BtcPrices
+    from app.classes.wallet_btc import Btc_Prices
 
-    getfilter = db.session.query(BtcPrices).filter_by(code=id).first()
+    getfilter = db.session\
+        .query(Btc_Prices)\
+        .filter_by(code=currencysymbol)\
+        .first()
     return getfilter.symbol
 
 

@@ -12,6 +12,7 @@ from app.common.decorators import \
     vendoraccount_required
 
 # forms
+
 from app.vendor.forms import \
     ratingsForm, \
     feedbackcomment, \
@@ -26,13 +27,13 @@ from app.userdata.views import \
     userdata_different_trading_partners_vendor, \
     userdata_total_spent_on_item_bch, \
     userdata_total_made_on_item_bch
-from app.search.searchfunction import headerfunctions_vendor
+
 from app.notification import notification
 
 from app.search.searchfunction import headerfunctions_vendor
-from app.wallet_bch.wallet_btccash_work import \
-    btc_cash_sendCointoclearnet, \
-    btc_cash_sendCointoUser
+from app.wallet_bch.wallet_bch_work import \
+    bch_send_coin_to_clearnet, \
+    bch_send_coin_to_user
 
 from app.auth.forms import becomeavendor
 
@@ -53,7 +54,7 @@ from app.classes.service import \
     Service_Tracking
 
 from app.classes.userdata import \
-    User_DataFeedback
+    UserData_Feedback
 
 from app.classes.vendor import \
     Vendor_Orders
@@ -144,6 +145,7 @@ def vendor_orders_send(id):
 def vendor_orders_disput(id):
     try:
         item = Vendor_Orders.query.get(id)
+
         if item.vendor_id == current_user.id:
             try:
                 item.disputed_order = 1
@@ -225,7 +227,7 @@ def vendor_orders_reject(id):
                         refund = Decimal(the_item_price) + \
                             Decimal(the_item_shipping_price)
 
-                        btc_cash_sendCointoUser(amount=refund,
+                        bch_send_coin_to_user(amount=refund,
                                                 comment=item.id,
                                                 user_id=item.vendor_id,
                                                 )
@@ -308,7 +310,7 @@ def vendor_orders_cancel_and_refund(id):
                                  salenumber=item.id,
                                  bitcoin=0)
 
-                    btc_cash_sendCointoUser(amount=refund,
+                    bch_send_coin_to_user(amount=refund,
                                             comment=item.id,
                                             user_id=item.vendor_id,
                                             )
@@ -554,14 +556,14 @@ def vendor_ratings():
         = headerfunctions_vendor()
 
     getavgitem = db.session.query(
-        func.avg(User_DataFeedback.item_rating).label("avgitem"))
-    getavgitem = getavgitem.filter(User_DataFeedback.vendorid == user.id)
+        func.avg(UserData_Feedback.item_rating).label("avgitem"))
+    getavgitem = getavgitem.filter(UserData_Feedback.vendorid == user.id)
     gitem = getavgitem.all()
     itemscore = str((gitem[0][0]))[:4]
 
     getavgvendor = db.session.query(
-        func.avg(User_DataFeedback.vendorrating).label("avgvendor"))
-    getavgvendor = getavgvendor.filter(User_DataFeedback.vendorid == user.id)
+        func.avg(UserData_Feedback.vendorrating).label("avgvendor"))
+    getavgvendor = getavgvendor.filter(UserData_Feedback.vendorid == user.id)
     gvendor = getavgvendor.all()
     vendorscore = str((gvendor[0][0]))[:4]
 
@@ -588,9 +590,9 @@ def vendor_ratings():
     # end pagination
 
     ratings = db.session\
-        .query(User_DataFeedback)\
+        .query(UserData_Feedback)\
         .filter_by(vendorid=current_user.id)\
-        .order_by(User_DataFeedback.timestamp.desc())
+        .order_by(UserData_Feedback.timestamp.desc())
     ratings = ratings.limit(per_page).offset(offset)
 
     pagination = Pagination(page=page,
@@ -610,23 +612,23 @@ def vendor_ratings():
             pass
         elif ratingdata == '1':
             # Newest ratings first
-            r = db.session.query(User_DataFeedback)
+            r = db.session.query(UserData_Feedback)
             r = r.filter_by(vendorid=user.id)
-            r = r.order_by(User_DataFeedback.timestamp.desc())
+            r = r.order_by(UserData_Feedback.timestamp.desc())
             ratings = r.limit(per_page).offset(offset)
 
         elif ratingdata == '2':
             # Highest vendor ratings first
-            r = db.session.query(User_DataFeedback)
+            r = db.session.query(UserData_Feedback)
             r = r.filter_by(vendorid=user.id)
-            r = r.order_by(User_DataFeedback.vendorrating.desc())
+            r = r.order_by(UserData_Feedback.vendorrating.desc())
             ratings = r.limit(per_page).offset(offset)
 
         elif ratingdata == '3':
             # Highest vendor ratings first
-            r = db.session.query(User_DataFeedback)
+            r = db.session.query(UserData_Feedback)
             r = r.filter_by(vendorid=user.id)
-            r = r.order_by(User_DataFeedback.vendorrating.asc())
+            r = r.order_by(UserData_Feedback.vendorrating.asc())
             ratings = r.limit(per_page).offset(offset)
         else:
             flash("Invalid Selection.", category="danger")
@@ -659,7 +661,7 @@ def vendor_feddback_view_specific(id):
             .filter_by(username=current_user.username)\
             .first()
         rating = db.session\
-            .query(User_DataFeedback)\
+            .query(UserData_Feedback)\
             .filter_by(id=id)\
             .first()
         ileftfeedback = db.session\
@@ -895,11 +897,11 @@ def vendor_add_temp_address(id):
                                  salenumber=order.id,
                                  bitcoin=0)
 
-                    btc_cash_sendCointoclearnet(amount=order.fee,
+                    bch_send_coin_to_clearnet(amount=order.fee,
                                                 comment=order.id,
                                                 shard=current_user.shard
                                                 )
-                    btc_cash_sendCointoUser(amount=totalprice,
+                    bch_send_coin_to_user(amount=totalprice,
                                             comment=order.id,
                                             user_id=order.vendor_id,
                                             )
@@ -1116,14 +1118,14 @@ def vendor_returns_orders_recieve(id):
                      bitcoin=0
                      )
 
-        btc_cash_sendCointoUser(amount=vendororder.return_amount,
+        bch_send_coin_to_user(amount=vendororder.return_amount,
                                 comment=comment,
                                 user_id=vendororder.vendor_id,
                                 )
 
         if vendorgets > 0:
 
-            btc_cash_sendCointoUser(amount=vendorgets,
+            bch_send_coin_to_user(amount=vendorgets,
                                     comment=comment,
                                     user_id=vendororder.vendor_id,
                                     )

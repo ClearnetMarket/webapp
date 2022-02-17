@@ -5,9 +5,6 @@ def itemororder():
         (0, ''),
         (1, 'Per Item'),
         (2, 'Per Order'),
-
-
-
     ]
     return list
 
@@ -26,9 +23,6 @@ def continents():
         (9, 'Military addresses'),
         (10, 'PO Boxes'),
 
-
-
-
     ]
     return list
 
@@ -43,7 +37,6 @@ def achievementvalue():
         (25, '25'),
         (50, '50'),
         (100, '100'),
-
 
     ]
     return list

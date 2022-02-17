@@ -13,7 +13,7 @@ from app.achs.a import newbie
 from app.classes.vendor import \
     Vendor_VendorVerification
 from app.classes.userdata import \
-    User_DataHistory
+    UserData_History
 from app.classes.models import Query_CategoryCats
 from app.classes.profile import \
     Profile_StatisticsUser, \
@@ -43,8 +43,8 @@ from app.classes.wallet_bch import \
 from app.common.decorators import \
     website_offline, \
     login_required
-from app.wallet_bch.wallet_btccash_work import \
-    btc_cash_create_wallet
+from app.wallet_bch.wallet_bch_work import \
+    bch_create_wallet
 from app.auth.profile_images.profile_images import \
     deleteprofileimage, \
     image1
@@ -215,7 +215,7 @@ def register():
         )
 
         # create browser history
-        browserhistory = User_DataHistory(
+        browserhistory = UserData_History(
             user_id=new_user.id,
             recentcat1=1,
             recentcat1date=now,
@@ -259,7 +259,7 @@ def register():
         db.session.add(newcart)
 
         # creates bitcoin cash wallet in db
-        btc_cash_create_wallet(user_id=new_user.id)
+        bch_create_wallet(user_id=new_user.id)
 
         # achievement
         newbie(user_id=new_user.id)
@@ -700,8 +700,8 @@ def delete_account():
                 userexp = db.session.query(Achievements_UserAchievements) \
                     .filter(user.id == Achievements_UserAchievements.user_id).first()
                 # get browser history
-                userbrowser = db.session.query(User_DataHistory) \
-                    .filter(user.id == User_DataHistory.user_id).first()
+                userbrowser = db.session.query(UserData_History) \
+                    .filter(user.id == UserData_History.user_id).first()
                 # get shopping cart total
                 usercarttotal = db.session.query(Item_ShoppingCartTotal) \
                     .filter(user.id == Item_ShoppingCartTotal.customer).first()

@@ -1,35 +1,26 @@
-from app import \
-    db
+from app import db
 
-from app.common.functions import \
-    floating_decimals
-from app.notification import \
-    notification
-from app.wallet_bch.wallet_btccash_transaction import \
-    btc_cash_addtransaction
-from app.wallet_bch.wallet_btccash_security import \
-    checkbalance_btccash
+from app.common.functions import floating_decimals
+from app.notification import notification
+from app.wallet_bch.wallet_bch_transaction import bch_add_transaction
+from app.wallet_bch.wallet_bch_security import bch_check_balance
 from decimal import Decimal
 import datetime
 # models
-from app.classes.auth import \
-    Auth_User
-
+from app.classes.auth import Auth_User
 from app.classes.admin import \
     Admin_ClearnetProfitBCH, \
     Admin_ClearnetHoldingsBCH
-
 from app.classes.wallet_bch import \
     Bch_Wallet, \
     Bch_WalletAddresses, \
     Bch_WalletFee, \
     Bch_WalletUnconfirmed, \
     Bch_WalletWork
-
 # end models
 
 
-def btc_cash_walletstatus(user_id):
+def bch_walletstatus(user_id):
     """
     This function checks status opf the wallet
     :param user_id:
@@ -48,7 +39,7 @@ def btc_cash_walletstatus(user_id):
             if userswallet.address1status == 0\
                 and userswallet.address2status == 0\
                 and userswallet.address2status == 0:
-                btc_cash_create_wallet(user_id=user_id)
+                bch_create_wallet(user_id=user_id)
                 if getuser.shard is None:
                     getuser.shard = 1
                     db.session.add(getuser)
@@ -64,10 +55,10 @@ def btc_cash_walletstatus(user_id):
             db.session.add(userswallet)
     else:
         # creates wallet_btc in db
-        btc_cash_create_wallet(user_id=getuser.id)
+        bch_create_wallet(user_id=getuser.id)
 
 
-def btc_cash_create_wallet(user_id):
+def bch_create_wallet(user_id):
     """
     This function creates the wallet bch and puts its first address there
     if wallet exists it adds an address to wallet
@@ -149,7 +140,7 @@ def btc_cash_create_wallet(user_id):
         db.session.add(getnewaddress)
 
 
-def btc_cash_sendCoin(user_id, sendto, amount, comment):
+def bch_send_coin(user_id, sendto, amount, comment):
     """
     Add work order to send off site
     :param user_id:
@@ -164,7 +155,7 @@ def btc_cash_sendCoin(user_id, sendto, amount, comment):
         .filter_by(id=1)\
         .first()
     walletfee = getwallet.btc
-    a = checkbalance_btccash(user_id=user_id, amount=amount)
+    a = bch_check_balance(user_id=user_id, amount=amount)
     if a == 1:
 
         strcomment = str(comment)
@@ -212,7 +203,7 @@ def btc_cash_sendCoin(user_id, sendto, amount, comment):
         )
 
 
-def btc_cash_sendCointoEscrow(amount, comment, user_id):
+def bch_send_coin_to_escrow(amount, comment, user_id):
     """
     # TO clearnet_webapp Wallet
     # this function will move the coin to clearnets wallet_btc from a user
@@ -221,7 +212,7 @@ def btc_cash_sendCointoEscrow(amount, comment, user_id):
     :param user_id:
     :return:
     """
-    a = checkbalance_btccash(user_id=user_id, amount=amount)
+    a = bch_check_balance(user_id=user_id, amount=amount)
     if a == 1:
         try:
             type_transaction = 4
@@ -236,7 +227,7 @@ def btc_cash_sendCointoEscrow(amount, comment, user_id):
             db.session.add(userswallet)
 
             oid = int(comment)
-            btc_cash_addtransaction(category=type_transaction,
+            bch_add_transaction(category=type_transaction,
                                     amount=amount,
                                     user_id=user_id,
                                     comment='Sent Coin To Escrow',
@@ -266,7 +257,7 @@ def btc_cash_sendCointoEscrow(amount, comment, user_id):
         )
 
 
-def btc_cash_send_coin_to_user_as_admin(amount, comment, user_id):
+def bch_send_coin_to_user_as_admin(amount, comment, user_id):
     """
     #to User
     # this function will move the coin from clearnets wallet_btc to a user as an admin
@@ -289,7 +280,7 @@ def btc_cash_send_coin_to_user_as_admin(amount, comment, user_id):
     db.session.add(userswallet)
     db.session.flush()
 
-    btc_cash_addtransaction(category=type_transaction,
+    bch_add_transaction(category=type_transaction,
                             amount=amount,
                             user_id=user_id,
                             comment=comment,
@@ -299,7 +290,7 @@ def btc_cash_send_coin_to_user_as_admin(amount, comment, user_id):
                             )
 
 
-def btc_cash_takeCointoUser_asAdmin(amount, comment, user_id):
+def bch_take_coin_to_user_as_admin(amount, comment, user_id):
     """
     # TO User
     # this function will move the coin from clearnets wallet_btc to a user as an admin
@@ -322,7 +313,7 @@ def btc_cash_takeCointoUser_asAdmin(amount, comment, user_id):
     db.session.add(userswallet)
     db.session.flush()
 
-    btc_cash_addtransaction(category=type_transaction,
+    bch_add_transaction(category=type_transaction,
                             amount=amount,
                             user_id=user_id,
                             comment=comment,
@@ -339,13 +330,13 @@ def btc_cash_takeCointoUser_asAdmin(amount, comment, user_id):
     newamount = floating_decimals(currentamount, 8) + floating_decimals(a, 8)
     prof = Admin_ClearnetProfitBCH(
         amount=amount,
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.datetime.utcnow(),
         total=newamount
     )
     db.session.add(prof)
 
 
-def sendcoinforad(amount, user_id, comment):
+def bch_send_coin_for_ad(amount, user_id, comment):
     """
     # TO clearnet_webapp
     # this function will move the coin from vendor to clearnet holdings.  This is for vendor verification
@@ -354,10 +345,10 @@ def sendcoinforad(amount, user_id, comment):
     :param comment:
     :return:
     """
-    a = checkbalance_btccash(user_id=user_id, amount=amount)
+    a = bch_check_balance(user_id=user_id, amount=amount)
     if a == 1:
         type_transaction = 9
-        now = datetime.utcnow()
+        now = datetime.datetime.utcnow()
         user = db.session\
             .query(Auth_User)\
             .filter(Auth_User.id == user_id)\
@@ -377,7 +368,7 @@ def sendcoinforad(amount, user_id, comment):
         c = str(comment)
         a = Decimal(amount)
         commentstring = (f"Sent money for ad {c}")
-        btc_cash_addtransaction(category=type_transaction,
+        bch_add_transaction(category=type_transaction,
                                 amount=amount,
                                 user_id=user.id,
                                 comment=commentstring,
@@ -403,7 +394,7 @@ def sendcoinforad(amount, user_id, comment):
         db.session.add(holdingsaccount)
 
 
-def btc_cash_sendCointoHoldings(amount, user_id, comment):
+def bch_send_coin_to_holdings(amount, user_id, comment):
     """
     # TO clearnet_webapp
     # this function will move the coin from vendor to clearnet holdings.  This is for vendor verification
@@ -412,10 +403,10 @@ def btc_cash_sendCointoHoldings(amount, user_id, comment):
     :param comment:
     :return:
     """
-    a = checkbalance_btccash(user_id=user_id, amount=amount)
+    a = bch_check_balance(user_id=user_id, amount=amount)
     if a == 1:
         type_transaction = 7
-        now = datetime.utcnow()
+        now = datetime.datetime.utcnow()
         user = db.session\
             .query(Auth_User)\
             .filter(Auth_User.id == user_id)\
@@ -435,7 +426,7 @@ def btc_cash_sendCointoHoldings(amount, user_id, comment):
         c = str(comment)
         a = Decimal(amount)
         commentstring = "Vendor Verification: Level " + c
-        btc_cash_addtransaction(category=type_transaction,
+        bch_add_transaction(category=type_transaction,
                                 amount=amount,
                                 user_id=user.id,
                                 comment=commentstring,
@@ -449,8 +440,7 @@ def btc_cash_sendCointoHoldings(amount, user_id, comment):
             .order_by(Admin_ClearnetHoldingsBCH.id.desc())\
             .first()
         currentamount = floating_decimals(getcurrentholdings.total, 8)
-        newamount = floating_decimals(
-            currentamount, 8) + floating_decimals(a, 8)
+        newamount = floating_decimals(currentamount, 8) + floating_decimals(a, 8)
 
         holdingsaccount = Admin_ClearnetHoldingsBCH(
             amount=a,
@@ -462,7 +452,7 @@ def btc_cash_sendCointoHoldings(amount, user_id, comment):
         db.session.add(holdingsaccount)
 
 
-def btc_cash_sendCoinfromHoldings(amount, user_id, comment):
+def bch_send_coin_from_holdings(amount, user_id, comment):
     """
     # TO clearnet_webapp
     # this function will move the coin from holdings back to vendor.  
@@ -474,7 +464,7 @@ def btc_cash_sendCoinfromHoldings(amount, user_id, comment):
     """
 
     type_transaction = 8
-    now = datetime.utcnow()
+    now = datetime.datetime.utcnow()
     user = db.session\
         .query(Auth_User)\
         .filter(Auth_User.id == user_id)\
@@ -495,7 +485,7 @@ def btc_cash_sendCoinfromHoldings(amount, user_id, comment):
     a = Decimal(amount)
     commentstring = "Vendor Verification Refund: Level " + c
 
-    btc_cash_addtransaction(category=type_transaction,
+    bch_add_transaction(category=type_transaction,
                             amount=amount,
                             user_id=user.id,
                             comment=commentstring,
@@ -520,7 +510,7 @@ def btc_cash_sendCoinfromHoldings(amount, user_id, comment):
     db.session.add(holdingsaccount)
 
 
-def btc_cash_sendCointoclearnet(amount, comment, shard):
+def bch_send_coin_to_clearnet(amount, comment, shard):
     """
     # TO clearnet_webapp
     # this function will move the coin from clearnets escrow to profit account
@@ -532,10 +522,10 @@ def btc_cash_sendCointoclearnet(amount, comment, shard):
     """
 
     type_transaction = 6
-    now = datetime.utcnow()
+    now = datetime.datetime.utcnow()
     oid = int(comment)
     a = Decimal(amount)
-    btc_cash_addtransaction(
+    bch_add_transaction(
         category=type_transaction,
         amount=amount,
         user_id=1,
@@ -560,7 +550,7 @@ def btc_cash_sendCointoclearnet(amount, comment, shard):
     db.session.add(prof)
 
 
-def btc_cash_sendCointoUser(amount, comment, user_id):
+def bch_send_coin_to_user(amount, comment, user_id):
     """
     #TO User
     ##this function will move the coin from clearnets wallet_btc to a user
@@ -584,7 +574,7 @@ def btc_cash_sendCointoUser(amount, comment, user_id):
     db.session.add(userswallet)
     db.session.flush()
 
-    btc_cash_addtransaction(category=type_transaction,
+    bch_add_transaction(category=type_transaction,
                             amount=amount,
                             user_id=user_id,
                             comment='Transaction',
@@ -594,14 +584,14 @@ def btc_cash_sendCointoUser(amount, comment, user_id):
                             )
 
 
-def btc_cash_sendcointoaffiliate(amount, comment, user_id):
+def bch_send_coin_to_affiliate(amount, comment, user_id):
     """
     # TO clearnet_webapp
     # this function will move the coin from clearnets escrow to profit account
     # no balance necessary
     :param amount:
     :param comment:
-    :param shard:
+    :param user_id:
     :return:
     """
 
@@ -609,15 +599,17 @@ def btc_cash_sendcointoaffiliate(amount, comment, user_id):
 
     oid = int(comment)
 
-    userswallet = db.session.query(
-        Bch_Wallet).filter_by(user_id=user_id).first()
+    userswallet = db.session\
+        .query(Bch_Wallet)\
+        .filter_by(user_id=user_id)\
+        .first()
     curbal = Decimal(userswallet.currentbalance)
     amounttomod = Decimal(amount)
     newbalance = Decimal(curbal) + Decimal(amounttomod)
     userswallet.currentbalance = newbalance
     db.session.add(userswallet)
 
-    btc_cash_addtransaction(category=type_transaction,
+    bch_add_transaction(category=type_transaction,
                             amount=amount,
                             user_id=user_id,
                             comment='Transaction',

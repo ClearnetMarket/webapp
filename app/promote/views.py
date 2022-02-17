@@ -21,7 +21,7 @@ from app.promote.forms import \
     PromoHomeForm
 # end forms
 
-from app.wallet_bch.wallet_btccash_work import sendcoinforad
+from app.wallet_bch.wallet_bch_work import bch_send_coin_for_ad
 
 # general imports
 
@@ -98,7 +98,7 @@ def promote_item(itemid):
                     elif promoselection == 1:
                         # category promo
                         if useramount > decimaldollar:
-                            sendcoinforad(amount=decimaldollar,
+                            bch_send_coin_for_ad(amount=decimaldollar,
                                           comment=item.id,
                                           user_id=current_user.id
                                           )
@@ -118,7 +118,7 @@ def promote_item(itemid):
                     elif promoselection == 2:
                         # Font page promo
                         if useramount > decimaltendollar:
-                            sendcoinforad(amount=decimaltendollar,
+                            bch_send_coin_for_ad(amount=decimaltendollar,
                                           comment=item.id,
                                           user_id=current_user.id
                                           )

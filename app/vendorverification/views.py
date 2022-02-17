@@ -25,9 +25,9 @@ from app.classes.vendor import \
     Vendor_VendorVerification
 from app.classes.wallet_bch import *
 
-from app.wallet_bch.wallet_btccash_work import \
-    btc_cash_sendCoinfromHoldings,\
-    btc_cash_sendCointoHoldings
+from app.wallet_bch.wallet_bch_work import \
+    bch_send_coin_from_holdings,\
+    bch_send_coin_to_holdings
 
 
 @vendorverification.route('/becomeverified', methods=['GET', 'POST'])
@@ -140,7 +140,7 @@ def vendorverification_cancel():
         if getverify.vendor_level != 0:
             if form.confirmcancel.data:
                 if allow == 1:
-                    btc_cash_sendCoinfromHoldings(amount=getverify.amount,
+                    bch_send_coin_from_holdings(amount=getverify.amount,
                                                   user_id=getverify.vendor_id,
                                                   comment=getverify.vendor_level
                                                   )
@@ -206,7 +206,7 @@ def vendorverification_confirm_level_1():
             if form.levelone.data:
                 # 100 dollars
                 if useramount > Decimalhundred:
-                    btc_cash_sendCointoHoldings(
+                    bch_send_coin_to_holdings(
                         amount=hundred, user_id=current_user.id, comment=1)
                     getverify.vendor_level = 1
                     getverify.timestamp = now
@@ -271,7 +271,7 @@ def vendorverification_confirm_level_2():
             if form.leveltwo.data:
                 if useramount > Decimaltwofity:
                     # 250 dollars
-                    btc_cash_sendCointoHoldings(
+                    bch_send_coin_to_holdings(
                         amount=twofity, user_id=current_user.id, comment=2)
                     getverify.vendor_level = 2
                     getverify.timestamp = now
@@ -335,7 +335,7 @@ def vendorverification_confirm_level_3():
         if request.method == 'POST':
             if form.levelthree.data:
                 if useramount > Decimalfivehundred:
-                    btc_cash_sendCointoHoldings(
+                    bch_send_coin_to_holdings(
                         amount=fivehundred, user_id=current_user.id, comment=3)
                     getverify.vendor_level = 3
                     getverify.timestamp = now
@@ -398,7 +398,7 @@ def vendorverification_confirm_level_4():
 
         if request.method == 'POST':
             if useramount > Decimalthousand:
-                btc_cash_sendCointoHoldings(
+                bch_send_coin_to_holdings(
                     amount=thousand, user_id=current_user.id, comment=4)
                 getverify.vendor_level = 4
                 getverify.timestamp = now
@@ -458,7 +458,7 @@ def vendorverification_confirm_level_5():
         if request.method == 'POST':
             if form.levelfive.data:
                 if useramount > Decimaltwentyfivehundred:
-                    btc_cash_sendCointoHoldings(
+                    bch_send_coin_to_holdings(
                         amount=twentyfivehundred, user_id=current_user.id, comment=5)
                     getverify.vendor_level = 5
                     getverify.timestamp = now
@@ -559,9 +559,9 @@ def vendorverification_upgrade_vendor_verification():
                 if getverify.vendor_level == 1 \
                         or getverify.vendor_level == 2:
                     if useramount > Decimalfivehundred:
-                        btc_cash_sendCoinfromHoldings(amount=getverify.amount, user_id=getverify.vendor_id,
+                        bch_send_coin_from_holdings(amount=getverify.amount, user_id=getverify.vendor_id,
                                                       comment=getverify.vendor_level)
-                        btc_cash_sendCointoHoldings(
+                        bch_send_coin_to_holdings(
                             amount=fivehundred, user_id=current_user.id, comment=3)
                         getverify.vendor_level = 3
                         getverify.timestamp = now
@@ -585,9 +585,9 @@ def vendorverification_upgrade_vendor_verification():
                         or getverify.vendor_level == 2 \
                         or getverify.vendor_level == 3:
                     if useramount > Decimalthousand:
-                        btc_cash_sendCoinfromHoldings(
+                        bch_send_coin_from_holdings(
                             amount=getverify.amount, user_id=getverify.vendor_id, comment=getverify.vendor_level)
-                        btc_cash_sendCointoHoldings(
+                        bch_send_coin_to_holdings(
                             amount=thousand, user_id=current_user.id, comment=4)
 
                         getverify.vendor_level = 4
@@ -611,9 +611,9 @@ def vendorverification_upgrade_vendor_verification():
                         or getverify.vendor_level == 3 \
                         or getverify.vendor_level == 4:
                     if useramount > Decimaltwentyfivehundred:
-                        btc_cash_sendCoinfromHoldings(
+                        bch_send_coin_from_holdings(
                             amount=getverify.amount, user_id=getverify.vendor_id, comment=getverify.vendor_level)
-                        btc_cash_sendCointoHoldings(
+                        bch_send_coin_to_holdings(
                             amount=twentyfivehundred, user_id=current_user.id, comment=5)
 
                         getverify.vendor_level = 5

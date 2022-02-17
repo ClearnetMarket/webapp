@@ -15,8 +15,8 @@ from app.admin.forms import \
     changeitemForm, \
     changeUserForm
 
-from app.wallet_bch.wallet_btccash_work import\
-    btc_cash_send_coin_to_user_as_admin
+from app.wallet_bch.wallet_bch_work import\
+    bch_send_coin_to_user_as_admin
 # models
 from app.classes.auth import \
     Auth_User
@@ -51,7 +51,7 @@ from app.classes.service import \
     Service_Issue
 
 from app.classes.userdata import \
-    User_DataFeedback
+    UserData_Feedback
 
 from app.classes.vendor import \
     Vendor_Orders
@@ -59,8 +59,8 @@ from app.classes.vendor import \
 # end models
 from app.notification import notification
 
-from app.wallet_bch.wallet_btccash_work import \
-    btc_cash_sendCointoUser
+from app.wallet_bch.wallet_bch_work import \
+    bch_send_coin_to_user
 
 from app.common.query import achievementcategory
 from app.classes.wallet_bch import *
@@ -208,7 +208,7 @@ def change_item():
                     id=form.searchbar.data).first()
                 if getitem:
                     try:
-                        addfeed = User_DataFeedback(
+                        addfeed = UserData_Feedback(
                             customername='eddwinn',
                             sale_id=0,
                             vendorname=getitem.vendor_name,
@@ -498,8 +498,8 @@ def dispute(id):
     vendorach = db.session.query(Achievements_WhichAch).filter_by(
         user_id=vendor.id).first()
     # vendorreviews
-    vendorreviews = db.session.query(User_DataFeedback).filter(
-        vendor.id == User_DataFeedback.vendorid).limit(25)
+    vendorreviews = db.session.query(UserData_Feedback).filter(
+        vendor.id == UserData_Feedback.vendorid).limit(25)
 
     if request.method == 'POST':
         if postform.post.data:
@@ -572,7 +572,7 @@ def dispute(id):
             whole_price = c + x
             if order.type == 1:
 
-                btc_cash_sendCointoUser(amount=whole_price,
+                bch_send_coin_to_user(amount=whole_price,
                                         comment=order.id,
                                         user_id=order.customer_id
                                         )
@@ -621,12 +621,12 @@ def dispute(id):
             if order.type == 1:
 
                 if order.digital_currency == 3:
-                    btc_cash_sendCointoUser(amount=customer_withshipping,
+                    bch_send_coin_to_user(amount=customer_withshipping,
                                             comment=order.id,
                                             user_id=order.customer_id,
                                             )
 
-                    btc_cash_sendCointoUser(amount=vendor_withshipping,
+                    bch_send_coin_to_user(amount=vendor_withshipping,
                                             comment=order.id,
                                             user_id=order.vendor_id,
                                             )
@@ -672,12 +672,12 @@ def dispute(id):
 
             if order.type == 1:
 
-                btc_cash_sendCointoUser(amount=customer_withshipping,
+                bch_send_coin_to_user(amount=customer_withshipping,
                                         comment=order.id,
                                         user_id=order.customer_id,
                                         )
 
-                btc_cash_sendCointoUser(amount=vendor_withshipping,
+                bch_send_coin_to_user(amount=vendor_withshipping,
                                         comment=order.id,
                                         user_id=order.vendor_id,
                                         )
@@ -724,12 +724,12 @@ def dispute(id):
 
             if order.type == 1:
 
-                btc_cash_sendCointoUser(amount=customer_withshipping,
+                bch_send_coin_to_user(amount=customer_withshipping,
                                         comment=order.id,
                                         user_id=order.customer_id,
                                         )
 
-                btc_cash_sendCointoUser(amount=vendor_withshipping,
+                bch_send_coin_to_user(amount=vendor_withshipping,
                                         comment=order.id,
                                         user_id=order.vendor_id,
                                         )
@@ -766,7 +766,7 @@ def dispute(id):
 
             if order.type == 1:
 
-                btc_cash_sendCointoUser(amount=whole_price,
+                bch_send_coin_to_user(amount=whole_price,
                                         comment=order.id,
                                         user_id=order.vendor_id,
                                         )
@@ -867,7 +867,7 @@ def dispute(id):
                         s = 0
                     refund = Decimal(p) + Decimal(s)
 
-                    btc_cash_sendCointoUser(amount=refund,
+                    bch_send_coin_to_user(amount=refund,
                                             comment=item.id,
                                             user_id=item.customer_id,
                                             )
@@ -1563,7 +1563,7 @@ def admin_move_money():
 
                 if form.submit.data:
                     if current_user.admin_role == 10:
-                        btc_cash_send_coin_to_user_as_admin(
+                        bch_send_coin_to_user_as_admin(
                             amount=amount, comment=description, user_id=theuser)
                         flash("Money sent to: " + theusername + " with user id: " + theuser_id,
                               category="success")
@@ -1619,7 +1619,7 @@ def admin_move_money_from_user():
 
                 if form.submit.data:
                     if current_user.admin_role == 10:
-                        btc_cash_send_coin_to_user_as_admin(amount=amount,
+                        bch_send_coin_to_user_as_admin(amount=amount,
                                                             comment=description,
                                                             user_id=theuser)
 

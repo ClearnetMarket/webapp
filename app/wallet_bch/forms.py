@@ -15,7 +15,7 @@ from app.auth.validation import\
     onlynumbers
 
 
-class walletSendcoin(FlaskForm):
+class BchWalletSendCoin(FlaskForm):
     sendto = StringField(validators=[DataRequired(),
                                      Length(54, 54),
 

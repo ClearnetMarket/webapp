@@ -1,11 +1,9 @@
 from app import db
-from app.classes.wallet_bch import \
-    Bch_Wallet
-from decimal import \
-    Decimal
+from app.classes.wallet_bch import  Bch_Wallet
+from decimal import Decimal
 
 
-def checkbalance_btccash(user_id, amount):
+def bch_check_balance(user_id, amount):
     # The money requested during the trade
     userwallet = db.session\
         .query(Bch_Wallet)\

@@ -80,7 +80,7 @@ def search_master(searchterm, function):
     else:
         shipping_sort = 1
 
-    # SIGNED IN USER
+
     if current_user.is_authenticated:
         user = db.session.query(Auth_User).filter_by(
             username=current_user.username).first()
@@ -112,7 +112,8 @@ def search_master(searchterm, function):
                 data = db.session\
                     .query(Item_MarketItem)\
                     .filter(Item_MarketItem.currency == user.currency).filter(Item_MarketItem.online == 1)\
-                    .filter(or_(Item_MarketItem.keywords.like('%' + searchterm + '%'), (Item_MarketItem.item_title.like('%' + searchterm + '%'))))
+                    .filter(or_(Item_MarketItem.keywords.like('%' + searchterm + '%'),
+                                (Item_MarketItem.item_title.like('%' + searchterm + '%'))))
 
                 # FILTERS
                 # Price Filter
@@ -233,7 +234,9 @@ def search_master(searchterm, function):
                     .filter(Item_MarketItem.currency == user.currency)\
                     .filter(Item_MarketItem.online == 1)\
                     .filter(Item_MarketItem.image_one != '0')\
-                    .filter(Item_MarketItem.category_id_0 == function).filter(or_(Item_MarketItem.keywords.like('%' + searchterm + '%'), (Item_MarketItem.item_title.like('%' + searchterm + '%'))))\
+                    .filter(Item_MarketItem.category_id_0 == function)\
+                    .filter(or_(Item_MarketItem.keywords.like('%' + searchterm + '%'),
+                                (Item_MarketItem.item_title.like('%' + searchterm + '%'))))\
                     .filter(or_(Item_MarketItem.destination_country_one == user.country,
                             Item_MarketItem.destination_country_two == user.country,
                             Item_MarketItem.destination_country_three == user.country,

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, send_from_directory, Response
 from flask_login import current_user
 from app.main import main
 from app import db, app, UPLOADED_FILES_DEST
@@ -10,28 +10,21 @@ from flask import request
 from app.classes.auth import Auth_User
 from app.classes.achievements import \
     Achievements_UserAchievementsRecent
-
 from app.classes.affiliate import \
     Affiliate_Overview, \
     Affiliate_Stats
-from app.classes.item import \
-    Item_MarketItem
+from app.classes.item import Item_MarketItem
 from app.classes.category import Category_Categories
-from app.classes.message import \
-    Message_Notifications
-
-from app.classes.vendor import \
-    Vendor_Orders
-
-from app.classes.wallet_bch import \
-    Bch_Prices
-
+from app.classes.message import  Message_Notifications
+from app.classes.vendor import Vendor_Orders
+from app.classes.wallet_bch import Bch_Prices
 # End Models
+
 from app.profile.profilebar import profilebar
 
 from app.auth.forms import searchForm
 from app.search.searchfunction import headerfunctions_vendor, headerfunctions
-from datetime import timedelta, datetime
+from datetime import datetime
 from app.common.functions import convert_local_to_bch
 import os
 from decimal import Decimal
@@ -131,7 +124,6 @@ def index():
         else:
             userpromooverview = None
             userpromostats = None
-
         try:
             # Get Vendor needs return address
             ordersifreturnvendor = db.session\

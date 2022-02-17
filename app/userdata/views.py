@@ -20,7 +20,7 @@ from app.achs.c import howmanyitemsbought_customer, howmanytrades_customer
 from app.achs.v import howmanyitemssold_vendor, howmanytrades_vendor
 from app.common.functions import mkdir_p,  convert_to_local_bch, userimagelocation
 
-now = datetime.utcnow()
+
 
 
 @userdata.route('/item/<path:filename>')
@@ -44,7 +44,7 @@ def profile_image(filename):
     return send_from_directory(UPLOADED_FILES_DEST_USER, filename, as_attachment=False)
 
 
-def addtotalItemsSold(user_id, howmany):
+def userdata_add_total_items_sold(user_id, howmany):
     """
     how many items a customer sold
     """""

@@ -482,93 +482,70 @@ def auth_achievements_vendor():
 @achievements.route('/select-user-achievements/', methods=['GET', 'POST'])
 @website_offline
 def selectuserachs():
-    if request.method == 'GET':
+    title = "My Achievements"
+    form = achselectForm()
+    now = datetime.utcnow()
+    specificach = db.session.query(Achievements_WhichAch).filter_by(
+    user_id=current_user.id).first()
 
-        title = "My Achievements"
-        form = achselectForm()
-        now = datetime.utcnow()
-        specificach = db.session.query(Achievements_WhichAch).filter_by(
+    if current_user.vendor_account == 0:
+        user = db.session.query(Auth_User).filter_by(
+            username=current_user.username).first()
+        usergetlevel = db.session.query(Achievements_UserAchievements).filter_by(
+            username=user.username).first()
+        userpictureid = str(usergetlevel.level)
+        userwallet = db.session.query(
+            Bch_Wallet).filter_by(user_id=user.id).first()
+        userstats = db.session.query(Profile_StatisticsUser).filter_by(
+            username=user.username).first()
+
+        level = db.session.query(Achievements_UserAchievements).filter_by(
+            username=user.username).first()
+        width = int(level.experiencepoints / 10)
+        userach = db.session.query(Achievements_WhichAch).filter_by(
             user_id=current_user.id).first()
-        if current_user.vendor_account == 0:
-            user = db.session.query(Auth_User).filter_by(
-                username=current_user.username).first()
-            usergetlevel = db.session.query(Achievements_UserAchievements).filter_by(
-                username=user.username).first()
-            userpictureid = str(usergetlevel.level)
-            userwallet = db.session.query(
-                Bch_Wallet).filter_by(user_id=user.id).first()
-            userstats = db.session.query(Profile_StatisticsUser).filter_by(
-                username=user.username).first()
+        vendor = 0
+        vendorwallet = 0
+        vendorstats = 0
+        vendorgetlevel = 0
+        vendorpictureid = 0
+        vendorach = 0
+    else:
+        # vendor
+        vendor = db.session\
+            .query(Auth_User)\
+            .filter_by(id=current_user.id)\
+            .first()
+        vendorwallet = db.session\
+            .query(Bch_Wallet)\
+            .filter_by(user_id=vendor.id)\
+            .first()
+        vendorstats = db.session\
+            .query(Profile_StatisticsVendor)\
+            .filter_by(vendorid=vendor.id)\
+            .first()
+        vendorgetlevel = db.session\
+            .query(Achievements_UserAchievements)\
+            .filter_by(username=vendor.username)\
+            .first()
+        vendorpictureid = str(vendorgetlevel.level)
+        vendorach = db.session\
+            .query(Achievements_WhichAch)\
+            .filter_by(user_id=current_user.id)\
+            .first()
 
-            level = db.session.query(Achievements_UserAchievements).filter_by(
-                username=user.username).first()
-            width = int(level.experiencepoints / 10)
-            userach = db.session.query(Achievements_WhichAch).filter_by(
-                user_id=current_user.id).first()
-            vendor = 0
-            vendorwallet = 0
-            vendorstats = 0
-            vendorgetlevel = 0
-            vendorpictureid = 0
-            vendorach = 0
-        else:
-            # vendor
-            vendor = db.session\
-                .query(Auth_User)\
-                .filter_by(id=current_user.id)\
-                .first()
-            vendorwallet = db.session\
-                .query(Bch_Wallet)\
-                .filter_by(user_id=vendor.id)\
-                .first()
-            vendorstats = db.session\
-                .query(Profile_StatisticsVendor)\
-                .filter_by(vendorid=vendor.id)\
-                .first()
-            vendorgetlevel = db.session\
-                .query(Achievements_UserAchievements)\
-                .filter_by(username=vendor.username)\
-                .first()
-            vendorpictureid = str(vendorgetlevel.level)
-            vendorach = db.session\
-                .query(Achievements_WhichAch)\
-                .filter_by(user_id=current_user.id)\
-                .first()
+        user = 0
+        usergetlevel = 0
+        userpictureid = 0
+        userwallet = 0
+        userstats = 0
+        userach = 0
 
-            user = 0
-            usergetlevel = 0
-            userpictureid = 0
-            userwallet = 0
-            userstats = 0
-            userach = 0
+        level = 0
+        width = 0
 
-            level = 0
-            width = 0
+    x, size = row2dict(row=db.session.query(Achievements_UserAchievements).filter_by(user_id=current_user.id).first())
 
-        x, size = row2dict(row=db.session.query(
-            Achievements_UserAchievements).filter_by(user_id=current_user.id).first())
-        return render_template('/auth/userachievements/achievementscustomize.html',
-                               x=x,
-                               size=size,
-                               title=title,
-                               form=form,
-                               specificach=specificach,
-                               user=user,
-                               now=now,
-                               usergetlevel=usergetlevel,
-                               userpictureid=userpictureid,
-                               userwallet=userwallet,
-                               userstats=userstats,
-                               width=width,
-                               level=level,
-                               vendor=vendor,
-                               vendorwallet=vendorwallet,
-                               vendorstats=vendorstats,
-                               vendorgetlevel=vendorgetlevel,
-                               vendorpictureid=vendorpictureid,
-                               userach=userach,
-                               vendorach=vendorach
-                               )
 
     if request.method == "POST":
         if form.selectone.data:

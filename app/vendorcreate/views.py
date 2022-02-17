@@ -82,9 +82,10 @@ def vendorcreate_items_for_sale():
     per_page = 10
     # End Pagination
     # Query all the items related to the vendor
-    sale = db.session.query(Item_MarketItem).filter(Item_MarketItem.vendor_id == user.id).order_by(
-        Item_MarketItem.total_sold.desc(), Item_MarketItem.online.desc(), Item_MarketItem.id.desc())
-
+    sale = db.session\
+        .query(Item_MarketItem)\
+        .filter(Item_MarketItem.vendor_id == user.id)\
+        .order_by(Item_MarketItem.total_sold.desc(), Item_MarketItem.online.desc(), Item_MarketItem.id.desc())
 
     forsale = sale.limit(per_page).offset(offset)
 
@@ -1047,7 +1048,7 @@ def vendorcreate_delete_img(id, img):
                     db.session.add(item)
                     db.session.commit()
                     return redirect(url_for('vendorcreate.vendorcreate_edit_item', id=item.id))
-                elif xitem.image_three3 == img:
+                elif item.image_three3 == img:
                     os.remove(file0)
                     os.remove(file1)
                     os.remove(file2)

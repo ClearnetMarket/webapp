@@ -874,7 +874,7 @@ def message_compose_specific_person_admin(person):
                         modid=0,
                         itemid=0,
                         unread=1,
-                        postid=post.id,
+                        postid=newpost.id,
                         user_id=user.id,
                         username=user.username
 
@@ -1076,8 +1076,8 @@ def message_post(id):
                             )
                             db.session.add(newpost)
                             db.session.commit()
-                            flash(
-                                "support added to conversation.  Please wait for support to message. ", category="success")
+                            flash("support added to conversation.  Please wait for support to message. ",
+                                  category="success")
                             return redirect(url_for('message.message_post', id=post.id))
 
                         elif form2.adduserbody.data == "Admin":
@@ -1099,7 +1099,8 @@ def message_post(id):
                             db.session.add(newpost2)
                             db.session.commit()
                             flash(
-                                "support added to conversation.  Please wait for support to message. ", category="success")
+                                "support added to conversation.  Please wait for support to message. ",
+                                category="success")
                             return redirect(url_for('message.message_post', id=post.id))
                         else:
                             Usersearch = db.session\

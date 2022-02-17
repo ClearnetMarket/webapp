@@ -14,50 +14,51 @@ def headerfunctions():
     
     
     if current_user.is_authenticated:
-        user = db.session.query(Auth_User).filter_by(
-            username=current_user.username).first()
+        user = db.session\
+            .query(Auth_User)\
+            .filter_by(username=current_user.username)\
+            .first()
 
         # shopping cart total
-        tcart = db.session.query(
-            func.sum(Item_CheckoutShoppingCart.quantity_of_item))
-        tcart = tcart.filter(Item_CheckoutShoppingCart.customer_id ==
-                             user.id, Item_CheckoutShoppingCart.savedforlater == 0)
+        tcart = db.session\
+            .query(func.sum(Item_CheckoutShoppingCart.quantity_of_item))\
+            .filter(Item_CheckoutShoppingCart.customer_id ==user.id, Item_CheckoutShoppingCart.savedforlater == 0)
         totalincart = tcart.all()
 
         # Vendor
         # issues count
         # disputes orders as vendor
-        rdispute = db.session.query(Vendor_Orders)
-        rdispute = rdispute.filter(Vendor_Orders.completed == 0)
-        rdispute = rdispute.filter(Vendor_Orders.vendor_id == user.id)
-        rdispute = rdispute.filter(or_(
-                                   Vendor_Orders.request_return != 0,
-                                   Vendor_Orders.disputed_order == 1))
+        rdispute = db.session\
+            .query(Vendor_Orders)\
+            .filter(Vendor_Orders.completed == 0)\
+            .filter(Vendor_Orders.vendor_id == user.id)\
+            .filter(or_(
+                       Vendor_Orders.request_return != 0,
+                       Vendor_Orders.disputed_order == 1))
         returndispute = rdispute.count()
 
         # Customer
         #  service issues count
         # GET customer issues
         # new orders for physical items
-        norders = db.session.query(Vendor_Orders.new_order)
-        norders = norders.filter(
-            Vendor_Orders.vendor_id == user.id, Vendor_Orders.new_order == 1)
+        norders = db.session\
+            .query(Vendor_Orders.new_order)\
+            .filter(Vendor_Orders.vendor_id == user.id, Vendor_Orders.new_order == 1)
         neworders = norders.count()
 
         # See if user has any active issues for the sidebar
-        posts = db.session.query(Service_Issue)
-        posts = posts.filter(Service_Issue.author_id == current_user.id)
-        posts = posts.filter(Service_Issue.status == 0)
-        posts = posts.order_by(Service_Issue.timestamp.desc())
+        posts = db.session\
+            .query(Service_Issue)\
+            .filter(Service_Issue.author_id == current_user.id)\
+            .filter(Service_Issue.status == 0).order_by(Service_Issue.timestamp.desc())
         thepostcount = posts.count()
 
         # get returns or disputes as a customer
-        myordersissues = db.session.query(Vendor_Orders)
-        myordersissues = myordersissues.filter(
-            Vendor_Orders.customer == current_user.username)
-        myordersissues = myordersissues.filter(
-            or_(Vendor_Orders.disputed_order == 1, Vendor_Orders.request_return == 2))
-        myordersissues = myordersissues.order_by(Vendor_Orders.age.desc())
+        myordersissues = db.session\
+            .query(Vendor_Orders)\
+            .filter(Vendor_Orders.customer == current_user.username)\
+            .filter(or_(Vendor_Orders.disputed_order == 1, Vendor_Orders.request_return == 2))\
+            .order_by(Vendor_Orders.age.desc())
         myordersissuesfullcount = myordersissues.count()
 
         # notifications

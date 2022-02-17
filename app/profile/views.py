@@ -16,7 +16,7 @@ from app.classes.profile import \
     Profile_StatisticsUser, \
     Profile_StatisticsVendor
 
-from app.classes.userdata import User_DataFeedback
+from app.classes.userdata import UserData_Feedback
 from app.profile.profilebar import profilebar
 from app.common.decorators import website_offline
 
@@ -214,9 +214,9 @@ def profile_vendor(username):
             started = vendorstats.startedselling.strftime("%m/%d/%y")
 
             ratingsall = db.session\
-                .query(User_DataFeedback)\
+                .query(UserData_Feedback)\
                 .filter_by(vendorid=user.id)\
-                .order_by(User_DataFeedback.timestamp.desc())
+                .order_by(UserData_Feedback.timestamp.desc())
             ratingscount = ratingsall.count()
             ratings = ratingsall.limit(per_page).offset(offset)
 
@@ -230,18 +230,18 @@ def profile_vendor(username):
                                                 inner_window=inner_window,
                                                 outer_window=outer_window)
 
-            getavgitem = db.session.query(
-                func.avg(User_DataFeedback.item_rating).label("avgitem"))
-            getavgitem = getavgitem.filter(
-                User_DataFeedback.vendorid == user.id)
+            getavgitem = db.session\
+                .query(func.avg(UserData_Feedback.item_rating)
+                .label("avgitem"))\
+                .filter(UserData_Feedback.vendorid == user.id)
             gitem = getavgitem.all()
             itemscore = str((gitem[0][0]))[:4]
             if itemscore == 'None':
                 itemscore = 0
-            getavgvendor = db.session.query(
-                func.avg(User_DataFeedback.vendorrating).label("avgvendor"))
-            getavgvendor = getavgvendor.filter(
-                User_DataFeedback.vendorid == user.id)
+            getavgvendor = db.session\
+                .query(func.avg(UserData_Feedback.vendorrating)
+                       .label("avgvendor"))\
+                .filter(UserData_Feedback.vendorid == user.id)
             gvendor = getavgvendor.all()
             vendorscore = str((gvendor[0][0]))[:4]
             if vendorscore == 'None':

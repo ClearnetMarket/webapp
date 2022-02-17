@@ -23,7 +23,7 @@ from app.classes.service import \
 from app.classes.profile import \
     Profile_StatisticsUser, \
     Profile_StatisticsVendor
-from app.classes.userdata import User_DataFeedback
+from app.classes.userdata import UserData_Feedback
 from app.classes.vendor import Vendor_Orders
 from app.classes.wallet_bch import Bch_Prices
 
@@ -613,7 +613,7 @@ def helpwithitem_active(id):
                                 "item_rating")
                             if text_box_value_vendorrating and text_box_value_item_rating is not None:
                                 try:
-                                    feed = User_DataFeedback(
+                                    feed = UserData_Feedback(
                                         type=getitemid.type,
                                         sale_id=getitemid.id,
                                         vendorname=getitemid.vendor,

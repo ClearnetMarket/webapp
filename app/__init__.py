@@ -1,42 +1,28 @@
 # coding=utf-8
-
-
-
 from flask import Flask, request, render_template
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_qrcode import QRcode
 from flask_sqlalchemy import SQLAlchemy
-from datetime import timedelta, datetime
+from datetime import timedelta
 from sqlalchemy.orm import sessionmaker
 from werkzeug.routing import BaseConverter
-from flask_wtf import \
-    CSRFProtect, \
-    csrf
+from flask_wtf import CSRFProtect, csrf
 from flask_paranoid import Paranoid
 from time import strftime
 import traceback
-from config import \
-    UPLOADED_FILES_DEST, \
-    UPLOADED_FILES_DEST_ITEM, \
-    UPLOADED_FILES_DEST_USER, \
-    UPLOADED_FILES_ALLOW, \
-    MAX_CONTENT_LENGTH, \
-    SQLALCHEMY_DATABASE_URI_0, \
-    SECRET_KEY, \
-    WTF_CSRF_ENABLED,\
-    DEBUG
-from flask_login import current_user
+from config import ApplicationConfig
+
+
 app = Flask(__name__,
             static_url_path='',
             static_folder='static',
             template_folder='templates')
 
 
-app.config.from_object('config')
+app.config.from_object('ApplicationConfigTest')
 Session = sessionmaker()
-
 
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *items):
@@ -198,16 +184,22 @@ app.jinja_env.filters['usd_to_currency_bch'] = filters_bch.usd_to_currency_bch
 
 # configuration
 app.url_map.converters['regex'] = RegexConverter
-app.config['UPLOADED_FILES_DEST_USER'] = UPLOADED_FILES_DEST_USER
-app.config['UPLOADED_FILES_DEST_ITEM'] = UPLOADED_FILES_DEST_ITEM
-app.config['UPLOADED_FILES_DEST'] = UPLOADED_FILES_DEST
-app.config['UPLOADED_FILES_ALLOW'] = UPLOADED_FILES_ALLOW
-app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
-app.config['SECRET_KEY'] = SECRET_KEY
-app.config['CSRF_ENABLED'] = WTF_CSRF_ENABLED
-app.config['DEBUG'] = DEBUG
+UPLOADED_FILES_DEST_USER= ApplicationConfig.UPLOADED_FILES_DEST_USER
+UPLOADED_FILES_DEST_ITEM = ApplicationConfig.UPLOADED_FILES_DEST_ITEM
+UPLOADED_FILES_DEST =   ApplicationConfig.UPLOADED_FILES_DEST
+UPLOADED_FILES_ALLOW =  ApplicationConfig.UPLOADED_FILES_ALLOW
 
-Session.configure(bind=SQLALCHEMY_DATABASE_URI_0)
+
+app.config['UPLOADED_FILES_DEST_USER'] = ApplicationConfig.UPLOADED_FILES_DEST_USER
+app.config['UPLOADED_FILES_DEST_ITEM'] = ApplicationConfig.UPLOADED_FILES_DEST_ITEM
+app.config['UPLOADED_FILES_DEST'] = ApplicationConfig.UPLOADED_FILES_DEST
+app.config['UPLOADED_FILES_ALLOW'] = ApplicationConfig.UPLOADED_FILES_ALLOW
+app.config['MAX_CONTENT_LENGTH'] = ApplicationConfig.MAX_CONTENT_LENGTH
+app.config['SECRET_KEY'] = ApplicationConfig.SECRET_KEY
+app.config['CSRF_ENABLED'] = ApplicationConfig.WTF_CSRF_ENABLED
+app.config['DEBUG'] = ApplicationConfig.DEBUG
+
+Session.configure(bind=ApplicationConfig.SQLALCHEMY_DATABASE_URI_0)
 paranoid = Paranoid(app)
 db = SQLAlchemy(app)
 qrcode = QRcode(app)

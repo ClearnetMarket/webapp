@@ -38,13 +38,13 @@ from app.checkout.forms import \
     shoppingcartForm
 # endforms
 from app.subq.related import subq_related_to_item
-from app.common.functions import convert_local_to_bch
+
 from app.common.decorators import \
     ping_user, \
     website_offline, \
     login_required
 
-from app.wallet_bch.wallet_btccash_work import btc_cash_sendCointoEscrow
+from app.wallet_bch.wallet_bch_work import bch_send_coin_to_escrow
 
 from app.common.functions import \
     floating_decimals, \
@@ -971,9 +971,9 @@ def checkout():
                     if (len(msg.txtmsg)) < 5:
                         flash("Message not long enough", category="danger")
                         return redirect(url_for('item.checkout'))
-                    # customer has the coin..proceed
-                    # loop through ORDERS..sendinc coin and doing transactions 1 by 1
-                    # this doesnt loop through the shopping cart
+                    # customer has the coin. proceed
+                    # loop through ORDERS. sendinc coin and doing transactions 1 by 1
+                    # this does not loop through the shopping cart
                     for specificitemincart in orders:
                         # get the item
                         # get specific item being purchased
@@ -985,8 +985,7 @@ def checkout():
                         except Exception:
                             db.session.delete(specificitemincart)
                             db.session.commit()
-                            flash(
-                                "Could Not find Item. Perhaps the vendor removed it.", category="danger")
+                            flash("Could Not find Item. Perhaps the vendor removed it.", category="danger")
                             return redirect(url_for('wallet_btc.walletReceive', username=current_user.username))
 
                         # update the order to notify vendor
@@ -1033,7 +1032,7 @@ def checkout():
                         # subtraction of balances occur there also
                         # send bitcoin
 
-                        btc_cash_sendCointoEscrow(
+                        bch_send_coin_to_escrow(
                             amount=priceofitemorder,
                             comment=specificitemincart.id,
                             user_id=specificitemincart.customer_id

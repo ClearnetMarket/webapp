@@ -7,18 +7,18 @@ from flask import \
 from app.wallet_btc import wallet_btc
 
 from app import db
-from app.wallet_btc.wallet_btc_work import btc_sendCoin
+from app.wallet_btc.wallet_btc_work import btc_send_coin
 
 # models
 from app.classes.auth import Auth_User
 
 from app.classes.wallet_btc import \
-    Btc_WalletTransactions,\
+    Btc_TransactionsBtc,\
     Btc_Wallet,\
     Btc_WalletFee
 
 # end models
-from app.wallet_btc.forms import walletSendcoin
+from app.wallet_btc.forms import BtcWalletSendCoin
 from datetime import datetime
 from app.common.functions import floating_decimals
 from app.common.decorators import\
@@ -77,9 +77,9 @@ def btc_home():
 
     # Get Transaction history
     transactfull = db.session\
-        .query(Btc_WalletTransactions)\
-        .filter(Btc_WalletTransactions.user_id == current_user.id)\
-        .order_by(Btc_WalletTransactions.id.desc())
+        .query(Btc_TransactionsBtc)\
+        .filter(Btc_TransactionsBtc.user_id == current_user.id)\
+        .order_by(Btc_TransactionsBtc.id.desc())
     transactcount = transactfull.count()
     transact = transactfull.limit(per_page).offset(offset)
 
@@ -137,7 +137,7 @@ def btc_home():
 def btc_send():
     now = datetime.utcnow()
     title = "Send"
-    form = walletSendcoin(request.form)
+    form = BtcWalletSendCoin(request.form)
 
     user1, \
         user1pictureid, \
@@ -170,7 +170,6 @@ def btc_send():
     wfee = Decimal(walletthefee.btc)
 
     if request.method == "POST":
-
         if form.validate_on_submit() and current_user.dispute == 0:
             if Auth_User.decryptpassword(pwdhash=current_user.wallet_pin, 
                                          password=form.pin.data):
@@ -188,7 +187,7 @@ def btc_send():
                     # greater than fee
                     if Decimal(amount) > Decimal(wfee):
                         # add to wallet_btc work
-                        btc_sendCoin(
+                        btc_send_coin(
                             user_id=current_user.id,
                             sendto=sendto,
                             amount=amount,
@@ -197,16 +196,20 @@ def btc_send():
                         # achievement
                         withdrawl(user_id=current_user.id)
                         db.session.commit()
-                        flash(f"Bitcoin Sent: {str(sendto)}", category="success")
+                        flash(f"Bitcoin Sent: {str(sendto)}",
+                              category="success")
                         return redirect(url_for('wallet_btc.btc_send'))
                     else:
-                        flash(f"Cannot withdraw amount less than wallet_btc fee: {str(wfee)}", category="danger")
+                        flash(f"Cannot withdraw amount less than wallet_btc fee: {str(wfee)}",
+                              category="danger")
                         return redirect(url_for('wallet_btc.btc_send'))
                 else:
-                    flash("Cannot withdraw more than your balance including fee", category="danger")
+                    flash("Cannot withdraw more than your balance including fee",
+                          category="danger")
                     return redirect(url_for('wallet_btc.btc_send'))
             else:
-                flash("Invalid Pin. Account will be locked with 5 failed attempts.", category="danger")
+                flash("Invalid Pin. Account will be locked with 5 failed attempts.",
+                      category="danger")
                 x = int(current_user.fails)
                 y = x + 1
                 current_user.fails = y

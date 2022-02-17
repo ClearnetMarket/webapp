@@ -6,14 +6,11 @@ from flask import \
     request
 from app import db
 
-from app.wallet_bch import\
-    wallet_bch
-from app.wallet_bch.wallet_btccash_work import\
-    btc_cash_sendCoin
+from app.wallet_bch import wallet_bch
+from app.wallet_bch.wallet_bch_work import bch_send_coin
 
 # models
-from app.classes.auth import \
-    Auth_User
+from app.classes.auth import Auth_User
 
 from app.classes.wallet_bch import \
     Bch_WalletTransactions,\
@@ -21,12 +18,9 @@ from app.classes.wallet_bch import \
     Bch_WalletFee
 
 # end models
-from app.wallet_bch.forms import\
-    walletSendcoin
-from datetime import \
-    datetime
-from app.common.functions import\
-    floating_decimals
+from app.wallet_bch.forms import BchWalletSendCoin
+from datetime import datetime
+from app.common.functions import floating_decimals
 from app.common.decorators import\
     website_offline,\
     login_required
@@ -145,7 +139,7 @@ def bch_home():
 def bch_send():
     now = datetime.utcnow()
     title = "Send"
-    form = walletSendcoin(request.form)
+    form = BchWalletSendCoin(request.form)
 
     user1, \
         user1pictureid, \
@@ -193,7 +187,7 @@ def bch_send():
                     # greater than fee
                     if Decimal(amount) > Decimal(wfee):
                         # add to wallet_btc work
-                        btc_cash_sendCoin(
+                        bch_send_coin(
                             user_id=current_user.id,
                             sendto=sendto,
                             amount=amount,

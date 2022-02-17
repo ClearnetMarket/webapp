@@ -56,7 +56,7 @@ class Admin_ClearnetFeeHoldingsBCH(db.Model):
     total = db.Column(db.DECIMAL(20, 8))
 
 
-class Admin_ClearnetHoldings(db.Model):
+class Admin_ClearnetHoldingsBtc(db.Model):
     __tablename__ = 'account_clearnetholdings_btc'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

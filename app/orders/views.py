@@ -22,10 +22,10 @@ from app.userdata.views import \
     userdata_aff_stats
 
 # btc cash work
-from app.wallet_bch.wallet_btccash_work import \
-    btc_cash_sendCointoclearnet, \
-    btc_cash_sendcointoaffiliate, \
-    btc_cash_sendCointoUser
+from app.wallet_bch.wallet_bch_work import \
+    bch_send_coin_to_clearnet, \
+    bch_send_coin_to_affiliate, \
+    bch_send_coin_to_user
 from app.common.decorators import \
     website_offline, \
     login_required
@@ -52,7 +52,7 @@ from app.classes.service import \
     Service_Tracking
 from app.classes.category import Category_Categories
 from app.classes.userdata import \
-    User_DataFeedback
+    UserData_Feedback
 from app.classes.vendor import \
     Vendor_Orders
 from app.classes.wallet_bch import Bch_Prices
@@ -158,7 +158,7 @@ def orders_home():
                         if text_box_value_vendorrating and text_box_value_item_rating is not None:
                             if (1 <= int(text_box_value_vendorrating) <= 5) \
                                     and (1 <= int(text_box_value_item_rating) <= 5):
-                                add = User_DataFeedback(
+                                add = UserData_Feedback(
                                     type=getitemid.type,
                                     sale_id=getitemid.id,
                                     timestamp=now,
@@ -444,7 +444,7 @@ def orders_cancel_order(id):
 
                     db.session.add(getorder)
 
-                    btc_cash_sendCointoUser(amount=totalprice,
+                    bch_send_coin_to_user(amount=totalprice,
                                             comment=getorder.id,
                                             user_id=getorder.customer_id,
                                             )
@@ -578,12 +578,12 @@ def orders_mark_as_recieved(id):
                             db.session.add(getorder)
 
                             # order the amount sent
-                            btc_cash_sendcointoaffiliate(amount=amount_to_affiliate,
+                            bch_send_coin_to_affiliate(amount=amount_to_affiliate,
                                                          comment=getorder.id,
                                                          user_id=getpromo.user_id
                                                          )
 
-                            btc_cash_sendCointoclearnet(amount=amount_to_protos,
+                            bch_send_coin_to_clearnet(amount=amount_to_protos,
                                                         comment=getorder.id,
                                                         shard=current_user.shard
                                                         )
@@ -592,7 +592,7 @@ def orders_mark_as_recieved(id):
                                                amount=amount_to_affiliate, currency=3)
 
                             # send amount to user
-                            btc_cash_sendCointoUser(amount=shiprice,
+                            bch_send_coin_to_user(amount=shiprice,
                                                     comment=getorder.id,
                                                     user_id=getorder.vendor_id,
                                                     )
@@ -759,7 +759,10 @@ def orders_customer_return(id):
 
                             db.session.add(order)
 
-                            notification(type=5, username=order.vendor, user_id=order.vendor_id, salenumber=order.id,
+                            notification(type=5,
+                                         username=order.vendor,
+                                         user_id=order.vendor_id,
+                                         salenumber=order.id,
                                          bitcoin=0)
                             db.session.commit()
                             flash("Item Return initiated", category="success")

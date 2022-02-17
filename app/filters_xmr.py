@@ -6,14 +6,15 @@ from decimal import Decimal
 def xmrtousd(coinamount):
     """
     Puts the price in currency to btc
-    :param price:
-    :param currency:
+
     :return:
     """
-    from app.classes.wallet_xmr import MoneroPrices
+    from app.classes.wallet_xmr import Xmr_Prices
     from app import db
 
-    getcurrentprice = db.session.query(MoneroPrices).get(1)
+    getcurrentprice = db.session\
+            .query(Xmr_Prices)\
+            .get(1)
 
     bt = (Decimal(getcurrentprice.price) * coinamount)
     formatteddollar = '{0:.2f}'.format(bt)
@@ -28,11 +29,13 @@ def xmrtocurrency(price, currency):
     :param currency:
     :return:
     """
-    from app.classes.wallet_xmr import MoneroPrices
+    from app.classes.wallet_xmr import Xmr_Prices
     from app import db
 
-    getcurrentprice = db.session.query(MoneroPrices) \
-        .filter_by(id=currency).first()
+    getcurrentprice = db.session\
+        .query(Xmr_Prices) \
+        .filter_by(id=currency)\
+        .first()
     if currency == 1:
 
         return price
@@ -51,11 +54,13 @@ def xmrprice(price, currency):
     :param currency:
     :return:
     """
-    from app.classes.wallet_xmr import MoneroPrices
+    from app.classes.wallet_xmr import Xmr_Prices
     from app import db
     
-    getcurrentprice = db.session.query(MoneroPrices) \
-        .filter_by(id=currency).first()
+    getcurrentprice = db.session\
+        .query(Xmr_Prices) \
+        .filter_by(id=currency)\
+        .first()
     bt = getcurrentprice.price
     z = Decimal(price) / Decimal(bt)
     c = '{0:.8f}'.format(z)

@@ -1,6 +1,5 @@
 from app import db
-from datetime import\
-    datetime
+from datetime import datetime
 from app.classes.wallet_btc import Btc_TransactionsBtc
 
 # type 1: wallet withdrawl

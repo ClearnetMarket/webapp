@@ -1,7 +1,7 @@
 from app import db
 
 
-class User_DataHistory(db.Model):
+class UserData_History(db.Model):
     __tablename__ = 'userhistory'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
@@ -19,7 +19,7 @@ class User_DataHistory(db.Model):
     recentcat5date = db.Column(db.TIMESTAMP())
 
 
-class User_DataFeedback(db.Model):
+class UserData_Feedback(db.Model):
     __tablename__ = 'feedback'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}

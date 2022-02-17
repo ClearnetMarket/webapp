@@ -9,8 +9,10 @@ def convert_bch_to_local(amount, currency):
     from app import db
     from app.classes.wallet_bch import Bch_Prices
     from app.common.functions import floating_decimals
-    getcurrentprice = db.session.query(
-        Bch_Prices).filter_by(currency_id=currency).first()
+    getcurrentprice = db.session\
+        .query(Bch_Prices)\
+        .filter_by(currency_id=currency)\
+        .first()
     bt = getcurrentprice.price
     z = Decimal(bt) * Decimal(amount)
     c = floating_decimals(z, 2)
@@ -24,8 +26,10 @@ def convert_local_to_bch(amount, currency):
     from app import db
     from app.classes.wallet_bch import Bch_Prices
     from app.common.functions import floating_decimals
-    getcurrentprice = db.session.query(
-        Bch_Prices).filter_by(currency_id=currency).first()
+    getcurrentprice = db.session\
+        .query(Bch_Prices)\
+        .filter_by(currency_id=currency)\
+        .first()
 
     bt = getcurrentprice.price
     z = Decimal(amount) / Decimal(bt)
@@ -40,8 +44,10 @@ def usd_to_currency_bch(price, currency):
     """
     from app.classes.wallet_bch import Bch_Prices
     from app import db
-    getcurrentprice = db.session.query(
-        Bch_Prices).filter_by(currency_id=currency).first()
+    getcurrentprice = db.session\
+        .query(Bch_Prices)\
+        .filter_by(currency_id=currency)\
+        .first()
     if currency == 1:
         return price
     else:
@@ -59,12 +65,12 @@ def bch_to_currency(btccashamount, currency):
     from app.classes.wallet_bch import Bch_Prices
     from app import db
 
-    getcurrentprice = db.session.query(Bch_Prices) \
-        .filter_by(currency_id=currency).first()
+    getcurrentprice = db.session\
+        .query(Bch_Prices)\
+        .filter_by(currency_id=currency)\
+        .first()
     x = Decimal(btccashamount)
-
     bt = (Decimal(getcurrentprice.price) * x)
-
     c = '{0:.2f}'.format(bt)
     return c
 
@@ -91,8 +97,10 @@ def format_to_string_bch(value):
 def convert_local_to_bch_filter(price, currency):
     from app.classes.wallet_bch import Bch_Prices
     from app import db
-    getcurrentprice = db.session.query(Bch_Prices) \
-        .filter_by(currency_id=currency).first()
+    getcurrentprice = db.session\
+        .query(Bch_Prices)\
+        .filter_by(currency_id=currency)\
+        .first()
     bt = getcurrentprice.price
     z = Decimal(price) / Decimal(bt)
     c = '{0:.8f}'.format(z)

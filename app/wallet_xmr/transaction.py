@@ -1,13 +1,13 @@
 from app import db
 from datetime import datetime
-from app.classes.wallet_xmr import MoneroTransactions
+from app.classes.wallet_xmr import Xmr_Transactions
 
 # this function will move the coin from holdings back to vendor.  This is for vendor verification
-def monero_addtransaction(category, amount, user_id, orderid, balance, senderid, comment):
+def xmr_add_transaction(category, amount, user_id, orderid, balance, senderid, comment):
     now = datetime.utcnow()
     orderid = int(orderid)
 
-    trans = MoneroTransactions(
+    trans = Xmr_Transactions(
         category=category,
         user_id=user_id,
         senderid=senderid,

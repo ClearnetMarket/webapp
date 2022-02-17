@@ -22,11 +22,10 @@ def maincatname(catdid0):
 
 
 @app.template_filter('trustlevel')
-def trustlevel(id):
+def trustlevel(userid):
     from app.classes.vendor import Vendor_VendorVerification
     from app import db
-    x = db.session.query(Vendor_VendorVerification).filter_by(
-        vendor_id=id).first()
+    x = db.session.query(Vendor_VendorVerification).filter_by(vendor_id=userid).first()
     if x:
         level = x.vendor_level
         return str(level)
@@ -80,13 +79,13 @@ def achievementdescription(categoryid):
 
 # converts id to country
 @app.template_filter('countryformat')
-def countryformat(id):
+def countryformat(idofcountry):
     from app.classes.models import Query_Country
     from app import db
 
     try:
         getcountry = db.session.query(
-            Query_Country).filter_by(numericcode=id).first()
+            Query_Country).filter_by(numericcode=idofcountry).first()
         return getcountry.name
     except Exception:
         name = "World Wide"
@@ -111,12 +110,12 @@ def currencyformat(id):
 
 
 @app.template_filter('notshippingformat')
-def notshippingformat(id):
+def notshippingformat(valueofid):
     from app.classes.models import Query_Continents
     from app import db
 
     getnotshipping = db.session.query(
-        Query_Continents).filter_by(value=id).first()
+        Query_Continents).filter_by(value=valueofid).first()
     if not None:
         return getnotshipping.text
     else:
@@ -262,10 +261,10 @@ def avgvendorrating(id):
 # Gets avg of the ratings for the vendor
 @app.template_filter('vendorratingonorder')
 def vendorratingonorder(id):
-    from app.classes.userdata import User_DataFeedback
+    from app.classes.userdata import UserData_Feedback
     from app import db
-    getratings = db.session.query(User_DataFeedback)
-    getratings = getratings.filter(User_DataFeedback.sale_id == id)
+    getratings = db.session.query(UserData_Feedback)
+    getratings = getratings.filter(UserData_Feedback.sale_id == id)
     rate = getratings.first()
     if rate is None:
         return 0

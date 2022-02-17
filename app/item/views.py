@@ -26,7 +26,7 @@ from app.classes.item import \
 from app.classes.profile import \
     Profile_StatisticsVendor
 from app.classes.userdata import \
-    User_DataFeedback
+    UserData_Feedback
 # endmodels
 
 from app.search.searchfunction import headerfunctions
@@ -114,25 +114,25 @@ def item_for_sale(id):
 
     # Item Feedback
     itemfeedback = db.session\
-        .query(User_DataFeedback)\
+        .query(UserData_Feedback)\
         .filter_by(item_id=id)\
-        .order_by(User_DataFeedback.timestamp.desc())\
+        .order_by(UserData_Feedback.timestamp.desc())\
         .limit(25)
     feedbackofitem_count = db.session\
-        .query(User_DataFeedback)\
+        .query(UserData_Feedback)\
         .filter_by(item_id=id)\
-        .order_by(User_DataFeedback.timestamp.desc())\
+        .order_by(UserData_Feedback.timestamp.desc())\
         .count()
 
-    # Vendor User_DataFeedback
+    # Vendor UserData_Feedback
     vendorfeedback = db.session\
-        .query(User_DataFeedback)\
+        .query(UserData_Feedback)\
         .filter_by(vendorid=vendoritem.vendor_id)\
-        .order_by(User_DataFeedback.timestamp.desc())\
+        .order_by(UserData_Feedback.timestamp.desc())\
         .limit(25)
 
     vendorfeedbackcount = db.session\
-        .query(User_DataFeedback)\
+        .query(UserData_Feedback)\
         .filter_by(vendorid=vendoritem.vendor_id)\
         .count()
 
@@ -588,14 +588,14 @@ def preview_item(id):
     vendorpictureid = str(vendorgetlevel.level)
 
     # Item Feedback
-    itemfeedback = db.session.query(User_DataFeedback).filter_by(
-        item_id=id).order_by(User_DataFeedback.timestamp.desc()).limit(25)
-    feedbackofitem_count = db.session.query(User_DataFeedback).filter_by(
-        item_id=id).order_by(User_DataFeedback.timestamp.desc()).count()
+    itemfeedback = db.session.query(UserData_Feedback).filter_by(
+        item_id=id).order_by(UserData_Feedback.timestamp.desc()).limit(25)
+    feedbackofitem_count = db.session.query(UserData_Feedback).filter_by(
+        item_id=id).order_by(UserData_Feedback.timestamp.desc()).count()
     # Vendor Feedback
-    vendorfeedback = db.session.query(User_DataFeedback).filter_by(
-        vendorid=vendoritem.vendor_id).order_by(User_DataFeedback.timestamp.desc()).limit(25)
-    vendorfeedbackcount = db.session.query(User_DataFeedback).filter_by(
+    vendorfeedback = db.session.query(UserData_Feedback).filter_by(
+        vendorid=vendoritem.vendor_id).order_by(UserData_Feedback.timestamp.desc()).limit(25)
+    vendorfeedbackcount = db.session.query(UserData_Feedback).filter_by(
         vendorid=vendoritem.vendor_id).count()
     vendorach = db.session.query(Achievements_WhichAch).filter_by(
         user_id=vendoritem.vendor_id).first()

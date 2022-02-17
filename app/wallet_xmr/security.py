@@ -1,11 +1,11 @@
 from app import db
 from decimal import Decimal
-from app.classes.wallet_xmr import MoneroWallet
+from app.classes.wallet_xmr import Xmr_Wallet
 
-def monero_checkbalance(user_id, amount):
+def xmr_check_balance(user_id, amount):
     # The money requested during the trade
     userwallet = db.session\
-        .query(MoneroWallet)\
+        .query(Xmr_Wallet)\
         .filter_by(user_id=user_id)\
         .first()
     x = userwallet.currentbalance
