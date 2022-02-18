@@ -9,11 +9,11 @@ class Bch_Wallet(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.INTEGER)
     currentbalance = db.Column(db.DECIMAL(20, 8))
-    address1 = db.Column(db.TEXT)
+    address1 = db.Column(db.VARCHAR(500))
     address1status = db.Column(db.INTEGER)
-    address2 = db.Column(db.TEXT)
+    address2 = db.Column(db.VARCHAR(500))
     address2status = db.Column(db.INTEGER)
-    address3 = db.Column(db.TEXT)
+    address3 = db.Column(db.VARCHAR(500))
     address3status = db.Column(db.INTEGER)
     locked = db.Column(db.INTEGER)
     transactioncount = db.Column(db.INTEGER)
@@ -22,7 +22,7 @@ class Bch_Wallet(db.Model):
 
 
 class Bch_Prices(db.Model):
-    __tablename__ = 'prices_btc_cash'
+    __tablename__ = 'bch_price'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -30,18 +30,19 @@ class Bch_Prices(db.Model):
     currency_id = db.Column(db.INTEGER)
     percent_change_twentyfour = db.Column(db.DECIMAL(50, 2))
 
+
 class Bch_WalletTransferOrphan(db.Model):
-    __tablename__ = 'bch_transorphan'
+    __tablename__ = 'bch_transaction_orphan'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     bch = db.Column(db.DECIMAL(20, 8))
-    bchaddress = db.Column(db.TEXT)
-    txid = db.Column(db.TEXT)
+    bchaddress = db.Column(db.VARCHAR(500))
+    txid = db.Column(db.VARCHAR(500))
 
 
 class Bch_WalletUnconfirmed(db.Model):
-    __tablename__ = 'bch_unconfirmed'
+    __tablename__ = 'bch_wallet_unconfirmed_transaction'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -52,39 +53,39 @@ class Bch_WalletUnconfirmed(db.Model):
     unconfirmed3 = db.Column(db.DECIMAL(20, 8))
     unconfirmed4 = db.Column(db.DECIMAL(20, 8))
     unconfirmed5 = db.Column(db.DECIMAL(20, 8))
-    txid1 = db.Column(db.TEXT)
-    txid2 = db.Column(db.TEXT)
-    txid3 = db.Column(db.TEXT)
-    txid4 = db.Column(db.TEXT)
-    txid5 = db.Column(db.TEXT)
+    txid1 = db.Column(db.VARCHAR(500))
+    txid2 = db.Column(db.VARCHAR(500))
+    txid3 = db.Column(db.VARCHAR(500))
+    txid4 = db.Column(db.VARCHAR(500))
+    txid5 = db.Column(db.VARCHAR(500))
 
 
 class Bch_WalletWork(db.Model):
-    __tablename__ = 'bch_walletwork'
+    __tablename__ = 'bch_wallet_work'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
     amount = db.Column(db.DECIMAL(20, 8))
-    sendto = db.Column(db.TEXT)
-    comment = db.Column(db.TEXT)
+    sendto = db.Column(db.VARCHAR(500))
+    comment = db.Column(db.VARCHAR(500))
     created = db.Column(db.TIMESTAMP(), default=datetime.utcnow())
-    txtcomment = db.Column(db.TEXT)
+    txtcomment = db.Column(db.VARCHAR(500))
 
 
 class Bch_WalletAddresses(db.Model):
-    __tablename__ = 'bch_walletaddresses'
+    __tablename__ = 'bch_wallet_addresses'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    bchaddress = db.Column(db.TEXT)
+    bchaddress = db.Column(db.VARCHAR(500))
     status = db.Column(db.INTEGER)
     shard = db.Column(db.INTEGER)
 
 
 class Bch_WalletFee(db.Model):
-    __tablename__ = 'bch_walletfee'
+    __tablename__ = 'bch_wallet_fee'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -100,14 +101,14 @@ class Bch_WalletTransactions(db.Model):
     user_id = db.Column(db.INTEGER)
     senderid = db.Column(db.INTEGER)
     confirmations = db.Column(db.INTEGER)
-    txid = db.Column(db.TEXT)
+    txid = db.Column(db.VARCHAR(500))
     amount = db.Column(db.DECIMAL(20, 8))
-    blockhash = db.Column(db.TEXT)
+    blockhash = db.Column(db.VARCHAR(500))
     timeoft = db.Column(db.INTEGER)
     timerecieved = db.Column(db.INTEGER)
-    commentbch = db.Column(db.TEXT)
+    commentbch = db.Column(db.VARCHAR(500))
     otheraccount = db.Column(db.INTEGER)
-    address = db.Column(db.TEXT)
+    address = db.Column(db.VARCHAR(500))
     fee = db.Column(db.DECIMAL(20, 8))
     created = db.Column(db.TIMESTAMP(), default=datetime.utcnow())
     balance = db.Column(db.DECIMAL(20, 8))

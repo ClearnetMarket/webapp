@@ -5,7 +5,7 @@ def headerfunctions():
     from app import db
     from app.classes.auth import Auth_User
     from app.classes.message import Message_PostUser, Message_Notifications
-    from app.classes.item import Item_CheckoutShoppingCart
+    from app.classes.item import Checkout_CheckoutShoppingCart
     from app.classes.service import Service_Issue
     from app.classes.vendor import Vendor_Orders
     from app.classes.wallet_bch import Bch_Wallet
@@ -21,8 +21,8 @@ def headerfunctions():
 
         # shopping cart total
         tcart = db.session\
-            .query(func.sum(Item_CheckoutShoppingCart.quantity_of_item))\
-            .filter(Item_CheckoutShoppingCart.customer_id ==user.id, Item_CheckoutShoppingCart.savedforlater == 0)
+            .query(func.sum(Checkout_CheckoutShoppingCart.quantity_of_item))\
+            .filter(Checkout_CheckoutShoppingCart.customer_id ==user.id, Checkout_CheckoutShoppingCart.savedforlater == 0)
         totalincart = tcart.all()
 
         # Vendor

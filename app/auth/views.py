@@ -19,8 +19,8 @@ from app.classes.profile import \
     Profile_StatisticsUser, \
     Profile_StatisticsVendor
 from app.classes.item import \
-    Item_ShoppingCartTotal, \
-    Item_CheckoutShoppingCart
+    Checkout_ShoppingCartTotal, \
+    Checkout_CheckoutShoppingCart
 from app.classes.achievements import \
     Achievements_UserAchievements, \
     Achievements_WhichAch
@@ -230,7 +230,7 @@ def register():
         )
 
         # create checkout_shopping_cart for user
-        newcart = Item_ShoppingCartTotal(
+        newcart = Checkout_ShoppingCartTotal(
             customer=new_user.id,
             btc_cash_sumofitem=0,
             btc_cash_price=0,
@@ -703,11 +703,11 @@ def delete_account():
                 userbrowser = db.session.query(UserData_History) \
                     .filter(user.id == UserData_History.user_id).first()
                 # get shopping cart total
-                usercarttotal = db.session.query(Item_ShoppingCartTotal) \
-                    .filter(user.id == Item_ShoppingCartTotal.customer).first()
+                usercarttotal = db.session.query(Checkout_ShoppingCartTotal) \
+                    .filter(user.id == Checkout_ShoppingCartTotal.customer).first()
                 # get shopping cart total
-                usercart = db.session.query(Item_CheckoutShoppingCart) \
-                    .filter(user.id == Item_CheckoutShoppingCart.customer_id).first()
+                usercart = db.session.query(Checkout_CheckoutShoppingCart) \
+                    .filter(user.id == Checkout_CheckoutShoppingCart.customer_id).first()
                 if usercart is None:
                     usercartfound = 0
                 else:

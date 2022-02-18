@@ -5,15 +5,20 @@ from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from app import db, login_manager
 from datetime import datetime
+from uuid import uuid4
 
+def get_uuid():
+    return uuid4().hex
 
 class Auth_UserFees(db.Model):
-    __tablename__ = 'userfees'
+    __tablename__ = 'auth_user_fees'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
 
-    id = db.Column(db.Integer, autoincrement=True,
-                   primary_key=True, unique=True)
+    id = db.Column(db.Integer,
+                   autoincrement=True,
+                   primary_key=True,
+                   unique=True)
     user_id = db.Column(db.INTEGER)
     buyerfee = db.Column(db.DECIMAL(6, 4))
     buyerfee_time = db.Column(db.TIMESTAMP())
@@ -22,12 +27,14 @@ class Auth_UserFees(db.Model):
 
 
 class Auth_AccountSeedWords(db.Model):
-    __tablename__ = 'AccountSeedWords'
+    __tablename__ = 'auth_account_seed_words'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
 
-    id = db.Column(db.Integer, autoincrement=True,
-                   primary_key=True, unique=True)
+    id = db.Column(db.Integer,
+                   autoincrement=True,
+                   primary_key=True,
+                   unique=True)
     user_id = db.Column(db.INTEGER)
     word00 = db.Column(db.VARCHAR(30))
     word01 = db.Column(db.VARCHAR(30))
@@ -39,24 +46,26 @@ class Auth_AccountSeedWords(db.Model):
 
 
 class Auth_User(UserMixin, db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'auth_users'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
 
-    id = db.Column(db.Integer, autoincrement=True,
-                   primary_key=True, unique=True)
-    username = db.Column(db.TEXT)
+    id = db.Column(db.Integer,
+                   autoincrement=True,
+                   primary_key=True,
+                   unique=True)
+    username = db.Column(db.VARCHAR(40))
     password_hash = db.Column(db.TEXT)
     member_since = db.Column(db.TIMESTAMP(), default=datetime.utcnow())
-    email = db.Column(db.TEXT)
-    wallet_pin = db.Column(db.TEXT)
-    profileimage = db.Column(db.TEXT)
-    stringuserdir = db.Column(db.TEXT)
+    email = db.Column(db.VARCHAR(350))
+    wallet_pin = db.Column(db.VARCHAR(5))
+    profileimage = db.Column(db.VARCHAR(100))
+    stringuserdir = db.Column(db.VARCHAR(100))
     bio = db.Column(db.TEXT)
-    country = db.Column(db.TEXT)
+    country = db.Column(db.VARCHAR(100))
     currency = db.Column(db.INTEGER)
     vendor_account = db.Column(db.INTEGER)
-    selling_from = db.Column(db.TEXT)
+    selling_from = db.Column(db.VARCHAR(100))
     last_seen = db.Column(db.TIMESTAMP(), default=datetime.utcnow())
     admin = db.Column(db.INTEGER)
     admin_role = db.Column(db.INTEGER)

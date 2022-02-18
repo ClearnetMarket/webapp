@@ -3,12 +3,14 @@ from datetime import datetime
 
 
 class Message_Notifications(db.Model):
-    __tablename__ = 'notifications'
+    __tablename__ = 'message_notifications'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
     type = db.Column(db.INTEGER)
-    username = db.Column(db.TEXT)
+    username = db.Column(db.VARCHAR(40))
     user_id = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
     salenumber = db.Column(db.INTEGER)
@@ -17,13 +19,15 @@ class Message_Notifications(db.Model):
 
 
 class Message_Chat(db.Model):
-    __tablename__ = 'chat'
+    __tablename__ = 'message_chat'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
     orderid = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
-    author = db.Column(db.TEXT)
+    author = db.Column(db.VARCHAR(40))
     author_id = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
     body = db.Column(db.TEXT)
@@ -32,16 +36,17 @@ class Message_Chat(db.Model):
 
 
 class Message_Post(db.Model):
-    __tablename__ = 'post'
+    __tablename__ = 'message_post'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.TIMESTAMP(), index=True,
+    timestamp = db.Column(db.TIMESTAMP(),
+                          index=True,
                           default=datetime.utcnow())
 
 
 class Message_PostUser(db.Model):
-    __tablename__ = 'postuser'
+    __tablename__ = 'message_post_user'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -65,19 +70,20 @@ class Message_PostUser(db.Model):
     postid = db.Column(db.Integer)
 
     user_id = db.Column(db.Integer)
-    username = db.Column(db.TEXT)
+    username = db.Column(db.VARCHAR(40))
 
 
 class Message_Comment(db.Model):
-    __tablename__ = 'comment'
+    __tablename__ = 'message_comment'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
-    timestamp = db.Column(db.TIMESTAMP(), index=True,
+    timestamp = db.Column(db.TIMESTAMP(),
+                          index=True,
                           default=datetime.utcnow())
     author_id = db.Column(db.Integer)
-    author = db.Column(db.TEXT)
+    author = db.Column(db.VARCHAR(40))
     post_id = db.Column(db.Integer)
     modid = db.Column(db.Integer)
 

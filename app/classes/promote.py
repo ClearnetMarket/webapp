@@ -2,11 +2,13 @@ from app import db
 
 
 class Promoted_Item(db.Model):
-    __tablename__ = 'category'
+    __tablename__ = 'promoted_item'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   unique=True)
     itemid = db.Column(db.INTEGER)
 
 

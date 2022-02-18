@@ -2,11 +2,11 @@ from app import db
 
 
 class Profile_Userreviews(db.Model):
-    __tablename__ = 'userreviews'
+    __tablename__ = 'profile_user_reviews'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    customer = db.Column(db.TEXT)
+    customer = db.Column(db.VARCHAR(40))
     order_id = db.Column(db.INTEGER)
     customer_id = db.Column(db.INTEGER)
     review = db.Column(db.TEXT)
@@ -15,7 +15,7 @@ class Profile_Userreviews(db.Model):
 
 
 class Profile_FeedbackComments(db.Model):
-    __tablename__ = 'feedbackcomments'
+    __tablename__ = 'profile_feedback_comments'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -27,11 +27,13 @@ class Profile_FeedbackComments(db.Model):
 
 
 class Profile_Exptable(db.Model):
-    __tablename__ = 'exptable'
+    __tablename__ = 'profile_exp_table'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   unique=True)
     user_id = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
     amount = db.Column(db.INTEGER)
@@ -39,12 +41,14 @@ class Profile_Exptable(db.Model):
 
 
 class Profile_StatisticsVendor(db.Model):
-    __tablename__ = 'statsvendor'
+    __tablename__ = 'profile_stats_vendor'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
-    username = db.Column(db.Text)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   unique=True)
+    username = db.Column(db.VARCHAR(40))
     vendorid = db.Column(db.INTEGER)
     totalsales = db.Column(db.INTEGER)
     totaltrades = db.Column(db.INTEGER)
@@ -59,16 +63,20 @@ class Profile_StatisticsVendor(db.Model):
     totalbtcrecieved = db.Column(db.DECIMAL(20, 8))
     totalbtccashspent = db.Column(db.DECIMAL(20, 8))
     totalbtccashrecieved = db.Column(db.DECIMAL(20, 8))
+    totalxmrspent = db.Column(db.DECIMAL(20, 12))
+    totalxmrrecieved = db.Column(db.DECIMAL(20, 12))
     totalusdmade = db.Column(db.DECIMAL(20, 2))
 
 
 class Profile_StatisticsUser(db.Model):
-    __tablename__ = 'statsuserr'
+    __tablename__ = 'profile_stats_user'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
-    username = db.Column(db.VARCHAR(50))
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   unique=True)
+    username = db.Column(db.VARCHAR(40))
     user_id = db.Column(db.INTEGER)
     totalitemsbought = db.Column(db.INTEGER)
     totaltrades = db.Column(db.INTEGER)
@@ -83,6 +91,8 @@ class Profile_StatisticsUser(db.Model):
     totalbtcrecieved = db.Column(db.DECIMAL(20, 8))
     totalbtccashspent = db.Column(db.DECIMAL(20, 8))
     totalbtccashrecieved = db.Column(db.DECIMAL(20, 8))
+    totalxmrspent = db.Column(db.DECIMAL(20, 12))
+    totalxmrrecieved = db.Column(db.DECIMAL(20, 12))
     totalusdspent = db.Column(db.DECIMAL(20, 2))
 
 

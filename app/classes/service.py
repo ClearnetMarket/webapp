@@ -2,7 +2,7 @@ from app import db
 
 
 class Service_ShippingSecret(db.Model):
-    __tablename__ = 'shippingsecret'
+    __tablename__ = 'service_shipping_secret'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -13,71 +13,71 @@ class Service_ShippingSecret(db.Model):
 
 
 class Service_Returns(db.Model):
-    __tablename__ = 'returns'
+    __tablename__ = 'service_returns'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ordernumber = db.Column(db.INTEGER)
-    name = db.Column(db.TEXT)
-    street = db.Column(db.TEXT)
-    city = db.Column(db.TEXT)
-    state = db.Column(db.TEXT)
-    country = db.Column(db.TEXT)
-    zip = db.Column(db.TEXT)
+    name = db.Column(db.VARCHAR(500))
+    street = db.Column(db.VARCHAR(500))
+    city = db.Column(db.VARCHAR(300))
+    state = db.Column(db.VARCHAR(140))
+    country = db.Column(db.VARCHAR(400))
+    zip = db.Column(db.VARCHAR(140))
     message = db.Column(db.TEXT)
 
 
 class Service_DefaultReturns(db.Model):
-    __tablename__ = 'defaultreturns'
+    __tablename__ = 'servicedefault_return_addresses'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.TEXT)
-    street = db.Column(db.TEXT)
-    city = db.Column(db.TEXT)
-    state = db.Column(db.TEXT)
-    country = db.Column(db.TEXT)
-    zip = db.Column(db.TEXT)
+    name = db.Column(db.VARCHAR(500))
+    street =  db.Column(db.VARCHAR(400))
+    city = db.Column(db.VARCHAR(300))
+    state = db.Column(db.VARCHAR(140))
+    country = db.Column(db.VARCHAR(400))
+    zip = db.Column(db.VARCHAR(140))
     message = db.Column(db.TEXT)
-    username = db.Column(db.TEXT)
+    username = db.Column(db.VARCHAR(40))
     user_id = db.Column(db.INTEGER)
 
 
 class Service_ReturnsTracking(db.Model):
-    __tablename__ = 'returntracking'
+    __tablename__ = 'service_return_tracking'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ordernumber = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
-    customername = db.Column(db.TEXT)
+    customername = db.Column(db.VARCHAR(40))
     customerid = db.Column(db.INTEGER)
-    vendorname = db.Column(db.TEXT)
+    vendorname = db.Column(db.VARCHAR(40))
     vendorid = db.Column(db.INTEGER)
     carrier = db.Column(db.INTEGER)
-    trackingnumber = db.Column(db.TEXT)
-    othercarrier = db.Column(db.TEXT)
+    trackingnumber = db.Column(db.VARCHAR(500))
+    othercarrier = db.Column(db.VARCHAR(500))
 
 
 class Service_Tracking(db.Model):
-    __tablename__ = 'tracking'
+    __tablename__ = 'service_tracking'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sale_id = db.Column(db.INTEGER)
-    tracking1 = db.Column(db.TEXT)
-    carrier1 = db.Column(db.TEXT)
-    othercarrier1 = db.Column(db.TEXT)
-    tracking2 = db.Column(db.TEXT)
-    carrier2 = db.Column(db.TEXT)
-    othercarrier2 = db.Column(db.TEXT)
-    tracking3 = db.Column(db.TEXT)
-    carrier3 = db.Column(db.TEXT)
-    othercarrier3 = db.Column(db.TEXT)
+    tracking1 = db.Column(db.VARCHAR(500))
+    carrier1 = db.Column(db.VARCHAR(500))
+    othercarrier1 = db.Column(db.VARCHAR(500))
+    tracking2 = db.Column(db.VARCHAR(500))
+    carrier2 = db.Column(db.VARCHAR(500))
+    othercarrier2 = db.Column(db.VARCHAR(500))
+    tracking3 = db.Column(db.VARCHAR(500))
+    carrier3 = db.Column(db.VARCHAR(500))
+    othercarrier3 = db.Column(db.VARCHAR(500))
 
 
 class Service_UpdateLog(db.Model):
-    __tablename__ = 'updatelog'
+    __tablename__ = 'service_update_log'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -87,32 +87,32 @@ class Service_UpdateLog(db.Model):
 
 
 class Service_CustomerServiceItem(db.Model):
-    __tablename__ = 'customerserviceonitem'
+    __tablename__ = 'service_customer_issue_selection'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    issue = db.Column(db.TEXT)
+    issue = db.Column(db.VARCHAR(400))
 
 
 class Service_WebsiteFeedback(db.Model):
-    __tablename__ = 'websitefeedback'
+    __tablename__ = 'service_website_feedback'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.TEXT)
+    username = db.Column(db.VARCHAR(40))
     user_id = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
     comment = db.Column(db.TEXT)
-    email = db.Column(db.TEXT)
+    email = db.Column(db.VARCHAR(350))
     timestamp = db.Column(db.TIMESTAMP())
 
 
 class Service_Issue(db.Model):
-    __tablename__ = 'issues'
+    __tablename__ = 'service_issues'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    author = db.Column(db.TEXT)
+    author = db.Column(db.VARCHAR(140))
     author_id = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
     admin = db.Column(db.INTEGER)

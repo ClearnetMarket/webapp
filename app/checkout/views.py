@@ -13,8 +13,8 @@ from app.classes.auth import Auth_User, Auth_UserFees
 
 from app.classes.item import \
     Item_MarketItem, \
-    Item_CheckoutShoppingCart, \
-    Item_ShoppingCartTotal
+    Checkout_CheckoutShoppingCart, \
+    Checkout_ShoppingCartTotal
 
 from app.classes.service import \
     Service_ShippingSecret
@@ -65,13 +65,13 @@ from app.userdata.views import \
 @login_required
 def checkout_move_cart_item(id):
     try:
-        theitem = Item_CheckoutShoppingCart.query.get(id)
+        theitem = Checkout_CheckoutShoppingCart.query.get(id)
         if theitem:
             if theitem.customer_id == current_user.id:
                 getcart = db.session\
-                    .query(Item_CheckoutShoppingCart)\
-                    .filter(current_user.id == Item_CheckoutShoppingCart.customer_id)\
-                    .filter(Item_CheckoutShoppingCart.savedforlater == 0)
+                    .query(Checkout_CheckoutShoppingCart)\
+                    .filter(current_user.id == Checkout_CheckoutShoppingCart.customer_id)\
+                    .filter(Checkout_CheckoutShoppingCart.savedforlater == 0)
                 cartamount = getcart.count()
                 if int(cartamount) > 5:
                     theitem.savedforlater = 1
@@ -109,12 +109,12 @@ def checkout_shopping_cart():
         .filter_by(username=current_user.username)\
         .first()
     cart = db.session\
-        .query(Item_CheckoutShoppingCart)\
-        .filter(Item_CheckoutShoppingCart.customer == current_user.username,
-                Item_CheckoutShoppingCart.savedforlater == 0)\
+        .query(Checkout_CheckoutShoppingCart)\
+        .filter(Checkout_CheckoutShoppingCart.customer == current_user.username,
+                Checkout_CheckoutShoppingCart.savedforlater == 0)\
         .all()
     gettotalcart = db.session\
-        .query(Item_ShoppingCartTotal)\
+        .query(Checkout_ShoppingCartTotal)\
         .filter_by(customer=user.id)\
         .first()
 
@@ -140,8 +140,8 @@ def checkout_shopping_cart():
     # Saved for later cart
     try:
         cartsaved = db.session\
-            .query(Item_CheckoutShoppingCart)\
-            .filter(Item_CheckoutShoppingCart.customer == user.username, Item_CheckoutShoppingCart.savedforlater == 1)\
+            .query(Checkout_CheckoutShoppingCart)\
+            .filter(Checkout_CheckoutShoppingCart.customer == user.username, Checkout_CheckoutShoppingCart.savedforlater == 1)\
             .all()
     except Exception:
         cartsaved = 0
@@ -401,8 +401,8 @@ def checkout_shopping_cart():
     # gets queries of related subcategory..if not enough will do main category
     # related to first item only currently
     cart1 = db.session\
-        .query(Item_CheckoutShoppingCart)\
-        .filter(Item_CheckoutShoppingCart.customer_id == user.id, Item_CheckoutShoppingCart.savedforlater == 0)\
+        .query(Checkout_CheckoutShoppingCart)\
+        .filter(Checkout_CheckoutShoppingCart.customer_id == user.id, Checkout_CheckoutShoppingCart.savedforlater == 0)\
         .first()
     if cart1 is not None:
         itemsinrelated = subq_related_to_item(id=cart1.item_id)
@@ -506,7 +506,7 @@ def checkout_shopping_cart():
                             pass
                         else:
                             # match item checked to cart
-                            cartitem = db.session.query(Item_CheckoutShoppingCart).filter_by(
+                            cartitem = db.session.query(Checkout_CheckoutShoppingCart).filter_by(
                                 id=valueincheckbox).first()
                             # if owner
                             if cartitem.customer == current_user.username:
@@ -531,7 +531,7 @@ def checkout_shopping_cart():
                         if valueincheckbox == 0:
                             pass
                         else:
-                            cartitem = db.session.query(Item_CheckoutShoppingCart).filter_by(
+                            cartitem = db.session.query(Checkout_CheckoutShoppingCart).filter_by(
                                 id=valueincheckbox).first()
                             if cartitem.customer == current_user.username:
                                 cartitem.savedforlater = 1
@@ -669,7 +669,7 @@ def checkout():
         .first()
 
     gettotalcart = db.session\
-        .query(Item_ShoppingCartTotal)\
+        .query(Checkout_ShoppingCartTotal)\
         .filter_by(customer=user.id)\
         .first()
 
@@ -687,7 +687,7 @@ def checkout():
         .filter_by(user_id=user.id)\
         .first()
     gettotalcart = db.session\
-        .query(Item_ShoppingCartTotal)\
+        .query(Checkout_ShoppingCartTotal)\
         .filter_by(customer=user.id)\
         .first()
 
@@ -698,8 +698,8 @@ def checkout():
 
     # queries
     cart = db.session\
-        .query(Item_CheckoutShoppingCart)\
-        .filter(Item_CheckoutShoppingCart.customer == current_user.username, Item_CheckoutShoppingCart.savedforlater == 0)\
+        .query(Checkout_CheckoutShoppingCart)\
+        .filter(Checkout_CheckoutShoppingCart.customer == current_user.username, Checkout_CheckoutShoppingCart.savedforlater == 0)\
         .all()
 
     # get the orders
@@ -1079,7 +1079,7 @@ def checkout():
 
                 # clear user shoppingcarttotal
                 gettotalcart = db.session \
-                    .query(Item_ShoppingCartTotal) \
+                    .query(Checkout_ShoppingCartTotal) \
                     .filter_by(customer=user.id) \
                     .first()
                 gettotalcart.totalbtcprice = 0

@@ -2,7 +2,7 @@ from app import db
 
 
 class UserData_History(db.Model):
-    __tablename__ = 'userhistory'
+    __tablename__ = 'userdata_userhistory'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -20,13 +20,13 @@ class UserData_History(db.Model):
 
 
 class UserData_Feedback(db.Model):
-    __tablename__ = 'feedback'
+    __tablename__ = 'userdata_feedback'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    customername = db.Column(db.TEXT)
+    customername = db.Column(db.VARCHAR(40))
     sale_id = db.Column(db.INTEGER)
-    vendorname = db.Column(db.TEXT)
+    vendorname = db.Column(db.VARCHAR(40))
     vendorid = db.Column(db.INTEGER)
     comment = db.Column(db.TEXT)
     item_rating = db.Column(db.INTEGER)

@@ -1,7 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from app.vendor import vendor
-
 from decimal import Decimal
 from sqlalchemy import func
 from flask_paginate import Pagination, get_page_args
@@ -122,6 +121,7 @@ def vendor_orders_send(id):
                     item.request_cancel = 0
                     item.waiting_order = 1
                     item.reason_cancel = 0
+                    
                     db.session.add(item)
                     db.session.commit()
                     flash("Order Shipped", category="success")

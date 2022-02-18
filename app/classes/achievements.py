@@ -2,33 +2,37 @@ from app import db
 
 
 class Achievements_WhichAch(db.Model):
-    __tablename__ = 'whichAch'
+    __tablename__ = 'achievements_which_ach'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   unique=True)
     user_id = db.Column(db.INTEGER)
-    ach1 = db.Column(db.TEXT)
-    ach2 = db.Column(db.TEXT)
-    ach3 = db.Column(db.TEXT)
-    ach4 = db.Column(db.TEXT)
-    ach5 = db.Column(db.TEXT)
+    ach1 = db.Column(db.VARCHAR(140))
+    ach2 = db.Column(db.VARCHAR(140))
+    ach3 = db.Column(db.VARCHAR(140))
+    ach4 = db.Column(db.VARCHAR(140))
+    ach5 = db.Column(db.VARCHAR(140))
 
-    ach1_cat = db.Column(db.TEXT)
-    ach2_cat = db.Column(db.TEXT)
-    ach3_cat = db.Column(db.TEXT)
-    ach4_cat = db.Column(db.TEXT)
-    ach5_cat = db.Column(db.TEXT)
+    ach1_cat = db.Column(db.VARCHAR(140))
+    ach2_cat = db.Column(db.VARCHAR(140))
+    ach3_cat = db.Column(db.VARCHAR(140))
+    ach4_cat = db.Column(db.VARCHAR(140))
+    ach5_cat = db.Column(db.VARCHAR(140))
 
 
 class Achievements_UserAchievementsRecent(db.Model):
-    __tablename__ = 'userachievements_recent'
+    __tablename__ = 'achievements_user_achievements_recent'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True, unique=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   unique=True)
     user_id = db.Column(db.INTEGER)
-    username = db.Column(db.Text)
+    username = db.Column(db.VARCHAR(50))
 
     ach_id = db.Column(db.INTEGER)
     achievement_date = db.Column(db.TIMESTAMP())
@@ -36,13 +40,15 @@ class Achievements_UserAchievementsRecent(db.Model):
 
 
 class Achievements_UserAchievements(db.Model):
-    __tablename__ = 'userachievements'
+    __tablename__ = 'achievements_user_achievements'
     __bind_key__ = 'clearnet'
     __table_args__ = {"schema": "public", 'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True,
-                   autoincrement=True,  unique=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   unique=True)
     user_id = db.Column(db.INTEGER)
-    username = db.Column(db.Text)
+    username = db.Column(db.VARCHAR(50))
     experiencepoints = db.Column(db.INTEGER)
     level = db.Column(db.INTEGER)
 
@@ -176,12 +182,12 @@ class Achievements(db.Model):
     __table_args__ = {"schema": "public", 'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
-    categoryid = db.Column(db.TEXT)
-    categoryname = db.Column(db.TEXT)
+    categoryid = db.Column(db.VARCHAR(20))
+    categoryname = db.Column(db.VARCHAR(100))
     value = db.Column(db.INTEGER)
     category = db.Column(db.INTEGER)
-    title = db.Column(db.TEXT)
-    description = db.Column(db.TEXT)
+    title = db.Column(db.String(350))
+    description = db.Column(db.VARCHAR(350))
     dateadded = db.Column(db.TIMESTAMP())
 
 

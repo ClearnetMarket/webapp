@@ -21,7 +21,7 @@ from app.classes.admin import \
     Admin_Flagged
 from app.classes.item import \
     Item_MarketItem, \
-    Item_CheckoutShoppingCart, \
+    Checkout_CheckoutShoppingCart, \
     Item_ItemtoDelete
 from app.classes.profile import \
     Profile_StatisticsVendor
@@ -204,9 +204,9 @@ def item_for_sale(id):
                         .first()
                     if vendoritem.online == 1:
                         getcart = db.session\
-                            .query(Item_CheckoutShoppingCart)\
-                            .filter(current_user.id == Item_CheckoutShoppingCart.customer_id)\
-                            .filter(Item_CheckoutShoppingCart.savedforlater == 0)
+                            .query(Checkout_CheckoutShoppingCart)\
+                            .filter(current_user.id == Checkout_CheckoutShoppingCart.customer_id)\
+                            .filter(Checkout_CheckoutShoppingCart.savedforlater == 0)
                         generalcart = getcart.all()
                         cartamount = getcart.count()
 
@@ -218,7 +218,7 @@ def item_for_sale(id):
                                   category="danger")
                             return redirect(url_for('item.item_for_sale', id=vendoritem.id))
                         if cartamount < 5:
-                            item = Item_CheckoutShoppingCart(
+                            item = Checkout_CheckoutShoppingCart(
                                 customer=current_user.username,
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
@@ -264,7 +264,7 @@ def item_for_sale(id):
                             return redirect(url_for('item.item_for_sale', id=vendoritem.id))
                         else:
                             # cart full..save for later
-                            item = Item_CheckoutShoppingCart(
+                            item = Checkout_CheckoutShoppingCart(
                                 customer=current_user.username,
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
@@ -465,7 +465,7 @@ def delete_cart_item(id):
         user = db.session.query(Auth_User).filter_by(
             username=current_user.username).first()
         try:
-            item = Item_CheckoutShoppingCart.query.get(id)
+            item = Checkout_CheckoutShoppingCart.query.get(id)
             if item.customer_id == user.id:
                 db.session.delete(item)
                 db.session.commit()
@@ -488,7 +488,7 @@ def save_cart_item(id):
             .filter_by(username=current_user.username)\
             .first()
         try:
-            item = Item_CheckoutShoppingCart.query.get(id)
+            item = Checkout_CheckoutShoppingCart.query.get(id)
             if item.customer_id == user.id:
                 item.savedforlater = 1
                 db.session.add(item)
@@ -512,7 +512,7 @@ def create_shipping(id):
             .filter_by(username=current_user.username)\
             .first()
         try:
-            theitem = Item_CheckoutShoppingCart.query.get(id)
+            theitem = Checkout_CheckoutShoppingCart.query.get(id)
             if item.customer_id == user.id:
                 theitem.savedforlater = 1
                 db.session.add(theitem)
@@ -661,12 +661,12 @@ def buy_it_again(id):
                         return redirect(url_for('index', username=current_user.username))
                     else:
 
-                        getcart = db.session.query(Item_CheckoutShoppingCart)
+                        getcart = db.session.query(Checkout_CheckoutShoppingCart)
                         getcart = getcart.filter(
-                            current_user.id == Item_CheckoutShoppingCart.customer_id)
+                            current_user.id == Checkout_CheckoutShoppingCart.customer_id)
                         generalcart = getcart.all()
                         getcart = getcart.filter(
-                            Item_CheckoutShoppingCart.savedforlater == 0)
+                            Checkout_CheckoutShoppingCart.savedforlater == 0)
                         cartamount = getcart.count()
                         already_in_cart = []
                         for f in generalcart:
@@ -676,7 +676,7 @@ def buy_it_again(id):
                                   category="danger")
                             return redirect(url_for('index', username=current_user.username))
                         if cartamount < 5:
-                            additem = Item_CheckoutShoppingCart(
+                            additem = Checkout_CheckoutShoppingCart(
                                 customer=current_user.username,
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
@@ -725,7 +725,7 @@ def buy_it_again(id):
 
                         else:
                             # cart full..save for later
-                            additem = Item_CheckoutShoppingCart(
+                            additem = Checkout_CheckoutShoppingCart(
                                 customer=current_user.username,
                                 customer_id=current_user.id,
                                 vendor=vendoritem.vendor_name,
