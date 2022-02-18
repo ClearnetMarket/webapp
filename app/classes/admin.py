@@ -4,7 +4,7 @@ from app import db
 class Admin_ClearnetFee(db.Model):
     __tablename__ = 'admin_clearnet_fee'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -15,7 +15,7 @@ class Admin_ClearnetFee(db.Model):
 class Admin_ClearnetProfitBtc(db.Model):
     __tablename__ = 'admin_clearnet_profit_btc'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -29,7 +29,7 @@ class Admin_ClearnetProfitBtc(db.Model):
 class Admin_ClearnetProfitBCH(db.Model):
     __tablename__ = 'admin_clearnet_profit_bch'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -43,7 +43,7 @@ class Admin_ClearnetProfitBCH(db.Model):
 class Admin_ClearnetProfitXMR(db.Model):
     __tablename__ = 'admin_clearnet_profit_bch'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -57,7 +57,7 @@ class Admin_ClearnetProfitXMR(db.Model):
 class Admin_ClearnetFeeHoldings(db.Model):
     __tablename__ = 'admin_clearnet_fee_holdings'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -70,7 +70,7 @@ class Admin_ClearnetFeeHoldings(db.Model):
 class Admin_ClearnetFeeHoldingsBCH(db.Model):
     __tablename__ = 'admin_clearnet_fee_holdings_bch'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -82,7 +82,7 @@ class Admin_ClearnetFeeHoldingsBCH(db.Model):
 class Admin_ClearnetFeeHoldingsXMR(db.Model):
     __tablename__ = 'admin_clearnet_fee_holdings_xmr'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -95,7 +95,7 @@ class Admin_ClearnetFeeHoldingsXMR(db.Model):
 class Admin_ClearnetHoldingsBtc(db.Model):
     __tablename__ = 'admin_clearnet_holdings_btc'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -109,7 +109,7 @@ class Admin_ClearnetHoldingsBtc(db.Model):
 class Admin_ClearnetHoldingsBCH(db.Model):
     __tablename__ = 'admin_clearnet_holdings_bch'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
     amount = db.Column(db.DECIMAL(20, 8))
@@ -121,7 +121,7 @@ class Admin_ClearnetHoldingsBCH(db.Model):
 class Admin_WebsiteOffline(db.Model):
     __tablename__ = 'admin_website_offline'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -132,7 +132,7 @@ class Admin_WebsiteOffline(db.Model):
 class Admin_Flagged(db.Model):
     __tablename__ = 'admin_flagged'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,

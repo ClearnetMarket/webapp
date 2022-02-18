@@ -1,11 +1,20 @@
 from app import db
+from uuid import uuid4
+
+
+def get_uuid_item():
+    return uuid4().hex
+
 
 
 class Vendor_Orders(db.Model):
     __tablename__ = 'vendor_orders'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    uuid = db.Column(db.String(32), default=get_uuid_item)
+
     type = db.Column(db.INTEGER)
     vendor = db.Column(db.VARCHAR(40))
     vendor_id = db.Column(db.INTEGER)
@@ -66,10 +75,11 @@ class Vendor_Orders(db.Model):
     affiliate_discount_btc_cash = db.Column(db.DECIMAL(20, 8))
     affiliate_discount_xmr = db.Column(db.DECIMAL(20, 12))
 
+
 class Vendor_NotShipping(db.Model):
     __tablename__ = 'vendor_not_shipping_country'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     code = db.Column(db.INTEGER)
     name = db.Column(db.VARCHAR(40))
@@ -78,7 +88,7 @@ class Vendor_NotShipping(db.Model):
 class Vendor_VendorVerification(db.Model):
     __tablename__ = 'vendor_verification_level'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     vendor_id = db.Column(db.INTEGER)
     vendor_level = db.Column(db.INTEGER)
@@ -89,7 +99,7 @@ class Vendor_VendorVerification(db.Model):
 class Vendor_Duration(db.Model):
     __tablename__ = 'vendor_duration_timer'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     time = db.Column(db.VARCHAR(140))
     displaytime = db.Column(db.VARCHAR(140))
@@ -98,7 +108,7 @@ class Vendor_Duration(db.Model):
 class Vendor_EbaySearchItem(db.Model):
     __tablename__ = 'vendor_ebay_item'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True, nullable=False)
     dateadded = db.Column(db.TIMESTAMP())

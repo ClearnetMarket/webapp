@@ -5,7 +5,7 @@ from app import db
 class Affiliate_Orders(db.Model):
     __tablename__ = 'affiliat_orders'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", "extend_existing": True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -85,7 +85,7 @@ class Affiliate_Orders(db.Model):
 class Affiliate_Overview(db.Model):
     __tablename__ = 'affiliate_overview'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
 
     id = db.Column(db.Integer,
                    autoincrement=True,
@@ -109,7 +109,7 @@ class Affiliate_Overview(db.Model):
 class Affiliate_Stats(db.Model):
     __tablename__ = 'affiliate_stats'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
 
     id = db.Column(db.Integer, autoincrement=True,
                    primary_key=True, unique=True)
@@ -136,7 +136,7 @@ class Affiliate_Stats(db.Model):
 class Affiliate_Id(db.Model):
     __tablename__ = 'affiliate_ids'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
 
     id = db.Column(db.Integer, autoincrement=True,
                    primary_key=True, unique=True)

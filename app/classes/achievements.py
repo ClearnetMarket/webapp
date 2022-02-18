@@ -4,7 +4,7 @@ from app import db
 class Achievements_WhichAch(db.Model):
     __tablename__ = 'achievements_which_ach'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -26,7 +26,7 @@ class Achievements_WhichAch(db.Model):
 class Achievements_UserAchievementsRecent(db.Model):
     __tablename__ = 'achievements_user_achievements_recent'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -42,7 +42,7 @@ class Achievements_UserAchievementsRecent(db.Model):
 class Achievements_UserAchievements(db.Model):
     __tablename__ = 'achievements_user_achievements'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -177,9 +177,9 @@ class Achievements_UserAchievements(db.Model):
 
 
 class Achievements(db.Model):
-    __tablename__ = 'achievements'
+    __tablename__ = 'achievements_achievements'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True, unique=True)
     categoryid = db.Column(db.VARCHAR(20))

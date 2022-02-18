@@ -5,7 +5,7 @@ from datetime import datetime
 class Message_Notifications(db.Model):
     __tablename__ = 'message_notifications'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -21,7 +21,7 @@ class Message_Notifications(db.Model):
 class Message_Chat(db.Model):
     __tablename__ = 'message_chat'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -38,7 +38,7 @@ class Message_Chat(db.Model):
 class Message_Post(db.Model):
     __tablename__ = 'message_post'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.TIMESTAMP(),
                           index=True,
@@ -48,7 +48,7 @@ class Message_Post(db.Model):
 class Message_PostUser(db.Model):
     __tablename__ = 'message_post_user'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True)
 
     # type of message
@@ -76,7 +76,7 @@ class Message_PostUser(db.Model):
 class Message_Comment(db.Model):
     __tablename__ = 'message_comment'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.TIMESTAMP(),

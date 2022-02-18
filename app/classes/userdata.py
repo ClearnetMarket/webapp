@@ -4,7 +4,7 @@ from app import db
 class UserData_History(db.Model):
     __tablename__ = 'userdata_userhistory'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.INTEGER)
     recentcat1 = db.Column(db.INTEGER)
@@ -22,7 +22,7 @@ class UserData_History(db.Model):
 class UserData_Feedback(db.Model):
     __tablename__ = 'userdata_feedback'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     customername = db.Column(db.VARCHAR(40))
     sale_id = db.Column(db.INTEGER)

@@ -13,7 +13,7 @@ def get_uuid():
 class Auth_UserFees(db.Model):
     __tablename__ = 'auth_user_fees'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
 
     id = db.Column(db.Integer,
                    autoincrement=True,
@@ -29,7 +29,7 @@ class Auth_UserFees(db.Model):
 class Auth_AccountSeedWords(db.Model):
     __tablename__ = 'auth_account_seed_words'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
 
     id = db.Column(db.Integer,
                    autoincrement=True,
@@ -48,12 +48,13 @@ class Auth_AccountSeedWords(db.Model):
 class Auth_User(UserMixin, db.Model):
     __tablename__ = 'auth_users'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
 
     id = db.Column(db.Integer,
                    autoincrement=True,
                    primary_key=True,
                    unique=True)
+    uuid = db.Column(db.String(32))
     username = db.Column(db.VARCHAR(40))
     password_hash = db.Column(db.TEXT)
     member_since = db.Column(db.TIMESTAMP(), default=datetime.utcnow())

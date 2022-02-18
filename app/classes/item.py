@@ -1,10 +1,14 @@
 from app import db
+from uuid import uuid4
+
+def get_uuid_item():
+    return uuid4().hex
 
 
 class Item_ItemtoDelete(db.Model):
     __tablename__ = 'item_to_delete'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -17,13 +21,14 @@ class Item_ItemtoDelete(db.Model):
 class Item_MarketItem(db.Model):
     __tablename__ = 'item_market_item'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
                    unique=True,
                    nullable=False)
 
+    uuid = db.Column(db.String(32), default=get_uuid_item)
     online = db.Column(db.INTEGER)
     created = db.Column(db.TIMESTAMP())
     price = db.Column(db.DECIMAL(20, 2))

@@ -4,7 +4,7 @@ from app import db
 class Checkout_CheckoutShoppingCart(db.Model):
     __tablename__ = 'checkout_shopping_cart'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -56,9 +56,9 @@ class Checkout_CheckoutShoppingCart(db.Model):
     final_price_xmr = db.Column(db.DECIMAL(20, 8))
 
 class Checkout_ShoppingCartTotal(db.Model):
-    __tablename__ = 'shoppingcarttotal'
+    __tablename__ = 'checkout_shopping_cart_total'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,

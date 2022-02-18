@@ -4,7 +4,7 @@ from app import db
 class Service_ShippingSecret(db.Model):
     __tablename__ = 'service_shipping_secret'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
@@ -15,7 +15,7 @@ class Service_ShippingSecret(db.Model):
 class Service_Returns(db.Model):
     __tablename__ = 'service_returns'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ordernumber = db.Column(db.INTEGER)
     name = db.Column(db.VARCHAR(500))
@@ -30,7 +30,7 @@ class Service_Returns(db.Model):
 class Service_DefaultReturns(db.Model):
     __tablename__ = 'servicedefault_return_addresses'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.VARCHAR(500))
     street =  db.Column(db.VARCHAR(400))
@@ -46,7 +46,7 @@ class Service_DefaultReturns(db.Model):
 class Service_ReturnsTracking(db.Model):
     __tablename__ = 'service_return_tracking'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ordernumber = db.Column(db.INTEGER)
     timestamp = db.Column(db.TIMESTAMP())
@@ -62,7 +62,7 @@ class Service_ReturnsTracking(db.Model):
 class Service_Tracking(db.Model):
     __tablename__ = 'service_tracking'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sale_id = db.Column(db.INTEGER)
     tracking1 = db.Column(db.VARCHAR(500))
@@ -79,7 +79,7 @@ class Service_Tracking(db.Model):
 class Service_UpdateLog(db.Model):
     __tablename__ = 'service_update_log'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     header = db.Column(db.INTEGER)
     body = db.Column(db.INTEGER)
@@ -89,7 +89,7 @@ class Service_UpdateLog(db.Model):
 class Service_CustomerServiceItem(db.Model):
     __tablename__ = 'service_customer_issue_selection'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     issue = db.Column(db.VARCHAR(400))
 
@@ -97,7 +97,7 @@ class Service_CustomerServiceItem(db.Model):
 class Service_WebsiteFeedback(db.Model):
     __tablename__ = 'service_website_feedback'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.VARCHAR(40))
     user_id = db.Column(db.INTEGER)
@@ -110,7 +110,7 @@ class Service_WebsiteFeedback(db.Model):
 class Service_Issue(db.Model):
     __tablename__ = 'service_issues'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     author = db.Column(db.VARCHAR(140))
     author_id = db.Column(db.INTEGER)

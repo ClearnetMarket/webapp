@@ -5,7 +5,7 @@ from datetime import datetime
 class Bch_Wallet(db.Model):
     __tablename__ = 'bch_wallet'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.INTEGER)
     currentbalance = db.Column(db.DECIMAL(20, 8))
@@ -24,7 +24,7 @@ class Bch_Wallet(db.Model):
 class Bch_Prices(db.Model):
     __tablename__ = 'bch_price'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     price = db.Column(db.DECIMAL(50, 2))
     currency_id = db.Column(db.INTEGER)
@@ -34,7 +34,7 @@ class Bch_Prices(db.Model):
 class Bch_WalletTransferOrphan(db.Model):
     __tablename__ = 'bch_transaction_orphan'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     bch = db.Column(db.DECIMAL(20, 8))
     bchaddress = db.Column(db.VARCHAR(500))
@@ -44,7 +44,7 @@ class Bch_WalletTransferOrphan(db.Model):
 class Bch_WalletUnconfirmed(db.Model):
     __tablename__ = 'bch_wallet_unconfirmed_transaction'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     user_id = db.Column(db.INTEGER)
@@ -63,7 +63,7 @@ class Bch_WalletUnconfirmed(db.Model):
 class Bch_WalletWork(db.Model):
     __tablename__ = 'bch_wallet_work'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.INTEGER)
     type = db.Column(db.INTEGER)
@@ -77,7 +77,7 @@ class Bch_WalletWork(db.Model):
 class Bch_WalletAddresses(db.Model):
     __tablename__ = 'bch_wallet_addresses'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     bchaddress = db.Column(db.VARCHAR(500))
     status = db.Column(db.INTEGER)
@@ -87,7 +87,7 @@ class Bch_WalletAddresses(db.Model):
 class Bch_WalletFee(db.Model):
     __tablename__ = 'bch_wallet_fee'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     bch = db.Column(db.DECIMAL(20, 8))
 
@@ -95,7 +95,7 @@ class Bch_WalletFee(db.Model):
 class Bch_WalletTransactions(db.Model):
     __tablename__ = 'bch_transactions'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     category = db.Column(db.INTEGER)
     user_id = db.Column(db.INTEGER)

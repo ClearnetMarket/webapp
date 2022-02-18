@@ -4,7 +4,7 @@ from app import db
 class Promoted_Item(db.Model):
     __tablename__ = 'promoted_item'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,

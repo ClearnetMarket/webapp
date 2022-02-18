@@ -4,7 +4,7 @@ from app import db
 class Profile_Userreviews(db.Model):
     __tablename__ = 'profile_user_reviews'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     customer = db.Column(db.VARCHAR(40))
     order_id = db.Column(db.INTEGER)
@@ -17,7 +17,7 @@ class Profile_Userreviews(db.Model):
 class Profile_FeedbackComments(db.Model):
     __tablename__ = 'profile_feedback_comments'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.TIMESTAMP())
@@ -29,7 +29,7 @@ class Profile_FeedbackComments(db.Model):
 class Profile_Exptable(db.Model):
     __tablename__ = 'profile_exp_table'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -43,7 +43,7 @@ class Profile_Exptable(db.Model):
 class Profile_StatisticsVendor(db.Model):
     __tablename__ = 'profile_stats_vendor'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
@@ -71,7 +71,7 @@ class Profile_StatisticsVendor(db.Model):
 class Profile_StatisticsUser(db.Model):
     __tablename__ = 'profile_stats_user'
     __bind_key__ = 'clearnet'
-    __table_args__ = {"schema": "public", 'extend_existing': True}
+    __table_args__ = {"schema": "public"}
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True,
