@@ -1,5 +1,8 @@
 README.MD
 
+
+# THIS IS CURRENTLY DEPRECATED 
+
 # ClearnetMarket.com
 
 Clearnet Market is an open-source platform for exchanging goods and services for cryptocurrency.
